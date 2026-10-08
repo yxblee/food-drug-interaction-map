@@ -28,9 +28,15 @@ export function checkMeds(ix: Index, drugIds: string[]): FoodWarning[] {
   }
   const out = [...byFood.values()]
   for (const w of out) {
-    w.hits.sort((a, b) => rank(a.interaction.severity) - rank(b.interaction.severity) || a.drug.name.localeCompare(b.drug.name))
+    w.hits.sort(
+      (a, b) =>
+        rank(a.interaction.severity) - rank(b.interaction.severity) ||
+        a.drug.name.localeCompare(b.drug.name),
+    )
   }
-  return out.sort((a, b) => rank(a.severity) - rank(b.severity) || a.food.name.localeCompare(b.food.name))
+  return out.sort(
+    (a, b) => rank(a.severity) - rank(b.severity) || a.food.name.localeCompare(b.food.name),
+  )
 }
 
 export function mapKeysFor(warnings: FoodWarning[], drugIds: string[]): Set<string> {

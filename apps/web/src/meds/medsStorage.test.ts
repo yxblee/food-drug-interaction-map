@@ -21,7 +21,10 @@ describe('medsStorage', () => {
     expect(loadMeds(fake(), known)).toEqual({ ids: [], dropped: [] })
     expect(loadMeds(fake({ [MEDS_KEY]: '{not json' }), known)).toEqual({ ids: [], dropped: [] })
     expect(loadMeds(fake({ [MEDS_KEY]: '{"a":1}' }), known)).toEqual({ ids: [], dropped: [] })
-    expect(loadMeds(fake({ [MEDS_KEY]: '[1, null, "warfarin"]' }), known)).toEqual({ ids: ['warfarin'], dropped: [] })
+    expect(loadMeds(fake({ [MEDS_KEY]: '[1, null, "warfarin"]' }), known)).toEqual({
+      ids: ['warfarin'],
+      dropped: [],
+    })
   })
   it('saves a list and removes the key when empty', () => {
     const s = fake()

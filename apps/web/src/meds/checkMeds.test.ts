@@ -11,7 +11,12 @@ const node = (kind: GraphNode['kind'], id: string, extra: Partial<GraphNode> = {
   group: false,
   ...extra,
 })
-const ia = (food: string, drug: string, severity: GraphInteraction['severity'], mechanisms = ['m']): GraphInteraction => ({
+const ia = (
+  food: string,
+  drug: string,
+  severity: GraphInteraction['severity'],
+  mechanisms = ['m'],
+): GraphInteraction => ({
   id: `${food}--${drug}`,
   food,
   drug,
