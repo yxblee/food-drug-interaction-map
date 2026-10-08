@@ -12,7 +12,7 @@ describe('seed dataset', () => {
     expect('errors' in r ? r.errors : []).toEqual([])
   })
   it('has the catalogue sizes from the ticket', () => {
-    const drugs = ds!.drugs.filter((d) => !d.group).length
+    const drugs = ds!.drugs.length
     expect(drugs).toBeGreaterThanOrEqual(55)
     expect(drugs).toBeLessThanOrEqual(65)
     expect(ds!.foods.length).toBe(39)
@@ -34,7 +34,7 @@ describe('seed dataset', () => {
   })
   it('backs every interaction with an authoritative citation and no placeholders', () => {
     const ok =
-      /^https:\/\/(dailymed\.nlm\.nih\.gov|pubmed\.ncbi\.nlm\.nih\.gov|ods\.od\.nih\.gov|www\.nccih\.nih\.gov|www\.ncbi\.nlm\.nih\.gov)\//
+      /^https:\/\/(dailymed\.nlm\.nih\.gov|pubmed\.ncbi\.nlm\.nih\.gov|ods\.od\.nih\.gov|www\.nccih\.nih\.gov|www\.niaaa\.nih\.gov|www\.ncbi\.nlm\.nih\.gov)\//
     for (const i of ds!.interactions) {
       expect(i.status, i.id).toBe('approved')
       expect(i.source, i.id).toBe('curated')

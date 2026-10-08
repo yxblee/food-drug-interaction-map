@@ -1,0 +1,21 @@
+id: grapefruit-relatives--buspirone
+food: grapefruit-relatives
+drug: buspirone
+mechanisms: [cyp3a4-inhibition]
+severity: caution
+effect: increases
+summary: "Large amounts of grapefruit juice can raise buspirone levels about nine-fold."
+advice: "Avoid drinking large amounts of grapefruit juice while taking buspirone."
+details: "Grapefruit, pomelo and Seville orange contain furanocoumarins that switch off CYP3A4 in the gut wall, so more of the medicine is absorbed. Sweet oranges do not contain these compounds and are not part of this warning.\n\nThe buspirone label describes a study in which double-strength grapefruit juice raised buspirone exposure roughly 9-fold and advises patients to avoid such large amounts. Higher levels can cause more dizziness and sedation."
+citations:
+  - type: "label"
+    title: "BUSPIRONE HYDROCHLORIDE TABLET [REMEDYREPACK INC.]"
+    url: "https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=ef8fc378-7fee-4d20-81ec-31211e34dc6e"
+    setid: "ef8fc378-7fee-4d20-81ec-31211e34dc6e"
+  - type: "review"
+    title: "Grapefruit-medication interactions: forbidden fruit or avoidable consequences? (CMAJ 2013)"
+    url: "https://pubmed.ncbi.nlm.nih.gov/23184849/"
+    pmid: "23184849"
+status: approved
+source: curated
+reviewed_at: 2026-10-08

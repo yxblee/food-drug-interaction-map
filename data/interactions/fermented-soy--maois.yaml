@@ -1,0 +1,21 @@
+id: fermented-soy--maois
+food: fermented-soy
+drug: maois
+mechanisms: [tyramine-pressor-response]
+severity: avoid
+effect: increases
+summary: "Soy sauce and other fermented soy foods can contain enough tyramine to be unsafe with MAO inhibitors."
+advice: "Avoid soy sauce and other fermented soy products, and check with your prescriber before eating foods such as miso."
+details: "Tyramine is normally broken down by monoamine oxidase in the gut and liver. While that enzyme is blocked, tyramine from food builds up and triggers a release of norepinephrine, which can raise blood pressure sharply (hypertensive crisis). The risk continues for about two weeks after the medicine is stopped, so keep following the diet during that time.\n\nThe tranylcypromine label lists most soybean products, including soy sauce, among tyramine-rich foods to avoid, and the isocarboxazid label lists soy sauce."
+citations:
+  - type: "label"
+    title: "PARNATE (TRANYLCYPROMINE SULFATE) TABLET, FILM COATED [ADVANZ PHARMA (US) CORP.]"
+    url: "https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=b72d8187-dfcc-4ea0-b5e9-c0be95b69a27"
+    setid: "b72d8187-dfcc-4ea0-b5e9-c0be95b69a27"
+  - type: "label"
+    title: "MARPLAN (ISOCARBOXAZID) TABLET [VALIDUS PHARMACEUTICALS LLC]"
+    url: "https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=ac387aa0-3f04-4865-a913-db6ed6f4fdc5"
+    setid: "ac387aa0-3f04-4865-a913-db6ed6f4fdc5"
+status: approved
+source: curated
+reviewed_at: 2026-10-08

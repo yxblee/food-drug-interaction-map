@@ -1,0 +1,17 @@
+id: histamine-rich-fish--isoniazid
+food: histamine-rich-fish
+drug: isoniazid
+mechanisms: [histamine-accumulation]
+severity: avoid
+effect: increases
+summary: "Isoniazid can make reactions to histamine-rich fish such as tuna stronger, with flushing, headache and palpitations."
+advice: "Avoid histamine-rich fish such as tuna, skipjack and other tropical fish while taking isoniazid. Seek help if you get flushing, a pounding heart or a drop in blood pressure after eating fish."
+details: "The isoniazid label says it may also inhibit diamine oxidase, an enzyme that breaks down histamine, leading to exaggerated reactions to histamine-containing foods. It gives skipjack, tuna and other tropical fish as examples, with headache, sweating, palpitations, flushing and low blood pressure as symptoms."
+citations:
+  - type: "label"
+    title: "ISONIAZID TABLET [REMEDYREPACK INC.]"
+    url: "https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=6dab7b7b-a3a9-47ef-b423-134bc6970d8b"
+    setid: "6dab7b7b-a3a9-47ef-b423-134bc6970d8b"
+status: approved
+source: curated
+reviewed_at: 2026-10-08

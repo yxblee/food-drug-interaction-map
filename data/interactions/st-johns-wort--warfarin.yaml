@@ -1,0 +1,20 @@
+id: st-johns-wort--warfarin
+food: st-johns-wort
+drug: warfarin
+mechanisms: [cyp2c9-induction, cyp3a4-induction]
+severity: caution
+effect: decreases
+summary: "St. John's wort can lower warfarin levels and reduce its protective effect."
+advice: "Do not start or stop St. John's wort without talking to your prescriber. If you do change it, expect extra INR checks."
+details: "St. John's wort speeds up several liver enzymes that clear warfarin, so the blood may clot more easily than intended. The warfarin label lists St. John's wort among botanicals that can reduce warfarin's effect and calls for more frequent INR monitoring when any botanical is started or stopped. NCCIH also names warfarin among the medicines it can weaken."
+citations:
+  - type: "label"
+    title: "JANTOVEN (WARFARIN SODIUM) TABLET [UPSHER-SMITH LABORATORIES, LLC]"
+    url: "https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=19a69a72-ac5d-45d5-a94d-a5aaecbe4730"
+    setid: "19a69a72-ac5d-45d5-a94d-a5aaecbe4730"
+  - type: "guideline"
+    title: "St. John's Wort: Usefulness and Safety (NCCIH)"
+    url: "https://www.nccih.nih.gov/health/st-johns-wort"
+status: approved
+source: curated
+reviewed_at: 2026-10-08

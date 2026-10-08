@@ -1,0 +1,25 @@
+id: fermented-vegetables--maois
+food: fermented-vegetables
+drug: maois
+mechanisms: [tyramine-pressor-response]
+severity: avoid
+effect: increases
+summary: "Sauerkraut and similar fermented vegetables are high in tyramine and unsafe with MAO inhibitors."
+advice: "Avoid sauerkraut and other fermented or pickled vegetables, and check with your prescriber before eating foods such as kimchi."
+details: "Tyramine is normally broken down by monoamine oxidase in the gut and liver. While that enzyme is blocked, tyramine from food builds up and triggers a release of norepinephrine, which can raise blood pressure sharply (hypertensive crisis). The risk continues for about two weeks after the medicine is stopped, so keep following the diet during that time.\n\nThe phenelzine, tranylcypromine and isocarboxazid labels all list sauerkraut among foods to avoid."
+citations:
+  - type: "label"
+    title: "NARDIL (PHENELZINE SULFATE) TABLET, FILM COATED [PARKE-DAVIS DIV OF PFIZER INC]"
+    url: "https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=513a41d0-37d4-4355-8a6d-a2c643bce6fa"
+    setid: "513a41d0-37d4-4355-8a6d-a2c643bce6fa"
+  - type: "label"
+    title: "PARNATE (TRANYLCYPROMINE SULFATE) TABLET, FILM COATED [ADVANZ PHARMA (US) CORP.]"
+    url: "https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=b72d8187-dfcc-4ea0-b5e9-c0be95b69a27"
+    setid: "b72d8187-dfcc-4ea0-b5e9-c0be95b69a27"
+  - type: "label"
+    title: "MARPLAN (ISOCARBOXAZID) TABLET [VALIDUS PHARMACEUTICALS LLC]"
+    url: "https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=ac387aa0-3f04-4865-a913-db6ed6f4fdc5"
+    setid: "ac387aa0-3f04-4865-a913-db6ed6f4fdc5"
+status: approved
+source: curated
+reviewed_at: 2026-10-08

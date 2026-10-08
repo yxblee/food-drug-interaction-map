@@ -1,0 +1,21 @@
+id: grapefruit-relatives--simvastatin
+food: grapefruit-relatives
+drug: simvastatin
+mechanisms: [cyp3a4-inhibition]
+severity: avoid
+effect: increases
+summary: "Grapefruit raises simvastatin levels and increases the risk of serious muscle damage."
+advice: "Avoid grapefruit and grapefruit juice while taking simvastatin. Ask your pharmacist about other fruits from the same family, such as pomelo and Seville orange."
+details: "Grapefruit, pomelo and Seville orange contain furanocoumarins that switch off CYP3A4 in the gut wall, so more of the medicine is absorbed. Sweet oranges do not contain these compounds and are not part of this warning.\n\nThe Zocor label says grapefruit juice can raise simvastatin levels and increase the risk of myopathy and rhabdomyolysis, and tells patients to avoid it. Rhabdomyolysis is a breakdown of muscle that can damage the kidneys."
+citations:
+  - type: "label"
+    title: "ZOCOR (SIMVASTATIN) TABLET, FILM COATED [ORGANON LLC]"
+    url: "https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=8f55d5de-5a4f-4a39-8c84-c53976dd6af9"
+    setid: "8f55d5de-5a4f-4a39-8c84-c53976dd6af9"
+  - type: "review"
+    title: "Grapefruit-medication interactions: forbidden fruit or avoidable consequences? (CMAJ 2013)"
+    url: "https://pubmed.ncbi.nlm.nih.gov/23184849/"
+    pmid: "23184849"
+status: approved
+source: curated
+reviewed_at: 2026-10-08

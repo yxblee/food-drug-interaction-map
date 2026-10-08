@@ -1,0 +1,21 @@
+id: grapefruit-relatives--tacrolimus
+food: grapefruit-relatives
+drug: tacrolimus
+mechanisms: [cyp3a4-inhibition]
+severity: avoid
+effect: increases
+summary: "Grapefruit raises tacrolimus levels and should not be eaten or drunk with it."
+advice: "Do not eat grapefruit or drink grapefruit juice while taking tacrolimus."
+details: "Grapefruit, pomelo and Seville orange contain furanocoumarins that switch off CYP3A4 in the gut wall, so more of the medicine is absorbed. Sweet oranges do not contain these compounds and are not part of this warning.\n\nThe Prograf label tells patients not to eat grapefruit or drink grapefruit juice and lists grapefruit juice among interactions to avoid because it raises tacrolimus concentrations through CYP3A inhibition. Blood levels are monitored in transplant care for this reason."
+citations:
+  - type: "label"
+    title: "PROGRAF (TACROLIMUS) CAPSULE, GELATIN COATED PROGRAF (TACROLIMUS) INJECTION, SOLUTION PROGRAF (TACROLIMUS) GRANULE, FOR SUSPENSION [ASTELLAS PHARMA US, INC.]"
+    url: "https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=7f667de1-9dfa-4bd6-8ba0-15ee2d78873b"
+    setid: "7f667de1-9dfa-4bd6-8ba0-15ee2d78873b"
+  - type: "review"
+    title: "Grapefruit-medication interactions: forbidden fruit or avoidable consequences? (CMAJ 2013)"
+    url: "https://pubmed.ncbi.nlm.nih.gov/23184849/"
+    pmid: "23184849"
+status: approved
+source: curated
+reviewed_at: 2026-10-08
