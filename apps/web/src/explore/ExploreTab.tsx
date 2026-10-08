@@ -1,6 +1,7 @@
 import type { GraphPayload } from '@fdi/schema'
 import type { Palette } from '../theme/tokens.ts'
 import type { ViewState } from '../urlState.ts'
+import { Search } from './Search.tsx'
 
 export interface ExploreTabProps {
   graph: GraphPayload
@@ -11,6 +12,11 @@ export interface ExploreTabProps {
   clearMedsFilter: () => void
 }
 
-export function ExploreTab({ graph }: ExploreTabProps) {
-  return <p className="mono-label">{graph.nodes.length} nodes</p>
+export function ExploreTab({ graph, state, update }: ExploreTabProps) {
+  return (
+    <>
+      <Search graph={graph} state={state} update={update} />
+      <p className="mono-label">{graph.nodes.length} nodes</p>
+    </>
+  )
 }
