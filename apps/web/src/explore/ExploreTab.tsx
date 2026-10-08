@@ -5,6 +5,7 @@ import type { Palette } from '../theme/tokens.ts'
 import type { ViewState } from '../urlState.ts'
 import { browseKeys, stepKey } from './browse.ts'
 import { SidePanel } from './SidePanel.tsx'
+import { Search } from './Search.tsx'
 import './explore.css'
 
 export interface ExploreTabProps {
@@ -46,6 +47,7 @@ export function ExploreTab({ graph, state, update }: ExploreTabProps) {
 
   return (
     <div className="explore">
+      <Search graph={graph} state={state} update={update} />
       <p className="mono-label">{graph.nodes.length} nodes</p>
       {stale && (
         <p className="notice" role="status">
