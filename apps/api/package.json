@@ -1,0 +1,11 @@
+{
+  "name": "@fdi/api",
+  "private": true,
+  "type": "module",
+  "dependencies": {
+    "@fdi/schema": "workspace:*",
+    "@hono/node-server": "^2.1.4",
+    "hono": "^4.13.13",
+    "yaml": "^2.9.1"
+  }
+}

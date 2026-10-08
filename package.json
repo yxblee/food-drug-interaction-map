@@ -1,0 +1,19 @@
+{
+  "name": "food-drug-interaction-map",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "build:db": "node apps/api/scripts/build-db.ts data dist/data.db",
+    "start": "node apps/api/src/server.ts"
+  },
+  "devDependencies": {
+    "@playwright/test": "^1.64.0",
+    "@types/node": "^24.0.0",
+    "typescript": "^7.0.2",
+    "vite-plus": "1.1.0"
+  },
+  "engines": {
+    "node": ">=24.11.0"
+  },
+  "packageManager": "pnpm@12.10.1"
+}

@@ -1,0 +1,16 @@
+id: leafy-greens--warfarin
+food: leafy-greens
+drug: warfarin
+mechanisms: [vitamin-k-antagonism]
+severity: caution
+effect: increases
+summary: Fixture summary.
+advice: Fixture advice.
+details: Fixture details.
+citations:
+  - type: label
+    title: Fixture citation
+    url: https://example.org/fixture
+status: approved
+source: curated
+reviewed_at: 2026-10-08

@@ -1,0 +1,9 @@
+packages:
+  - apps/*
+  - packages/*
+
+minimumReleaseAgeExclude:
+  - '@hono/node-server@2.1.4'
+
+overrides:
+  vite: npm:@voidzero-dev/vite-plus-core@1.1.0
