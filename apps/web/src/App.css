@@ -1,6 +1,6 @@
 .app {
-  display: grid;
-  grid-template-rows: auto auto 1fr auto;
+  display: flex;
+  flex-direction: column;
   height: 100%;
 }
 .app__bar {
@@ -24,6 +24,7 @@
 }
 .app__main {
   position: relative;
+  flex: 1;
   min-height: 0;
 }
 .app__loading {
