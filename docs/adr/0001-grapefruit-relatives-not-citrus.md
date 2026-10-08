@@ -1,0 +1,3 @@
+# Grapefruit and its relatives are a Food group; citrus is not
+
+The CYP3A4 interactions come from furanocoumarins found in grapefruit, pomelo and Seville (bitter) orange, not in sweet oranges, lemons or limes. A "citrus" Food group would make every citrus fruit inherit avoid-level warnings for drugs such as simvastatin and felodipine, which is clinically wrong and would erode trust in the real warnings. So the seed Dataset uses a `grapefruit-relatives` Food group, and orange juice is a separate Food with only its own documented interactions. Changing this after publication means correcting warnings people may already rely on.

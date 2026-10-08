@@ -20,11 +20,23 @@ _Avoid_: Substance, consumable, ingredient
 A named set of Foods that share interactions, such as leafy greens or aged cheeses.
 _Avoid_: Food class, food category
 
+**Alias**:
+Another name a person might search for a Drug or Food by.
+_Avoid_: Synonym, nickname
+
+**Brand name**:
+A manufacturer's trade name for a Drug, such as Zocor, recorded as an Alias.
+_Avoid_: Trade name
+
 **Food category**:
 A display-only label for the kind of Food, such as fruit, dairy or beverage. It plays no part in interactions.
 _Avoid_: Food group, food type
 
 ## Interactions
+
+**Dataset**:
+Every Approved Interaction plus the Drugs, Foods and Mechanisms they refer to. Absence from the Dataset does not mean a combination is safe.
+_Avoid_: Database (as a domain term)
 
 **Interaction**:
 A documented change in a Drug's action caused by a Food, with a Severity, Effect, Mechanisms and citations.
@@ -37,6 +49,14 @@ _Avoid_: Risk level, grade
 **Effect**:
 The direction in which the Food pushes the Drug's action: increases or decreases.
 _Avoid_: Impact, outcome
+
+**Mechanism**:
+The biological reason a Food changes a Drug's action. An Interaction can have several.
+_Avoid_: Pathway, cause
+
+**Citation**:
+A link to published evidence for an Interaction. Shown to people under the label "Sources".
+_Avoid_: Reference, evidence (as nouns)
 
 **Direct interaction**:
 An Interaction recorded against the exact Food and Drug being viewed.
@@ -70,3 +90,7 @@ _Avoid_: Med (outside the UI), prescription
 **Medication list**:
 The Medications a person has entered. It stays on their device and is never sent anywhere.
 _Avoid_: My meds (outside the UI), profile, regimen, prescriptions
+
+**Food warning**:
+One Food that interacts with something on a Medication list, shown at its worst Severity with every affected Medication. Shown to people under "Foods to watch".
+_Avoid_: Alert, hit
