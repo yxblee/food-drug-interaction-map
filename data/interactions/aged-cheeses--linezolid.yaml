@@ -1,0 +1,17 @@
+id: aged-cheeses--linezolid
+food: aged-cheeses
+drug: linezolid
+mechanisms: [tyramine-pressor-response]
+severity: caution
+effect: increases
+summary: "Large amounts of aged cheese can raise blood pressure while taking linezolid."
+advice: "Avoid large amounts of foods high in tyramine, such as aged cheeses, fermented or air-dried meats, sauerkraut, soy sauce, tap beer and red wine, while taking linezolid."
+details: "Linezolid is a reversible, non-selective MAO inhibitor, so tyramine from food is cleared more slowly. The Zyvox label reports a significant rise in blood pressure in healthy adults given linezolid with more than 100 mg of tyramine, and tells patients to avoid large amounts of high-tyramine foods."
+citations:
+  - type: "label"
+    title: "ZYVOX (LINEZOLID) INJECTION, SOLUTION ZYVOX (LINEZOLID) GRANULE, FOR SUSPENSION ZYVOX (LINEZOLID) TABLET, FILM COATED [PHARMACIA & UPJOHN COMPANY LLC]"
+    url: "https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=6e70e63b-bfd5-478d-a8ee-8ba22c9efabd"
+    setid: "6e70e63b-bfd5-478d-a8ee-8ba22c9efabd"
+status: approved
+source: curated
+reviewed_at: 2026-10-08

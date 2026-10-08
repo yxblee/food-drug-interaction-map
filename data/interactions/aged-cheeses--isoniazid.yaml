@@ -1,0 +1,17 @@
+id: aged-cheeses--isoniazid
+food: aged-cheeses
+drug: isoniazid
+mechanisms: [tyramine-pressor-response]
+severity: avoid
+effect: increases
+summary: "Isoniazid can block tyramine breakdown, so cheese may cause headache, flushing and blood pressure changes."
+advice: "Avoid tyramine-rich foods such as aged cheese and red wine while taking isoniazid, as the label advises."
+details: "The isoniazid label says tyramine- and histamine-containing foods should be avoided because the drug has some monoamine oxidase inhibiting activity, and gives cheese and red wine as examples. Its MAO inhibition is weaker than that of dedicated MAO inhibitor antidepressants, so reactions are less predictable, but the label still advises avoidance."
+citations:
+  - type: "label"
+    title: "ISONIAZID TABLET [REMEDYREPACK INC.]"
+    url: "https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=6dab7b7b-a3a9-47ef-b423-134bc6970d8b"
+    setid: "6dab7b7b-a3a9-47ef-b423-134bc6970d8b"
+status: approved
+source: curated
+reviewed_at: 2026-10-08

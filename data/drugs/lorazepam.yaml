@@ -1,0 +1,5 @@
+id: "lorazepam"
+name: "Lorazepam"
+aliases: ["Ativan"]
+parent: "benzodiazepines"
+drug_class: "Benzodiazepine"

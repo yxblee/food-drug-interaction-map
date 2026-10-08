@@ -1,0 +1,5 @@
+id: "seville-orange"
+name: "Seville orange"
+aliases: ["bitter orange", "sour orange"]
+parent: "grapefruit-relatives"
+category: "fruit"

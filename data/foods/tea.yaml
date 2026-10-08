@@ -1,0 +1,4 @@
+id: "tea"
+name: "Tea"
+aliases: ["black tea", "green tea"]
+category: "beverage"

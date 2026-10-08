@@ -1,0 +1,21 @@
+id: cured-meats--maois
+food: cured-meats
+drug: maois
+mechanisms: [tyramine-pressor-response]
+severity: avoid
+effect: increases
+summary: "Dried and cured sausages such as salami and pepperoni are high in tyramine and unsafe with MAO inhibitors."
+advice: "Avoid dry, aged and fermented meats such as salami and pepperoni, and any meat that is spoiled or has been stored badly. Fresh meat is generally acceptable."
+details: "Tyramine is normally broken down by monoamine oxidase in the gut and liver. While that enzyme is blocked, tyramine from food builds up and triggers a release of norepinephrine, which can raise blood pressure sharply (hypertensive crisis). The risk continues for about two weeks after the medicine is stopped, so keep following the diet during that time.\n\nThe phenelzine label names dry sausage including salami and pepperoni, and the tranylcypromine label names aged and fermented meats and salamis."
+citations:
+  - type: "label"
+    title: "NARDIL (PHENELZINE SULFATE) TABLET, FILM COATED [PARKE-DAVIS DIV OF PFIZER INC]"
+    url: "https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=513a41d0-37d4-4355-8a6d-a2c643bce6fa"
+    setid: "513a41d0-37d4-4355-8a6d-a2c643bce6fa"
+  - type: "label"
+    title: "PARNATE (TRANYLCYPROMINE SULFATE) TABLET, FILM COATED [ADVANZ PHARMA (US) CORP.]"
+    url: "https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=b72d8187-dfcc-4ea0-b5e9-c0be95b69a27"
+    setid: "b72d8187-dfcc-4ea0-b5e9-c0be95b69a27"
+status: approved
+source: curated
+reviewed_at: 2026-10-08

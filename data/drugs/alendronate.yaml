@@ -1,0 +1,5 @@
+id: "alendronate"
+name: "Alendronate"
+aliases: ["Fosamax"]
+parent: "bisphosphonates"
+drug_class: "Bisphosphonate"

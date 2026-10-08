@@ -1,0 +1,5 @@
+id: "collard-greens"
+name: "Collard greens"
+aliases: ["collards"]
+parent: "leafy-greens"
+category: "vegetable"

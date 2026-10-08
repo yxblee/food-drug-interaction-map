@@ -1,0 +1,5 @@
+id: "citalopram"
+name: "Citalopram"
+aliases: ["Celexa"]
+parent: "ssris"
+drug_class: "Selective serotonin reuptake inhibitor"

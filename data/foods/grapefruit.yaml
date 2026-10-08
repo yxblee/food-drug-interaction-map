@@ -1,0 +1,5 @@
+id: "grapefruit"
+name: "Grapefruit"
+aliases: ["grapefruit juice"]
+parent: "grapefruit-relatives"
+category: "fruit"

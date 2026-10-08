@@ -1,0 +1,4 @@
+id: "cyp2c9-induction"
+name: "CYP2C9 induction"
+kind: "enzyme"
+explanation: "Some substances make the body produce more CYP2C9, the main enzyme that clears warfarin. Faster clearance lowers the amount of warfarin in the blood, so the blood may clot more easily than intended."

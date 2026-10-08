@@ -1,0 +1,21 @@
+id: grapefruit-relatives--rosuvastatin
+food: grapefruit-relatives
+drug: rosuvastatin
+mechanisms: [cyp3a4-inhibition]
+severity: minimal
+effect: increases
+summary: "Rosuvastatin is not meaningfully affected by grapefruit."
+advice: "No grapefruit restriction is needed for rosuvastatin itself. Check your other medicines, because many are affected."
+details: "The rosuvastatin label states that its clearance does not depend to a clinically significant extent on CYP3A4, the enzyme grapefruit blocks. A review of grapefruit interactions lists rosuvastatin among statins that can be used without this problem. The effect direction is shown as increases only because that is the way grapefruit pushes drugs of this kind."
+citations:
+  - type: "label"
+    title: "CRESTOR (ROSUVASTATIN) TABLET, FILM COATED [ASTRAZENECA PHARMACEUTICALS LP]"
+    url: "https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=325a5d0e-9a72-4015-9fcd-1655fb504cee"
+    setid: "325a5d0e-9a72-4015-9fcd-1655fb504cee"
+  - type: "review"
+    title: "Grapefruit-medication interactions: forbidden fruit or avoidable consequences? (CMAJ 2013)"
+    url: "https://pubmed.ncbi.nlm.nih.gov/23184849/"
+    pmid: "23184849"
+status: approved
+source: curated
+reviewed_at: 2026-10-08

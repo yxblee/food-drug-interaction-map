@@ -1,0 +1,17 @@
+id: leafy-greens--warfarin
+food: leafy-greens
+drug: warfarin
+mechanisms: [vitamin-k-antagonism]
+severity: caution
+effect: decreases
+summary: "Vitamin K in leafy greens can weaken warfarin and lower your INR."
+advice: "Eat leafy greens in about the same amount each week rather than avoiding them, and avoid sudden big changes such as starting a daily salad or large servings of greens. Tell your anticoagulation clinic about any lasting change to your diet."
+details: "Warfarin works by blocking vitamin K, which the body needs to make clotting factors. Leafy greens such as kale, spinach and collards are rich in vitamin K, so a large or irregular serving can reduce warfarin's effect and lower the INR.\n\nThe label advises a normal, balanced diet with a consistent amount of vitamin K and warns against drastic dietary changes such as eating large amounts of green leafy vegetables. Steady intake lets the warfarin dose be set around it."
+citations:
+  - type: "label"
+    title: "JANTOVEN (WARFARIN SODIUM) TABLET [UPSHER-SMITH LABORATORIES, LLC]"
+    url: "https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=19a69a72-ac5d-45d5-a94d-a5aaecbe4730"
+    setid: "19a69a72-ac5d-45d5-a94d-a5aaecbe4730"
+status: approved
+source: curated
+reviewed_at: 2026-10-08

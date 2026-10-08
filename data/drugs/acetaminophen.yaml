@@ -1,0 +1,4 @@
+id: "acetaminophen"
+name: "Acetaminophen"
+aliases: ["Tylenol", "paracetamol"]
+drug_class: "Analgesic"

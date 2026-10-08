@@ -1,0 +1,5 @@
+id: "enalapril"
+name: "Enalapril"
+aliases: ["Vasotec"]
+parent: "ace-inhibitors"
+drug_class: "ACE inhibitor"

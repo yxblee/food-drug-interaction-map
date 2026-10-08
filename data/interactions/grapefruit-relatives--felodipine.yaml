@@ -1,0 +1,21 @@
+id: grapefruit-relatives--felodipine
+food: grapefruit-relatives
+drug: felodipine
+mechanisms: [cyp3a4-inhibition]
+severity: caution
+effect: increases
+summary: "Grapefruit juice more than doubles felodipine levels and can lower blood pressure and speed the heart rate."
+advice: "Ask your prescriber or pharmacist before having grapefruit or its relatives with felodipine. If you do, expect a stronger effect and report dizziness, a very low blood pressure reading or a racing heart."
+details: "Grapefruit, pomelo and Seville orange contain furanocoumarins that switch off CYP3A4 in the gut wall, so more of the medicine is absorbed. Sweet oranges do not contain these compounds and are not part of this warning.\n\nThe felodipine label reports more than a doubling of exposure with grapefruit juice and says CYP3A4 inhibitors can cause several-fold rises, leading to a lower blood pressure and faster heart rate. It tells prescribers to use caution and take a conservative approach to dosing."
+citations:
+  - type: "label"
+    title: "FELODIPINE TABLET, EXTENDED RELEASE FELODIPINE TABLET, FILM COATED, EXTENDED RELEASE [PAR HEALTH USA, LLC]"
+    url: "https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=55637724-8757-11de-8a39-0800200c9a66"
+    setid: "55637724-8757-11de-8a39-0800200c9a66"
+  - type: "review"
+    title: "Grapefruit-medication interactions: forbidden fruit or avoidable consequences? (CMAJ 2013)"
+    url: "https://pubmed.ncbi.nlm.nih.gov/23184849/"
+    pmid: "23184849"
+status: approved
+source: curated
+reviewed_at: 2026-10-08

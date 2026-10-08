@@ -1,0 +1,21 @@
+id: grapefruit-relatives--atorvastatin
+food: grapefruit-relatives
+drug: atorvastatin
+mechanisms: [cyp3a4-inhibition]
+severity: caution
+effect: increases
+summary: "Large amounts of grapefruit juice can raise atorvastatin levels and the risk of muscle problems."
+advice: "Avoid drinking large quantities of grapefruit juice (more than about 1.2 litres a day). Small amounts are less of a concern, but ask your pharmacist if you have it regularly."
+details: "Grapefruit, pomelo and Seville orange contain furanocoumarins that switch off CYP3A4 in the gut wall, so more of the medicine is absorbed. Sweet oranges do not contain these compounds and are not part of this warning.\n\nThe Lipitor label ties the risk mainly to excessive intake, more than 1.2 litres a day, and advises avoiding large quantities."
+citations:
+  - type: "label"
+    title: "LIPITOR (ATORVASTATIN CALCIUM) TABLET, FILM COATED [VIATRIS SPECIALTY LLC]"
+    url: "https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=a60cc18b-0631-4cf0-b021-9f52224ece65"
+    setid: "a60cc18b-0631-4cf0-b021-9f52224ece65"
+  - type: "review"
+    title: "Grapefruit-medication interactions: forbidden fruit or avoidable consequences? (CMAJ 2013)"
+    url: "https://pubmed.ncbi.nlm.nih.gov/23184849/"
+    pmid: "23184849"
+status: approved
+source: curated
+reviewed_at: 2026-10-08

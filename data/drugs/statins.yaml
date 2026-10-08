@@ -1,0 +1,4 @@
+id: "statins"
+name: "Statins"
+group: true
+drug_class: "HMG-CoA reductase inhibitor"

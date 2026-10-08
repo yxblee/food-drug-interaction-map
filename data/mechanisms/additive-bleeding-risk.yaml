@@ -1,0 +1,4 @@
+id: "additive-bleeding-risk"
+name: "Added bleeding risk"
+kind: "pharmacodynamic"
+explanation: "Alcohol can affect the liver and platelets in ways that add to warfarin's blood-thinning effect, and heavy or binge drinking can make the effect unpredictable. The result can be a higher chance of bruising and bleeding."

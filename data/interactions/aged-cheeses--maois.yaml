@@ -1,0 +1,25 @@
+id: aged-cheeses--maois
+food: aged-cheeses
+drug: maois
+mechanisms: [tyramine-pressor-response]
+severity: avoid
+effect: increases
+summary: "Aged cheese is high in tyramine and can cause a dangerous rise in blood pressure with MAO inhibitors."
+advice: "Avoid aged and strong cheeses. Fresh cheeses such as cottage and cream cheese are generally allowed, but check with your prescriber."
+details: "Tyramine is normally broken down by monoamine oxidase in the gut and liver. While that enzyme is blocked, tyramine from food builds up and triggers a release of norepinephrine, which can raise blood pressure sharply (hypertensive crisis). The risk continues for about two weeks after the medicine is stopped, so keep following the diet during that time.\n\nThe labels for phenelzine, tranylcypromine and isocarboxazid all tell patients to avoid cheese, especially aged varieties."
+citations:
+  - type: "label"
+    title: "NARDIL (PHENELZINE SULFATE) TABLET, FILM COATED [PARKE-DAVIS DIV OF PFIZER INC]"
+    url: "https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=513a41d0-37d4-4355-8a6d-a2c643bce6fa"
+    setid: "513a41d0-37d4-4355-8a6d-a2c643bce6fa"
+  - type: "label"
+    title: "PARNATE (TRANYLCYPROMINE SULFATE) TABLET, FILM COATED [ADVANZ PHARMA (US) CORP.]"
+    url: "https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=b72d8187-dfcc-4ea0-b5e9-c0be95b69a27"
+    setid: "b72d8187-dfcc-4ea0-b5e9-c0be95b69a27"
+  - type: "label"
+    title: "MARPLAN (ISOCARBOXAZID) TABLET [VALIDUS PHARMACEUTICALS LLC]"
+    url: "https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=ac387aa0-3f04-4865-a913-db6ed6f4fdc5"
+    setid: "ac387aa0-3f04-4865-a913-db6ed6f4fdc5"
+status: approved
+source: curated
+reviewed_at: 2026-10-08

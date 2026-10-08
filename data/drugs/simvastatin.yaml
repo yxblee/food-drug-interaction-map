@@ -1,0 +1,5 @@
+id: "simvastatin"
+name: "Simvastatin"
+aliases: ["Zocor"]
+parent: "statins"
+drug_class: "HMG-CoA reductase inhibitor"

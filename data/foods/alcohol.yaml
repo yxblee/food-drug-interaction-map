@@ -1,0 +1,4 @@
+id: "alcohol"
+name: "Alcohol"
+aliases: ["wine", "beer", "spirits"]
+category: "alcohol"

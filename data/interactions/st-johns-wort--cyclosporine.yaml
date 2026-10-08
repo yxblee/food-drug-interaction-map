@@ -1,0 +1,20 @@
+id: st-johns-wort--cyclosporine
+food: st-johns-wort
+drug: cyclosporine
+mechanisms: [cyp3a4-induction, p-glycoprotein-induction]
+severity: avoid
+effect: decreases
+summary: "St. John's wort can sharply lower cyclosporine levels, which has led to transplant rejection."
+advice: "Do not take St. John's wort with cyclosporine unless your transplant team directs it. If you already take it, tell them before changing anything."
+details: "St. John's wort turns up CYP3A4 and the P-glycoprotein pump, so cyclosporine is cleared faster and absorbed less. The Neoral label describes reports of a marked drop in cyclosporine levels, resulting in levels too low to work, rejection of transplanted organs and graft loss. NCCIH also lists cyclosporine among medicines St. John's wort can weaken."
+citations:
+  - type: "label"
+    title: "NEORAL (CYCLOSPORINE) CAPSULE, LIQUID FILLED NEORAL (CYCLOSPORINE) SOLUTION [NOVARTIS PHARMACEUTICALS CORPORATION]"
+    url: "https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=94461af3-11f1-4670-95d4-2965b9538ae3"
+    setid: "94461af3-11f1-4670-95d4-2965b9538ae3"
+  - type: "guideline"
+    title: "St. John's Wort: Usefulness and Safety (NCCIH)"
+    url: "https://www.nccih.nih.gov/health/st-johns-wort"
+status: approved
+source: curated
+reviewed_at: 2026-10-08

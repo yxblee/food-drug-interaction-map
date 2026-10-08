@@ -1,0 +1,5 @@
+id: "levofloxacin"
+name: "Levofloxacin"
+aliases: ["Levaquin"]
+parent: "fluoroquinolones"
+drug_class: "Fluoroquinolone antibiotic"

@@ -1,0 +1,5 @@
+id: "fluoxetine"
+name: "Fluoxetine"
+aliases: ["Prozac"]
+parent: "ssris"
+drug_class: "Selective serotonin reuptake inhibitor"

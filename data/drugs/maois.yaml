@@ -1,0 +1,5 @@
+id: "maois"
+name: "MAO inhibitors"
+aliases: ["MAOIs"]
+group: true
+drug_class: "Monoamine oxidase inhibitor"

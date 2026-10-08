@@ -1,0 +1,5 @@
+id: "minocycline"
+name: "Minocycline"
+aliases: ["Minocin", "Solodyn"]
+parent: "tetracyclines"
+drug_class: "Tetracycline antibiotic"

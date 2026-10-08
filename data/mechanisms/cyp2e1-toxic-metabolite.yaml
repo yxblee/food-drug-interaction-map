@@ -1,0 +1,4 @@
+id: "cyp2e1-toxic-metabolite"
+name: "Toxic metabolite via CYP2E1"
+kind: "enzyme"
+explanation: "In regular heavy drinkers, the enzyme CYP2E1 is more active. It turns a larger share of acetaminophen into a harmful by-product that can damage the liver, especially when the liver is already stressed by alcohol."

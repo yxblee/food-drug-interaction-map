@@ -1,0 +1,21 @@
+id: grapefruit-relatives--amlodipine
+food: grapefruit-relatives
+drug: amlodipine
+mechanisms: [cyp3a4-inhibition]
+severity: minimal
+effect: increases
+summary: "Grapefruit juice has no measurable effect on amlodipine exposure."
+advice: "No grapefruit restriction is needed for amlodipine itself."
+details: "The Norvasc label says grapefruit juice does not change amlodipine exposure, even though amlodipine is processed partly by CYP3A. Other calcium channel blockers such as felodipine and nifedipine behave differently. The effect direction is shown as increases only for consistency with the enzyme mechanism."
+citations:
+  - type: "label"
+    title: "NORVASC (AMLODIPINE BESYLATE) TABLET [VIATRIS SPECIALTY LLC]"
+    url: "https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=7367289c-b0b0-466a-83e2-558e2985c29f"
+    setid: "7367289c-b0b0-466a-83e2-558e2985c29f"
+  - type: "review"
+    title: "Grapefruit-medication interactions: forbidden fruit or avoidable consequences? (CMAJ 2013)"
+    url: "https://pubmed.ncbi.nlm.nih.gov/23184849/"
+    pmid: "23184849"
+status: approved
+source: curated
+reviewed_at: 2026-10-08

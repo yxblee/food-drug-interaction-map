@@ -1,0 +1,21 @@
+id: grapefruit-relatives--nifedipine
+food: grapefruit-relatives
+drug: nifedipine
+mechanisms: [cyp3a4-inhibition]
+severity: avoid
+effect: increases
+summary: "Grapefruit roughly doubles nifedipine levels, so the label advises avoiding it."
+advice: "Avoid grapefruit and grapefruit juice while taking nifedipine."
+details: "Grapefruit, pomelo and Seville orange contain furanocoumarins that switch off CYP3A4 in the gut wall, so more of the medicine is absorbed. Sweet oranges do not contain these compounds and are not part of this warning.\n\nThe Procardia XL label reports about a doubling of exposure with grapefruit juice, attributes it to blocked CYP3A4 first-pass metabolism, and says to avoid grapefruit and grapefruit juice. Higher levels can cause low blood pressure and swelling."
+citations:
+  - type: "label"
+    title: "PROCARDIA XL (NIFEDIPINE) TABLET, FILM COATED, EXTENDED RELEASE [PFIZER LABORATORIES DIV PFIZER INC]"
+    url: "https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=8ebcb33c-f43b-4b36-9f94-9774b2a59e06"
+    setid: "8ebcb33c-f43b-4b36-9f94-9774b2a59e06"
+  - type: "review"
+    title: "Grapefruit-medication interactions: forbidden fruit or avoidable consequences? (CMAJ 2013)"
+    url: "https://pubmed.ncbi.nlm.nih.gov/23184849/"
+    pmid: "23184849"
+status: approved
+source: curated
+reviewed_at: 2026-10-08
