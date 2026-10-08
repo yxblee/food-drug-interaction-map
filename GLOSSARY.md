@@ -63,8 +63,12 @@ An Interaction recorded against the exact Food and Drug being viewed.
 _Avoid_: Exact match
 
 **Inherited interaction**:
-An Interaction recorded against a Drug class or Food group that applies to one of its members. A Direct interaction for the same pair takes its place.
+An Interaction recorded against a Drug class or Food group that applies to one of its members. A Direct interaction for the same pair always takes its place, even when the Direct interaction is milder.
 _Avoid_: Via row, group match, fallback
+
+**Example exchange**:
+An illustrative patient–pharmacist dialogue attached to an Interaction. Not a real case.
+_Avoid_: Testimonial, case, story
 
 ## Curation
 
@@ -84,7 +88,7 @@ Reviewed and turned down.
 ## Patients
 
 **Medication**:
-A Drug that a particular person takes.
+A specific Drug that a particular person takes. Never a Drug class.
 _Avoid_: Med (outside the UI), prescription
 
 **Medication list**:
