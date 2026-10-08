@@ -35,6 +35,22 @@ describe('GET /api/search', () => {
     expect(await (await get('/api/search?q=')).json()).toEqual([])
     expect(await (await get('/api/search')).json()).toEqual([])
   })
+  it('ignores case and treats special characters literally', async () => {
+    const upper = (await (await get('/api/search?q=ZOC')).json()) as SearchResult[]
+    expect(upper.map((r) => r.id)).toEqual(['simvastatin'])
+    for (const q of ['(', '.*', '%', '%20%20', '+']) {
+      const res = await get(`/api/search?q=${q}`)
+      expect(res.status).toBe(200)
+      expect(await res.json()).toEqual([])
+    }
+  })
+  it('returns [] for whitespace-only q', async () => {
+    expect(await (await get('/api/search?q=%20%20')).json()).toEqual([])
+  })
+  it('flags groups', async () => {
+    const body = (await (await get('/api/search?q=leafy')).json()) as SearchResult[]
+    expect(body[0]).toMatchObject({ id: 'leafy-greens', group: true })
+  })
 })
 
 describe('GET /api/graph', () => {
