@@ -1,14 +1,11 @@
 import { useCallback, useEffect, useState } from 'react'
 import { safeStorage } from './storage.ts'
-import { decode, encode, type ViewState } from './urlState.ts'
+import { decode, decodeWithStoredTint, encode, type ViewState } from './urlState.ts'
 
 const TINT_KEY = 'fdi:tint'
 
 function initial(): ViewState {
-  const s = decode(location.search)
-  if (!new URLSearchParams(location.search).has('tint') && safeStorage()?.getItem(TINT_KEY) === '1')
-    s.tint = true
-  return s
+  return decodeWithStoredTint(location.search, safeStorage()?.getItem(TINT_KEY) ?? null)
 }
 
 export function useUrlState(): [

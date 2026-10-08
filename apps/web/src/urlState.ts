@@ -43,3 +43,10 @@ export function encode(s: ViewState): string {
   if (s.tint) p.set('tint', '1')
   return p.toString()
 }
+
+/** Initial state: the URL wins; otherwise fall back to the Color mode remembered on this device. */
+export function decodeWithStoredTint(search: string, stored: string | null): ViewState {
+  const s = decode(search)
+  if (!new URLSearchParams(search).has('tint') && stored === '1') s.tint = true
+  return s
+}
