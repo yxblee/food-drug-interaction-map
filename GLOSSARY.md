@@ -39,11 +39,11 @@ Every Approved Interaction plus the Drugs, Foods and Mechanisms they refer to. A
 _Avoid_: Database (as a domain term)
 
 **Interaction**:
-A documented change in a Drug's action caused by a Food, with a Severity, Effect, Mechanisms and citations.
+A documented change in a Drug's action caused by a Food that is worth warning about, with a Severity, Effect, Mechanisms and citations. When and how much to eat belongs in its advice, not in separate terms.
 _Avoid_: Contraindication, conflict, warning (as a data term)
 
 **Severity**:
-How strongly we advise against combining the Food and Drug: avoid, caution, monitor or minimal. It is advice, not a clinical grade.
+How strongly we advise against combining the Food and Drug: avoid, caution, monitor or minimal. It is advice, not a clinical grade, and it always comes from the primary Citation.
 _Avoid_: Risk level, grade
 
 **Effect**:
@@ -51,7 +51,7 @@ The direction in which the Food pushes the Drug's action: increases or decreases
 _Avoid_: Impact, outcome
 
 **Mechanism**:
-The biological reason a Food changes a Drug's action. An Interaction can have several.
+The biological reason a Food changes a Drug's action, naming the responsible compound where known. An Interaction can have several.
 _Avoid_: Pathway, cause
 
 **Citation**:
@@ -88,7 +88,7 @@ Reviewed and turned down.
 ## Patients
 
 **Medication**:
-A specific Drug that a particular person takes. Never a Drug class.
+A specific Drug from the Dataset that a particular person takes. Never a Drug class, and never a drug outside the Dataset.
 _Avoid_: Med (outside the UI), prescription
 
 **Medication list**:

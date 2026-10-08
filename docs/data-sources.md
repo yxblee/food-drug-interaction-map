@@ -6,6 +6,8 @@ Most of their records are *potential* interactions, either text-mined or computa
 
 We link to these sources and never copy their records or text into `data/`.
 
+Their grades, such as DDID's positive, negative, no effect, harmful or possible, are never mapped onto our Severity. A reviewer sets Severity from the primary citation. A database's grade only flags which pairs are worth checking.
+
 | Database | What it contains | Paper | Data | Licence (paper) |
 |---|---|---|---|---|
 | **FooDrugs** | About 3.4 million potential interactions: about 1.1 million text-mined from scientific documents and clinical trials, about 2.3 million inferred from gene-expression similarity | Lacruz-Pleguezuelos B, et al. *Database* 2023;baad075. [doi:10.1093/database/baad075](https://doi.org/10.1093/database/baad075) · PMID [37951712](https://pubmed.ncbi.nlm.nih.gov/37951712/) | [Zenodo 10.5281/zenodo.6638469](https://doi.org/10.5281/zenodo.6638469) | CC BY 4.0 |
