@@ -28,7 +28,8 @@ export interface RenderGraph {
   links: RenderLink[]
 }
 
-export const nodeRadius = (n: RenderNode) => (n.kind === 'mechanism' ? 5 : 6 + Math.sqrt(n.weight) * 3)
+export const nodeRadius = (n: RenderNode) =>
+  n.kind === 'mechanism' ? 5 : 6 + Math.sqrt(n.weight) * 3
 
 export function toRenderGraph(g: GraphPayload, opts: { mechanisms: boolean }): RenderGraph {
   const weight = new Map<string, number>()
@@ -64,10 +65,21 @@ export function toRenderGraph(g: GraphPayload, opts: { mechanisms: boolean }): R
   const nodes = g.nodes
     .map((n) => ({ n, key: nodeKey(n.kind, n.id) }))
     .filter(({ n, key }) => n.kind !== 'mechanism' || usedMechanisms.has(key))
-    .map(({ n, key }) => ({ key, kind: n.kind, id: n.id, name: n.name, group: n.group, weight: weight.get(key) ?? 0 }))
+    .map(({ n, key }) => ({
+      key,
+      kind: n.kind,
+      id: n.id,
+      name: n.name,
+      group: n.group,
+      weight: weight.get(key) ?? 0,
+    }))
   const members: RenderLink[] = g.nodes
     .filter((n) => n.parent)
-    .map((n) => ({ source: nodeKey(n.kind, n.id), target: nodeKey(n.kind, n.parent!), kind: 'member' }))
+    .map((n) => ({
+      source: nodeKey(n.kind, n.id),
+      target: nodeKey(n.kind, n.parent!),
+      kind: 'member',
+    }))
   return { nodes, links: [...links.values(), ...members] }
 }
 
@@ -78,7 +90,11 @@ export function filterRenderGraph(rg: RenderGraph, keys: Set<string>): RenderGra
   }
 }
 
-export function computeFocus(ix: Index, selected: string | null, highlighted: Set<string> | null): Set<string> | null {
+export function computeFocus(
+  ix: Index,
+  selected: string | null,
+  highlighted: Set<string> | null,
+): Set<string> | null {
   if (!selected) return highlighted
   const [kind, id] = splitKey(selected)
   const rows =
@@ -90,7 +106,8 @@ export function computeFocus(ix: Index, selected: string | null, highlighted: Se
   const focus = new Set([selected])
   const node = ix.nodes.get(selected)
   if (node?.parent) focus.add(nodeKey(kind, node.parent))
-  for (const n of ix.nodes.values()) if (n.kind === kind && n.parent === id) focus.add(nodeKey(n.kind, n.id))
+  for (const n of ix.nodes.values())
+    if (n.kind === kind && n.parent === id) focus.add(nodeKey(n.kind, n.id))
   for (const { interaction: i } of rows) {
     focus.add(nodeKey('food', i.food))
     focus.add(nodeKey('drug', i.drug))

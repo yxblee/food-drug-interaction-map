@@ -1,6 +1,8 @@
 import { useCallback, useEffect, useMemo, useState } from 'react'
 import type { GraphPayload } from '@fdi/schema'
-import { nodeKey } from '@fdi/schema/domain'
+import { buildIndex, nodeKey, searchNodes } from '@fdi/schema/domain'
+import { GraphView } from '../graph/GraphView.tsx'
+import { computeFocus, toRenderGraph } from '../graph/renderGraph.ts'
 import type { Palette } from '../theme/tokens.ts'
 import type { ViewState } from '../urlState.ts'
 import { browseKeys, stepKey } from './browse.ts'
@@ -17,7 +19,7 @@ export interface ExploreTabProps {
   clearMedsFilter: () => void
 }
 
-export function ExploreTab({ graph, state, update }: ExploreTabProps) {
+export function ExploreTab({ graph, state, update, palette }: ExploreTabProps) {
   const [stale, setStale] = useState(false)
   const keys = useMemo(() => browseKeys(graph.nodes, state.q), [graph, state.q])
   const known = useMemo(() => new Set(graph.nodes.map((n) => nodeKey(n.kind, n.id))), [graph])
@@ -45,10 +47,49 @@ export function ExploreTab({ graph, state, update }: ExploreTabProps) {
   const next = useCallback(() => step(1), [step])
   const close = useCallback(() => update({ node: null }), [update])
 
+  const renderGraph = useMemo(
+    () => toRenderGraph(graph, { mechanisms: state.mech }),
+    [graph, state.mech],
+  )
+  const ix = useMemo(() => buildIndex(graph.nodes, graph.interactions), [graph])
+  const matches = useMemo(
+    () =>
+      state.q.trim()
+        ? new Set(searchNodes(graph.nodes, state.q, Infinity).map((r) => nodeKey(r.kind, r.id)))
+        : null,
+    [graph, state.q],
+  )
+  const selected = node && known.has(node) ? node : null
+  const focus = useMemo(
+    () => ({ selected, focus: computeFocus(ix, selected, matches) }),
+    [ix, selected, matches],
+  )
+  const motion = useMemo(() => !window.matchMedia('(prefers-reduced-motion: reduce)').matches, [])
+  const clearSelection = useCallback(
+    (key: string | null) => (key ? select(key) : update({ node: null }, { push: true })),
+    [select, update],
+  )
+
   return (
     <div className="explore">
-      <Search graph={graph} state={state} update={update} />
-      <p className="mono-label">{graph.nodes.length} nodes</p>
+      <GraphView
+        graph={renderGraph}
+        motion={motion}
+        focus={focus}
+        palette={palette}
+        onSelect={clearSelection}
+      />
+      <div className="explore__bar">
+        <Search graph={graph} state={state} update={update} />
+        <p className="mono-label">{renderGraph.nodes.length} nodes</p>
+        <button
+          className="pill-button"
+          aria-pressed={state.mech}
+          onClick={() => update({ mech: !state.mech })}
+        >
+          Mechanisms
+        </button>
+      </div>
       {stale && (
         <p className="notice" role="status">
           That item is no longer in the dataset.

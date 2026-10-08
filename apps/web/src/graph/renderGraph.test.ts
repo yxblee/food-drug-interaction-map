@@ -7,18 +7,64 @@ const g: GraphPayload = {
   version: 'v',
   nodes: [
     { kind: 'drug', id: 'statins', name: 'Statins', aliases: [], group: true },
-    { kind: 'drug', id: 'simvastatin', name: 'Simvastatin', aliases: [], group: false, parent: 'statins' },
+    {
+      kind: 'drug',
+      id: 'simvastatin',
+      name: 'Simvastatin',
+      aliases: [],
+      group: false,
+      parent: 'statins',
+    },
     { kind: 'drug', id: 'felodipine', name: 'Felodipine', aliases: [], group: false },
     { kind: 'food', id: 'grapefruit', name: 'Grapefruit', aliases: [], group: false },
     { kind: 'food', id: 'st-johns-wort', name: "St. John's wort", aliases: [], group: false },
-    { kind: 'mechanism', id: 'cyp3a4-inhibition', name: 'CYP3A4 inhibition', aliases: [], group: false },
-    { kind: 'mechanism', id: 'cyp3a4-induction', name: 'CYP3A4 induction', aliases: [], group: false },
+    {
+      kind: 'mechanism',
+      id: 'cyp3a4-inhibition',
+      name: 'CYP3A4 inhibition',
+      aliases: [],
+      group: false,
+    },
+    {
+      kind: 'mechanism',
+      id: 'cyp3a4-induction',
+      name: 'CYP3A4 induction',
+      aliases: [],
+      group: false,
+    },
     { kind: 'mechanism', id: 'unused', name: 'Unused', aliases: [], group: false },
   ],
   interactions: [
-    { id: 'grapefruit--simvastatin', food: 'grapefruit', drug: 'simvastatin', mechanisms: ['cyp3a4-inhibition'], severity: 'avoid', effect: 'increases', summary: '', advice: '' },
-    { id: 'grapefruit--felodipine', food: 'grapefruit', drug: 'felodipine', mechanisms: ['cyp3a4-inhibition'], severity: 'caution', effect: 'increases', summary: '', advice: '' },
-    { id: 'st-johns-wort--felodipine', food: 'st-johns-wort', drug: 'felodipine', mechanisms: ['cyp3a4-induction'], severity: 'monitor', effect: 'decreases', summary: '', advice: '' },
+    {
+      id: 'grapefruit--simvastatin',
+      food: 'grapefruit',
+      drug: 'simvastatin',
+      mechanisms: ['cyp3a4-inhibition'],
+      severity: 'avoid',
+      effect: 'increases',
+      summary: '',
+      advice: '',
+    },
+    {
+      id: 'grapefruit--felodipine',
+      food: 'grapefruit',
+      drug: 'felodipine',
+      mechanisms: ['cyp3a4-inhibition'],
+      severity: 'caution',
+      effect: 'increases',
+      summary: '',
+      advice: '',
+    },
+    {
+      id: 'st-johns-wort--felodipine',
+      food: 'st-johns-wort',
+      drug: 'felodipine',
+      mechanisms: ['cyp3a4-induction'],
+      severity: 'monitor',
+      effect: 'decreases',
+      summary: '',
+      advice: '',
+    },
   ],
 }
 
@@ -67,7 +113,10 @@ describe('nodeRadius', () => {
 
 describe('filterRenderGraph', () => {
   it('keeps only listed nodes and links between them', () => {
-    const rg = filterRenderGraph(toRenderGraph(g, { mechanisms: false }), new Set(['food:grapefruit', 'drug:simvastatin']))
+    const rg = filterRenderGraph(
+      toRenderGraph(g, { mechanisms: false }),
+      new Set(['food:grapefruit', 'drug:simvastatin']),
+    )
     expect(rg.nodes.map((n) => n.key).sort()).toEqual(['drug:simvastatin', 'food:grapefruit'])
     expect(linkIds(rg.links)).toEqual(['food:grapefruit>drug:simvastatin:avoid'])
   })
@@ -84,7 +133,12 @@ describe('computeFocus', () => {
   })
   it('includes counterparts, mechanisms and the parent of a selected node, not unrelated paths', () => {
     const f = computeFocus(ix, 'drug:simvastatin', null)!
-    expect([...f].sort()).toEqual(['drug:simvastatin', 'drug:statins', 'food:grapefruit', 'mechanism:cyp3a4-inhibition'])
+    expect([...f].sort()).toEqual([
+      'drug:simvastatin',
+      'drug:statins',
+      'food:grapefruit',
+      'mechanism:cyp3a4-inhibition',
+    ])
   })
   it('includes the members of a selected group', () => {
     expect([...computeFocus(ix, 'drug:statins', null)!]).toContain('drug:simvastatin')

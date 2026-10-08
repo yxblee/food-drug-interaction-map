@@ -1,0 +1,93 @@
+.graph-host {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+}
+.graph2d {
+  width: 100%;
+  height: 100%;
+  display: block;
+  cursor: grab;
+}
+.graph2d .link {
+  stroke: var(--line);
+  stroke-width: 1;
+  opacity: 0.45;
+  transition: opacity 200ms;
+}
+.graph2d .link--member {
+  stroke-dasharray: 2 3;
+  opacity: 0.35;
+}
+.graph2d .link.is-focus {
+  opacity: 1;
+  stroke-width: 1.6;
+}
+.graph2d .link.is-focus.sev-avoid {
+  stroke: var(--sev-avoid);
+  stroke-width: 2.4;
+}
+.graph2d .link.is-focus.sev-caution {
+  stroke: var(--sev-caution);
+  stroke-width: 2;
+}
+.graph2d .link.is-focus.sev-monitor {
+  stroke: var(--sev-monitor);
+  stroke-width: 1.6;
+}
+.graph2d .link.is-focus.sev-minimal {
+  stroke: var(--sev-minimal);
+  stroke-width: 1.2;
+  stroke-dasharray: 4 3;
+}
+.graph2d .link.is-dim {
+  opacity: 0.08;
+}
+.graph2d .node {
+  cursor: pointer;
+  transition: opacity 200ms;
+}
+.graph2d .node .shape {
+  fill: var(--muted);
+  stroke: var(--paper);
+  stroke-width: 1.5;
+  stroke-linejoin: round;
+}
+.graph2d .node--mechanism .shape {
+  fill: none;
+  stroke: var(--ink);
+}
+.graph2d .node .shape-ring {
+  fill: none;
+  stroke: var(--muted);
+  stroke-width: 1;
+}
+.graph2d .node.is-selected .shape {
+  fill: var(--ink);
+}
+.graph2d .node.is-dim {
+  opacity: 0.15;
+}
+.graph2d .node:focus-visible {
+  outline: none;
+}
+.graph2d .node:focus-visible .shape {
+  stroke: var(--ink);
+  stroke-width: 3;
+}
+.graph2d .label {
+  font: 9px var(--font-mono);
+  letter-spacing: 0.1em;
+  fill: var(--muted);
+  pointer-events: none;
+}
+.graph2d .node.is-selected .label {
+  fill: var(--ink);
+  font-weight: 700;
+}
+@media (prefers-reduced-motion: reduce) {
+  .graph2d .link,
+  .graph2d .node {
+    transition: none;
+  }
+}
