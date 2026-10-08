@@ -1,0 +1,5 @@
+id: "rosuvastatin"
+name: "Rosuvastatin"
+aliases: ["Crestor"]
+parent: "statins"
+drug_class: "HMG-CoA reductase inhibitor"

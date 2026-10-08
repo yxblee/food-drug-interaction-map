@@ -1,0 +1,5 @@
+id: "atorvastatin"
+name: "Atorvastatin"
+aliases: ["Lipitor"]
+parent: "statins"
+drug_class: "HMG-CoA reductase inhibitor"

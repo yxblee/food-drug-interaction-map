@@ -1,0 +1,5 @@
+id: "phenelzine"
+name: "Phenelzine"
+aliases: ["Nardil"]
+parent: "maois"
+drug_class: "Monoamine oxidase inhibitor"

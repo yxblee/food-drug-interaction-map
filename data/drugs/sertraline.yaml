@@ -1,0 +1,5 @@
+id: "sertraline"
+name: "Sertraline"
+aliases: ["Zoloft"]
+parent: "ssris"
+drug_class: "Selective serotonin reuptake inhibitor"

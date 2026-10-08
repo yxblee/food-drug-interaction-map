@@ -1,0 +1,5 @@
+id: "diazepam"
+name: "Diazepam"
+aliases: ["Valium"]
+parent: "benzodiazepines"
+drug_class: "Benzodiazepine"

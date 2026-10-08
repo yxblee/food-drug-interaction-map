@@ -1,0 +1,4 @@
+id: "amino-acid-transport-competition"
+name: "Amino-acid transport competition"
+kind: "transporter"
+explanation: "Levodopa crosses the gut wall and the blood-brain barrier using the same carriers that move amino acids from dietary protein. A high-protein meal gives those carriers more competition, so less levodopa may be absorbed or reach the brain."

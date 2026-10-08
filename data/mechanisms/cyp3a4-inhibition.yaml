@@ -1,0 +1,4 @@
+id: "cyp3a4-inhibition"
+name: "CYP3A4 inhibition (gut)"
+kind: "enzyme"
+explanation: "Some compounds in grapefruit and its relatives switch off CYP3A4, an enzyme in the gut wall that normally breaks down many medicines before they reach the blood. With less of it working, more of the medicine is absorbed and blood levels rise. The effect can last a day or more after the fruit is eaten, so spacing doses does not reliably avoid it."

@@ -1,0 +1,5 @@
+id: "isocarboxazid"
+name: "Isocarboxazid"
+aliases: ["Marplan"]
+parent: "maois"
+drug_class: "Monoamine oxidase inhibitor"

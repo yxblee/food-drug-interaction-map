@@ -1,0 +1,5 @@
+id: "parmesan"
+name: "Parmesan"
+aliases: ["parmigiano"]
+parent: "aged-cheeses"
+category: "dairy"

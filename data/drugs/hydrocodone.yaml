@@ -1,0 +1,5 @@
+id: "hydrocodone"
+name: "Hydrocodone"
+aliases: ["Hysingla"]
+parent: "opioids"
+drug_class: "Opioid analgesic"

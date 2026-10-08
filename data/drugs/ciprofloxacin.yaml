@@ -1,0 +1,5 @@
+id: "ciprofloxacin"
+name: "Ciprofloxacin"
+aliases: ["Cipro"]
+parent: "fluoroquinolones"
+drug_class: "Fluoroquinolone antibiotic"

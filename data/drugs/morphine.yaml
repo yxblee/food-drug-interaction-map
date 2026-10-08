@@ -1,0 +1,5 @@
+id: "morphine"
+name: "Morphine"
+aliases: ["MS Contin"]
+parent: "opioids"
+drug_class: "Opioid analgesic"

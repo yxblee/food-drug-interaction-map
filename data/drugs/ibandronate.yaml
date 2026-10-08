@@ -1,0 +1,5 @@
+id: "ibandronate"
+name: "Ibandronate"
+aliases: ["Boniva"]
+parent: "bisphosphonates"
+drug_class: "Bisphosphonate"
