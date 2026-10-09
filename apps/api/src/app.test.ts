@@ -59,10 +59,10 @@ describe('GET /api/graph', () => {
     expect(body.version).toBe(store.version)
     expect(body.nodes).toHaveLength(10)
     expect(body.interactions.map((i) => i.id).sort()).toEqual([
-      'citrus--statins',
       'grapefruit--simvastatin',
       'leafy-greens--warfarin',
       'orange--simvastatin',
+      'sample-fruits--statins',
     ])
     expect(body.interactions[0]).not.toHaveProperty('details')
     expect(body.interactions[0]).not.toHaveProperty('citations')
@@ -91,12 +91,12 @@ describe('GET /api/node/:kind/:id', () => {
     const body = (await (await get('/api/node/drug/simvastatin')).json()) as NodeDetail
     expect(body.interactions.map((r) => [r.interaction.id, r.via])).toEqual([
       ['grapefruit--simvastatin', undefined],
-      ['citrus--statins', 'statins'],
+      ['sample-fruits--statins', 'statins'],
       ['orange--simvastatin', undefined],
     ])
   })
   it('lists children of a group', async () => {
-    const body = (await (await get('/api/node/food/citrus')).json()) as NodeDetail
+    const body = (await (await get('/api/node/food/sample-fruits')).json()) as NodeDetail
     expect(body.children.map((c) => c.id)).toEqual(['grapefruit', 'orange'])
   })
   it('404s on unknown kinds, ids and odd paths', async () => {

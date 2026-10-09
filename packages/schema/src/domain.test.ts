@@ -29,9 +29,9 @@ const nodes: GraphNode[] = [
   n('drug', 'simvastatin', 'Simvastatin', { aliases: ['Zocor'], parent: 'statins' }),
   n('drug', 'atorvastatin', 'Atorvastatin', { aliases: ['Lipitor'], parent: 'statins' }),
   n('drug', 'warfarin', 'Warfarin', { aliases: ['Coumadin'] }),
-  n('food', 'citrus', 'Citrus', { group: true }),
-  n('food', 'grapefruit', 'Grapefruit', { parent: 'citrus' }),
-  n('food', 'orange', 'Orange', { parent: 'citrus' }),
+  n('food', 'sample-fruits', 'Sample fruits', { group: true }),
+  n('food', 'grapefruit', 'Grapefruit', { parent: 'sample-fruits' }),
+  n('food', 'orange', 'Orange', { parent: 'sample-fruits' }),
   n('food', 'leafy-greens', 'Leafy greens', { group: true }),
   n('food', 'kale', 'Kale', { parent: 'leafy-greens', aliases: ['curly kale'] }),
   n('mechanism', 'cyp3a4-inhibition', 'CYP3A4 inhibition'),
@@ -55,7 +55,7 @@ const i = (
 })
 
 const interactions = [
-  i('citrus', 'statins', 'caution'),
+  i('sample-fruits', 'statins', 'caution'),
   i('grapefruit', 'statins', 'caution'),
   i('grapefruit', 'simvastatin', 'avoid'),
   i('orange', 'simvastatin', 'minimal'),
@@ -76,14 +76,14 @@ describe('interactionsForDrug', () => {
   it('lets an exact drug interaction replace the inherited class one for the same food', () => {
     expect(ids(interactionsForDrug(ix, 'simvastatin'))).toEqual([
       ['grapefruit--simvastatin', undefined],
-      ['citrus--statins', 'statins'],
+      ['sample-fruits--statins', 'statins'],
       ['orange--simvastatin', undefined],
     ])
   })
   it('inherits class interactions for a drug with none of its own', () => {
     expect(ids(interactionsForDrug(ix, 'atorvastatin'))).toEqual([
-      ['citrus--statins', 'statins'],
       ['grapefruit--statins', 'statins'],
+      ['sample-fruits--statins', 'statins'],
     ])
   })
   it('returns [] for unknown ids', () => {

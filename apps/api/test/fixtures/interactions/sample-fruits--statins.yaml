@@ -1,5 +1,5 @@
-id: citrus--statins
-food: citrus
+id: sample-fruits--statins
+food: sample-fruits
 drug: statins
 mechanisms: [cyp3a4-inhibition]
 severity: caution
