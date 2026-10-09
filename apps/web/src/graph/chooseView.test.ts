@@ -15,7 +15,13 @@ describe('chooseView', () => {
     expect(chooseView({ ...desktop, webgl: false }, '3d')).toEqual({ view: '2d', canToggle: false })
   })
   it('defaults to 2D under reduced motion but still allows 3D', () => {
-    expect(chooseView({ ...desktop, reducedMotion: true }, null)).toEqual({ view: '2d', canToggle: true })
-    expect(chooseView({ ...desktop, reducedMotion: true }, '3d')).toEqual({ view: '3d', canToggle: true })
+    expect(chooseView({ ...desktop, reducedMotion: true }, null)).toEqual({
+      view: '2d',
+      canToggle: true,
+    })
+    expect(chooseView({ ...desktop, reducedMotion: true }, '3d')).toEqual({
+      view: '3d',
+      canToggle: true,
+    })
   })
 })

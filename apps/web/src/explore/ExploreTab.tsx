@@ -1,7 +1,9 @@
 import { useCallback, useEffect, useMemo, useState } from 'react'
 import type { GraphPayload } from '@fdi/schema'
 import { buildIndex, nodeKey, searchNodes } from '@fdi/schema/domain'
+import { chooseView, detectEnv } from '../graph/chooseView.ts'
 import { GraphView } from '../graph/GraphView.tsx'
+import { srRows } from '../graph/srRows.ts'
 import { computeFocus, toRenderGraph } from '../graph/renderGraph.ts'
 import type { Palette } from '../theme/tokens.ts'
 import type { ViewState } from '../urlState.ts'
@@ -64,7 +66,9 @@ export function ExploreTab({ graph, state, update, palette }: ExploreTabProps) {
     () => ({ selected, focus: computeFocus(ix, selected, matches) }),
     [ix, selected, matches],
   )
-  const motion = useMemo(() => !window.matchMedia('(prefers-reduced-motion: reduce)').matches, [])
+  const env = useMemo(() => detectEnv(), [])
+  const { view, canToggle } = chooseView(env, state.view)
+  const srList = useMemo(() => srRows(ix, selected), [ix, selected])
   const clearSelection = useCallback(
     (key: string | null) => (key ? select(key) : update({ node: null }, { push: true })),
     [select, update],
@@ -74,7 +78,8 @@ export function ExploreTab({ graph, state, update, palette }: ExploreTabProps) {
     <div className="explore">
       <GraphView
         graph={renderGraph}
-        motion={motion}
+        view={view}
+        motion={!env.reducedMotion}
         focus={focus}
         palette={palette}
         onSelect={clearSelection}
@@ -82,6 +87,14 @@ export function ExploreTab({ graph, state, update, palette }: ExploreTabProps) {
       <div className="explore__bar">
         <Search graph={graph} state={state} update={update} />
         <p className="mono-label">{renderGraph.nodes.length} nodes</p>
+        {canToggle && (
+          <button
+            className="pill-button"
+            onClick={() => update({ view: view === '3d' ? '2d' : '3d' })}
+          >
+            {view === '3d' ? '2D' : '3D'}
+          </button>
+        )}
         <button
           className="pill-button"
           aria-pressed={state.mech}
@@ -90,6 +103,16 @@ export function ExploreTab({ graph, state, update, palette }: ExploreTabProps) {
           Mechanisms
         </button>
       </div>
+      {view === '3d' && selected && (
+        <div className="sr-only" aria-live="polite">
+          <p>Interactions for the selected item:</p>
+          <ul>
+            {srList.map((t) => (
+              <li key={t}>{t}</li>
+            ))}
+          </ul>
+        </div>
+      )}
       {stale && (
         <p className="notice" role="status">
           That item is no longer in the dataset.
