@@ -7,6 +7,7 @@ import './graph.css'
 
 interface Props {
   graph: RenderGraph
+  view: '3d' | '2d'
   motion: boolean
   focus: Focus
   palette: Palette
@@ -23,20 +24,32 @@ export function GraphView(props: Props) {
   })
 
   useEffect(() => {
-    const r = create2d({ motion: props.motion })
-    const { graph, focus, palette } = latest.current
-    r.mount(host.current!)
-    r.onSelect((key) => latest.current.onSelect(key))
-    r.setTheme(palette)
-    r.setData(graph)
-    r.setFocus(focus)
-    applied.current = graph
-    renderer.current = r
+    let cancelled = false
+    const el = host.current!
+    const start = (r: GraphRenderer) => {
+      const { graph, focus, palette } = latest.current
+      r.mount(el)
+      r.onSelect((key) => latest.current.onSelect(key))
+      r.setTheme(palette)
+      r.setData(graph)
+      r.setFocus(focus)
+      applied.current = graph
+      renderer.current = r
+    }
+    // The 3D renderer (three.js) is its own chunk, fetched only when 3D is shown.
+    if (props.view === '3d') {
+      void import('./render3d.ts').then(({ create3d }) => {
+        if (!cancelled) start(create3d({ motion: props.motion }))
+      })
+    } else {
+      start(create2d({ motion: props.motion }))
+    }
     return () => {
-      r.destroy()
+      cancelled = true
+      renderer.current?.destroy()
       renderer.current = null
     }
-  }, [props.motion])
+  }, [props.view, props.motion])
 
   useEffect(() => {
     if (!renderer.current || applied.current === props.graph) return
