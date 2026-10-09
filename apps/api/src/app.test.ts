@@ -74,6 +74,18 @@ describe('GET /api/graph', () => {
     expect(etag).toBe(`"${store.version}"`)
     expect((await get('/api/graph', { 'if-none-match': etag! })).status).toBe(304)
   })
+  it('matches weak validators and comma lists', async () => {
+    const etag = `"${store.version}"`
+    for (const v of [`W/${etag}`, `"other", ${etag}`, `W/"other",W/${etag}`, '*']) {
+      expect((await get('/api/graph', { 'if-none-match': v })).status, v).toBe(304)
+    }
+    expect((await get('/api/graph', { 'if-none-match': '"other"' })).status).toBe(200)
+  })
+  it('404s unknown /api paths even with a matching If-None-Match', async () => {
+    const res = await get('/api/nope', { 'if-none-match': `"${store.version}"` })
+    expect(res.status).toBe(404)
+    expect(await res.json()).toEqual({ error: 'not_found' })
+  })
 })
 
 describe('GET /api/node/:kind/:id', () => {
