@@ -31,8 +31,12 @@ describe('palettes', () => {
       it(`${tint}/${mode}: ink on paper is AA`, () => {
         expect(contrastRatio(p.ink, p.paper)).toBeGreaterThanOrEqual(4.5)
       })
-      it(`${tint}/${mode}: muted labels on paper are at least 3:1`, () => {
-        expect(contrastRatio(p.muted, p.paper)).toBeGreaterThanOrEqual(3)
+      it(`${tint}/${mode}: muted labels (11px) on paper and surface are AA`, () => {
+        expect(contrastRatio(p.muted, p.paper)).toBeGreaterThanOrEqual(4.5)
+        expect(contrastRatio(p.muted, p.surface)).toBeGreaterThanOrEqual(4.5)
+      })
+      it(`${tint}/${mode}: ink on surface is AA`, () => {
+        expect(contrastRatio(p.ink, p.surface)).toBeGreaterThanOrEqual(4.5)
       })
     }
   }

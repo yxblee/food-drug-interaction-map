@@ -28,14 +28,14 @@
   padding: 10px 14px;
   border-radius: 999px;
   border: 1px solid var(--line);
-  background: color-mix(in srgb, var(--paper) 70%, white);
+  background: var(--surface);
   color: var(--ink);
 }
 .meds__options {
   list-style: none;
   padding: 4px;
   margin: 6px 0;
-  background: var(--badge-bg);
+  background: var(--surface);
   border-radius: 12px;
 }
 .meds__options button {

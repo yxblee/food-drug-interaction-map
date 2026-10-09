@@ -1,13 +1,10 @@
 :root {
   --paper: #e8e6e1;
   --ink: #1c1b19;
-  --muted: #6f6c66;
+  --muted: #67645e;
   --line: #b9b5ad;
   --badge-bg: #f8f7f4;
-  --sev-avoid: #7a2a1c;
-  --sev-caution: #6e4f00;
-  --sev-monitor: #3d3d3d;
-  --sev-minimal: #5c5c5c;
+  --surface: #f8f7f4;
   --font-mono: ui-monospace, 'SF Mono', Menlo, Consolas, monospace;
   --font-head: 'Helvetica Neue', Helvetica, Arial, sans-serif;
   --font-body: system-ui, -apple-system, 'Segoe UI', sans-serif;
@@ -106,7 +103,7 @@ h3 {
 
 .pill-button {
   border: 1px solid var(--line);
-  background: color-mix(in srgb, var(--paper) 80%, white);
+  background: var(--surface);
   border-radius: 999px;
   padding: 6px 12px;
   cursor: pointer;

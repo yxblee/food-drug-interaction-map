@@ -21,6 +21,7 @@ export function useTheme(tinted: boolean, kind: Kind | null): Palette {
     s.setProperty('--muted', palette.muted)
     s.setProperty('--line', palette.line)
     s.setProperty('--badge-bg', palette.badgeBg)
+    s.setProperty('--surface', palette.surface)
     for (const [sev, color] of Object.entries(SEVERITY_COLORS)) s.setProperty(`--sev-${sev}`, color)
   }, [palette])
   return palette
