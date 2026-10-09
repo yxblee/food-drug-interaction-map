@@ -1,8 +1,9 @@
 import { useCallback, useEffect, useMemo, useState } from 'react'
 import type { GraphPayload } from '@fdi/schema'
 import { buildIndex, nodeKey, searchNodes } from '@fdi/schema/domain'
-import { chooseView, detectEnv } from '../graph/chooseView.ts'
+import { chooseView } from '../graph/chooseView.ts'
 import { GraphView } from '../graph/GraphView.tsx'
+import { useEnv } from '../graph/useEnv.ts'
 import { srRows } from '../graph/srRows.ts'
 import { computeFocus, filterRenderGraph, toRenderGraph } from '../graph/renderGraph.ts'
 import type { Palette } from '../theme/tokens.ts'
@@ -29,20 +30,29 @@ export function ExploreTab({
   medsFilter,
   clearMedsFilter,
 }: ExploreTabProps) {
-  const [stale, setStale] = useState(false)
-  const keys = useMemo(() => browseKeys(graph.nodes, state.q), [graph, state.q])
+  // Search, browsing and highlighting all work within what the graph currently shows.
+  const nodes = useMemo(
+    () =>
+      medsFilter ? graph.nodes.filter((n) => medsFilter.has(nodeKey(n.kind, n.id))) : graph.nodes,
+    [graph, medsFilter],
+  )
+  const keys = useMemo(() => browseKeys(nodes, state.q), [nodes, state.q])
   const known = useMemo(() => new Set(graph.nodes.map((n) => nodeKey(n.kind, n.id))), [graph])
   const node = state.node
+  const selected = node && known.has(node) ? node : null
 
-  // A link to an item that is no longer in the dataset: say so once, then clear it.
-  const dropStale = useCallback(() => {
-    setStale(true)
-    update({ node: null })
-  }, [update])
+  // A link to an item that is no longer in the dataset: say so, then clear it from the URL.
+  const [staleNode, setStaleNode] = useState<string | null>(null)
+  if (node && !selected && staleNode !== node) setStaleNode(node)
+  else if (selected && staleNode) setStaleNode(null)
+  const stale = staleNode !== null && !selected
   useEffect(() => {
-    if (node && !known.has(node)) dropStale()
-    else if (node) setStale(false)
-  }, [node, known, dropStale])
+    if (node && !selected) update({ node: null })
+  }, [node, selected, update])
+  const onNotFound = useCallback(() => {
+    setStaleNode(node)
+    update({ node: null })
+  }, [node, update])
 
   const select = useCallback((key: string) => update({ node: key }, { push: true }), [update])
   const step = useCallback(
@@ -64,19 +74,18 @@ export function ExploreTab({
   const matches = useMemo(
     () =>
       state.q.trim()
-        ? new Set(searchNodes(graph.nodes, state.q, Infinity).map((r) => nodeKey(r.kind, r.id)))
+        ? new Set(searchNodes(nodes, state.q, Infinity).map((r) => nodeKey(r.kind, r.id)))
         : null,
-    [graph, state.q],
+    [nodes, state.q],
   )
-  const selected = node && known.has(node) ? node : null
   const focus = useMemo(
     () => ({ selected, focus: computeFocus(ix, selected, matches) }),
     [ix, selected, matches],
   )
-  const env = useMemo(() => detectEnv(), [])
+  const env = useEnv()
   const { view, canToggle } = chooseView(env, state.view)
   const srList = useMemo(() => srRows(ix, selected), [ix, selected])
-  const clearSelection = useCallback(
+  const onGraphSelect = useCallback(
     (key: string | null) => (key ? select(key) : update({ node: null }, { push: true })),
     [select, update],
   )
@@ -89,11 +98,10 @@ export function ExploreTab({
         motion={!env.reducedMotion}
         focus={focus}
         palette={palette}
-        onSelect={clearSelection}
+        onSelect={onGraphSelect}
       />
       <div className="explore__bar">
-        <Search graph={graph} state={state} update={update} />
-        <p className="mono-label">{renderGraph.nodes.length} nodes</p>
+        <Search nodes={nodes} state={state} update={update} />
         {medsFilter && (
           <button className="pill-button" onClick={clearMedsFilter}>
             Showing your meds ✕
@@ -130,15 +138,15 @@ export function ExploreTab({
           That item is no longer in the dataset.
         </p>
       )}
-      {node && known.has(node) && (
+      {selected && (
         <SidePanel
-          nodeKey={node}
-          position={{ index: Math.max(keys.indexOf(node), 0), total: keys.length }}
+          nodeKey={selected}
+          position={{ index: Math.max(keys.indexOf(selected), 0), total: keys.length }}
           onSelect={select}
           onPrev={prev}
           onNext={next}
           onClose={close}
-          onNotFound={dropStale}
+          onNotFound={onNotFound}
         />
       )}
     </div>

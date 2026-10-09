@@ -11,11 +11,15 @@ export function createApp(store: Store, opts: { staticDir?: string } = {}) {
   const etag = `"${store.version}"`
 
   app.use('/api/*', async (c, next) => {
-    if (c.req.header('if-none-match') === etag) {
-      return c.body(null, 304, { ETag: etag, 'Cache-Control': CACHE_CONTROL })
-    }
     await next()
-    if (c.res.status === 200) {
+    if (c.res.status !== 200) return
+    const tags = (c.req.header('if-none-match') ?? '')
+      .split(',')
+      .map((t) => t.trim().replace(/^W\//, ''))
+    const headers = { ETag: etag, 'Cache-Control': CACHE_CONTROL }
+    if (tags.includes(etag) || tags.includes('*')) {
+      c.res = new Response(null, { status: 304, headers })
+    } else {
       c.header('ETag', etag)
       c.header('Cache-Control', CACHE_CONTROL)
     }

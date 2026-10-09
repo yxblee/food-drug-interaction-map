@@ -1,18 +1,18 @@
 import { useEffect, useMemo, useRef } from 'react'
-import type { GraphPayload } from '@fdi/schema'
-import { nodeKey, searchNodes } from '@fdi/schema/domain'
+import type { GraphNode } from '@fdi/schema'
+import { groupTerm, nodeKey, searchNodes } from '@fdi/schema/domain'
 import type { ViewState } from '../urlState.ts'
 import { isSlashFocus, matchCountLabel } from './searchUi.ts'
 
 interface Props {
-  graph: GraphPayload
+  nodes: GraphNode[]
   state: ViewState
   update: (patch: Partial<ViewState>, opts?: { push?: boolean }) => void
 }
 
-export function Search({ graph, state, update }: Props) {
+export function Search({ nodes, state, update }: Props) {
   const input = useRef<HTMLInputElement>(null)
-  const results = useMemo(() => searchNodes(graph.nodes, state.q), [graph.nodes, state.q])
+  const results = useMemo(() => searchNodes(nodes, state.q), [nodes, state.q])
   const searching = state.q.trim() !== ''
 
   useEffect(() => {
@@ -25,7 +25,8 @@ export function Search({ graph, state, update }: Props) {
     return () => window.removeEventListener('keydown', onKey)
   }, [])
 
-  const select = (r: (typeof results)[number]) => update({ node: nodeKey(r.kind, r.id) })
+  const select = (r: (typeof results)[number]) =>
+    update({ node: nodeKey(r.kind, r.id) }, { push: true })
 
   return (
     <div className="search" role="search">
@@ -52,7 +53,7 @@ export function Search({ graph, state, update }: Props) {
               <button type="button" className="search__item" onClick={() => select(r)}>
                 <span className="mono-label">
                   {r.kind}
-                  {r.group ? ' · group' : ''}
+                  {r.group ? ` · ${groupTerm(r.kind)}` : ''}
                 </span>{' '}
                 {r.name}
                 {r.matched !== r.name && (

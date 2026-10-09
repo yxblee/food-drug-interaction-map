@@ -1,9 +1,11 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import type { GraphPayload, Kind } from '@fdi/schema'
-import { splitKey } from '@fdi/schema/domain'
+import { buildIndex, splitKey } from '@fdi/schema/domain'
 import { fetchGraph } from './api.ts'
 import { ExploreTab } from './explore/ExploreTab.tsx'
+import { checkMeds, mapKeysFor } from './meds/checkMeds.ts'
 import { MyMedsTab } from './meds/MyMedsTab.tsx'
+import { useMeds } from './meds/useMeds.ts'
 import { useTheme } from './theme/useTheme.ts'
 import { useUrlState } from './useUrlState.ts'
 import './App.css'
@@ -12,7 +14,14 @@ export function App() {
   const [state, update] = useUrlState()
   const [graph, setGraph] = useState<GraphPayload | null>(null)
   const [error, setError] = useState<string | null>(null)
-  const [medsFilter, setMedsFilter] = useState<Set<string> | null>(null)
+  const [filterMeds, setFilterMeds] = useState(false)
+  const { meds, setMeds, dropped } = useMeds(graph)
+  const ix = useMemo(() => (graph ? buildIndex(graph.nodes, graph.interactions) : null), [graph])
+  // Derived, so it follows the Medication list while the filter is on.
+  const medsFilter = useMemo(
+    () => (filterMeds && ix ? mapKeysFor(ix, checkMeds(ix, meds), meds) : null),
+    [filterMeds, ix, meds],
+  )
 
   const [attempt, setAttempt] = useState(0)
 
@@ -72,6 +81,12 @@ export function App() {
         </div>
       )}
 
+      {dropped > 0 && (
+        <p role="status" className="meds__notice">
+          Removed {dropped} medication(s) that are no longer in our dataset.
+        </p>
+      )}
+
       <main className="app__main">
         {!graph ? (
           !error && <p className="app__loading mono-label">Loading…</p>
@@ -82,13 +97,15 @@ export function App() {
             update={update}
             palette={palette}
             medsFilter={medsFilter}
-            clearMedsFilter={() => setMedsFilter(null)}
+            clearMedsFilter={() => setFilterMeds(false)}
           />
         ) : (
           <MyMedsTab
             graph={graph}
-            onSeeOnMap={(keys) => {
-              setMedsFilter(keys)
+            meds={meds}
+            setMeds={setMeds}
+            onSeeOnMap={() => {
+              setFilterMeds(true)
               update({ tab: 'explore', node: null, q: '', mech: true }, { push: true })
             }}
           />

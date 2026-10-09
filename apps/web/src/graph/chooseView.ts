@@ -4,21 +4,6 @@ export interface Env {
   reducedMotion: boolean
 }
 
-export function detectEnv(): Env {
-  const matches = (q: string) => window.matchMedia(q).matches
-  let webgl = false
-  try {
-    webgl = !!document.createElement('canvas').getContext('webgl2')
-  } catch {
-    webgl = false
-  }
-  return {
-    mobile: matches('(max-width: 768px), (pointer: coarse)'),
-    webgl,
-    reducedMotion: matches('(prefers-reduced-motion: reduce)'),
-  }
-}
-
 export function chooseView(
   env: Env,
   requested: '3d' | '2d' | null,

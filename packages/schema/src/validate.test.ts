@@ -32,12 +32,12 @@ function base(): RawDataset {
     ],
     foods: [
       {
-        file: 'foods/citrus.yaml',
-        data: { id: 'citrus', name: 'Citrus', group: true, category: 'fruit' },
+        file: 'foods/sample-fruits.yaml',
+        data: { id: 'sample-fruits', name: 'Sample fruits', group: true, category: 'fruit' },
       },
       {
         file: 'foods/grapefruit.yaml',
-        data: { id: 'grapefruit', name: 'Grapefruit', parent: 'citrus', category: 'fruit' },
+        data: { id: 'grapefruit', name: 'Grapefruit', parent: 'sample-fruits', category: 'fruit' },
       },
     ],
     mechanisms: [
@@ -51,7 +51,10 @@ function base(): RawDataset {
         },
       },
     ],
-    interactions: [interaction('grapefruit', 'simvastatin'), interaction('citrus', 'statins')],
+    interactions: [
+      interaction('grapefruit', 'simvastatin'),
+      interaction('sample-fruits', 'statins'),
+    ],
   }
 }
 
@@ -80,26 +83,30 @@ describe('validateDataset', () => {
 
   it('requires interaction id to equal food--drug', () => {
     const raw = base()
-    raw.interactions.push(interaction('grapefruit', 'statins', { id: 'citrus--statins' }))
-    raw.interactions[2].file = 'interactions/citrus--statins.yaml'
-    expect(errorsOf(raw)).toContainEqual(
-      expect.stringContaining('id must be "grapefruit--statins"'),
+    raw.interactions.push(interaction('grapefruit', 'statins', { id: 'sample-fruits--statins' }))
+    raw.interactions[2].file = 'interactions/sample-fruits--statins.yaml'
+    expect(errorsOf(raw)).toContain(
+      'interactions/sample-fruits--statins.yaml: id: must be "grapefruit--statins"',
     )
   })
 
   it('reports duplicate ids', () => {
     const raw = base()
-    raw.interactions.push(interaction('citrus', 'statins'))
-    expect(errorsOf(raw)).toContainEqual(expect.stringContaining('duplicate id "citrus--statins"'))
+    raw.interactions.push(interaction('sample-fruits', 'statins'))
+    expect(errorsOf(raw)).toContainEqual(
+      expect.stringContaining('duplicate id "sample-fruits--statins"'),
+    )
   })
 
   it('reports unknown references', () => {
     const raw = base()
     raw.interactions.push(interaction('kale', 'warfarin', { mechanisms: ['nope'] }))
     const errors = errorsOf(raw)
-    expect(errors).toContain('interaction kale--warfarin: unknown food "kale"')
-    expect(errors).toContain('interaction kale--warfarin: unknown drug "warfarin"')
-    expect(errors).toContain('interaction kale--warfarin: unknown mechanism "nope"')
+    expect(errors).toContain('interactions/kale--warfarin.yaml: food: unknown food "kale"')
+    expect(errors).toContain('interactions/kale--warfarin.yaml: drug: unknown drug "warfarin"')
+    expect(errors).toContain(
+      'interactions/kale--warfarin.yaml: mechanisms: unknown mechanism "nope"',
+    )
   })
 
   it('enforces one-level groups', () => {
@@ -117,27 +124,29 @@ describe('validateDataset', () => {
       data: { id: 'lime', name: 'Lime', parent: 'nothing', category: 'fruit' },
     })
     const errors = errorsOf(raw)
-    expect(errors).toContain('drug lipid: a group cannot have a parent')
-    expect(errors).toContain('food pomelo: parent "grapefruit" is not a group')
-    expect(errors).toContain('food lime: unknown parent "nothing"')
+    expect(errors).toContain('drugs/lipid.yaml: parent: a group cannot have a parent')
+    expect(errors).toContain('foods/pomelo.yaml: parent: "grapefruit" is not a group')
+    expect(errors).toContain('foods/lime.yaml: parent: unknown parent "nothing"')
   })
 
   it('reports name and alias collisions within a kind, case-insensitively', () => {
     const raw = base()
     raw.drugs.push({ file: 'drugs/zocor-xr.yaml', data: { id: 'zocor-xr', name: 'ZOCOR' } })
-    expect(errorsOf(raw)).toContain('drug zocor-xr: name/alias "zocor" already used by simvastatin')
+    expect(errorsOf(raw)).toContain(
+      'drugs/zocor-xr.yaml: name/aliases: "zocor" already used by simvastatin',
+    )
   })
 
   it('fails an interaction with no mechanism or no citation, naming file and field', () => {
     const raw = base()
     raw.interactions[0] = interaction('grapefruit', 'simvastatin', { mechanisms: [] })
-    raw.interactions[1] = interaction('citrus', 'statins', { citations: [] })
+    raw.interactions[1] = interaction('sample-fruits', 'statins', { citations: [] })
     const errors = errorsOf(raw)
     expect(errors).toContainEqual(
       expect.stringMatching(/^interactions\/grapefruit--simvastatin\.yaml: mechanisms: /),
     )
     expect(errors).toContainEqual(
-      expect.stringMatching(/^interactions\/citrus--statins\.yaml: citations: /),
+      expect.stringMatching(/^interactions\/sample-fruits--statins\.yaml: citations: /),
     )
   })
 })

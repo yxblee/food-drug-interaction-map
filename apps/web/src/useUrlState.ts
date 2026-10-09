@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useState } from 'react'
 import { safeStorage } from './storage.ts'
-import { decode, decodeWithStoredTint, encode, type ViewState } from './urlState.ts'
+import { decodeWithStoredTint, encode, type ViewState } from './urlState.ts'
 
 const TINT_KEY = 'fdi:tint'
 
@@ -15,7 +15,7 @@ export function useUrlState(): [
   const [state, setState] = useState(initial)
 
   useEffect(() => {
-    const onPop = () => setState(decode(location.search))
+    const onPop = () => setState(initial())
     window.addEventListener('popstate', onPop)
     return () => window.removeEventListener('popstate', onPop)
   }, [])
