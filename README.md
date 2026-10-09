@@ -9,7 +9,23 @@ Two ways in, over one curated dataset:
 
 > Informational only — not medical advice. Talk to your pharmacist or doctor before changing your diet or medications.
 
-**Status:** design and plan done; building starts in Build Session 2. See [design spec](docs/superpowers/specs/2026-10-08-core-app-design.md), [implementation plan](docs/superpowers/plans/2026-10-08-core-app.md), [glossary](GLOSSARY.md) and [data sources](docs/data-sources.md).
+**Status:** core app built (schema, API, 53 cited interactions, Explore, My meds, end-to-end tests). See the [design spec](docs/superpowers/specs/2026-10-08-core-app-design.md), [implementation plan](docs/superpowers/plans/2026-10-08-core-app.md), [glossary](GLOSSARY.md) and [data sources](docs/data-sources.md).
+
+## Development
+
+Needs Node ≥ 24.11 and pnpm. Layout: `apps/api` (Hono), `apps/web` (React), `packages/schema` (shared zod types), `data/` (curated YAML), `e2e/` (Playwright).
+
+| Command | Description |
+|---|---|
+| `pnpm install` | Install dependencies |
+| `pnpm run build:db` | Compile and validate `data/` YAML into `dist/data.db` |
+| `pnpm --filter @fdi/web dev` | Web dev server |
+| `pnpm --filter @fdi/web build` | Production web build to `apps/web/dist` |
+| `pnpm start` | Serve the API on `PORT` (default 8787) |
+| `vp check` / `vp test` | Lint, format and type check / unit tests (as in CI) |
+| `vp exec playwright test` | End-to-end tests |
+
+`pnpm start` reads `DB_PATH` (default `dist/data.db`) and `STATIC_DIR` (web build to serve; unset = API only). The [Dockerfile](Dockerfile) sets both and deploys via [fly.toml](fly.toml).
 
 ---
 
