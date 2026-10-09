@@ -1,0 +1,4 @@
+id: "metformin"
+name: "Metformin"
+aliases: ["Glucophage"]
+drug_class: "Biguanide"

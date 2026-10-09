@@ -1,0 +1,5 @@
+id: "doxycycline"
+name: "Doxycycline"
+aliases: ["Vibramycin", "Doryx"]
+parent: "tetracyclines"
+drug_class: "Tetracycline antibiotic"

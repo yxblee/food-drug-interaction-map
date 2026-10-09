@@ -1,0 +1,16 @@
+id: cranberry-juice--warfarin
+food: cranberry-juice
+drug: warfarin
+mechanisms: [possible-cyp2c9-inhibition]
+severity: monitor
+effect: increases
+summary: "Evidence is mixed on whether cranberry raises warfarin's effect."
+advice: "If you drink cranberry juice or take cranberry products regularly, mention it to the clinic that manages your warfarin so your INR can be checked, and keep the amount steady."
+details: "NCCIH notes that studies disagree on whether cranberry interacts with warfarin. A possible route is slowed breakdown of warfarin by CYP2C9, which has not been proven. Because warfarin has a narrow safe range, a regular habit is worth telling your care team about even though the evidence is unsettled."
+citations:
+  - type: "guideline"
+    title: "Cranberry: Usefulness and Safety (NCCIH)"
+    url: "https://www.nccih.nih.gov/health/cranberry"
+status: approved
+source: curated
+reviewed_at: 2026-10-08

@@ -1,0 +1,16 @@
+id: kale--simvastatin
+food: kale
+drug: simvastatin
+mechanisms: [cyp3a4-inhibition]
+severity: monitor
+effect: increases
+summary: Fixture summary.
+advice: Fixture advice.
+details: Fixture details.
+citations:
+  - type: label
+    title: Fixture citation
+    url: https://example.org/fixture
+status: pending
+source: curated
+reviewed_at: 2026-10-08

@@ -1,0 +1,21 @@
+id: coffee--bisphosphonates
+food: coffee
+drug: bisphosphonates
+mechanisms: [reduced-absorption]
+severity: avoid
+effect: decreases
+summary: "Coffee taken with an osteoporosis pill can cut absorption by about 60%."
+advice: "Take the pill with plain water only, and wait the time on the label before coffee or food."
+details: "The alendronate label reports that taking it with coffee or orange juice reduced bioavailability by about 60%. The ibandronate label says to use plain water only, not coffee, tea, soda or juice, and to wait 60 minutes before other food or drink."
+citations:
+  - type: "label"
+    title: "ALENDRONATE SODIUM TABLET [REMEDYREPACK INC.]"
+    url: "https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=c7e470d6-508e-466e-a78d-060bbbc9745c"
+    setid: "c7e470d6-508e-466e-a78d-060bbbc9745c"
+  - type: "label"
+    title: "IBANDRONATE SODIUM TABLET [BIONPHARMA INC.]"
+    url: "https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=6ca94cce-a2bb-421f-bd8f-6b14bc2bd985"
+    setid: "6ca94cce-a2bb-421f-bd8f-6b14bc2bd985"
+status: approved
+source: curated
+reviewed_at: 2026-10-09

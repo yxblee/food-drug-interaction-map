@@ -1,0 +1,5 @@
+id: "ramipril"
+name: "Ramipril"
+aliases: ["Altace"]
+parent: "ace-inhibitors"
+drug_class: "ACE inhibitor"

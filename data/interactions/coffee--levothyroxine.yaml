@@ -1,0 +1,17 @@
+id: coffee--levothyroxine
+food: coffee
+drug: levothyroxine
+mechanisms: [reduced-absorption]
+severity: monitor
+effect: decreases
+summary: "Drinking coffee close to levothyroxine may lower how much is absorbed."
+advice: "Take levothyroxine with water on an empty stomach and leave a gap before coffee. Keep your routine steady so thyroid tests stay comparable."
+details: "A systematic review found limited evidence that coffee taken with levothyroxine reduces its absorption. Evidence is thin, so this is graded as something to be aware of and to keep consistent."
+citations:
+  - type: "review"
+    title: "Levothyroxine Interactions with Food and Dietary Supplements-A Systematic Review"
+    url: "https://pubmed.ncbi.nlm.nih.gov/33801406/"
+    pmid: "33801406"
+status: approved
+source: curated
+reviewed_at: 2026-10-09

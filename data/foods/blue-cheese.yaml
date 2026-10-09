@@ -1,0 +1,5 @@
+id: "blue-cheese"
+name: "Blue cheese"
+aliases: ["gorgonzola", "stilton"]
+parent: "aged-cheeses"
+category: "dairy"

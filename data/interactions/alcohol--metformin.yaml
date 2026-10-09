@@ -1,0 +1,17 @@
+id: alcohol--metformin
+food: alcohol
+drug: metformin
+mechanisms: [lactic-acidosis-risk]
+severity: caution
+effect: increases
+summary: "Heavy drinking raises the risk of a dangerous build-up of lactic acid with metformin."
+advice: "Avoid excessive alcohol while taking metformin and ask your prescriber what is safe for you."
+details: "The metformin label says alcohol is known to potentiate metformin's effect on lactate metabolism and lists excessive alcohol intake as a risk factor for lactic acidosis, advising patients against excessive drinking."
+citations:
+  - type: "label"
+    title: "METFORMIN HYDROCHLORIDE TABLET"
+    url: "https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=8cd5555c-f6b2-28d8-e053-2a95a90a5f1e"
+    setid: "8cd5555c-f6b2-28d8-e053-2a95a90a5f1e"
+status: approved
+source: curated
+reviewed_at: 2026-10-09

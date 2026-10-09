@@ -1,0 +1,17 @@
+id: alcohol--benzodiazepines
+food: alcohol
+drug: benzodiazepines
+mechanisms: [cns-depression]
+severity: avoid
+effect: increases
+summary: "Alcohol adds to the sedating effect of benzodiazepines."
+advice: "Do not drink alcohol while taking a benzodiazepine, and do not drive or use machinery until you know how it affects you."
+details: "The alprazolam label advises patients to avoid alcohol and other central nervous system depressants during treatment because of their added CNS depressant effects."
+citations:
+  - type: "label"
+    title: "ALPRAZOLAM TABLET [ACTAVIS PHARMA, INC.]"
+    url: "https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=a23063c0-099a-4256-b95f-3a857bbf704b"
+    setid: "a23063c0-099a-4256-b95f-3a857bbf704b"
+status: approved
+source: curated
+reviewed_at: 2026-10-09

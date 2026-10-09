@@ -1,0 +1,4 @@
+id: "lactic-acidosis-risk"
+name: "Lactic acidosis risk"
+kind: "pharmacodynamic"
+explanation: "Metformin can raise lactate in the blood, and alcohol also increases lactate production. Heavy drinking together with metformin raises the small risk of lactic acidosis, a serious build-up of acid in the blood."

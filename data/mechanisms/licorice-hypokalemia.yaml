@@ -1,0 +1,4 @@
+id: "licorice-hypokalemia"
+name: "Licorice-induced potassium loss"
+kind: "pharmacodynamic"
+explanation: "Glycyrrhizin in black licorice makes the body lose potassium and hold on to sodium. Low potassium can make digoxin more likely to cause heart rhythm problems."

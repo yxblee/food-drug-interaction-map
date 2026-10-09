@@ -1,0 +1,5 @@
+id: "oxycodone"
+name: "Oxycodone"
+aliases: ["OxyContin", "Roxicodone"]
+parent: "opioids"
+drug_class: "Opioid analgesic"

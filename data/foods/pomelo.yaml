@@ -1,0 +1,5 @@
+id: "pomelo"
+name: "Pomelo"
+aliases: ["pummelo"]
+parent: "grapefruit-relatives"
+category: "fruit"

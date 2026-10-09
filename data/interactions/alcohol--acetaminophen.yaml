@@ -1,0 +1,17 @@
+id: alcohol--acetaminophen
+food: alcohol
+drug: acetaminophen
+mechanisms: [cyp2e1-toxic-metabolite]
+severity: caution
+effect: increases
+summary: "Regular heavy drinking with acetaminophen raises the risk of liver damage."
+advice: "If you have 3 or more alcoholic drinks a day, ask a doctor before using acetaminophen and never exceed the labelled daily limit."
+details: "The over-the-counter label warns that severe liver damage may occur if you take acetaminophen while having three or more alcoholic drinks every day. The liver enzyme CYP2E1, which alcohol affects, helps form acetaminophen's toxic by-product."
+citations:
+  - type: "label"
+    title: "TYLENOL EXTRA STRENGTH (ACETAMINOPHEN) TABLET, FILM COATED [KENVUE BRANDS LLC]"
+    url: "https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=103d109d-f520-409c-8da2-eb6b0fbec891"
+    setid: "103d109d-f520-409c-8da2-eb6b0fbec891"
+status: approved
+source: curated
+reviewed_at: 2026-10-09

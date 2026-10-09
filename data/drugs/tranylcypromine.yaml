@@ -1,0 +1,5 @@
+id: "tranylcypromine"
+name: "Tranylcypromine"
+aliases: ["Parnate"]
+parent: "maois"
+drug_class: "Monoamine oxidase inhibitor"

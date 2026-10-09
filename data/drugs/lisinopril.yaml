@@ -1,0 +1,5 @@
+id: "lisinopril"
+name: "Lisinopril"
+aliases: ["Zestril", "Prinivil"]
+parent: "ace-inhibitors"
+drug_class: "ACE inhibitor"

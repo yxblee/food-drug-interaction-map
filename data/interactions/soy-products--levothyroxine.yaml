@@ -1,0 +1,21 @@
+id: soy-products--levothyroxine
+food: soy-products
+drug: levothyroxine
+mechanisms: [reduced-absorption]
+severity: caution
+effect: decreases
+summary: "Soy foods can lower levothyroxine absorption."
+advice: "Keep soy intake steady and take levothyroxine apart from soy-based foods. Tell your prescriber if your soy intake changes a lot."
+details: "The Synthroid label says soybean flour can bind levothyroxine and decrease its absorption, and warns against giving it in soy-based infant formula. The systematic review reached the same direction for soy products."
+citations:
+  - type: "label"
+    title: "SYNTHROID (LEVOTHYROXINE SODIUM) TABLET [ABBVIE INC.]"
+    url: "https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=1e11ad30-1041-4520-10b0-8f9d30d30fcc"
+    setid: "1e11ad30-1041-4520-10b0-8f9d30d30fcc"
+  - type: "review"
+    title: "Levothyroxine Interactions with Food and Dietary Supplements-A Systematic Review"
+    url: "https://pubmed.ncbi.nlm.nih.gov/33801406/"
+    pmid: "33801406"
+status: approved
+source: curated
+reviewed_at: 2026-10-09

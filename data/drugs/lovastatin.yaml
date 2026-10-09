@@ -1,0 +1,5 @@
+id: "lovastatin"
+name: "Lovastatin"
+aliases: ["Mevacor", "Altoprev"]
+parent: "statins"
+drug_class: "HMG-CoA reductase inhibitor"

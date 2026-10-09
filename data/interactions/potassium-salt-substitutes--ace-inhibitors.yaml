@@ -1,0 +1,17 @@
+id: potassium-salt-substitutes--ace-inhibitors
+food: potassium-salt-substitutes
+drug: ace-inhibitors
+mechanisms: [additive-hyperkalemia]
+severity: caution
+effect: increases
+summary: "Potassium-based salt substitutes can push potassium too high with ACE inhibitors."
+advice: "Ask your prescriber before using salt substitutes such as lite salt, and have your potassium checked if you do."
+details: "ACE inhibitors reduce potassium loss in the kidney. The lisinopril label lists potassium-containing salt substitutes as a risk factor for hyperkalemia, especially with kidney disease or diabetes."
+citations:
+  - type: "label"
+    title: "LISINOPRIL TABLET [ST. MARY'S MEDICAL PARK PHARMACY]"
+    url: "https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=6062fd98-7663-f4b5-e053-2a91aa0acbc3"
+    setid: "6062fd98-7663-f4b5-e053-2a91aa0acbc3"
+status: approved
+source: curated
+reviewed_at: 2026-10-09

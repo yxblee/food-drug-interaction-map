@@ -1,0 +1,21 @@
+id: grapefruit-relatives--amiodarone
+food: grapefruit-relatives
+drug: amiodarone
+mechanisms: [cyp3a4-inhibition]
+severity: avoid
+effect: increases
+summary: "Grapefruit juice raises amiodarone exposure, and the label says to avoid it."
+advice: "Avoid grapefruit and grapefruit juice while taking amiodarone."
+details: "Grapefruit, pomelo and Seville orange contain furanocoumarins that switch off CYP3A4 in the gut wall, so more of the medicine is absorbed. Sweet oranges do not contain these compounds and are not part of this warning.\n\nThe Pacerone label reports that grapefruit juice raised amiodarone exposure by about 50% in healthy volunteers, lists it among CYP450 inhibitors to avoid, and tells patients to avoid it. Higher levels raise the chance of heart rhythm side effects."
+citations:
+  - type: "label"
+    title: "PACERONE (AMIODARONE HYDROCHLORIDE) TABLET [UPSHER-SMITH LABORATORIES, LLC]"
+    url: "https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=4c4ec9b0-13a5-49a8-b57b-b3f64e4316a7"
+    setid: "4c4ec9b0-13a5-49a8-b57b-b3f64e4316a7"
+  - type: "review"
+    title: "Grapefruit-medication interactions: forbidden fruit or avoidable consequences? (CMAJ 2013)"
+    url: "https://pubmed.ncbi.nlm.nih.gov/23184849/"
+    pmid: "23184849"
+status: approved
+source: curated
+reviewed_at: 2026-10-08

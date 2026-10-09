@@ -1,0 +1,21 @@
+id: grapefruit-relatives--lovastatin
+food: grapefruit-relatives
+drug: lovastatin
+mechanisms: [cyp3a4-inhibition]
+severity: avoid
+effect: increases
+summary: "Grapefruit can raise lovastatin levels many times over and increase the risk of muscle damage."
+advice: "Avoid grapefruit and grapefruit juice while taking lovastatin."
+details: "Grapefruit, pomelo and Seville orange contain furanocoumarins that switch off CYP3A4 in the gut wall, so more of the medicine is absorbed. Sweet oranges do not contain these compounds and are not part of this warning.\n\nThe lovastatin label describes a study in which a large amount of grapefruit juice raised blood levels of lovastatin about 15-fold, and its interaction table says to avoid grapefruit juice. Higher levels raise the risk of myopathy and rhabdomyolysis."
+citations:
+  - type: "label"
+    title: "LOVASTATIN TABLET [LUPIN PHARMACEUTICALS, INC.]"
+    url: "https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=df7ddf4f-d569-431e-81f1-9129d7043150"
+    setid: "df7ddf4f-d569-431e-81f1-9129d7043150"
+  - type: "review"
+    title: "Grapefruit-medication interactions: forbidden fruit or avoidable consequences? (CMAJ 2013)"
+    url: "https://pubmed.ncbi.nlm.nih.gov/23184849/"
+    pmid: "23184849"
+status: approved
+source: curated
+reviewed_at: 2026-10-08

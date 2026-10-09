@@ -1,0 +1,5 @@
+id: "alprazolam"
+name: "Alprazolam"
+aliases: ["Xanax"]
+parent: "benzodiazepines"
+drug_class: "Benzodiazepine"

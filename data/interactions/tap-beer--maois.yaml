@@ -1,0 +1,25 @@
+id: tap-beer--maois
+food: tap-beer
+drug: maois
+mechanisms: [tyramine-pressor-response]
+severity: avoid
+effect: increases
+summary: "Tap beer and unpasteurized beer can contain enough tyramine to cause a blood pressure crisis with MAO inhibitors."
+advice: "Avoid tap or draft beer and beer that has not been pasteurized. Ask your prescriber about alcohol in general, because the labels advise against combining it with these medicines."
+details: "Tyramine is normally broken down by monoamine oxidase in the gut and liver. While that enzyme is blocked, tyramine from food builds up and triggers a release of norepinephrine, which can raise blood pressure sharply (hypertensive crisis). The risk continues for about two weeks after the medicine is stopped, so keep following the diet during that time.\n\nThe tranylcypromine label lists all kinds of tap beer and unpasteurized beer among foods to avoid and notes that bottled and canned beer contains little or no tyramine. The phenelzine and isocarboxazid labels also tell patients to avoid beer."
+citations:
+  - type: "label"
+    title: "PARNATE (TRANYLCYPROMINE SULFATE) TABLET, FILM COATED [ADVANZ PHARMA (US) CORP.]"
+    url: "https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=b72d8187-dfcc-4ea0-b5e9-c0be95b69a27"
+    setid: "b72d8187-dfcc-4ea0-b5e9-c0be95b69a27"
+  - type: "label"
+    title: "NARDIL (PHENELZINE SULFATE) TABLET, FILM COATED [PARKE-DAVIS DIV OF PFIZER INC]"
+    url: "https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=513a41d0-37d4-4355-8a6d-a2c643bce6fa"
+    setid: "513a41d0-37d4-4355-8a6d-a2c643bce6fa"
+  - type: "label"
+    title: "MARPLAN (ISOCARBOXAZID) TABLET [VALIDUS PHARMACEUTICALS LLC]"
+    url: "https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=ac387aa0-3f04-4865-a913-db6ed6f4fdc5"
+    setid: "ac387aa0-3f04-4865-a913-db6ed6f4fdc5"
+status: approved
+source: curated
+reviewed_at: 2026-10-08

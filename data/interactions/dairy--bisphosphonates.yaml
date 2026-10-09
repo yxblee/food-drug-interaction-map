@@ -1,0 +1,21 @@
+id: dairy--bisphosphonates
+food: dairy
+drug: bisphosphonates
+mechanisms: [chelation]
+severity: caution
+effect: decreases
+summary: "Milk and other dairy foods can interfere with osteoporosis pills."
+advice: "Take the pill with plain water and wait the time on the label before milk, yogurt or cheese."
+details: "The labels require plain water and a wait before any food or drink, and say calcium-containing products are likely to interfere with absorption. They do not name dairy specifically, so this is graded caution rather than avoid."
+citations:
+  - type: "label"
+    title: "ALENDRONATE SODIUM TABLET [REMEDYREPACK INC.]"
+    url: "https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=c7e470d6-508e-466e-a78d-060bbbc9745c"
+    setid: "c7e470d6-508e-466e-a78d-060bbbc9745c"
+  - type: "label"
+    title: "IBANDRONATE SODIUM TABLET [BIONPHARMA INC.]"
+    url: "https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=6ca94cce-a2bb-421f-bd8f-6b14bc2bd985"
+    setid: "6ca94cce-a2bb-421f-bd8f-6b14bc2bd985"
+status: approved
+source: curated
+reviewed_at: 2026-10-09

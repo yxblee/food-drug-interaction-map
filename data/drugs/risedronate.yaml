@@ -1,0 +1,5 @@
+id: "risedronate"
+name: "Risedronate"
+aliases: ["Actonel", "Atelvia"]
+parent: "bisphosphonates"
+drug_class: "Bisphosphonate"

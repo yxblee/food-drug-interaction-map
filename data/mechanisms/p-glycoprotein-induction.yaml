@@ -1,0 +1,4 @@
+id: "p-glycoprotein-induction"
+name: "P-glycoprotein induction"
+kind: "transporter"
+explanation: "P-glycoprotein is a pump that moves medicines out of cells in the gut and elsewhere. Some substances increase how much of it the body makes, so less medicine is absorbed and more is pushed out, lowering blood levels."

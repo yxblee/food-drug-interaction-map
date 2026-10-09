@@ -1,0 +1,4 @@
+id: "tetracycline"
+name: "Tetracycline"
+parent: "tetracyclines"
+drug_class: "Tetracycline antibiotic"
