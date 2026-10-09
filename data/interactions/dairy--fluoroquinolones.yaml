@@ -1,0 +1,17 @@
+id: dairy--fluoroquinolones
+food: dairy
+drug: fluoroquinolones
+mechanisms: [chelation]
+severity: caution
+effect: decreases
+summary: "Milk or yogurt on its own can reduce how much ciprofloxacin you absorb."
+advice: "Avoid taking the antibiotic with milk, yogurt or calcium-fortified juice alone. Taking it with a full meal that includes them is acceptable."
+details: "The ciprofloxacin label says to avoid taking it with dairy products or calcium-fortified juice alone because absorption may drop, while allowing it as part of a meal containing them."
+citations:
+  - type: "label"
+    title: "CIPROFLOXACIN HYDROCHLORIDE TABLET, FILM COATED [WESTMINSTER PHARMACEUTICALS, LLC]"
+    url: "https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=c47250c2-bece-46b5-8b3b-b7c97d9005d8"
+    setid: "c47250c2-bece-46b5-8b3b-b7c97d9005d8"
+status: approved
+source: curated
+reviewed_at: 2026-10-09

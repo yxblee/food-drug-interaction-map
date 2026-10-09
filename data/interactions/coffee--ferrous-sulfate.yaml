@@ -1,0 +1,21 @@
+id: coffee--ferrous-sulfate
+food: coffee
+drug: ferrous-sulfate
+mechanisms: [reduced-absorption]
+severity: caution
+effect: decreases
+summary: "Coffee taken with iron pills can reduce how much iron you absorb."
+advice: "Take iron at least an hour away from coffee."
+details: "A review of dietary factors lists polyphenols in tea and coffee as inhibitors of iron absorption."
+citations:
+  - type: "review"
+    title: "Effect of tea and other dietary factors on iron absorption"
+    url: "https://pubmed.ncbi.nlm.nih.gov/11029010/"
+    pmid: "11029010"
+  - type: "review"
+    title: "Iron bioavailability and dietary reference values"
+    url: "https://pubmed.ncbi.nlm.nih.gov/20200263/"
+    pmid: "20200263"
+status: approved
+source: curated
+reviewed_at: 2026-10-09

@@ -1,0 +1,21 @@
+id: calcium-supplements--tetracyclines
+food: calcium-supplements
+drug: tetracyclines
+mechanisms: [chelation]
+severity: caution
+effect: decreases
+summary: "Calcium products can bind tetracycline antibiotics and weaken them."
+advice: "Space tetracycline antibiotics away from calcium supplements and calcium-containing antacids, following your pharmacist's timing advice."
+details: "The tetracycline label states that absorption is impaired by antacids containing aluminum, calcium or magnesium. The doxycycline label also notes reduced tetracycline absorption with calcium-containing foods."
+citations:
+  - type: "label"
+    title: "TETRACYCLINE HYDROCHLORIDE CAPSULE [BRYANT RANCH PREPACK]"
+    url: "https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=02e88b4a-57ae-4ef6-ba48-97c657202b94"
+    setid: "02e88b4a-57ae-4ef6-ba48-97c657202b94"
+  - type: "label"
+    title: "DOXYCYCLINE HYCLATE TABLET, FILM COATED [REMEDYREPACK INC.]"
+    url: "https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=c8194d6e-c407-465e-a342-4d2d9756dfc4"
+    setid: "c8194d6e-c407-465e-a342-4d2d9756dfc4"
+status: approved
+source: curated
+reviewed_at: 2026-10-09

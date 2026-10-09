@@ -1,0 +1,21 @@
+id: calcium-supplements--levothyroxine
+food: calcium-supplements
+drug: levothyroxine
+mechanisms: [chelation]
+severity: caution
+effect: decreases
+summary: "Calcium supplements can bind levothyroxine in the gut and weaken it."
+advice: "Take levothyroxine at least 4 hours apart from calcium supplements, and have your thyroid levels checked if the timing changes."
+details: "The Synthroid label lists calcium carbonate among agents that can bind levothyroxine and advises dosing at least 4 hours apart. The systematic review also found calcium supplements lowered absorption."
+citations:
+  - type: "label"
+    title: "SYNTHROID (LEVOTHYROXINE SODIUM) TABLET [ABBVIE INC.]"
+    url: "https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=1e11ad30-1041-4520-10b0-8f9d30d30fcc"
+    setid: "1e11ad30-1041-4520-10b0-8f9d30d30fcc"
+  - type: "review"
+    title: "Levothyroxine Interactions with Food and Dietary Supplements-A Systematic Review"
+    url: "https://pubmed.ncbi.nlm.nih.gov/33801406/"
+    pmid: "33801406"
+status: approved
+source: curated
+reviewed_at: 2026-10-09

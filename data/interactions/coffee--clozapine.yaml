@@ -1,0 +1,17 @@
+id: coffee--clozapine
+food: coffee
+drug: clozapine
+mechanisms: [cyp1a2-competition]
+severity: monitor
+effect: increases
+summary: "Caffeine can slow clozapine breakdown and raise its levels."
+advice: "Keep your caffeine intake steady and tell your prescriber about large changes."
+details: "The clozapine label lists caffeine as a weak or moderate CYP1A2 inhibitor and advises close monitoring with possible dose reduction when such inhibitors are used."
+citations:
+  - type: "label"
+    title: "CLOZAPINE TABLET [NORTHSTAR RX LLC]"
+    url: "https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=61fe53d5-ed5c-4e45-9189-709d08d386cb"
+    setid: "61fe53d5-ed5c-4e45-9189-709d08d386cb"
+status: approved
+source: curated
+reviewed_at: 2026-10-09

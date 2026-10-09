@@ -1,0 +1,20 @@
+id: st-johns-wort--combined-oral-contraceptives
+food: st-johns-wort
+drug: combined-oral-contraceptives
+mechanisms: [cyp3a4-induction, p-glycoprotein-induction]
+severity: caution
+effect: decreases
+summary: "St. John's wort may make hormonal birth control less reliable."
+advice: "Talk to your prescriber or pharmacist before combining them. If you take St. John's wort, ask whether you need a backup method."
+details: "St. John's wort switches on liver enzymes and a drug transporter that clear contraceptive hormones. A combined pill label says herbal products containing it may reduce the effectiveness of contraceptive steroids and can cause unscheduled bleeding. NCCIH also lists birth control pills among medicines it can weaken."
+citations:
+  - type: "label"
+    title: "LEVONORGESTREL AND ETHINYL ESTRADIOL TABLET [GLENMARK PHARMACEUTICALS INC., USA]"
+    url: "https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=44fbc5ae-5682-471f-a12a-955e8b4d233a"
+    setid: "44fbc5ae-5682-471f-a12a-955e8b4d233a"
+  - type: "guideline"
+    title: "St. John's Wort: Usefulness and Safety (NCCIH)"
+    url: "https://www.nccih.nih.gov/health/st-johns-wort"
+status: approved
+source: curated
+reviewed_at: 2026-10-09

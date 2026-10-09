@@ -1,0 +1,21 @@
+id: coffee--lithium
+food: coffee
+drug: lithium
+mechanisms: [increased-renal-clearance]
+severity: monitor
+effect: decreases
+summary: "Caffeine can lower lithium levels, and cutting back suddenly can raise them."
+advice: "Keep your coffee intake steady, and tell your prescriber before making a big change so lithium levels can be rechecked."
+details: "The lithium label says xanthine preparations can lower serum lithium by increasing its excretion. A small study reported blood lithium rose when people stopped caffeine."
+citations:
+  - type: "label"
+    title: "LITHIUM CARBONATE TABLET, CAPSULE [HIKMA PHARMACEUTICALS USA INC.]"
+    url: "https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=b839ff4b-f62d-41ab-a823-550a756d58ec"
+    setid: "b839ff4b-f62d-41ab-a823-550a756d58ec"
+  - type: "study"
+    title: "Caffeine withdrawal increases lithium blood levels"
+    url: "https://pubmed.ncbi.nlm.nih.gov/7748990/"
+    pmid: "7748990"
+status: approved
+source: curated
+reviewed_at: 2026-10-09

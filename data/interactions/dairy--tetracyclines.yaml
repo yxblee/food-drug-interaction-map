@@ -1,0 +1,21 @@
+id: dairy--tetracyclines
+food: dairy
+drug: tetracyclines
+mechanisms: [chelation]
+severity: caution
+effect: decreases
+summary: "Dairy can bind tetracycline antibiotics and reduce how much you absorb."
+advice: "Check the instructions for your specific antibiotic. For tetracycline itself, keep doses away from milk and dairy products."
+details: "The tetracycline label says food and some dairy products interfere with absorption. The doxycycline label says tetracyclines in general are absorbed less with calcium-rich food, yet doxycycline itself is not markedly affected by food or milk, so the effect varies within the class."
+citations:
+  - type: "label"
+    title: "TETRACYCLINE HYDROCHLORIDE CAPSULE [BRYANT RANCH PREPACK]"
+    url: "https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=02e88b4a-57ae-4ef6-ba48-97c657202b94"
+    setid: "02e88b4a-57ae-4ef6-ba48-97c657202b94"
+  - type: "label"
+    title: "DOXYCYCLINE HYCLATE TABLET, FILM COATED [REMEDYREPACK INC.]"
+    url: "https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=c8194d6e-c407-465e-a342-4d2d9756dfc4"
+    setid: "c8194d6e-c407-465e-a342-4d2d9756dfc4"
+status: approved
+source: curated
+reviewed_at: 2026-10-09

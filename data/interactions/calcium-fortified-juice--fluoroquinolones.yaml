@@ -1,0 +1,17 @@
+id: calcium-fortified-juice--fluoroquinolones
+food: calcium-fortified-juice
+drug: fluoroquinolones
+mechanisms: [chelation]
+severity: caution
+effect: decreases
+summary: "Calcium-fortified juice on its own can reduce ciprofloxacin absorption."
+advice: "Do not take the antibiotic with calcium-fortified juice alone. A meal that contains it is acceptable."
+details: "The ciprofloxacin label names calcium-fortified juices alongside dairy as products to avoid when taken alone, because the calcium may lower absorption."
+citations:
+  - type: "label"
+    title: "CIPROFLOXACIN HYDROCHLORIDE TABLET, FILM COATED [WESTMINSTER PHARMACEUTICALS, LLC]"
+    url: "https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=c47250c2-bece-46b5-8b3b-b7c97d9005d8"
+    setid: "c47250c2-bece-46b5-8b3b-b7c97d9005d8"
+status: approved
+source: curated
+reviewed_at: 2026-10-09

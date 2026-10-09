@@ -1,0 +1,17 @@
+id: potassium-salt-substitutes--spironolactone
+food: potassium-salt-substitutes
+drug: spironolactone
+mechanisms: [additive-hyperkalemia]
+severity: caution
+effect: increases
+summary: "Potassium-based salt substitutes can push potassium too high with spironolactone."
+advice: "Ask your prescriber before using salt substitutes, and keep up regular potassium blood tests."
+details: "Spironolactone holds potassium in the body. Its label says the hyperkalemia risk rises with potassium-containing salt substitutes and calls for regular potassium monitoring."
+citations:
+  - type: "label"
+    title: "SPIRONOLACTONE TABLET [AUROBINDO PHARMA LIMITED]"
+    url: "https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=768563dc-a619-44dc-b97f-1a7e71fd56a0"
+    setid: "768563dc-a619-44dc-b97f-1a7e71fd56a0"
+status: approved
+source: curated
+reviewed_at: 2026-10-09
