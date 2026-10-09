@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react'
 import type { Drug, Food, Mechanism, NodeDetail } from '@fdi/schema'
-import { nodeKey as keyOf, splitKey } from '@fdi/schema/domain'
+import { groupTerm, nodeKey as keyOf, splitKey } from '@fdi/schema/domain'
 import { fetchNode } from '../api.ts'
 import { InteractionRow } from './InteractionRow.tsx'
 
@@ -60,7 +60,7 @@ export function SidePanel({
   const d = load.key === nodeKey ? load.detail : undefined
   const entity = d?.entity
   const header = d
-    ? [kind, d.parent?.name ?? (d.node.group ? 'group' : null)].filter(Boolean).join(' · ')
+    ? [kind, d.parent?.name ?? (d.node.group ? groupTerm(kind) : null)].filter(Boolean).join(' · ')
     : kind
 
   return (
@@ -129,7 +129,6 @@ export function SidePanel({
                   nodes={d.nodes}
                   mechanisms={d.mechanisms}
                   perspective={kind}
-                  viaName={row.via ? d.parent?.name : undefined}
                   onSelect={onSelect}
                 />
               ))}

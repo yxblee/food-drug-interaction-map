@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useRef } from 'react'
 import type { GraphPayload } from '@fdi/schema'
-import { nodeKey, searchNodes } from '@fdi/schema/domain'
+import { groupTerm, nodeKey, searchNodes } from '@fdi/schema/domain'
 import type { ViewState } from '../urlState.ts'
 import { isSlashFocus, matchCountLabel } from './searchUi.ts'
 
@@ -25,7 +25,7 @@ export function Search({ graph, state, update }: Props) {
     return () => window.removeEventListener('keydown', onKey)
   }, [])
 
-  const select = (r: (typeof results)[number]) => update({ node: nodeKey(r.kind, r.id) })
+  const select = (r: (typeof results)[number]) => update({ node: nodeKey(r.kind, r.id) }, { push: true })
 
   return (
     <div className="search" role="search">
@@ -52,7 +52,7 @@ export function Search({ graph, state, update }: Props) {
               <button type="button" className="search__item" onClick={() => select(r)}>
                 <span className="mono-label">
                   {r.kind}
-                  {r.group ? ' · group' : ''}
+                  {r.group ? ` · ${groupTerm(r.kind)}` : ''}
                 </span>{' '}
                 {r.name}
                 {r.matched !== r.name && (

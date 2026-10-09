@@ -32,6 +32,8 @@ const ix = buildIndex(
     node('drug', 'statins', { group: true }),
     node('drug', 'simvastatin', { parent: 'statins' }),
     node('drug', 'atorvastatin', { parent: 'statins' }),
+    node('drug', 'sartans', { group: true }),
+    node('drug', 'losartan', { parent: 'sartans' }),
     node('drug', 'warfarin'),
     node('food', 'grapefruit'),
     node('food', 'alcohol'),
@@ -42,6 +44,7 @@ const ix = buildIndex(
     ia('grapefruit', 'simvastatin', 'avoid'),
     ia('alcohol', 'warfarin', 'caution'),
     ia('alcohol', 'statins', 'monitor'),
+    ia('greens', 'losartan', 'monitor'),
     ia('greens', 'warfarin', 'caution', ['k']),
   ],
 )
@@ -52,10 +55,10 @@ describe('checkMeds', () => {
     expect(checkMeds(ix, ['nope'])).toEqual([])
   })
 
-  it('shows inherited class interactions with via', () => {
+  it('shows inherited class interactions with inheritedFrom', () => {
     const [w] = checkMeds(ix, ['atorvastatin']).filter((w) => w.food.id === 'grapefruit')
     expect(w.severity).toBe('caution')
-    expect(w.hits.map((h) => [h.drug.id, h.interaction.id, h.via])).toEqual([
+    expect(w.affected.map((h) => [h.drug.id, h.interaction.id, h.inheritedFrom])).toEqual([
       ['atorvastatin', 'grapefruit--statins', 'statins'],
     ])
   })
@@ -68,16 +71,21 @@ describe('checkMeds', () => {
       ['greens', 'caution'],
     ])
     const grapefruit = warnings[0]
-    expect(grapefruit.hits.map((h) => [h.drug.id, h.interaction.severity])).toEqual([
+    expect(grapefruit.affected.map((h) => [h.drug.id, h.interaction.severity])).toEqual([
       ['simvastatin', 'avoid'],
       ['atorvastatin', 'caution'],
     ])
     const alcohol = warnings[1]
-    expect(alcohol.hits.map((h) => h.drug.id)).toEqual(['warfarin', 'atorvastatin', 'simvastatin'])
+    expect(alcohol.affected.map((h) => h.drug.id)).toEqual(['warfarin', 'atorvastatin', 'simvastatin'])
+  })
+
+  it('includes the Drug class of a Medication that has only Direct interactions', () => {
+    const keys = mapKeysFor(ix, checkMeds(ix, ['losartan']), ['losartan'])
+    expect(keys.has('drug:sartans')).toBe(true)
   })
 
   it('collects map keys for drugs, foods, interaction drugs and mechanisms', () => {
-    const keys = mapKeysFor(checkMeds(ix, ['atorvastatin']), ['atorvastatin'])
+    const keys = mapKeysFor(ix, checkMeds(ix, ['atorvastatin']), ['atorvastatin'])
     expect([...keys].sort()).toEqual([
       'drug:atorvastatin',
       'drug:statins',

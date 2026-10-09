@@ -89,10 +89,10 @@ describe('GET /api/graph', () => {
 })
 
 describe('GET /api/node/:kind/:id', () => {
-  it('resolves inherited group interactions with via', async () => {
+  it('resolves inherited group interactions with inheritedFrom', async () => {
     const body = (await (await get('/api/node/food/kale')).json()) as NodeDetail
     expect(body.parent?.id).toBe('leafy-greens')
-    expect(body.interactions.map((r) => [r.interaction.id, r.via])).toEqual([
+    expect(body.interactions.map((r) => [r.interaction.id, r.inheritedFrom])).toEqual([
       ['leafy-greens--warfarin', 'leafy-greens'],
     ])
     expect(body.interactions[0].interaction.citations[0].title).toBe('Fixture citation')
@@ -101,7 +101,7 @@ describe('GET /api/node/:kind/:id', () => {
   })
   it('lets exact interactions beat class ones and excludes pending', async () => {
     const body = (await (await get('/api/node/drug/simvastatin')).json()) as NodeDetail
-    expect(body.interactions.map((r) => [r.interaction.id, r.via])).toEqual([
+    expect(body.interactions.map((r) => [r.interaction.id, r.inheritedFrom])).toEqual([
       ['grapefruit--simvastatin', undefined],
       ['sample-fruits--statins', 'statins'],
       ['orange--simvastatin', undefined],

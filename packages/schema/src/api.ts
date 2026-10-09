@@ -32,7 +32,7 @@ export interface SearchResult {
 
 export interface ResolvedInteraction<I extends GraphInteraction = GraphInteraction> {
   interaction: I
-  via?: string
+  inheritedFrom?: string
 }
 
 export interface NodeDetail {

@@ -99,7 +99,7 @@
 .warning__drugs {
   color: var(--muted);
 }
-.warning__hits {
+.warning__affected {
   padding-left: 18px;
 }
 @media (max-width: 768px) {

@@ -7,14 +7,15 @@ interface Props {
   nodes: Record<string, GraphNode>
   mechanisms: Record<string, Mechanism>
   perspective: Kind
-  viaName?: string
   onSelect?: (key: string) => void
 }
 
 const paragraphs = (text: string) => text.split(/\n\s*\n/).map((p, i) => <p key={i}>{p.trim()}</p>)
 
-export function InteractionRow({ row, nodes, mechanisms, perspective, viaName, onSelect }: Props) {
+export function InteractionRow({ row, nodes, mechanisms, perspective, onSelect }: Props) {
   const i = row.interaction
+  // The Drug class or Food group this row is inherited from, on the viewed side.
+  const inheritedFrom = row.inheritedFrom ? nodes[nodeKey(perspective, row.inheritedFrom)] : undefined
   const food = nodes[nodeKey('food', i.food)]
   const drug = nodes[nodeKey('drug', i.drug)]
   const counterpart =
@@ -41,7 +42,7 @@ export function InteractionRow({ row, nodes, mechanisms, perspective, viaName, o
           ))}
         </span>
       </div>
-      {row.via && viaName && <p className="mono-label">Applies to {viaName}</p>}
+      {inheritedFrom && <p className="mono-label">Applies to {inheritedFrom.name}</p>}
       <p className="irow__summary">{i.summary}</p>
       <p className="irow__advice">
         <strong>What to do:</strong> {i.advice}

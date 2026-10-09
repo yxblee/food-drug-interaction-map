@@ -93,7 +93,6 @@ export function ExploreTab({
       />
       <div className="explore__bar">
         <Search graph={graph} state={state} update={update} />
-        <p className="mono-label">{renderGraph.nodes.length} nodes</p>
         {medsFilter && (
           <button className="pill-button" onClick={clearMedsFilter}>
             Showing your meds ✕

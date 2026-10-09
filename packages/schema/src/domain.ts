@@ -9,6 +9,9 @@ export const SEVERITY_RANK: Record<Severity, number> = {
   minimal: 3,
 }
 
+// Glossary term for a group of this kind (Drug class / Food group).
+export const groupTerm = (kind: Kind) => (kind === 'drug' ? 'Drug class' : 'Food group')
+
 export const nodeKey = (kind: Kind, id: string) => `${kind}:${id}`
 
 export function splitKey(key: string): [Kind, string] {
@@ -47,7 +50,7 @@ function resolveRows<I extends GraphInteraction>(ix: Index<I>, side: 'drug' | 'f
   if (self.parent) {
     for (const i of ix.interactions) {
       if (i[side] === self.parent && !rows.has(i[other])) {
-        rows.set(i[other], { interaction: i, via: self.parent })
+        rows.set(i[other], { interaction: i, inheritedFrom: self.parent })
       }
     }
   }
@@ -73,7 +76,7 @@ export const interactionsForMechanism = <I extends GraphInteraction>(
 export function searchNodes(nodes: GraphNode[], q: string, limit = 20): SearchResult[] {
   const needle = q.trim().toLowerCase()
   if (!needle) return []
-  const hits: { rank: number; matched: string; node: GraphNode }[] = []
+  const found: { rank: number; matched: string; node: GraphNode }[] = []
   for (const node of nodes) {
     let best: { rank: number; matched: string } | undefined
     for (const term of [node.name, ...node.aliases]) {
@@ -81,10 +84,10 @@ export function searchNodes(nodes: GraphNode[], q: string, limit = 20): SearchRe
       const rank = t.startsWith(needle) ? 0 : t.includes(needle) ? 1 : -1
       if (rank >= 0 && (!best || rank < best.rank)) best = { rank, matched: term }
     }
-    if (best) hits.push({ ...best, node })
+    if (best) found.push({ ...best, node })
   }
-  hits.sort((a, b) => a.rank - b.rank || a.node.name.localeCompare(b.node.name))
-  return hits.slice(0, limit).map(({ node, matched }) => ({
+  found.sort((a, b) => a.rank - b.rank || a.node.name.localeCompare(b.node.name))
+  return found.slice(0, limit).map(({ node, matched }) => ({
     kind: node.kind,
     id: node.id,
     name: node.name,

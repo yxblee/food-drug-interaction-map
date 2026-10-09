@@ -62,8 +62,8 @@ const interactions = [
   i('leafy-greens', 'warfarin', 'caution', ['vitamin-k-antagonism']),
 ]
 const ix = buildIndex(nodes, interactions)
-const ids = (rows: { interaction: { id: string }; via?: string }[]) =>
-  rows.map((r) => [r.interaction.id, r.via])
+const ids = (rows: { interaction: { id: string }; inheritedFrom?: string }[]) =>
+  rows.map((r) => [r.interaction.id, r.inheritedFrom])
 
 describe('keys', () => {
   it('round-trips', () => {

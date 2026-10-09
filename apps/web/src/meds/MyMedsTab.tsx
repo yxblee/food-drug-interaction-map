@@ -1,7 +1,7 @@
 import { useEffect, useMemo, useState } from 'react'
 import type { GraphPayload, NodeDetail } from '@fdi/schema'
 import { SEVERITIES } from '@fdi/schema'
-import { buildIndex, nodeKey, searchNodes, type Index } from '@fdi/schema/domain'
+import { buildIndex, groupTerm, nodeKey, searchNodes, type Index } from '@fdi/schema/domain'
 import { fetchNode } from '../api.ts'
 import { InteractionRow } from '../explore/InteractionRow.tsx'
 import { SEVERITY_LABEL, SEVERITY_LEGEND, SeverityBadge } from '../explore/SeverityBadge.tsx'
@@ -103,7 +103,7 @@ export function MyMedsTab({ graph, onSeeOnMap }: MyMedsTabProps) {
             <button className="pill-button" onClick={() => setMeds([])}>
               Clear all
             </button>
-            <button className="pill-button" onClick={() => onSeeOnMap(mapKeysFor(warnings, meds))}>
+            <button className="pill-button" onClick={() => onSeeOnMap(mapKeysFor(ix, warnings, meds))}>
               See on map
             </button>
           </div>
@@ -148,7 +148,7 @@ export function MyMedsTab({ graph, onSeeOnMap }: MyMedsTabProps) {
 
 function WarningRow({ warning: w, ix }: { warning: FoodWarning; ix: Index }) {
   const [detail, setDetail] = useState<NodeDetail | null>(null)
-  const hitIds = new Set(w.hits.map((h) => h.interaction.id))
+  const affectedIds = new Set(w.affected.map((h) => h.interaction.id))
   return (
     <li className="warning">
       <details
@@ -159,20 +159,20 @@ function WarningRow({ warning: w, ix }: { warning: FoodWarning; ix: Index }) {
       >
         <summary>
           <SeverityBadge severity={w.severity} /> <strong>{w.food.name}</strong>
-          {w.food.group && <span className="mono-label"> (group)</span>}
+          {w.food.group && <span className="mono-label"> {groupTerm('food')}</span>}
           <span className="warning__drugs">
             {' '}
-            affects {w.hits.map((h) => h.drug.name).join(', ')}
+            affects {w.affected.map((h) => h.drug.name).join(', ')}
           </span>
         </summary>
-        <ul className="warning__hits">
-          {w.hits.map((h) => (
+        <ul className="warning__affected">
+          {w.affected.map((h) => (
             <li key={`${h.drug.id}:${h.interaction.id}`}>
               <strong>{h.drug.name}</strong>
-              {h.via && (
+              {h.inheritedFrom && (
                 <span className="mono-label">
                   {' '}
-                  (applies to all {ix.nodes.get(nodeKey('drug', h.via))?.name ?? h.via})
+                  (applies to all {ix.nodes.get(nodeKey('drug', h.inheritedFrom))?.name ?? h.inheritedFrom})
                 </span>
               )}
               : {h.interaction.summary} <em>{h.interaction.advice}</em>
@@ -182,7 +182,7 @@ function WarningRow({ warning: w, ix }: { warning: FoodWarning; ix: Index }) {
         {detail && (
           <ul className="panel__rows">
             {detail.interactions
-              .filter((r) => hitIds.has(r.interaction.id))
+              .filter((r) => affectedIds.has(r.interaction.id))
               .map((row) => (
                 <InteractionRow
                   key={row.interaction.id}
@@ -190,7 +190,6 @@ function WarningRow({ warning: w, ix }: { warning: FoodWarning; ix: Index }) {
                   nodes={detail.nodes}
                   mechanisms={detail.mechanisms}
                   perspective="food"
-                  viaName={row.via ? detail.nodes[`drug:${row.via}`]?.name : undefined}
                 />
               ))}
           </ul>
