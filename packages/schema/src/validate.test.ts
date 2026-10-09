@@ -51,7 +51,10 @@ function base(): RawDataset {
         },
       },
     ],
-    interactions: [interaction('grapefruit', 'simvastatin'), interaction('sample-fruits', 'statins')],
+    interactions: [
+      interaction('grapefruit', 'simvastatin'),
+      interaction('sample-fruits', 'statins'),
+    ],
   }
 }
 
@@ -90,7 +93,9 @@ describe('validateDataset', () => {
   it('reports duplicate ids', () => {
     const raw = base()
     raw.interactions.push(interaction('sample-fruits', 'statins'))
-    expect(errorsOf(raw)).toContainEqual(expect.stringContaining('duplicate id "sample-fruits--statins"'))
+    expect(errorsOf(raw)).toContainEqual(
+      expect.stringContaining('duplicate id "sample-fruits--statins"'),
+    )
   })
 
   it('reports unknown references', () => {
@@ -99,7 +104,9 @@ describe('validateDataset', () => {
     const errors = errorsOf(raw)
     expect(errors).toContain('interactions/kale--warfarin.yaml: food: unknown food "kale"')
     expect(errors).toContain('interactions/kale--warfarin.yaml: drug: unknown drug "warfarin"')
-    expect(errors).toContain('interactions/kale--warfarin.yaml: mechanisms: unknown mechanism "nope"')
+    expect(errors).toContain(
+      'interactions/kale--warfarin.yaml: mechanisms: unknown mechanism "nope"',
+    )
   })
 
   it('enforces one-level groups', () => {
@@ -125,7 +132,9 @@ describe('validateDataset', () => {
   it('reports name and alias collisions within a kind, case-insensitively', () => {
     const raw = base()
     raw.drugs.push({ file: 'drugs/zocor-xr.yaml', data: { id: 'zocor-xr', name: 'ZOCOR' } })
-    expect(errorsOf(raw)).toContain('drugs/zocor-xr.yaml: name/aliases: "zocor" already used by simvastatin')
+    expect(errorsOf(raw)).toContain(
+      'drugs/zocor-xr.yaml: name/aliases: "zocor" already used by simvastatin',
+    )
   })
 
   it('fails an interaction with no mechanism or no citation, naming file and field', () => {

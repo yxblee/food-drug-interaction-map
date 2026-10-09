@@ -54,7 +54,7 @@ export function validateDataset(raw: RawDataset): ValidationResult {
     return out
   }
 
-  function checkHierarchy( items: Hierarchical[]) {
+  function checkHierarchy(items: Hierarchical[]) {
     const byId = new Map(items.map((i) => [i.id, i]))
     for (const i of items) {
       if (!i.parent) continue
@@ -66,7 +66,7 @@ export function validateDataset(raw: RawDataset): ValidationResult {
     }
   }
 
-  function checkAliases( items: Hierarchical[]) {
+  function checkAliases(items: Hierarchical[]) {
     const owner = new Map<string, string>()
     for (const i of items) {
       for (const term of new Set([i.name, ...i.aliases].map((t) => t.toLowerCase()))) {

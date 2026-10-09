@@ -1,18 +1,18 @@
 import { useEffect, useMemo, useRef } from 'react'
-import type { GraphPayload } from '@fdi/schema'
+import type { GraphNode } from '@fdi/schema'
 import { groupTerm, nodeKey, searchNodes } from '@fdi/schema/domain'
 import type { ViewState } from '../urlState.ts'
 import { isSlashFocus, matchCountLabel } from './searchUi.ts'
 
 interface Props {
-  graph: GraphPayload
+  nodes: GraphNode[]
   state: ViewState
   update: (patch: Partial<ViewState>, opts?: { push?: boolean }) => void
 }
 
-export function Search({ graph, state, update }: Props) {
+export function Search({ nodes, state, update }: Props) {
   const input = useRef<HTMLInputElement>(null)
-  const results = useMemo(() => searchNodes(graph.nodes, state.q), [graph.nodes, state.q])
+  const results = useMemo(() => searchNodes(nodes, state.q), [nodes, state.q])
   const searching = state.q.trim() !== ''
 
   useEffect(() => {
@@ -25,7 +25,8 @@ export function Search({ graph, state, update }: Props) {
     return () => window.removeEventListener('keydown', onKey)
   }, [])
 
-  const select = (r: (typeof results)[number]) => update({ node: nodeKey(r.kind, r.id) }, { push: true })
+  const select = (r: (typeof results)[number]) =>
+    update({ node: nodeKey(r.kind, r.id) }, { push: true })
 
   return (
     <div className="search" role="search">

@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import type { Drug, Food, Mechanism, NodeDetail } from '@fdi/schema'
 import { groupTerm, nodeKey as keyOf, splitKey } from '@fdi/schema/domain'
 import { fetchNode } from '../api.ts'
@@ -30,7 +30,6 @@ export function SidePanel({
 
   useEffect(() => {
     let live = true
-    setLoad({ key: nodeKey })
     fetchNode(kind, id).then(
       (detail) => {
         if (!live) return
@@ -42,13 +41,23 @@ export function SidePanel({
     return () => {
       live = false
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps -- onNotFound identity changes every render
-  }, [nodeKey])
+  }, [kind, id, nodeKey, onNotFound])
+
+  // Move focus into the panel on open; give it back to the opener on close.
+  const panel = useRef<HTMLElement>(null)
+  useEffect(() => {
+    const opener = document.activeElement as HTMLElement | null
+    panel.current?.focus()
+    return () => {
+      if (opener && opener.isConnected) opener.focus()
+    }
+  }, [])
 
   useEffect(() => {
     const onKey = (e: KeyboardEvent) => {
       const t = e.target as HTMLElement | null
-      if (t && (t.tagName === 'INPUT' || t.tagName === 'TEXTAREA' || t.isContentEditable)) return
+      if (t?.closest('input, textarea, select, button, a, summary, [contenteditable="true"]'))
+        return
       if (e.key === 'ArrowLeft') onPrev()
       else if (e.key === 'ArrowRight') onNext()
       else if (e.key === 'Escape') onClose()
@@ -64,7 +73,7 @@ export function SidePanel({
     : kind
 
   return (
-    <aside className="panel" aria-labelledby="panel-title">
+    <aside ref={panel} tabIndex={-1} className="panel" aria-labelledby="panel-title">
       <div className="panel__top">
         <span className="mono-label">{header}</span>
         <span className="mono-label">
@@ -78,7 +87,9 @@ export function SidePanel({
         {d?.node.name ?? '…'}
       </h2>
 
-      {load.error && <p role="alert">Couldn't load details. Try again in a moment.</p>}
+      {load.key === nodeKey && load.error && (
+        <p role="alert">Couldn't load details. Try again in a moment.</p>
+      )}
 
       {d && entity && (
         <div className="panel__body">

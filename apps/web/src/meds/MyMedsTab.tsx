@@ -1,38 +1,23 @@
-import { useEffect, useMemo, useState } from 'react'
+import { useMemo, useState } from 'react'
 import type { GraphPayload, NodeDetail } from '@fdi/schema'
 import { SEVERITIES } from '@fdi/schema'
 import { buildIndex, groupTerm, nodeKey, searchNodes, type Index } from '@fdi/schema/domain'
 import { fetchNode } from '../api.ts'
 import { InteractionRow } from '../explore/InteractionRow.tsx'
 import { SEVERITY_LABEL, SEVERITY_LEGEND, SeverityBadge } from '../explore/SeverityBadge.tsx'
-import { safeStorage } from '../storage.ts'
-import { checkMeds, mapKeysFor, type FoodWarning } from './checkMeds.ts'
-import { loadMeds, saveMeds } from './medsStorage.ts'
+import { checkMeds, type FoodWarning } from './checkMeds.ts'
 import './meds.css'
 
 export interface MyMedsTabProps {
   graph: GraphPayload
-  onSeeOnMap: (keys: Set<string>) => void
+  meds: string[]
+  setMeds: (update: (m: string[]) => string[]) => void
+  onSeeOnMap: () => void
 }
 
-export function MyMedsTab({ graph, onSeeOnMap }: MyMedsTabProps) {
+export function MyMedsTab({ graph, meds, setMeds, onSeeOnMap }: MyMedsTabProps) {
   const ix = useMemo(() => buildIndex(graph.nodes, graph.interactions), [graph])
-  const storage = useMemo(() => safeStorage(), [])
-  const isMedication = (id: string) => ix.nodes.get(nodeKey('drug', id))?.group === false
-  const [initial] = useState(() =>
-    storage ? loadMeds(storage, isMedication) : { ids: [], dropped: [] },
-  )
-  const [meds, setMeds] = useState<string[]>(initial.ids)
   const [query, setQuery] = useState('')
-
-  useEffect(() => {
-    if (!storage) return
-    try {
-      saveMeds(storage, meds)
-    } catch {
-      // storage full or blocked: the list still works for this visit
-    }
-  }, [meds, storage])
 
   const candidates = useMemo(
     () => graph.nodes.filter((n) => n.kind === 'drug' && !n.group && !meds.includes(n.id)),
@@ -53,11 +38,6 @@ export function MyMedsTab({ graph, onSeeOnMap }: MyMedsTabProps) {
         <p className="meds__privacy">
           Your list stays on this device. It is never sent to our server.
         </p>
-        {initial.dropped.length > 0 && (
-          <p role="status" className="meds__notice">
-            Removed {initial.dropped.length} medication(s) that are no longer in our dataset.
-          </p>
-        )}
         <label htmlFor="med-input" className="mono-label">
           Add a medication
         </label>
@@ -100,10 +80,10 @@ export function MyMedsTab({ graph, onSeeOnMap }: MyMedsTabProps) {
         </ul>
         {meds.length > 0 && (
           <div className="meds__actions">
-            <button className="pill-button" onClick={() => setMeds([])}>
+            <button className="pill-button" onClick={() => setMeds(() => [])}>
               Clear all
             </button>
-            <button className="pill-button" onClick={() => onSeeOnMap(mapKeysFor(ix, warnings, meds))}>
+            <button className="pill-button" onClick={onSeeOnMap}>
               See on map
             </button>
           </div>
@@ -148,13 +128,16 @@ export function MyMedsTab({ graph, onSeeOnMap }: MyMedsTabProps) {
 
 function WarningRow({ warning: w, ix }: { warning: FoodWarning; ix: Index }) {
   const [detail, setDetail] = useState<NodeDetail | null>(null)
+  const [failed, setFailed] = useState(false)
   const affectedIds = new Set(w.affected.map((h) => h.interaction.id))
   return (
     <li className="warning">
       <details
         onToggle={(e) => {
-          if ((e.target as HTMLDetailsElement).open && !detail)
-            fetchNode('food', w.food.id).then(setDetail, () => {})
+          if ((e.target as HTMLDetailsElement).open && !detail) {
+            setFailed(false)
+            fetchNode('food', w.food.id).then(setDetail, () => setFailed(true))
+          }
         }}
       >
         <summary>
@@ -172,13 +155,15 @@ function WarningRow({ warning: w, ix }: { warning: FoodWarning; ix: Index }) {
               {h.inheritedFrom && (
                 <span className="mono-label">
                   {' '}
-                  (applies to all {ix.nodes.get(nodeKey('drug', h.inheritedFrom))?.name ?? h.inheritedFrom})
+                  (applies to all{' '}
+                  {ix.nodes.get(nodeKey('drug', h.inheritedFrom))?.name ?? h.inheritedFrom})
                 </span>
               )}
               : {h.interaction.summary} <em>{h.interaction.advice}</em>
             </li>
           ))}
         </ul>
+        {failed && <p role="alert">Couldn't load details. Close and reopen to try again.</p>}
         {detail && (
           <ul className="panel__rows">
             {detail.interactions

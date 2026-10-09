@@ -13,7 +13,9 @@ export function createApp(store: Store, opts: { staticDir?: string } = {}) {
   app.use('/api/*', async (c, next) => {
     await next()
     if (c.res.status !== 200) return
-    const tags = (c.req.header('if-none-match') ?? '').split(',').map((t) => t.trim().replace(/^W\//, ''))
+    const tags = (c.req.header('if-none-match') ?? '')
+      .split(',')
+      .map((t) => t.trim().replace(/^W\//, ''))
     const headers = { ETag: etag, 'Cache-Control': CACHE_CONTROL }
     if (tags.includes(etag) || tags.includes('*')) {
       c.res = new Response(null, { status: 304, headers })

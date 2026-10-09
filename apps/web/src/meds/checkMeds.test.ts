@@ -76,7 +76,11 @@ describe('checkMeds', () => {
       ['atorvastatin', 'caution'],
     ])
     const alcohol = warnings[1]
-    expect(alcohol.affected.map((h) => h.drug.id)).toEqual(['warfarin', 'atorvastatin', 'simvastatin'])
+    expect(alcohol.affected.map((h) => h.drug.id)).toEqual([
+      'warfarin',
+      'atorvastatin',
+      'simvastatin',
+    ])
   })
 
   it('includes the Drug class of a Medication that has only Direct interactions', () => {

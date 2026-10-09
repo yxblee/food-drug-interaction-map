@@ -12,7 +12,14 @@ export interface Palette {
   surface: string
 }
 
-const p = (paper: string, ink: string, muted: string, line: string, badgeBg: string, surface: string): Palette => ({
+const p = (
+  paper: string,
+  ink: string,
+  muted: string,
+  line: string,
+  badgeBg: string,
+  surface: string,
+): Palette => ({
   paper,
   ink,
   muted,

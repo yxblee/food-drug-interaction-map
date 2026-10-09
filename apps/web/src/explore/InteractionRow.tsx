@@ -15,7 +15,9 @@ const paragraphs = (text: string) => text.split(/\n\s*\n/).map((p, i) => <p key=
 export function InteractionRow({ row, nodes, mechanisms, perspective, onSelect }: Props) {
   const i = row.interaction
   // The Drug class or Food group this row is inherited from, on the viewed side.
-  const inheritedFrom = row.inheritedFrom ? nodes[nodeKey(perspective, row.inheritedFrom)] : undefined
+  const inheritedFrom = row.inheritedFrom
+    ? nodes[nodeKey(perspective, row.inheritedFrom)]
+    : undefined
   const food = nodes[nodeKey('food', i.food)]
   const drug = nodes[nodeKey('drug', i.drug)]
   const counterpart =
