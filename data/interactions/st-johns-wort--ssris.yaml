@@ -1,0 +1,20 @@
+id: st-johns-wort--ssris
+food: st-johns-wort
+drug: ssris
+mechanisms: [serotonin-excess]
+severity: caution
+effect: increases
+summary: "St. John's wort taken with an SSRI can push serotonin too high."
+advice: "Do not add St. John's wort to an SSRI without your prescriber's agreement. Seek urgent care for agitation, fever, sweating, tremor or a racing heart."
+details: "Both raise serotonin activity. The sertraline label names St. John's wort among the serotonergic products that raise the risk of serotonin syndrome, and NCCIH warns the combination may increase serotonin-related side effects that can be serious."
+citations:
+  - type: "label"
+    title: "SERTRALINE HYDROCHLORIDE TABLET, FILM COATED [A-S MEDICATION SOLUTIONS]"
+    url: "https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=b5e98b93-d8f8-4eed-8a0a-63b347b670ed"
+    setid: "b5e98b93-d8f8-4eed-8a0a-63b347b670ed"
+  - type: "guideline"
+    title: "St. John's Wort: Usefulness and Safety (NCCIH)"
+    url: "https://www.nccih.nih.gov/health/st-johns-wort"
+status: approved
+source: curated
+reviewed_at: 2026-10-09

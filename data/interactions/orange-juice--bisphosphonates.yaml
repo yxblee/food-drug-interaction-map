@@ -1,0 +1,21 @@
+id: orange-juice--bisphosphonates
+food: orange-juice
+drug: bisphosphonates
+mechanisms: [reduced-absorption]
+severity: avoid
+effect: decreases
+summary: "Orange juice taken with an osteoporosis pill can cut absorption by about 60%."
+advice: "Take the pill with plain water only, and have juice later after the wait on the label."
+details: "The alendronate label reports a bioavailability drop of about 60% when taken with coffee or orange juice, and the ibandronate label excludes juice when taking the tablet."
+citations:
+  - type: "label"
+    title: "ALENDRONATE SODIUM TABLET [REMEDYREPACK INC.]"
+    url: "https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=c7e470d6-508e-466e-a78d-060bbbc9745c"
+    setid: "c7e470d6-508e-466e-a78d-060bbbc9745c"
+  - type: "label"
+    title: "IBANDRONATE SODIUM TABLET [BIONPHARMA INC.]"
+    url: "https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=6ca94cce-a2bb-421f-bd8f-6b14bc2bd985"
+    setid: "6ca94cce-a2bb-421f-bd8f-6b14bc2bd985"
+status: approved
+source: curated
+reviewed_at: 2026-10-09

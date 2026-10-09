@@ -1,0 +1,21 @@
+id: licorice--digoxin
+food: licorice
+drug: digoxin
+mechanisms: [licorice-hypokalemia]
+severity: caution
+effect: increases
+summary: "Real licorice can lower potassium, which makes digoxin toxicity more likely."
+advice: "Avoid eating large or regular amounts of black licorice or licorice products while taking digoxin, and report palpitations or nausea."
+details: "Two linked facts: a review of licorice toxicity describes hypokalemia from regular heavy intake, and the digoxin label lists hypokalemia as a predisposing factor for digoxin toxicity. No source cited here tests the pair directly; the link is drawn from these two."
+citations:
+  - type: "review"
+    title: "Liquorice Toxicity: A Comprehensive Narrative Review"
+    url: "https://pubmed.ncbi.nlm.nih.gov/37764649/"
+    pmid: "37764649"
+  - type: "label"
+    title: "DIGOXIN TABLET [AMNEAL PHARMACEUTICALS OF NEW YORK LLC]"
+    url: "https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=dfac7f13-28be-423d-9389-9089da29da17"
+    setid: "dfac7f13-28be-423d-9389-9089da29da17"
+status: approved
+source: curated
+reviewed_at: 2026-10-09

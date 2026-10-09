@@ -1,0 +1,17 @@
+id: alcohol--opioids
+food: alcohol
+drug: opioids
+mechanisms: [cns-depression]
+severity: avoid
+effect: increases
+summary: "Alcohol with opioid pain medicine can slow breathing dangerously."
+advice: "Do not drink alcohol while taking opioid pain medicine."
+details: "The oxycodone label warns that using opioids with central nervous system depressants, including alcohol, may cause profound sedation, respiratory depression, coma and death."
+citations:
+  - type: "label"
+    title: "OXYCODONE HYDROCHLORIDE SOLUTION [SPECGX LLC]"
+    url: "https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=5451bcaa-0aca-4581-bcea-2f9c2a33b260"
+    setid: "5451bcaa-0aca-4581-bcea-2f9c2a33b260"
+status: approved
+source: curated
+reviewed_at: 2026-10-09

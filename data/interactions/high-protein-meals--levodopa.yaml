@@ -1,0 +1,17 @@
+id: high-protein-meals--levodopa
+food: high-protein-meals
+drug: levodopa
+mechanisms: [amino-acid-transport-competition]
+severity: monitor
+effect: decreases
+summary: "A high-protein diet may reduce how well levodopa is absorbed in some people."
+advice: "If doses seem to wear off after protein-rich meals, ask your prescriber about timing doses away from meals."
+details: "The carbidopa-levodopa label explains that levodopa competes with certain amino acids for transport across the gut wall, so absorption may be impaired in some patients on a high-protein diet."
+citations:
+  - type: "label"
+    title: "CARBIDOPA-LEVODOPA TABLET [ADVAGEN PHARMA LTD.]"
+    url: "https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=9e3c796b-2e68-4bcc-b927-18a58bea4703"
+    setid: "9e3c796b-2e68-4bcc-b927-18a58bea4703"
+status: approved
+source: curated
+reviewed_at: 2026-10-09

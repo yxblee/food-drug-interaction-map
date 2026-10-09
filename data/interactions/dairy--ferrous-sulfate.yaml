@@ -1,0 +1,21 @@
+id: dairy--ferrous-sulfate
+food: dairy
+drug: ferrous-sulfate
+mechanisms: [reduced-absorption]
+severity: monitor
+effect: decreases
+summary: "Milk and dairy may lower iron absorption from supplements."
+advice: "Take iron apart from milk or dairy foods where practical."
+details: "A review reports substantial drops in iron availability when dairy is taken with iron solutions, but little effect when added to complex meals. A second review lists calcium among inhibitors, hence monitor rather than caution."
+citations:
+  - type: "review"
+    title: "The effect of dairy products on iron availability"
+    url: "https://pubmed.ncbi.nlm.nih.gov/1581006/"
+    pmid: "1581006"
+  - type: "review"
+    title: "Iron bioavailability and dietary reference values"
+    url: "https://pubmed.ncbi.nlm.nih.gov/20200263/"
+    pmid: "20200263"
+status: approved
+source: curated
+reviewed_at: 2026-10-09

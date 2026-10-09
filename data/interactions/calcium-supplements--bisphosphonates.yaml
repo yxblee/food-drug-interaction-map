@@ -1,0 +1,21 @@
+id: calcium-supplements--bisphosphonates
+food: calcium-supplements
+drug: bisphosphonates
+mechanisms: [chelation]
+severity: avoid
+effect: decreases
+summary: "Calcium supplements bind osteoporosis pills and block their absorption."
+advice: "Take calcium supplements and antacids at a different time of day from the pill, following the wait on your label."
+details: "The alendronate label says products containing calcium and other multivalent cations are likely to interfere with absorption. The risedronate label tells patients to take calcium supplements and antacids at a different time of day."
+citations:
+  - type: "label"
+    title: "ALENDRONATE SODIUM TABLET [REMEDYREPACK INC.]"
+    url: "https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=c7e470d6-508e-466e-a78d-060bbbc9745c"
+    setid: "c7e470d6-508e-466e-a78d-060bbbc9745c"
+  - type: "label"
+    title: "ACTONEL (RISEDRONATE SODIUM) TABLET, FILM COATED [ALLERGAN, INC.]"
+    url: "https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=24ed00e0-25e2-49a8-97fc-66c1b417dc0b"
+    setid: "24ed00e0-25e2-49a8-97fc-66c1b417dc0b"
+status: approved
+source: curated
+reviewed_at: 2026-10-09
