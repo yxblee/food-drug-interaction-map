@@ -4,7 +4,7 @@ import { buildIndex, nodeKey, searchNodes } from '@fdi/schema/domain'
 import { chooseView, detectEnv } from '../graph/chooseView.ts'
 import { GraphView } from '../graph/GraphView.tsx'
 import { srRows } from '../graph/srRows.ts'
-import { computeFocus, toRenderGraph } from '../graph/renderGraph.ts'
+import { computeFocus, filterRenderGraph, toRenderGraph } from '../graph/renderGraph.ts'
 import type { Palette } from '../theme/tokens.ts'
 import type { ViewState } from '../urlState.ts'
 import { browseKeys, stepKey } from './browse.ts'
@@ -21,7 +21,14 @@ export interface ExploreTabProps {
   clearMedsFilter: () => void
 }
 
-export function ExploreTab({ graph, state, update, palette }: ExploreTabProps) {
+export function ExploreTab({
+  graph,
+  state,
+  update,
+  palette,
+  medsFilter,
+  clearMedsFilter,
+}: ExploreTabProps) {
   const [stale, setStale] = useState(false)
   const keys = useMemo(() => browseKeys(graph.nodes, state.q), [graph, state.q])
   const known = useMemo(() => new Set(graph.nodes.map((n) => nodeKey(n.kind, n.id))), [graph])
@@ -49,10 +56,10 @@ export function ExploreTab({ graph, state, update, palette }: ExploreTabProps) {
   const next = useCallback(() => step(1), [step])
   const close = useCallback(() => update({ node: null }), [update])
 
-  const renderGraph = useMemo(
-    () => toRenderGraph(graph, { mechanisms: state.mech }),
-    [graph, state.mech],
-  )
+  const renderGraph = useMemo(() => {
+    const full = toRenderGraph(graph, { mechanisms: state.mech })
+    return medsFilter ? filterRenderGraph(full, medsFilter) : full
+  }, [graph, state.mech, medsFilter])
   const ix = useMemo(() => buildIndex(graph.nodes, graph.interactions), [graph])
   const matches = useMemo(
     () =>
@@ -87,6 +94,11 @@ export function ExploreTab({ graph, state, update, palette }: ExploreTabProps) {
       <div className="explore__bar">
         <Search graph={graph} state={state} update={update} />
         <p className="mono-label">{renderGraph.nodes.length} nodes</p>
+        {medsFilter && (
+          <button className="pill-button" onClick={clearMedsFilter}>
+            Showing your meds ✕
+          </button>
+        )}
         {canToggle && (
           <button
             className="pill-button"

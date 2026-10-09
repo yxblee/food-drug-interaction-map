@@ -89,7 +89,7 @@ export function App() {
             graph={graph}
             onSeeOnMap={(keys) => {
               setMedsFilter(keys)
-              update({ tab: 'explore', node: null, q: '' }, { push: true })
+              update({ tab: 'explore', node: null, q: '', mech: true }, { push: true })
             }}
           />
         )}
