@@ -36,18 +36,43 @@ export function create3d(opts: RendererOptions): GraphRenderer {
   const linkInFocus = (l: FGLink) =>
     !!focus.focus && inFocus(endKey(l.source)) && inFocus(endKey(l.target))
 
-  function paint() {
-    if (!fg || !palette) return
-    fg.backgroundColor(palette.paper)
-    fg.scene().fog = new Fog(palette.paper, 250, 900)
-    for (const [key, m] of materials) {
+  function styleNode(key: string) {
+    if (!palette) return
+    const m = materials.get(key)
+    if (m) {
       m.color.set(key === focus.selected ? palette.ink : palette.muted)
       m.opacity = inFocus(key) ? 0.95 : 0.12
     }
-    for (const [key, s] of labels) {
+    const s = labels.get(key)
+    if (s) {
       s.color = inFocus(key) ? palette.ink : palette.muted
       s.material.opacity = inFocus(key) ? 1 : 0.15
     }
+  }
+
+  // Nodes are built lazily by 3d-force-graph, so style them as they appear.
+  let flyPending = false
+  function fly() {
+    if (!fg || !focus.selected) return
+    const n = (fg.graphData().nodes as FGNode[]).find((n) => n.key === focus.selected)
+    if (!n || n.x == null || n.y == null || n.z == null) {
+      flyPending = true // layout hasn't placed it yet; retry when the engine settles
+      return
+    }
+    flyPending = false
+    const ratio = 1 + 140 / (Math.hypot(n.x, n.y, n.z) || 1)
+    fg.cameraPosition(
+      { x: n.x * ratio, y: n.y * ratio, z: n.z * ratio },
+      { x: n.x, y: n.y, z: n.z },
+      opts.motion ? 800 : 0,
+    )
+  }
+
+  function paint() {
+    if (!fg || !palette) return
+    fg.backgroundColor(palette.paper)
+    fg.scene().fog = new Fog(palette.paper, 600, 1800)
+    for (const key of materials.keys()) styleNode(key)
     // re-set accessors so 3d-force-graph re-evaluates them
     fg.linkColor(fg.linkColor())
     fg.linkWidth(fg.linkWidth())
@@ -76,6 +101,7 @@ export function create3d(opts: RendererOptions): GraphRenderer {
     label.position.y = r + 6
     labels.set(n.key, label)
     group.add(label)
+    styleNode(n.key)
     return group
   }
 
@@ -114,6 +140,7 @@ export function create3d(opts: RendererOptions): GraphRenderer {
         .linkDirectionalParticleColor(() => palette?.ink ?? '#000000')
         .onNodeClick((n) => onSelect((n as FGNode).key))
         .onBackgroundClick(() => onSelect(null))
+        .onEngineStop(() => flyPending && fly())
       const controls = fg.controls() as unknown as { autoRotate: boolean; autoRotateSpeed: number }
       controls.autoRotate = opts.motion
       controls.autoRotateSpeed = 0.6
@@ -140,15 +167,7 @@ export function create3d(opts: RendererOptions): GraphRenderer {
       if (!fg) return
       const controls = fg.controls() as unknown as { autoRotate: boolean }
       controls.autoRotate = opts.motion && !f.selected
-      if (!f.selected) return
-      const n = (fg.graphData().nodes as FGNode[]).find((n) => n.key === f.selected)
-      if (!n || n.x == null || n.y == null || n.z == null) return
-      const ratio = 1 + 140 / (Math.hypot(n.x, n.y, n.z) || 1)
-      fg.cameraPosition(
-        { x: n.x * ratio, y: n.y * ratio, z: n.z * ratio },
-        { x: n.x, y: n.y, z: n.z },
-        opts.motion ? 800 : 0,
-      )
+      fly()
     },
 
     setTheme(p) {
