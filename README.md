@@ -29,6 +29,48 @@ Needs Node ≥ 24.11 and pnpm. Layout: `apps/api` (Hono), `apps/web` (React), `p
 
 ---
 
+## Build Session 2
+
+### Idea and choices
+
+I take medications and manage them for a family member; "can I eat this with it?" has no quick, cited, whole-list answer (see [Build Session 1 evidence](#build-session-1-evidence)). Choices:
+
+- **Two views, one dataset.** *My meds* answers my own question (what should I watch, by severity). *Explore* shows the mechanism links so related warnings make sense together.
+- **Curated, not scraped.** The research databases are mostly predicted or text-mined, so I hand-wrote 53 interactions, each citing a drug label, NIH fact sheet or review. Their grades are never mapped onto severity.
+- **Private by design.** The medication list lives only in the browser's storage; the check runs on the device and never calls the API with a drug name.
+- **Small stack.** YAML in git → validated → SQLite → small read API → React app. No accounts, no drug–drug interactions, US drug names, English only.
+
+### Data
+
+`data/` holds 59 drugs (including classes such as statins and MAOIs), 39 foods, 22 mechanisms and 53 interactions as YAML. Sources are DailyMed labels, NIH ODS/NCCIH fact sheets and PubMed reviews, linked but not copied (permission and terms in [docs/data-sources.md](docs/data-sources.md)). Each interaction file carries severity, a plain-language summary and advice, and its citations, so every result on screen traces to a file in `data/` and a source link.
+
+### Run locally
+
+```bash
+pnpm install
+pnpm run build:db                     # validates data/ YAML, writes dist/data.db
+pnpm --filter @fdi/web build          # builds the web app to apps/web/dist
+STATIC_DIR=apps/web/dist pnpm start   # app + API at http://localhost:8787
+```
+
+For live-reload development run `pnpm start` and `pnpm --filter @fdi/web dev` in two terminals (the dev server proxies `/api` to port 8787). `build:db` fails with a message if any YAML breaks the schema.
+
+### Demo path
+
+1. **Situation:** I'm prescribed Coumadin and I eat salads most days.
+2. **Action:** open *My meds*, type `Coumadin`, press Enter. The brand name resolves to **Warfarin**.
+3. **Result:** foods to watch appear grouped by severity. *Leafy greens* is a **Caution** with the reason (vitamin K opposes warfarin, INR drops), the advice (keep intake steady rather than avoiding it) and the DailyMed label citation. Reloading keeps the list; no request containing the drug name leaves the browser.
+4. **Then explore:** open *Explore*, search `grapefruit`. The panel lists affected drugs, e.g. Simvastatin marked **Avoid**, and the graph shows the CYP3A4 mechanism linking them. The URL is shareable.
+
+The e2e tests in `e2e/` replay these paths (`vp exec playwright test`).
+
+### What works now / before Build Session 3
+
+- **Works:** schema validation, SQLite build, read API, Explore (3D/2D graph, search, side panel, URL state), My meds (brand-name lookup, severity-ordered check, on-device storage), unit and e2e tests, CI, Docker/Fly config.
+- **Before Session 3:** deploy the public URL, get feedback from users beyond me, expand beyond 53 interactions, and a pharmacist/clinician review of the severity ratings.
+
+---
+
 ## Build Session 1 evidence
 
 ### Problem evidence
