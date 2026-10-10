@@ -16,6 +16,9 @@ citations:
     title: "Grapefruit-medication interactions: forbidden fruit or avoidable consequences? (CMAJ 2013)"
     url: "https://pubmed.ncbi.nlm.nih.gov/23184849/"
     pmid: "23184849"
+example:
+  patient: "I have a grapefruit with breakfast every day. Is that okay with my simvastatin?"
+  pharmacist: "Please skip it. Grapefruit makes your body absorb more simvastatin, which raises the risk of muscle damage. Sweet oranges are fine."
 status: approved
 source: curated
 reviewed_at: 2026-10-09

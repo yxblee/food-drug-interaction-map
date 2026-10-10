@@ -1,0 +1,28 @@
+name: Missing drug or food
+description: A medication or food you looked for isn't in the dataset, or a known interaction is missing.
+labels: [needs-triage]
+body:
+  - type: input
+    id: drug
+    attributes:
+      label: Drug (generic and brand name)
+      placeholder: e.g. warfarin (Coumadin)
+    validations:
+      required: true
+  - type: input
+    id: food
+    attributes:
+      label: Food, drink or supplement
+      placeholder: e.g. cranberry juice
+  - type: textarea
+    id: what
+    attributes:
+      label: What was missing or wrong?
+      description: Not found when searching, found with no interactions, or an interaction you expected.
+    validations:
+      required: true
+  - type: input
+    id: source
+    attributes:
+      label: Source to cite
+      description: Link to a drug label, NIH fact sheet or review, if you have one.
