@@ -31,6 +31,18 @@ Needs Node ≥ 24.11 and pnpm. Layout: `apps/api` (Hono), `apps/web` (React), `p
 
 ## Build Session 2
 
+### Brief
+
+**Problem.** I take medications myself and manage them for a family member. The same question keeps coming up: *can I eat or drink this with it?* It hits me when a new prescription arrives (the leaflet mentions food in passing, if at all), at the table when I'm about to have grapefruit, coffee or a glass of wine, and whenever several medications are in play and I have to check each one and merge the answers by hand.
+
+**Real example.** <!-- TODO (your words): one concrete moment, e.g. which drug, which food, what you did and how long it took. -->
+
+**Evidence and data.** Food–drug interactions are scattered across drug labels (DailyMed), NIH fact sheets and PubMed reviews. Three research databases (FooDrugs, FARFOOD, DDID) hold millions of candidate pairs, but mostly predicted or text-mined, so I use them to find candidates and verify each one against a primary source. See [docs/data-sources.md](docs/data-sources.md).
+
+**What alternatives leave unresolved.** A search or chatbot answers one drug at a time, with no severity I can compare across drugs, no reason behind the answer and no source I can check. Interaction checkers are drug-first lists. None gives a food-first view, the mechanism that links related warnings, a citation on every claim, or one check across my whole medication list that stays on my device.
+
+**Useful result.** Enter my medications (brand names work) and get the foods to watch, ordered by severity, in plain language, each with the why, the advice and a citation. Or start from a food and see everything it affects.
+
 ### Idea and choices
 
 I take medications and manage them for a family member; "can I eat this with it?" has no quick, cited, whole-list answer (see [Build Session 1 evidence](#build-session-1-evidence)). Choices:
