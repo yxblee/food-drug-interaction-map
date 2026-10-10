@@ -5,7 +5,7 @@ mechanisms: [disulfiram-like-reaction]
 severity: avoid
 effect: increases
 summary: "Alcohol with metronidazole can cause cramps, vomiting, headache and flushing."
-advice: "Do not drink alcohol, or use products containing it, while taking metronidazole and for at least 3 days after the last dose."
+advice: "Do not drink alcohol or use products containing propylene glycol while taking metronidazole and for at least 3 days after the last dose."
 details: "The metronidazole label describes a disulfiram-like reaction to alcohol with cramps, nausea, vomiting, headache and flushing, and tells patients to stop alcohol during therapy and for at least three days afterwards."
 citations:
   - type: "label"

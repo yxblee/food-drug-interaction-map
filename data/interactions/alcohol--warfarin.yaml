@@ -6,11 +6,11 @@ severity: caution
 effect: increases
 summary: "Alcohol can raise bleeding risk with warfarin, and heavy drinking makes the effect unpredictable."
 advice: "Ask your prescriber how much alcohol, if any, is right for you. Avoid binge drinking, and keep your pattern consistent so INR results stay predictable."
-details: "NIAAA lists warfarin among medicines that interact with alcohol: even occasional drinking can lead to internal bleeding, while heavier drinking can either cause bleeding or have the opposite effect and raise the chance of clots. The unpredictability is the main reason for caution."
+details: "NIAAA lists warfarin among medicines that interact with alcohol: even occasional drinking can lead to internal bleeding, while heavier drinking can either cause bleeding or have the opposite effect and raise the chance of clots."
 citations:
   - type: "guideline"
     title: "Harmful Interactions: Mixing Alcohol with Medicines (NIAAA)"
     url: "https://www.niaaa.nih.gov/publications/brochures-and-fact-sheets/harmful-interactions-mixing-alcohol-with-medicines"
 status: approved
 source: curated
-reviewed_at: 2026-10-08
+reviewed_at: 2026-10-09
