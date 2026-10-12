@@ -4,6 +4,7 @@
   "type": "module",
   "scripts": {
     "build:db": "node apps/api/scripts/build-db.ts data dist/data.db",
+    "export:static": "node apps/api/scripts/export-static.ts dist/data.db apps/web/public",
     "start": "node apps/api/src/server.ts"
   },
   "devDependencies": {

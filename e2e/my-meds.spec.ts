@@ -6,7 +6,7 @@ test('add a brand-name med, see foods to watch, persist across reload', async ({
     if (r.url().includes('/api/')) apiCalls.push(r.url())
   })
 
-  await page.goto('/')
+  await page.goto('./')
   await page.getByRole('tab', { name: 'My meds' }).click()
   const input = page.getByLabel('Add a medication')
   await input.fill('Coumadin')
