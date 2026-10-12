@@ -10,3 +10,4 @@ test-results
 .claude/worktrees/
 
 .claude/
+apps/web/public/api

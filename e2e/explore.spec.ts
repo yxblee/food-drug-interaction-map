@@ -1,7 +1,7 @@
 import { expect, test } from '@playwright/test'
 
 test('search, select and share a food', async ({ page }, info) => {
-  await page.goto('/')
+  await page.goto('./')
   const search = page.getByLabel('Search drugs, foods and mechanisms')
   await search.fill('grapefruit')
   await expect(page.getByText(/\d+ match/)).toBeVisible()
@@ -27,7 +27,7 @@ test('search, select and share a food', async ({ page }, info) => {
 })
 
 test('search selections are history entries', async ({ page }) => {
-  await page.goto('/')
+  await page.goto('./')
   const search = page.getByLabel('Search drugs, foods and mechanisms')
   await search.fill('grapefruit')
   await search.press('Enter')
@@ -37,7 +37,7 @@ test('search selections are history entries', async ({ page }) => {
 })
 
 test('stale node links clear themselves', async ({ page }) => {
-  await page.goto('/?node=drug:no-such-drug')
+  await page.goto('./?node=drug:no-such-drug')
   await expect(page.locator('.notice')).toContainText('no longer in the dataset')
   await expect(page).not.toHaveURL(/node=/)
 })

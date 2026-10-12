@@ -22,8 +22,10 @@ Needs Node ≥ 24.11 and pnpm. Layout: `apps/api` (Hono), `apps/web` (React), `p
 | `pnpm --filter @fdi/web dev` | Web dev server |
 | `pnpm --filter @fdi/web build` | Production web build to `apps/web/dist` |
 | `pnpm start` | Serve the API on `PORT` (default 8787) |
+| `pnpm run export:static` | Export the read API as JSON into `apps/web/public/api` (needs `dist/data.db`) |
+| `VITE_STATIC_DATA=1 pnpm --filter @fdi/web build` | Static GitHub Pages build (reads exported JSON, served under `/food-drug-interaction-map/`) |
 | `vp check` / `vp test` | Lint, format and type check / unit tests (as in CI) |
-| `vp exec playwright test` | End-to-end tests |
+| `vp exec playwright test` | End-to-end tests (against the static build) |
 
 `pnpm start` reads `DB_PATH` (default `dist/data.db`) and `STATIC_DIR` (web build to serve; unset = API only). The [Dockerfile](Dockerfile) sets both and deploys via [fly.toml](fly.toml).
 
