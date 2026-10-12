@@ -1,4 +1,4 @@
-import { mkdtempSync, readdirSync, readFileSync } from 'node:fs'
+import { mkdirSync, mkdtempSync, readdirSync, readFileSync, writeFileSync } from 'node:fs'
 import { tmpdir } from 'node:os'
 import { join } from 'node:path'
 import { beforeAll, describe, expect, it } from 'vite-plus/test'
@@ -17,11 +17,14 @@ beforeAll(() => {
   if ('errors' in r) throw new Error(r.errors.join('\n'))
   store = loadStore(db)
   out = mkdtempSync(join(tmpdir(), 'fdi-static-'))
+  // Left over from an earlier export whose Dataset still had this Drug.
+  mkdirSync(join(out, 'api/node/drug'), { recursive: true })
+  writeFileSync(join(out, 'api/node/drug/removed.json'), '{}')
   exportStatic(store, out)
 })
 
 describe('static export', () => {
-  it('writes the graph and one detail file per Drug, Food and Mechanism', () => {
+  it('writes the graph and one detail file per Drug, Drug class, Food, Food group and Mechanism, and nothing stale', () => {
     const files = readdirSync(out, { recursive: true, withFileTypes: true })
       .filter((f) => f.isFile())
       .map((f) => join(f.parentPath, f.name).slice(out.length + 1))
@@ -53,8 +56,10 @@ describe('static export', () => {
 
   it('serves the same payloads as the read API, including Inherited interactions', () => {
     expect(read('api/graph.json')).toEqual(store.graph)
+    for (const { kind, id } of store.graph.nodes) {
+      expect(read(`api/node/${kind}/${id}.json`), `${kind}:${id}`).toEqual(store.detail(kind, id))
+    }
     const kale = read<NodeDetail>('api/node/food/kale.json')
     expect(kale.interactions.map((r) => r.interaction.id)).toEqual(['leafy-greens--warfarin'])
-    expect(kale).toEqual(store.detail('food', 'kale'))
   })
 })

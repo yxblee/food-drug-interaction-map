@@ -1,9 +1,10 @@
-import { mkdirSync, writeFileSync } from 'node:fs'
+import { mkdirSync, rmSync, writeFileSync } from 'node:fs'
 import { dirname, join } from 'node:path'
 import type { Store } from './store.ts'
 
 /** Writes the read API as static files: api/graph.json and api/node/{kind}/{id}.json. */
 export function exportStatic(store: Store, outDir: string): void {
+  rmSync(join(outDir, 'api'), { recursive: true, force: true })
   const write = (path: string, body: unknown) => {
     const file = join(outDir, 'api', path)
     mkdirSync(dirname(file), { recursive: true })
