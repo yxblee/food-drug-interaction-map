@@ -9,6 +9,8 @@ Two ways in, over one curated dataset:
 
 > Informational only — not medical advice. Talk to your pharmacist or doctor before changing your diet or medications.
 
+**Live demo:** [yxblee.github.io/food-drug-interaction-map](https://yxblee.github.io/food-drug-interaction-map/). A static proof of concept of the full-stack app: the dataset as of the last deploy from `main`, redeployed after every green push.
+
 **Status:** core app built (schema, API, 53 cited interactions, Explore, My meds, end-to-end tests). See the [design spec](docs/superpowers/specs/2026-10-08-core-app-design.md), [implementation plan](docs/superpowers/plans/2026-10-08-core-app.md), [glossary](GLOSSARY.md) and [data sources](docs/data-sources.md).
 
 ## Development
