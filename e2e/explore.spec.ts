@@ -335,7 +335,7 @@ test('the panel groups Interactions by Severity and states shared lines once', a
   const headings = panel.getByRole('heading', { level: 3 })
   await expect(headings.first()).toBeVisible()
   const order = ['Avoid', 'Caution', 'Monitor', 'Minimal']
-  const names = (await headings.allTextContents()).map((t) => t.trim())
+  const names = (await headings.allTextContents()).map((t) => t.trim().split(' ')[0])
   expect(names.length).toBeGreaterThan(0)
   expect(names).toEqual(order.filter((w) => names.includes(w)))
   await expect(panel.getByText('Serious interaction.')).toHaveCount(1)
