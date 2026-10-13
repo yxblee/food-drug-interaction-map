@@ -370,3 +370,23 @@ test('every pill button is at least 44px tall and the panel close is 44x44', asy
   expect(Math.round(close!.width)).toBe(44)
   expect(Math.round(close!.height)).toBe(44)
 })
+
+test('the panel stops above the footer, which stays clickable and visible', async ({ page }) => {
+  await page.goto('./')
+  await page.getByRole('button', { name: 'Try grapefruit' }).click()
+  await expect(page.getByRole('complementary')).toBeVisible()
+  const r = await page.evaluate(() => {
+    const f = document.querySelector('footer')!.getBoundingClientRect()
+    const p = document.querySelector('.panel')!.getBoundingClientRect()
+    const y = f.top + f.height / 2
+    const hit = (x: number) => !!document.elementFromPoint(x, y)?.closest('footer')
+    return {
+      gap: f.top - p.bottom,
+      hits: [f.left + 4, f.left + f.width / 2, f.right - 4].map(hit),
+      visible: f.bottom <= innerHeight + 0.5,
+    }
+  })
+  expect(r.gap).toBeGreaterThanOrEqual(-0.5)
+  expect(r.hits).toEqual([true, true, true])
+  expect(r.visible).toBe(true)
+})
