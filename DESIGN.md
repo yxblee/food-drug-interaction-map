@@ -235,20 +235,22 @@ The Explore search field (square) and the My meds input (pill) currently disagre
 ### Buttons
 Quiet and tactile; they look like paper until pressed.
 - **Shape:** full pill (999px).
-- **Default:** Bone Surface fill, ink text, 1px Weathered Grey outline, 6px 12px padding.
+- **Default:** Bone Surface fill, ink text, 1px Weathered Grey outline, 6px 12px padding, 44px minimum height (the panel's close button is a 44×44 square). Colour is set on the pill itself so fill and text switch together on a theme change.
 - **Pressed / Selected** (`aria-pressed="true"`): fills with Field Ink, text turns paper. Used for the active view (Explore / My meds) and the Color, 2D and Mechanisms toggles.
 - **Focus:** 2px ink outline, 2px offset (global `:focus-visible`).
 - **Link button:** unstyled underlined text for in-panel navigation.
 
 ### Chips
 - **Medication chip:** solid Field Ink pill with paper text and a × remove button whose hit area is 44px (negative margins keep the chip compact); one per medication in My meds.
+- **Not-checked chip:** same pill, but transparent with a 1px dashed ink outline and ink text, plus a "not checked" mono tag before the ×. Marks a name the Dataset doesn't know; always paired with the dashed "Not checked: …" line above Foods to watch.
+- **Undo line:** in My meds' status region, "List cleared · Undo" with Undo as an underlined text button (44px tall), shown for 10 seconds after Clear all.
 
 ### Severity Badges
 The guide's stamp. Pill, light badge background, 1px `currentColor` outline, uppercase mono 600 at 11px, in the severity's ink. Always printed with its word (AVOID, CAUTION, MONITOR, MINIMAL); colour never stands alone.
 
 ### Cards / Containers
-- **Detail panel:** square, Bone Surface, 1px `currentColor` border, 16px padding, docked bottom-right. Interaction rows inside are separated by 20%-ink hairlines.
-- **Warning entries (My meds):** not cards; disclosure rows (`<details>`) separated by top hairlines, with a 44px-minimum summary. Each affected drug whose severity differs from the row's carries its own badge.
+- **Detail panel:** square, Bone Surface, 1px `currentColor` border, 16px padding, docked bottom-right. Interaction rows are grouped under Severity headings (avoid, caution, monitor, minimal), the same badge, word and subtitle as My meds; a group states once what its rows share ("Applies to …" when every row inherits from the same parent, the Avoid caution sentence), and rows keep only their own summary, advice and details, separated by 20%-ink hairlines. No position counter; Prev/Next are named by the kind browsed ("← Previous food").
+- **Warning entries (My meds):** not cards; disclosure rows (`<details>`) separated by top hairlines, with a 44px-minimum summary. Each affected drug whose severity differs from the row's carries its own badge; expanded, each Drug's detail appears once, with no separate summary list above it.
 - **Notices / banner:** hairline outline on surface; the danger banner uses an Oxblood outline.
 
 ### Inputs / Fields

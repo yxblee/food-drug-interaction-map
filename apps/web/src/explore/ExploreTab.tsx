@@ -82,8 +82,8 @@ export function ExploreTab({
     [nodes, state.q],
   )
   const focus = useMemo(
-    () => ({ selected, focus: computeFocus(ix, selected, matches) }),
-    [ix, selected, matches],
+    () => ({ selected, focus: computeFocus(ix, selected, matches) ?? medsFilter }),
+    [ix, selected, matches, medsFilter],
   )
   const env = useEnv()
   const { view, canToggle } = chooseView(env, state.view)
@@ -117,7 +117,7 @@ export function ExploreTab({
         >
           Mechanisms
         </button>
-        {!selected && !state.q && known.has(STARTER) && (
+        {!selected && !state.q && !medsFilter && known.has(STARTER) && (
           <p className="explore__hint">
             New here?{' '}
             <button className="link-button" onClick={() => select(STARTER)}>
@@ -126,13 +126,15 @@ export function ExploreTab({
           </p>
         )}
       </div>
-      <Legend />
+      {/* Remounting closes it when the panel opens; the person can reopen it. */}
+      <Legend key={selected ? 'panel' : 'free'} />
       {/* After the controls in DOM order so keyboard users reach search first. */}
       <GraphView
         graph={renderGraph}
         view={view}
         motion={!env.reducedMotion}
         focus={focus}
+        panelOpen={!!selected}
         palette={palette}
         onSelect={onGraphSelect}
       />
@@ -154,7 +156,6 @@ export function ExploreTab({
       {selected && (
         <SidePanel
           nodeKey={selected}
-          position={{ index: Math.max(keys.indexOf(selected), 0), total: keys.length }}
           onSelect={select}
           onPrev={prev}
           onNext={next}

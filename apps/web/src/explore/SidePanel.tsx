@@ -1,12 +1,12 @@
 import { useEffect, useRef, useState } from 'react'
-import type { Drug, Food, Mechanism, NodeDetail } from '@fdi/schema'
+import { SEVERITIES, type Drug, type Food, type Mechanism, type NodeDetail } from '@fdi/schema'
 import { groupTerm, nodeKey as keyOf, splitKey } from '@fdi/schema/domain'
 import { fetchNode } from '../api.ts'
+import { SeverityGroupHeading } from './SeverityBadge.tsx'
 import { InteractionRow } from './InteractionRow.tsx'
 
 interface Props {
   nodeKey: string
-  position: { index: number; total: number }
   onSelect: (key: string) => void
   onPrev: () => void
   onNext: () => void
@@ -16,15 +16,7 @@ interface Props {
 
 type Load = { key: string; detail?: NodeDetail; error?: boolean }
 
-export function SidePanel({
-  nodeKey,
-  position,
-  onSelect,
-  onPrev,
-  onNext,
-  onClose,
-  onNotFound,
-}: Props) {
+export function SidePanel({ nodeKey, onSelect, onPrev, onNext, onClose, onNotFound }: Props) {
   const [load, setLoad] = useState<Load>({ key: nodeKey })
   const [kind, id] = splitKey(nodeKey)
 
@@ -76,9 +68,6 @@ export function SidePanel({
     <aside ref={panel} tabIndex={-1} className="panel" aria-labelledby="panel-title">
       <div className="panel__top">
         <span className="mono-label">{header}</span>
-        <span className="mono-label">
-          {position.index + 1} / {position.total}
-        </span>
         <button className="pill-button" onClick={onClose} aria-label="Close panel">
           ✕
         </button>
@@ -132,28 +121,47 @@ export function SidePanel({
               combination is safe.
             </p>
           ) : (
-            <ul className="panel__rows">
-              {d.interactions.map((row) => (
-                <InteractionRow
-                  key={row.interaction.id}
-                  row={row}
-                  nodes={d.nodes}
-                  mechanisms={d.mechanisms}
-                  perspective={kind}
-                  onSelect={onSelect}
-                />
-              ))}
-            </ul>
+            SEVERITIES.map((sev) => {
+              const rows = d.interactions.filter((r) => r.interaction.severity === sev)
+              if (!rows.length) return null
+              const from = rows[0].inheritedFrom
+              const inherited = !!from && rows.every((r) => r.inheritedFrom === from)
+              const owner = inherited ? d.nodes[keyOf(kind, from)] : undefined
+              return (
+                <section key={sev} aria-labelledby={`sev-${sev}`} className="panel__sev">
+                  <SeverityGroupHeading severity={sev} />
+                  {owner && <p className="mono-label">Applies to {owner.name}</p>}
+                  {sev === 'avoid' && (
+                    <p className="irow__caution">
+                      Serious interaction. Check with your pharmacist or doctor before combining.
+                    </p>
+                  )}
+                  <ul className="panel__rows">
+                    {rows.map((row) => (
+                      <InteractionRow
+                        key={row.interaction.id}
+                        row={row}
+                        nodes={d.nodes}
+                        mechanisms={d.mechanisms}
+                        perspective={kind}
+                        onSelect={onSelect}
+                        grouped={{ inherited }}
+                      />
+                    ))}
+                  </ul>
+                </section>
+              )
+            })
           )}
         </div>
       )}
 
       <nav className="panel__nav" aria-label="Browse">
         <button className="pill-button" onClick={onPrev}>
-          ← Prev
+          ← Previous {kind}
         </button>
         <button className="pill-button" onClick={onNext}>
-          Next →
+          Next {kind} →
         </button>
       </nav>
     </aside>

@@ -15,7 +15,7 @@ export function App() {
   const [graph, setGraph] = useState<GraphPayload | null>(null)
   const [error, setError] = useState<string | null>(null)
   const [filterMeds, setFilterMeds] = useState(false)
-  const { meds, setMeds, dropped } = useMeds(graph)
+  const { meds, setMeds, brands, setBrands, notChecked, setNotChecked, dropped } = useMeds(graph)
   const ix = useMemo(() => (graph ? buildIndex(graph.nodes, graph.interactions) : null), [graph])
   // Derived, so it follows the Medication list while the filter is on.
   const medsFilter = useMemo(
@@ -104,6 +104,10 @@ export function App() {
             graph={graph}
             meds={meds}
             setMeds={setMeds}
+            brands={brands}
+            setBrands={setBrands}
+            notChecked={notChecked}
+            setNotChecked={setNotChecked}
             onSeeOnMap={() => {
               setFilterMeds(true)
               update({ tab: 'explore', node: null, q: '', mech: true }, { push: true })

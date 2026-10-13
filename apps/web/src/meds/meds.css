@@ -44,18 +44,20 @@
   background: var(--surface);
   border-radius: 12px;
 }
-.meds__options button {
-  width: 100%;
-  text-align: left;
-  border: 0;
-  background: none;
+.meds__option {
   padding: 8px 10px;
   cursor: pointer;
   border-radius: 8px;
 }
-.meds__options button:hover,
-.meds__options button:focus-visible {
+.meds__option:hover,
+.meds__option[aria-selected='true'] {
   background: var(--paper);
+}
+.meds__nomatch {
+  padding: 4px 10px 0;
+}
+.meds__hint {
+  padding: 4px 10px 8px;
 }
 .meds__chips {
   list-style: none;
@@ -84,6 +86,26 @@
   color: inherit;
   cursor: pointer;
 }
+.chip--unchecked {
+  background: none;
+  color: var(--ink);
+  border: 1px dashed var(--ink);
+}
+.meds__status button {
+  border: 0;
+  background: none;
+  padding: 0;
+  min-height: 44px;
+  color: inherit;
+  font: inherit;
+  text-decoration: underline;
+  cursor: pointer;
+}
+.meds__unchecked {
+  border: 1px dashed var(--ink);
+  padding: 8px 12px;
+  border-radius: 8px;
+}
 .meds__actions {
   display: flex;
   gap: 8px;
@@ -110,9 +132,6 @@
 }
 .warning__drugs {
   color: var(--muted);
-}
-.warning__affected {
-  padding-left: 18px;
 }
 @media (max-width: 768px) {
   .meds {

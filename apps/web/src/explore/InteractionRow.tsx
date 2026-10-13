@@ -8,11 +8,13 @@ interface Props {
   mechanisms: Record<string, Mechanism>
   perspective: Kind
   onSelect?: (key: string) => void
+  /** The Explore panel states these once per Severity group instead of on every row. */
+  grouped?: { inherited: boolean }
 }
 
 const paragraphs = (text: string) => text.split(/\n\s*\n/).map((p, i) => <p key={i}>{p.trim()}</p>)
 
-export function InteractionRow({ row, nodes, mechanisms, perspective, onSelect }: Props) {
+export function InteractionRow({ row, nodes, mechanisms, perspective, onSelect, grouped }: Props) {
   const i = row.interaction
   // The Drug class or Food group this row is inherited from, on the viewed side.
   const inheritedFrom = row.inheritedFrom
@@ -34,7 +36,7 @@ export function InteractionRow({ row, nodes, mechanisms, perspective, onSelect }
   return (
     <li className="irow">
       <div className="irow__head">
-        <SeverityBadge severity={i.severity} />
+        {!grouped && <SeverityBadge severity={i.severity} />}
         <span className="irow__name">
           {counterpart.map((n, k) => (
             <span key={k}>
@@ -44,12 +46,14 @@ export function InteractionRow({ row, nodes, mechanisms, perspective, onSelect }
           ))}
         </span>
       </div>
-      {inheritedFrom && <p className="mono-label">Applies to {inheritedFrom.name}</p>}
+      {inheritedFrom && !grouped?.inherited && (
+        <p className="mono-label">Applies to {inheritedFrom.name}</p>
+      )}
       <p className="irow__summary">{i.summary}</p>
       <p className="irow__advice">
         <strong>What to do:</strong> {i.advice}
       </p>
-      {i.severity === 'avoid' && (
+      {i.severity === 'avoid' && !grouped && (
         <p className="irow__caution">
           Serious interaction. Check with your pharmacist or doctor before combining.
         </p>

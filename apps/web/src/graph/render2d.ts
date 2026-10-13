@@ -6,9 +6,17 @@ import {
   forceSimulation,
   select,
   zoom,
+  zoomIdentity,
 } from 'd3'
 import type { Selection, Simulation, ZoomBehavior } from 'd3'
-import { nodeRadius, type RenderLink, type RenderNode } from './renderGraph.ts'
+import {
+  NO_INSET,
+  fitTransform,
+  nodeRadius,
+  type Inset,
+  type RenderLink,
+  type RenderNode,
+} from './renderGraph.ts'
 import type { Focus, GraphRenderer, RendererOptions } from './types.ts'
 
 type SimNode = RenderNode & { x?: number; y?: number }
@@ -18,6 +26,7 @@ type SimLink = Omit<RenderLink, 'source' | 'target'> & {
 }
 
 const endKey = (e: string | SimNode) => (typeof e === 'string' ? e : e.key)
+const nodeDomId = (key: string) => `g2d-${key.replace(/[^\w-]/g, '_')}`
 const KIND_LABEL = { drug: 'Drug', food: 'Food', mechanism: 'Mechanism' } as const
 
 // Shapes: Drug = circle, Food = square, Mechanism = diamond.
@@ -41,12 +50,34 @@ export function create2d(opts: RendererOptions): GraphRenderer {
   let nodes: SimNode[] = []
   let focus: Focus = { selected: null, focus: null }
   let onSelect: (key: string | null) => void = () => {}
+  let inset: Inset = NO_INSET
+  let fitTimer: ReturnType<typeof setTimeout> | undefined
 
-  function fit() {
+  function resize() {
     if (!host || !svg) return
     const w = host.clientWidth || 1
     const h = host.clientHeight || 1
     svg.attr('viewBox', `${-w / 2} ${-h / 2} ${w} ${h}`)
+  }
+
+  // Frames the focused nodes (or all); coalesced so a
+  // selection and the panel opening animate as one move.
+  function requestFit() {
+    clearTimeout(fitTimer)
+    fitTimer = setTimeout(doFit, 50)
+  }
+  function doFit() {
+    if (!host || !svg || !zoomer) return
+    const f = focus.selected ? focus.focus : null
+    const pts = nodes.filter((n) => (!f || f.has(n.key)) && n.x != null && n.y != null) as {
+      x: number
+      y: number
+    }[]
+    const t = fitTransform(pts, { width: host.clientWidth, height: host.clientHeight }, inset)
+    if (!t) return
+    const to = zoomIdentity.translate(t.x, t.y).scale(t.k)
+    if (opts.motion) zoomer.transform(svg.transition().duration(500), to)
+    else zoomer.transform(svg, to)
   }
 
   function positions() {
@@ -70,6 +101,7 @@ export function create2d(opts: RendererOptions): GraphRenderer {
       .selectAll<SVGGElement, SimNode>('g.node')
       .classed('is-dim', (n) => !inFocus(n.key))
       .classed('is-selected', (n) => n.key === selected)
+      .classed('is-labelled', (n) => !!n.group || (!!f && f.has(n.key)))
     root
       .selectAll<SVGLineElement, SimLink>('line.link')
       .classed('is-dim', (l) => !!f && !(f.has(endKey(l.source)) && f.has(endKey(l.target))))
@@ -82,11 +114,7 @@ export function create2d(opts: RendererOptions): GraphRenderer {
   return {
     mount(el) {
       host = el
-      svg = select(el)
-        .append('svg')
-        .attr('class', 'graph2d')
-        .attr('role', 'group')
-        .attr('aria-label', 'Interaction graph')
+      svg = select(el).append('svg').attr('class', 'graph2d').attr('role', 'presentation')
       root = svg.append('g')
       zoomer = zoom<SVGSVGElement, unknown>()
         .scaleExtent([0.2, 4])
@@ -95,9 +123,9 @@ export function create2d(opts: RendererOptions): GraphRenderer {
       svg.on('click', (e: MouseEvent) => {
         if (e.target === svg?.node()) onSelect(null)
       })
-      observer = new ResizeObserver(fit)
+      observer = new ResizeObserver(resize)
       observer.observe(el)
-      fit()
+      resize()
     },
 
     setData(g) {
@@ -123,18 +151,12 @@ export function create2d(opts: RendererOptions): GraphRenderer {
         .data(nodes)
         .join('g')
         .attr('class', (n) => `node node--${n.kind}${n.group ? ' node--group' : ''}`)
-        .attr('tabindex', 0)
+        .attr('id', (n) => nodeDomId(n.key))
         .attr('role', 'button')
         .attr('aria-label', (n) => `${KIND_LABEL[n.kind]}${n.group ? ' group' : ''}: ${n.name}`)
         .on('click', (e: MouseEvent, n) => {
           e.stopPropagation()
           onSelect(n.key)
-        })
-        .on('keydown', (e: KeyboardEvent, n) => {
-          if (e.key === 'Enter' || e.key === ' ') {
-            e.preventDefault()
-            onSelect(n.key)
-          }
         })
       node
         .filter((n) => n.group)
@@ -166,24 +188,48 @@ export function create2d(opts: RendererOptions): GraphRenderer {
           forceCollide<SimNode>((n) => nodeRadius(n) + 10),
         )
         .force('center', forceCenter(0, 0))
-      if (opts.motion) sim.on('tick', positions)
-      else {
-        sim.stop()
-        sim.tick(300)
-        positions()
-      }
+      // Lay out up front so the first frame is already settled and can be framed.
+      sim.stop()
+      sim.tick(300)
+      positions()
+      requestFit()
       paintFocus()
     },
 
     setFocus(f) {
+      const reframe = f.selected !== focus.selected
       focus = f
       paintFocus()
-      if (!svg || !zoomer || !f.selected) return
-      const n = nodes.find((n) => n.key === f.selected)
-      if (n?.x == null || n.y == null) return
-      if (opts.motion) zoomer.translateTo(svg.transition().duration(500), n.x, n.y)
-      else zoomer.translateTo(svg, n.x, n.y)
+      if (reframe) requestFit()
     },
+
+    points() {
+      if (!root) return []
+      const f = focus.focus
+      return nodes
+        .filter((n) => !f || f.has(n.key))
+        .map((n) => {
+          const r = document.getElementById(nodeDomId(n.key))?.getBoundingClientRect()
+          return {
+            key: n.key,
+            label: `${KIND_LABEL[n.kind]}: ${n.name}`,
+            x: r ? r.x + r.width / 2 : 0,
+            y: r ? r.y + r.height / 2 : 0,
+          }
+        })
+    },
+
+    setActive(key) {
+      root?.selectAll<SVGGElement, SimNode>('g.node').classed('is-active', (n) => n.key === key)
+      if (key) host?.setAttribute('aria-activedescendant', nodeDomId(key))
+      else host?.removeAttribute('aria-activedescendant')
+    },
+
+    setInset(i) {
+      inset = i
+    },
+
+    fit: requestFit,
 
     setTheme() {
       // 2D colors come from CSS custom properties set by useTheme
@@ -194,9 +240,11 @@ export function create2d(opts: RendererOptions): GraphRenderer {
     },
 
     destroy() {
+      clearTimeout(fitTimer)
       sim?.stop()
       observer?.disconnect()
       svg?.remove()
+      host?.removeAttribute('aria-activedescendant')
       host = null
       svg = null
       root = null
