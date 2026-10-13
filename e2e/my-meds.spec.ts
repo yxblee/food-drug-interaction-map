@@ -97,3 +97,74 @@ test('results are announced and controls are readable and easy to hit', async ({
   expect(colors.border).toBe(colors.muted)
   expect(colors.placeholder).toBe(colors.muted)
 })
+
+test('an unknown medicine is kept as "not checked", announced, and never sent to the API', async ({
+  page,
+}) => {
+  const apiCalls: string[] = []
+  page.on('request', (r) => {
+    if (r.url().includes('/api/')) apiCalls.push(r.url())
+  })
+  await page.goto('./')
+  await page.getByRole('tab', { name: 'My meds' }).click()
+  const input = page.getByLabel('Add a medication')
+  await input.fill('warfarin')
+  await input.press('Enter')
+  await input.fill('Eliquis')
+  await input.press('Enter')
+
+  await expect(page.getByRole('status').first()).toHaveText(
+    'No match in our dataset. Eliquis added as not checked',
+  )
+  const chip = page
+    .getByRole('list', { name: 'Your medications' })
+    .getByRole('listitem')
+    .filter({ hasText: 'Eliquis' })
+  await expect(chip).toContainText('not checked')
+  await expect(
+    page.getByText("Not checked: Eliquis. Being missing here doesn't mean it's safe;"),
+  ).toBeVisible()
+  await expect(page.getByRole('status').filter({ hasText: 'foods to watch' })).toContainText(
+    '1 not checked',
+  )
+
+  await page.reload()
+  await expect(page.getByRole('list', { name: 'Your medications' })).toContainText('Eliquis')
+  expect(apiCalls.some((u) => /eliquis/i.test(u))).toBe(false)
+
+  await page.getByRole('button', { name: 'Remove Eliquis' }).click()
+  await expect(page.getByText('Not checked: Eliquis')).toHaveCount(0)
+})
+
+test('an unknown name can be added from the suggestion list', async ({ page }) => {
+  await page.goto('./')
+  await page.getByRole('tab', { name: 'My meds' }).click()
+  await page.getByLabel('Add a medication').fill('Eliquis')
+  await page.getByRole('button', { name: 'Add “Eliquis” as not checked' }).click()
+  await expect(page.getByRole('list', { name: 'Your medications' })).toContainText('Eliquis')
+  await expect(page.getByText('Not checked: Eliquis.')).toBeVisible()
+})
+
+test('Clear all announces, returns focus to the input, and Undo restores both lists', async ({
+  page,
+}) => {
+  await page.goto('./')
+  await page.getByRole('tab', { name: 'My meds' }).click()
+  const input = page.getByLabel('Add a medication')
+  await input.fill('warfarin')
+  await input.press('Enter')
+  await input.fill('Eliquis')
+  await input.press('Enter')
+
+  await page.getByRole('button', { name: 'Clear all' }).click()
+  await expect(page.getByRole('status').first()).toHaveText('List cleared · Undo')
+  await expect(input).toBeFocused()
+  await expect(page.getByRole('list', { name: 'Your medications' })).not.toContainText('Warfarin')
+
+  await page.getByRole('button', { name: 'Undo' }).click()
+  await expect(input).toBeFocused()
+  const chips = page.getByRole('list', { name: 'Your medications' })
+  await expect(chips).toContainText('Warfarin')
+  await expect(chips).toContainText('Eliquis')
+  await expect(page.getByRole('button', { name: 'Undo' })).toHaveCount(0)
+})

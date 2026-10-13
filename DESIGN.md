@@ -242,6 +242,8 @@ Quiet and tactile; they look like paper until pressed.
 
 ### Chips
 - **Medication chip:** solid Field Ink pill with paper text and a × remove button whose hit area is 44px (negative margins keep the chip compact); one per medication in My meds.
+- **Not-checked chip:** same pill, but transparent with a 1px dashed ink outline and ink text, plus a "not checked" mono tag before the ×. Marks a name the Dataset doesn't know; always paired with the dashed "Not checked: …" line above Foods to watch.
+- **Undo line:** in My meds' status region, "List cleared · Undo" with Undo as an underlined text button (44px tall), shown for 10 seconds after Clear all.
 
 ### Severity Badges
 The guide's stamp. Pill, light badge background, 1px `currentColor` outline, uppercase mono 600 at 11px, in the severity's ink. Always printed with its word (AVOID, CAUTION, MONITOR, MINIMAL); colour never stands alone.

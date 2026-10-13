@@ -1,5 +1,12 @@
 import { describe, expect, it } from 'vite-plus/test'
-import { MEDS_KEY, loadMeds, saveMeds } from './medsStorage.ts'
+import {
+  MEDS_KEY,
+  NOT_CHECKED_KEY,
+  loadMeds,
+  loadNotChecked,
+  saveMeds,
+  saveNotChecked,
+} from './medsStorage.ts'
 
 function fake(initial: Record<string, string> = {}) {
   const m = new Map(Object.entries(initial))
@@ -32,5 +39,23 @@ describe('medsStorage', () => {
     expect(s.m.get(MEDS_KEY)).toBe('["warfarin"]')
     saveMeds(s, [])
     expect(s.m.has(MEDS_KEY)).toBe(false)
+  })
+  it('keeps not-checked names under their own key, leaving the id list untouched', () => {
+    const s = fake()
+    saveMeds(s, ['warfarin'])
+    saveNotChecked(s, ['Eliquis'])
+    expect(s.m.get(MEDS_KEY)).toBe('["warfarin"]')
+    expect(s.m.get(NOT_CHECKED_KEY)).toBe('["Eliquis"]')
+    expect(loadNotChecked(s)).toEqual(['Eliquis'])
+    saveNotChecked(s, [])
+    expect(s.m.has(NOT_CHECKED_KEY)).toBe(false)
+  })
+  it('survives missing, corrupt and wrongly-shaped not-checked data', () => {
+    expect(loadNotChecked(fake())).toEqual([])
+    expect(loadNotChecked(fake({ [NOT_CHECKED_KEY]: '{not json' }))).toEqual([])
+    expect(loadNotChecked(fake({ [NOT_CHECKED_KEY]: '{"a":1}' }))).toEqual([])
+    expect(loadNotChecked(fake({ [NOT_CHECKED_KEY]: '[1, " Eliquis ", "", "Eliquis"]' }))).toEqual([
+      'Eliquis',
+    ])
   })
 })

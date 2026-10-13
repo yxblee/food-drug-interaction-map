@@ -1,4 +1,4 @@
-import { Fragment, useMemo, useState } from 'react'
+import { Fragment, useEffect, useMemo, useRef, useState } from 'react'
 import type { GraphPayload, NodeDetail } from '@fdi/schema'
 import { SEVERITIES } from '@fdi/schema'
 import { buildIndex, groupTerm, nodeKey, searchNodes, type Index } from '@fdi/schema/domain'
@@ -12,13 +12,31 @@ export interface MyMedsTabProps {
   graph: GraphPayload
   meds: string[]
   setMeds: (update: (m: string[]) => string[]) => void
+  notChecked: string[]
+  setNotChecked: (update: (m: string[]) => string[]) => void
   onSeeOnMap: () => void
 }
 
-export function MyMedsTab({ graph, meds, setMeds, onSeeOnMap }: MyMedsTabProps) {
+export function MyMedsTab({
+  graph,
+  meds,
+  setMeds,
+  notChecked,
+  setNotChecked,
+  onSeeOnMap,
+}: MyMedsTabProps) {
   const ix = useMemo(() => buildIndex(graph.nodes, graph.interactions), [graph])
   const [query, setQuery] = useState('')
   const [notice, setNotice] = useState('')
+  // The list before "Clear all", in memory only, for UNDO_MS.
+  const [undo, setUndo] = useState<{ ids: string[]; names: string[] } | null>(null)
+  const undoTimer = useRef<number>(undefined)
+  const input = useRef<HTMLInputElement>(null)
+  useEffect(() => () => window.clearTimeout(undoTimer.current), [])
+  const dropUndo = () => {
+    window.clearTimeout(undoTimer.current)
+    setUndo(null)
+  }
 
   const candidates = useMemo(
     () => graph.nodes.filter((n) => n.kind === 'drug' && !n.group),
@@ -29,6 +47,7 @@ export function MyMedsTab({ graph, meds, setMeds, onSeeOnMap }: MyMedsTabProps) 
   const name = (id: string) => ix.nodes.get(nodeKey('drug', id))?.name ?? id
   const add = (id: string, matched: string) => {
     setQuery('')
+    dropUndo()
     if (meds.includes(id)) {
       const typed = matched === name(id) ? '' : ` (${matched})`
       setNotice(`${name(id)}${typed} is already on your list`)
@@ -37,6 +56,38 @@ export function MyMedsTab({ graph, meds, setMeds, onSeeOnMap }: MyMedsTabProps) 
     }
     setNotice('')
     setMeds((m) => (m.includes(id) ? m : [...m, id]))
+  }
+  const addNotChecked = (raw: string) => {
+    const typed = raw.trim()
+    if (!typed) return
+    setQuery('')
+    dropUndo()
+    if (notChecked.some((n) => n.toLowerCase() === typed.toLowerCase())) {
+      setNotice(`No match in our dataset. ${typed} is already on your list as not checked`)
+      return
+    }
+    setNotice(`No match in our dataset. ${typed} added as not checked`)
+    setNotChecked((n) => [...n, typed])
+  }
+  const clearAll = () => {
+    setUndo({ ids: meds, names: notChecked })
+    setMeds(() => [])
+    setNotChecked(() => [])
+    setNotice('List cleared')
+    window.clearTimeout(undoTimer.current)
+    undoTimer.current = window.setTimeout(() => {
+      setUndo(null)
+      setNotice((n) => (n === 'List cleared' ? '' : n))
+    }, UNDO_MS)
+    input.current?.focus()
+  }
+  const undoClear = () => {
+    if (!undo) return
+    setMeds(() => undo.ids)
+    setNotChecked(() => undo.names)
+    setNotice('List restored')
+    dropUndo()
+    input.current?.focus()
   }
 
   return (
@@ -51,6 +102,7 @@ export function MyMedsTab({ graph, meds, setMeds, onSeeOnMap }: MyMedsTabProps) 
         </label>
         <input
           id="med-input"
+          ref={input}
           type="search"
           autoComplete="off"
           placeholder="e.g. warfarin or Coumadin"
@@ -60,12 +112,23 @@ export function MyMedsTab({ graph, meds, setMeds, onSeeOnMap }: MyMedsTabProps) 
             setNotice('')
           }}
           onKeyDown={(e) => {
-            if (e.key === 'Enter' && options[0]) add(options[0].id, options[0].matched)
+            if (e.key !== 'Enter') return
+            if (options[0]) add(options[0].id, options[0].matched)
+            else addNotChecked(query)
           }}
         />
         {query && (
           <ul className="meds__options">
-            {options.length === 0 && <li className="mono-label">No match in our dataset</li>}
+            {options.length === 0 && query.trim() && (
+              <>
+                <li className="mono-label">No match in our dataset</li>
+                <li>
+                  <button onClick={() => addNotChecked(query)}>
+                    Add “{query.trim()}” as not checked
+                  </button>
+                </li>
+              </>
+            )}
             {options.map((o) => (
               <li key={o.id}>
                 <button onClick={() => add(o.id, o.matched)}>
@@ -78,7 +141,13 @@ export function MyMedsTab({ graph, meds, setMeds, onSeeOnMap }: MyMedsTabProps) 
           </ul>
         )}
         <p role="status" className="meds__status">
-          {notice}
+          {undo ? (
+            <>
+              List cleared · <button onClick={undoClear}>Undo</button>
+            </>
+          ) : (
+            notice
+          )}
         </p>
         <ul className="meds__chips" aria-label="Your medications">
           {meds.map((id) => (
@@ -92,15 +161,29 @@ export function MyMedsTab({ graph, meds, setMeds, onSeeOnMap }: MyMedsTabProps) 
               </button>
             </li>
           ))}
+          {notChecked.map((n) => (
+            <li key={n} className="chip chip--unchecked">
+              {n}
+              <span className="mono-label">not checked</span>
+              <button
+                aria-label={`Remove ${n}`}
+                onClick={() => setNotChecked((l) => l.filter((x) => x !== n))}
+              >
+                ✕
+              </button>
+            </li>
+          ))}
         </ul>
-        {meds.length > 0 && (
+        {(meds.length > 0 || notChecked.length > 0) && (
           <div className="meds__actions">
-            <button className="pill-button" onClick={() => setMeds(() => [])}>
+            <button className="pill-button" onClick={clearAll}>
               Clear all
             </button>
-            <button className="pill-button" onClick={onSeeOnMap}>
-              See on map
-            </button>
+            {meds.length > 0 && (
+              <button className="pill-button" onClick={onSeeOnMap}>
+                See on map
+              </button>
+            )}
           </div>
         )}
       </section>
@@ -108,8 +191,15 @@ export function MyMedsTab({ graph, meds, setMeds, onSeeOnMap }: MyMedsTabProps) 
       <section className="meds__results" aria-labelledby="results-title">
         <h2 id="results-title">Foods to watch</h2>
         <p role="status" className="meds__status">
-          {meds.length > 0 && resultsSummary(warnings)}
+          {(meds.length > 0 || notChecked.length > 0) &&
+            resultsSummary(meds.length > 0 ? warnings : null, notChecked.length)}
         </p>
+        {notChecked.length > 0 && (
+          <p className="meds__unchecked">
+            Not checked: {notChecked.join(', ')}. Being missing here doesn't mean it's safe; ask
+            your pharmacist.
+          </p>
+        )}
         {meds.length === 0 ? (
           <p>
             Add the medications you take, such as warfarin, simvastatin or levothyroxine, to see
@@ -220,8 +310,12 @@ const chipId = (id: string) => `med-chip-${id}`
 
 const plural = (n: number, one: string, many: string) => `${n} ${n === 1 ? one : many}`
 
-function resultsSummary(warnings: FoodWarning[]): string {
+const UNDO_MS = 10_000
+
+function resultsSummary(warnings: FoodWarning[] | null, notChecked: number): string {
+  const unchecked = notChecked ? `${notChecked} not checked` : ''
+  if (!warnings) return unchecked
   const avoid = warnings.filter((w) => w.severity === 'avoid').length
   const watch = plural(warnings.length, 'food to watch', 'foods to watch')
-  return avoid ? `${watch}, ${avoid} to avoid` : watch
+  return [avoid ? `${watch}, ${avoid} to avoid` : watch, unchecked].filter(Boolean).join(', ')
 }
