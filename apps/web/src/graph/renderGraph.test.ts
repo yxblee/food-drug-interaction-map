@@ -1,7 +1,14 @@
 import { describe, expect, it } from 'vite-plus/test'
 import type { GraphPayload } from '@fdi/schema'
 import { buildIndex } from '@fdi/schema/domain'
-import { computeFocus, filterRenderGraph, nodeRadius, toRenderGraph } from './renderGraph.ts'
+import {
+  computeFocus,
+  filterRenderGraph,
+  fitCamera,
+  fitTransform,
+  nodeRadius,
+  toRenderGraph,
+} from './renderGraph.ts'
 
 const g: GraphPayload = {
   version: 'v',
@@ -150,5 +157,76 @@ describe('computeFocus', () => {
       'food:grapefruit',
       'mechanism:cyp3a4-inhibition',
     ])
+  })
+})
+
+describe('fitTransform', () => {
+  const size = { width: 1000, height: 600 }
+  const pts = [
+    { x: -1000, y: -300 },
+    { x: 1000, y: 300 },
+  ]
+  const project = (t: { k: number; x: number; y: number }, p: { x: number; y: number }) => ({
+    x: p.x * t.k + t.x,
+    y: p.y * t.k + t.y,
+  })
+
+  it('has nothing to frame without points', () => {
+    expect(fitTransform([], size, { right: 0, bottom: 0 })).toBeNull()
+  })
+
+  it('centres the points and fills the viewport minus padding', () => {
+    const t = fitTransform(pts, size, { right: 0, bottom: 0 }, 50)!
+    const [a, b] = [project(t, pts[0]!), project(t, pts[1]!)]
+    expect(a.x).toBeCloseTo(-450)
+    expect(b.x).toBeCloseTo(450)
+    expect(a.y + b.y).toBeCloseTo(0)
+  })
+
+  it('keeps the points inside the space left of a right inset', () => {
+    const t = fitTransform(pts, size, { right: 400, bottom: 0 }, 50)!
+    const [a, b] = [project(t, pts[0]!), project(t, pts[1]!)]
+    expect(a.x).toBeGreaterThanOrEqual(-500 + 50)
+    expect(b.x).toBeLessThanOrEqual(500 - 400 - 50 + 0.001)
+  })
+
+  it('keeps the points above a bottom inset', () => {
+    const t = fitTransform(pts, size, { right: 0, bottom: 300 }, 50)!
+    expect(project(t, pts[1]!).y).toBeLessThanOrEqual(300 - 300 - 30 + 0.001)
+  })
+
+  it('does not zoom a single node past the maximum', () => {
+    expect(fitTransform([{ x: 5, y: 5 }], size, { right: 0, bottom: 0 })!.k).toBe(2.5)
+  })
+})
+
+describe('fitCamera', () => {
+  const size = { width: 1000, height: 1000 }
+  const none = { right: 0, bottom: 0 }
+  const line = [
+    { x: -100, y: 0, z: 0 },
+    { x: 100, y: 0, z: 0 },
+  ]
+  it('puts the extremes at the edge of the free area', () => {
+    // fov 90: one world unit at distance d spans 500 / d pixels
+    expect(fitCamera(line, 90, size, none, 0).distance).toBeCloseTo(100)
+  })
+  it('backs off for bigger spreads and for points nearer the camera', () => {
+    expect(
+      fitCamera(
+        line.map((p) => ({ ...p, x: p.x * 2 })),
+        90,
+        size,
+        none,
+        0,
+      ).distance,
+    ).toBeCloseTo(200)
+    const deep = [...line, { x: 100, y: 0, z: 50 }, { x: 100, y: 0, z: -50 }]
+    expect(fitCamera(deep, 90, size, none, 0).distance).toBeGreaterThan(100)
+  })
+  it('slides the look-at point right and down when a panel covers the right or bottom', () => {
+    expect(fitCamera(line, 90, size, none, 0).target.x).toBe(0)
+    expect(fitCamera(line, 90, size, { right: 400, bottom: 0 }, 0).target.x).toBeGreaterThan(0)
+    expect(fitCamera(line, 90, size, { right: 0, bottom: 300 }, 0).target.y).toBeLessThan(0)
   })
 })

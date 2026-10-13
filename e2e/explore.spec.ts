@@ -125,3 +125,82 @@ test('a search with no match suggests a next step and says absence is not safety
   await expect(page.getByText('Check the spelling or try the generic name.')).toBeVisible()
   await expect(page.getByText("doesn't mean a combination is safe")).toBeVisible()
 })
+
+// Screen-space box of the nodes currently in focus, and the canvas area the panel leaves free.
+async function framing(page: import('@playwright/test').Page) {
+  return page.evaluate(() => {
+    const host = document.querySelector('.graph-host')!.getBoundingClientRect()
+    const panel = document.querySelector('.panel')?.getBoundingClientRect()
+    const wide = !panel || panel.width < host.width * 0.9
+    const free = {
+      left: host.left,
+      top: host.top,
+      right: panel && wide ? panel.left : host.right,
+      bottom: panel && !wide ? panel.top : host.bottom,
+    }
+    const boxes = [...document.querySelectorAll('svg.graph2d g.node:not(.is-dim)')].map((n) =>
+      n.querySelector('.shape')!.getBoundingClientRect(),
+    )
+    const box = {
+      left: Math.min(...boxes.map((b) => b.left)),
+      top: Math.min(...boxes.map((b) => b.top)),
+      right: Math.max(...boxes.map((b) => b.right)),
+      bottom: Math.max(...boxes.map((b) => b.bottom)),
+    }
+    return { free, box, count: boxes.length }
+  })
+}
+
+async function expectFramed(page: import('@playwright/test').Page, minCount: number) {
+  await expect
+    .poll(
+      async () => {
+        const { free, box, count } = await framing(page)
+        const inside =
+          box.left >= free.left &&
+          box.top >= free.top &&
+          box.right <= free.right &&
+          box.bottom <= free.bottom
+        const share = Math.max(
+          (box.right - box.left) / (free.right - free.left),
+          (box.bottom - box.top) / (free.bottom - free.top),
+        )
+        return inside && share >= 0.5 && count >= minCount
+      },
+      { timeout: 15_000 },
+    )
+    .toBe(true)
+}
+
+test('selecting a food frames it and its neighbours beside the panel', async ({ page }, info) => {
+  await page.goto('./')
+  if (info.project.name !== 'mobile') await page.getByRole('button', { name: '2D' }).click()
+  await page.getByRole('button', { name: 'Try grapefruit' }).click()
+  await expect(page.getByRole('complementary')).toBeVisible()
+  await expectFramed(page, 2)
+})
+
+test('See on map frames the filtered medicines', async ({ page }, info) => {
+  await page.goto('./')
+  await page.getByRole('tab', { name: 'My meds' }).click()
+  const input = page.getByLabel('Add a medication')
+  await input.fill('warfarin')
+  await input.press('Enter')
+  await page.getByRole('button', { name: /See on map/ }).click()
+  if (info.project.name !== 'mobile') await page.getByRole('button', { name: '2D' }).click()
+  await expect(page.getByRole('button', { name: /Showing your meds/ })).toBeVisible()
+  await expectFramed(page, 2)
+})
+
+test('the legend closes when the panel opens and can be reopened', async ({ page }, info) => {
+  await page.goto('./')
+  const legend = page.locator('.legend')
+  await legend.getByText('How to read the map').click()
+  await expect(legend).toHaveJSProperty('open', true)
+  await page.getByRole('button', { name: 'Try grapefruit' }).click()
+  await expect(page.getByRole('complementary')).toBeVisible()
+  await expect(legend).toHaveJSProperty('open', false)
+  if (info.project.name === 'mobile') return // the panel covers the legend there
+  await legend.getByText('How to read the map').click()
+  await expect(legend).toHaveJSProperty('open', true)
+})

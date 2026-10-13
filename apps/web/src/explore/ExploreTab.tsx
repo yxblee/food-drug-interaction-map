@@ -126,13 +126,15 @@ export function ExploreTab({
           </p>
         )}
       </div>
-      <Legend />
+      {/* Remounting closes it when the panel opens; the person can reopen it. */}
+      <Legend key={selected ? 'panel' : 'free'} />
       {/* After the controls in DOM order so keyboard users reach search first. */}
       <GraphView
         graph={renderGraph}
         view={view}
         motion={!env.reducedMotion}
         focus={focus}
+        panelOpen={!!selected}
         palette={palette}
         onSelect={onGraphSelect}
       />

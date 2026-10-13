@@ -9,10 +9,19 @@ import {
   OctahedronGeometry,
   SphereGeometry,
   TorusGeometry,
+  Vector3,
+  type PerspectiveCamera,
 } from 'three'
 import { SEVERITY_RANK } from '@fdi/schema/domain'
 import { SEVERITY_COLORS, type Palette } from '../theme/tokens.ts'
-import { nodeRadius, type RenderLink, type RenderNode } from './renderGraph.ts'
+import {
+  NO_INSET,
+  fitCamera,
+  nodeRadius,
+  type Inset,
+  type RenderLink,
+  type RenderNode,
+} from './renderGraph.ts'
 import type { Focus, GraphRenderer, RendererOptions } from './types.ts'
 
 type FGNode = RenderNode & { x?: number; y?: number; z?: number }
@@ -21,6 +30,9 @@ type FGLink = Omit<RenderLink, 'source' | 'target'> & {
   target: string | FGNode
 }
 const endKey = (e: string | FGNode) => (typeof e === 'string' ? e : e.key)
+
+// Fit uses node centres; near nodes render big under perspective, so leave extra room.
+const NODE_MARGIN = 96
 
 export function create3d(opts: RendererOptions): GraphRenderer {
   let fg: InstanceType<typeof ForceGraph3D> | null = null
@@ -50,28 +62,57 @@ export function create3d(opts: RendererOptions): GraphRenderer {
     }
   }
 
-  // Nodes are built lazily by 3d-force-graph, so style them as they appear.
-  let flyPending = false
-  function fly() {
-    if (!fg || !focus.selected) return
-    const n = (fg.graphData().nodes as FGNode[]).find((n) => n.key === focus.selected)
-    if (!n || n.x == null || n.y == null || n.z == null) {
-      flyPending = true // layout hasn't placed it yet; retry when the engine settles
-      return
-    }
-    flyPending = false
-    const ratio = 1 + 140 / (Math.hypot(n.x, n.y, n.z) || 1)
-    fg.cameraPosition(
-      { x: n.x * ratio, y: n.y * ratio, z: n.z * ratio },
-      { x: n.x, y: n.y, z: n.z },
-      opts.motion ? 800 : 0,
+  // Frames the focused nodes (or all); coalesced so a
+  // selection and the panel opening animate as one move.
+  let fitTimer: ReturnType<typeof setTimeout> | undefined
+  let inset: Inset = NO_INSET
+  let fogNear = 600
+  function requestFit() {
+    clearTimeout(fitTimer)
+    fitTimer = setTimeout(doFit, 50)
+  }
+  function doFit() {
+    if (!fg || !host) return
+    const f = focus.selected ? focus.focus : null
+    const pts = (fg.graphData().nodes as FGNode[]).filter(
+      (n) => (!f || f.has(n.key)) && n.x != null && n.y != null && n.z != null,
     )
+    if (!pts.length) return
+    const cam = fg.camera() as PerspectiveCamera
+    // Keep the viewing direction; work in camera axes so the fit is exact under perspective.
+    const look = (fg.controls() as { target: Vector3 }).target
+    const back = cam.position.clone().sub(look)
+    if (back.lengthSq() < 1e-6) back.set(0, 0, 1)
+    back.normalize()
+    const right = new Vector3(0, 1, 0).cross(back)
+    if (right.lengthSq() < 1e-6) right.set(1, 0, 0)
+    right.normalize()
+    const up = back.clone().cross(right)
+    const { distance, target, depth } = fitCamera(
+      pts.map((n) => {
+        const p = new Vector3(n.x, n.y, n.z)
+        return { x: p.dot(right), y: p.dot(up), z: p.dot(back) }
+      }),
+      cam.fov,
+      { width: host.clientWidth, height: host.clientHeight },
+      inset,
+      NODE_MARGIN,
+    )
+    const at = right
+      .clone()
+      .multiplyScalar(target.x)
+      .addScaledVector(up, target.y)
+      .addScaledVector(back, target.z)
+    const pos = at.clone().addScaledVector(back, distance)
+    fogNear = distance + depth
+    paint()
+    fg.cameraPosition(pos, at, opts.motion ? 800 : 0)
   }
 
   function paint() {
     if (!fg || !palette) return
     fg.backgroundColor(palette.paper)
-    fg.scene().fog = new Fog(palette.paper, 600, 1800)
+    fg.scene().fog = new Fog(palette.paper, fogNear, fogNear + 1200)
     for (const key of materials.keys()) styleNode(key)
     // re-set accessors so 3d-force-graph re-evaluates them
     fg.linkColor(fg.linkColor())
@@ -141,7 +182,9 @@ export function create3d(opts: RendererOptions): GraphRenderer {
         .linkDirectionalParticleColor(() => palette?.ink ?? '#000000')
         .onNodeClick((n) => onSelect((n as FGNode).key))
         .onBackgroundClick(() => onSelect(null))
-        .onEngineStop(() => flyPending && fly())
+        // Lay out up front so the first frame is already settled and can be framed.
+        .warmupTicks(250)
+        .cooldownTicks(100)
       const controls = fg.controls() as unknown as { autoRotate: boolean; autoRotateSpeed: number }
       controls.autoRotate = opts.motion
       controls.autoRotateSpeed = 0.6
@@ -160,16 +203,24 @@ export function create3d(opts: RendererOptions): GraphRenderer {
         links: g.links.map((l) => ({ ...l })),
       })
       paint()
+      requestFit()
     },
 
     setFocus(f) {
+      const reframe = f.selected !== focus.selected
       focus = f
       paint()
       if (!fg) return
       const controls = fg.controls() as unknown as { autoRotate: boolean }
       controls.autoRotate = opts.motion && !f.selected
-      fly()
+      if (reframe) requestFit()
     },
+
+    setInset(i) {
+      inset = i
+    },
+
+    fit: requestFit,
 
     setTheme(p) {
       palette = p
@@ -181,6 +232,7 @@ export function create3d(opts: RendererOptions): GraphRenderer {
     },
 
     destroy() {
+      clearTimeout(fitTimer)
       observer?.disconnect()
       fg?._destructor()
       if (host) {
