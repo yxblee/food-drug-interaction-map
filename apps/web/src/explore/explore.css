@@ -16,6 +16,14 @@
   align-items: center;
   justify-content: space-between;
 }
+.panel__top .mono-label + .mono-label {
+  white-space: nowrap;
+}
+.irow__more summary {
+  min-height: 44px;
+  padding: 10px 0;
+  box-sizing: border-box;
+}
 .panel__title {
   margin: 0.5rem 0;
 }
@@ -94,7 +102,10 @@
   background: var(--surface);
 }
 .explore__hint {
-  margin: 4px 0 0;
+  /* Sits over the 2D graph's labels on narrow screens. */
+  margin: 4px 0 0 -4px;
+  padding: 0 4px;
+  background: var(--paper);
 }
 .legend {
   position: absolute;
@@ -130,6 +141,10 @@
   margin: 8px 0 0;
   padding: 0;
   list-style: none;
+}
+.legend__list + .legend__list {
+  display: grid;
+  grid-template-columns: repeat(2, max-content);
 }
 .legend__list li {
   display: flex;
