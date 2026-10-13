@@ -59,3 +59,27 @@ test('explore controls keep the 16px gutter and a readable search field', async 
   expect(border).toBe(muted)
   expect(placeholder).toBe(muted)
 })
+
+test('a first visit explains the map and suggests where to start', async ({ page }) => {
+  await page.goto('./')
+  await page.getByText('How to read the map').click()
+  const legend = page.locator('.legend')
+  for (const term of ['Drug', 'Food', 'Mechanism', 'Avoid', 'Minimal', 'Color']) {
+    await expect(legend).toContainText(term)
+  }
+
+  await page.getByRole('button', { name: 'Try grapefruit' }).click()
+  await expect(
+    page.getByRole('complementary').getByRole('heading', { name: 'Grapefruit', exact: true }),
+  ).toBeVisible()
+  await expect(page).toHaveURL(/node=food%3Agrapefruit/)
+  await expect(page.getByRole('button', { name: 'Try grapefruit' })).toHaveCount(0)
+})
+
+test('links carry severity ink before anything is selected', async ({ page }, info) => {
+  await page.goto('./')
+  if (info.project.name !== 'mobile') await page.getByRole('button', { name: '2D' }).click()
+  const avoidLink = page.locator('svg.graph2d .link.sev-avoid').first()
+  await expect(avoidLink).toBeAttached()
+  await expect(avoidLink).toHaveCSS('stroke', 'rgb(122, 42, 28)')
+})

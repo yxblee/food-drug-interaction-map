@@ -15,6 +15,19 @@
   opacity: 0.45;
   transition: opacity 200ms;
 }
+.graph2d .link.sev-avoid {
+  stroke: var(--sev-avoid);
+}
+.graph2d .link.sev-caution {
+  stroke: var(--sev-caution);
+}
+.graph2d .link.sev-monitor {
+  stroke: var(--sev-monitor);
+}
+.graph2d .link.sev-minimal {
+  stroke: var(--sev-minimal);
+  stroke-dasharray: 4 3;
+}
 .graph2d .link--member {
   stroke-dasharray: 2 3;
   opacity: 0.35;

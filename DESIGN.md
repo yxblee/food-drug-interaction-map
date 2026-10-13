@@ -260,7 +260,10 @@ The guide's stamp. Pill, light badge background, 1px `currentColor` outline, upp
 Two pill buttons top-right (Explore, My meds) plus the Color toggle; the active view is ink-filled. Every view state (tab, query, selected node, tint) lives in the URL so any view can be shared.
 
 ### Interaction Graph
-The fold-out map. 2D (d3) and 3D (3d-force-graph) render the same data. At rest: muted grey nodes, hairline links at 45% opacity, group-member links dotted; mechanisms are unfilled ink outlines. On selection the node fills with ink, its links take their severity ink with weight by severity (avoid 2.4 > caution 2 > monitor 1.6 > minimal 1.2 dashed), and everything else dims to 8–15%. Keyboard focus thickens the node outline to 3px ink. Screen-reader rows mirror the graph so it is never the only path.
+The fold-out map. 2D (d3) and 3D (3d-force-graph) render the same data. At rest: muted grey nodes, interaction links in their severity ink at reduced opacity (minimal dashed), group-member links dotted hairlines; mechanisms are unfilled ink outlines. On selection the node fills with ink, its links take their severity ink with weight by severity (avoid 2.4 > caution 2 > monitor 1.6 > minimal 1.2 dashed), and everything else dims to 8–15%. Keyboard focus thickens the node outline to 3px ink. Screen-reader rows mirror the graph so it is never the only path.
+
+### Map Legend
+A collapsed "How to read the map" disclosure, bottom-left over the graph: square, Bone Surface, hairline outline, mono summary with a +/− marker and a 44px target. Open, it shows the three node shapes, the outlined group/class form, the four severity line samples at their real weights, and one line explaining the Color toggle. With nothing selected and no search, the Explore bar offers "New here? Try grapefruit".
 
 ### Motion
 Paper and ink cross-fade over 400ms `ease` when the tint or colour mode changes; graph focus/dim changes fade over 200ms. Both are removed under `prefers-reduced-motion`.
