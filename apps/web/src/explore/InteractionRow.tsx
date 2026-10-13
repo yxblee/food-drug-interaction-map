@@ -1,4 +1,11 @@
-import type { GraphNode, Interaction, Kind, Mechanism, ResolvedInteraction } from '@fdi/schema'
+import type {
+  GraphNode,
+  Interaction,
+  Kind,
+  Mechanism,
+  ResolvedInteraction,
+  Severity,
+} from '@fdi/schema'
 import { nodeKey } from '@fdi/schema/domain'
 import { SeverityBadge } from './SeverityBadge.tsx'
 
@@ -10,11 +17,21 @@ interface Props {
   onSelect?: (key: string) => void
   /** The Explore panel states these once per Severity group instead of on every row. */
   grouped?: { inherited: boolean }
+  /** The Severity group heading above this row; its badge shows only when the row's own Severity differs. */
+  groupSeverity?: Severity
 }
 
 const paragraphs = (text: string) => text.split(/\n\s*\n/).map((p, i) => <p key={i}>{p.trim()}</p>)
 
-export function InteractionRow({ row, nodes, mechanisms, perspective, onSelect, grouped }: Props) {
+export function InteractionRow({
+  row,
+  nodes,
+  mechanisms,
+  perspective,
+  onSelect,
+  grouped,
+  groupSeverity,
+}: Props) {
   const i = row.interaction
   // The Drug class or Food group this row is inherited from, on the viewed side.
   const inheritedFrom = row.inheritedFrom
@@ -36,7 +53,7 @@ export function InteractionRow({ row, nodes, mechanisms, perspective, onSelect, 
   return (
     <li className="irow">
       <div className="irow__head">
-        {!grouped && <SeverityBadge severity={i.severity} />}
+        {!grouped && groupSeverity !== i.severity && <SeverityBadge severity={i.severity} />}
         <span className="irow__name">
           {counterpart.map((n, k) => (
             <span key={k}>

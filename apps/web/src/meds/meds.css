@@ -136,6 +136,9 @@
   min-height: 44px;
   cursor: pointer;
 }
+.warning__lead {
+  margin: 10px 0 0;
+}
 .warning__drugs {
   color: var(--muted);
 }

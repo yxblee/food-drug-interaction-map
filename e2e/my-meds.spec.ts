@@ -42,7 +42,7 @@ test('each affected drug shows its own severity inside a food warning', async ({
   }
 
   const avoid = page.locator('section.meds__sev', { has: page.locator('#sev-avoid') })
-  const grapefruit = avoid.locator('.warning summary', { hasText: 'Grapefruit' })
+  const grapefruit = avoid.locator('.warning__lead', { hasText: 'Grapefruit' })
   await expect(grapefruit.locator('.warning__drug', { hasText: 'Simvastatin' })).not.toContainText(
     'Minimal',
   )
@@ -53,6 +53,42 @@ test('each affected drug shows its own severity inside a food warning', async ({
     'no meaningful effect on Amlodipine',
   )
   await expect(grapefruit.locator('.warning__drugs')).not.toContainText('affects Simvastatin, Amlo')
+})
+
+test('Avoid and Caution show advice up front, with one disclosure for the detail and one Severity badge per group', async ({
+  page,
+}) => {
+  await page.goto('./')
+  await page.getByRole('tab', { name: 'My meds' }).click()
+  const input = page.getByLabel('Add a medication')
+  for (const med of ['simvastatin', 'amlodipine']) {
+    await input.fill(med)
+    await input.press('Enter')
+  }
+
+  const avoid = page.locator('section.meds__sev', { has: page.locator('#sev-avoid') })
+  const warning = avoid.locator('.warning', { hasText: 'Grapefruit' })
+  const simva = warning.locator('li.irow', { hasText: 'Simvastatin' })
+  await expect(simva.locator('.irow__advice')).toBeVisible()
+  await expect(simva.locator('.irow__advice')).toContainText('What to do:')
+  const more = simva.locator('details.irow__more')
+  await expect(more.getByText('Sources', { exact: true })).toBeHidden()
+  await expect(more.getByText('Mechanism', { exact: true })).toBeHidden()
+  await more.locator('summary').click()
+  await expect(more.getByText('Sources', { exact: true })).toBeVisible()
+  await expect(more.getByText('Mechanism', { exact: true })).toBeVisible()
+  // One level only: no disclosure inside the disclosure.
+  await expect(more.locator('details')).toHaveCount(0)
+  await expect(warning.locator('.warning > details')).toHaveCount(0)
+
+  // "Avoid" once (the group heading); Amlodipine's own Minimal badge still shows.
+  await expect(avoid.locator('.badge', { hasText: /^Avoid$/ })).toHaveCount(1)
+  await expect(warning.locator('.badge', { hasText: /^Minimal$/ }).first()).toBeVisible()
+  await expect(warning.locator('.badge', { hasText: /^Avoid$/ })).toHaveCount(0)
+
+  // Monitor and Minimal rows stay collapsed.
+  const collapsed = page.locator('section.meds__sev:has(#sev-minimal) .warning > details').first()
+  if (await collapsed.count()) await expect(collapsed).not.toHaveAttribute('open', '')
 })
 
 test('no-match in My meds gives a next step and says absence is not safety', async ({ page }) => {
@@ -235,7 +271,6 @@ test('an expanded warning shows each Drug detail once', async ({ page }) => {
   await input.fill('simvastatin')
   await input.press('Enter')
   const warning = page.locator('.warning', { hasText: 'Grapefruit' })
-  await warning.locator('summary').click()
   const row = warning.locator('li.irow', { hasText: 'Simvastatin' })
   await expect(row).toBeVisible()
   const summary = (await row.locator('.irow__summary').textContent())!.trim()

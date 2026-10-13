@@ -309,43 +309,68 @@ function WarningRow({ warning: w }: { warning: FoodWarning }) {
       </span>
     </Fragment>
   )
+  // Avoid and Caution show their advice up front; Monitor and Minimal stay collapsed.
+  const upFront = w.severity === 'avoid' || w.severity === 'caution'
+  const load = () => {
+    if (detail) return
+    setFailed(false)
+    fetchNode('food', w.food.id).then(setDetail, () => setFailed(true))
+  }
+  useEffect(() => {
+    if (upFront) load()
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [upFront, w.food.id])
+  const lead = (
+    <>
+      <strong>{w.food.name}</strong>
+      {w.food.group && <span className="mono-label"> {groupTerm('food')}</span>}
+      <span className="warning__drugs">
+        {' '}
+        {affecting.length > 0 && <>affects {affecting.map(drugChip)}</>}
+        {affecting.length > 0 && negligible.length > 0 && '; '}
+        {negligible.length > 0 && <>no meaningful effect on {negligible.map(drugChip)}</>}
+      </span>
+    </>
+  )
+  const body = (
+    <>
+      {failed && <p role="alert">Couldn't load details. Reload the page to try again.</p>}
+      {!detail && !failed && upFront && <p className="mono-label">Loading advice…</p>}
+      {detail && (
+        <ul className="panel__rows">
+          {detail.interactions
+            .filter((r) => affectedIds.has(r.interaction.id))
+            .map((row) => (
+              <InteractionRow
+                key={row.interaction.id}
+                row={row}
+                nodes={detail.nodes}
+                mechanisms={detail.mechanisms}
+                perspective="food"
+                groupSeverity={w.severity}
+              />
+            ))}
+        </ul>
+      )}
+    </>
+  )
   return (
     <li className="warning">
-      <details
-        onToggle={(e) => {
-          if ((e.target as HTMLDetailsElement).open && !detail) {
-            setFailed(false)
-            fetchNode('food', w.food.id).then(setDetail, () => setFailed(true))
-          }
-        }}
-      >
-        <summary>
-          <SeverityBadge severity={w.severity} /> <strong>{w.food.name}</strong>
-          {w.food.group && <span className="mono-label"> {groupTerm('food')}</span>}
-          <span className="warning__drugs">
-            {' '}
-            {affecting.length > 0 && <>affects {affecting.map(drugChip)}</>}
-            {affecting.length > 0 && negligible.length > 0 && '; '}
-            {negligible.length > 0 && <>no meaningful effect on {negligible.map(drugChip)}</>}
-          </span>
-        </summary>
-        {failed && <p role="alert">Couldn't load details. Close and reopen to try again.</p>}
-        {detail && (
-          <ul className="panel__rows">
-            {detail.interactions
-              .filter((r) => affectedIds.has(r.interaction.id))
-              .map((row) => (
-                <InteractionRow
-                  key={row.interaction.id}
-                  row={row}
-                  nodes={detail.nodes}
-                  mechanisms={detail.mechanisms}
-                  perspective="food"
-                />
-              ))}
-          </ul>
-        )}
-      </details>
+      {upFront ? (
+        <>
+          <p className="warning__lead">{lead}</p>
+          {body}
+        </>
+      ) : (
+        <details
+          onToggle={(e) => {
+            if ((e.target as HTMLDetailsElement).open) load()
+          }}
+        >
+          <summary>{lead}</summary>
+          {body}
+        </details>
+      )}
     </li>
   )
 }

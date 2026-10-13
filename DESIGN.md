@@ -256,7 +256,7 @@ The guide's stamp. Pill, light badge background, 1px `currentColor` outline, upp
 
 ### Cards / Containers
 - **Detail panel:** square, Bone Surface, 1px `currentColor` border, 16px padding, docked bottom-right. Interaction rows are grouped under Severity headings (avoid, caution, monitor, minimal), the same badge, word and subtitle as My meds; a group states once what its rows share ("Applies to …" when every row inherits from the same parent, the Avoid caution sentence), and rows keep only their own summary, advice and details, separated by 20%-ink hairlines. No position counter; Prev/Next are named by the kind browsed ("← Previous food").
-- **Warning entries (My meds):** not cards; disclosure rows (`<details>`) separated by top hairlines, with a 44px-minimum summary. Each affected drug whose severity differs from the row's carries its own badge; expanded, each Drug's detail appears once, with no separate summary list above it.
+- **Warning entries (My meds):** not cards; rows separated by top hairlines. Avoid and Caution rows are open: a lead line (Food, affected Drugs) then each Drug's "What to do" advice, loaded eagerly, with Mechanism, Example exchange and Sources behind one 44px-minimum "Details and sources" disclosure (never nested). Monitor and Minimal rows stay a collapsed `<details>`. The Severity badge appears once, in the group heading; a row or Drug shows its own badge only when its Severity differs from the group's.
 - **Notices / banner:** hairline outline on surface; the danger banner uses an Oxblood outline.
 
 ### Inputs / Fields
