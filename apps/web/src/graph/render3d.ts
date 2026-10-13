@@ -117,7 +117,8 @@ export function create3d(opts: RendererOptions): GraphRenderer {
         .linkColor((l) => {
           const link = l as FGLink
           if (!palette) return '#888888'
-          return linkInFocus(link) && link.severity && focus.selected
+          // Severity ink at rest and on focused paths; dimmed links fall back to the hairline.
+          return link.severity && (!focus.focus || linkInFocus(link))
             ? SEVERITY_COLORS[link.severity]
             : palette.line
         })

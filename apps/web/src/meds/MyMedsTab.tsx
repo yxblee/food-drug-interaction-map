@@ -1,4 +1,4 @@
-import { useMemo, useState } from 'react'
+import { Fragment, useMemo, useState } from 'react'
 import type { GraphPayload, NodeDetail } from '@fdi/schema'
 import { SEVERITIES } from '@fdi/schema'
 import { buildIndex, groupTerm, nodeKey, searchNodes, type Index } from '@fdi/schema/domain'
@@ -18,18 +18,26 @@ export interface MyMedsTabProps {
 export function MyMedsTab({ graph, meds, setMeds, onSeeOnMap }: MyMedsTabProps) {
   const ix = useMemo(() => buildIndex(graph.nodes, graph.interactions), [graph])
   const [query, setQuery] = useState('')
+  const [notice, setNotice] = useState('')
 
   const candidates = useMemo(
-    () => graph.nodes.filter((n) => n.kind === 'drug' && !n.group && !meds.includes(n.id)),
-    [graph, meds],
+    () => graph.nodes.filter((n) => n.kind === 'drug' && !n.group),
+    [graph],
   )
   const options = useMemo(() => searchNodes(candidates, query, 8), [candidates, query])
   const warnings = useMemo(() => checkMeds(ix, meds), [ix, meds])
-  const add = (id: string) => {
-    setMeds((m) => (m.includes(id) ? m : [...m, id]))
-    setQuery('')
-  }
   const name = (id: string) => ix.nodes.get(nodeKey('drug', id))?.name ?? id
+  const add = (id: string, matched: string) => {
+    setQuery('')
+    if (meds.includes(id)) {
+      const typed = matched === name(id) ? '' : ` (${matched})`
+      setNotice(`${name(id)}${typed} is already on your list`)
+      document.getElementById(chipId(id))?.focus()
+      return
+    }
+    setNotice('')
+    setMeds((m) => (m.includes(id) ? m : [...m, id]))
+  }
 
   return (
     <div className="meds">
@@ -47,9 +55,12 @@ export function MyMedsTab({ graph, meds, setMeds, onSeeOnMap }: MyMedsTabProps) 
           autoComplete="off"
           placeholder="e.g. warfarin or Coumadin"
           value={query}
-          onChange={(e) => setQuery(e.target.value)}
+          onChange={(e) => {
+            setQuery(e.target.value)
+            setNotice('')
+          }}
           onKeyDown={(e) => {
-            if (e.key === 'Enter' && options[0]) add(options[0].id)
+            if (e.key === 'Enter' && options[0]) add(options[0].id, options[0].matched)
           }}
         />
         {query && (
@@ -57,17 +68,21 @@ export function MyMedsTab({ graph, meds, setMeds, onSeeOnMap }: MyMedsTabProps) 
             {options.length === 0 && <li className="mono-label">No match in our dataset</li>}
             {options.map((o) => (
               <li key={o.id}>
-                <button onClick={() => add(o.id)}>
+                <button onClick={() => add(o.id, o.matched)}>
                   {o.name}
                   {o.matched !== o.name && <span className="mono-label"> ({o.matched})</span>}
+                  {meds.includes(o.id) && <span className="mono-label"> · on your list</span>}
                 </button>
               </li>
             ))}
           </ul>
         )}
+        <p role="status" className="meds__status">
+          {notice}
+        </p>
         <ul className="meds__chips" aria-label="Your medications">
           {meds.map((id) => (
-            <li key={id} className="chip">
+            <li key={id} id={chipId(id)} tabIndex={-1} className="chip">
               {name(id)}
               <button
                 aria-label={`Remove ${name(id)}`}
@@ -92,6 +107,9 @@ export function MyMedsTab({ graph, meds, setMeds, onSeeOnMap }: MyMedsTabProps) 
 
       <section className="meds__results" aria-labelledby="results-title">
         <h2 id="results-title">Foods to watch</h2>
+        <p role="status" className="meds__status">
+          {meds.length > 0 && resultsSummary(warnings)}
+        </p>
         {meds.length === 0 ? (
           <p>
             Add the medications you take, such as warfarin, simvastatin or levothyroxine, to see
@@ -145,7 +163,21 @@ function WarningRow({ warning: w, ix }: { warning: FoodWarning; ix: Index }) {
           {w.food.group && <span className="mono-label"> {groupTerm('food')}</span>}
           <span className="warning__drugs">
             {' '}
-            affects {w.affected.map((h) => h.drug.name).join(', ')}
+            affects{' '}
+            {w.affected.map((h, i) => (
+              <Fragment key={`${h.drug.id}:${h.interaction.id}`}>
+                {i > 0 && ', '}
+                <span className="warning__drug">
+                  {h.drug.name}
+                  {h.interaction.severity !== w.severity && (
+                    <>
+                      {' '}
+                      <SeverityBadge severity={h.interaction.severity} />
+                    </>
+                  )}
+                </span>
+              </Fragment>
+            ))}
           </span>
         </summary>
         <ul className="warning__affected">
@@ -182,4 +214,14 @@ function WarningRow({ warning: w, ix }: { warning: FoodWarning; ix: Index }) {
       </details>
     </li>
   )
+}
+
+const chipId = (id: string) => `med-chip-${id}`
+
+const plural = (n: number, one: string, many: string) => `${n} ${n === 1 ? one : many}`
+
+function resultsSummary(warnings: FoodWarning[]): string {
+  const avoid = warnings.filter((w) => w.severity === 'avoid').length
+  const watch = plural(warnings.length, 'food to watch', 'foods to watch')
+  return avoid ? `${watch}, ${avoid} to avoid` : watch
 }

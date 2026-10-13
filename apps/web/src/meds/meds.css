@@ -21,13 +21,19 @@
   padding: 8px 12px;
   border-radius: 8px;
 }
+.meds__status {
+  margin: 8px 0 0;
+}
+.meds__status:empty {
+  margin: 0;
+}
 .meds input {
   display: block;
   width: 100%;
   margin-top: 6px;
   padding: 10px 14px;
   border-radius: 999px;
-  border: 1px solid var(--line);
+  border: 1px solid var(--muted);
   background: var(--surface);
   color: var(--ink);
 }
@@ -69,6 +75,10 @@
   color: var(--paper);
 }
 .chip button {
+  /* 44px hit area without growing the chip */
+  min-width: 44px;
+  min-height: 44px;
+  margin: -12px -6px -12px -10px;
   border: 0;
   background: none;
   color: inherit;
@@ -91,9 +101,11 @@
 }
 .warning {
   border-top: 1px solid var(--line);
-  padding: 12px 0;
+  padding: 2px 0;
 }
 .warning summary {
+  padding: 10px 0;
+  min-height: 44px;
   cursor: pointer;
 }
 .warning__drugs {

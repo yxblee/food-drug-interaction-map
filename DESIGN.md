@@ -177,8 +177,8 @@ Each tint is a full six-role palette (paper, ink, muted, line, badge background,
 ### Neutral
 - **Stone Paper** (`paper`): page background; the default "grey" world.
 - **Bone Surface** (`surface`): raised things ink sits on: inputs, search results, the detail panel, badge backgrounds, unpressed pills.
-- **Weathered Grey** (`muted`): mono labels, secondary text, aliases, footer, graph labels and unselected nodes.
-- **Hairline** (`line`): 1px rules, input outlines, graph links at rest.
+- **Weathered Grey** (`muted`): mono labels, secondary text, aliases, footer, placeholders, graph labels and unselected nodes; also the outline of every control (inputs, pill buttons), which needs 3:1 non-text contrast.
+- **Hairline** (`line`): 1px dividing rules and graph links at rest. Decorative only: never the sole boundary of a control.
 - Dark mode inverts paper and ink (`paper-dark`, `ink-dark`, …) but keeps badge backgrounds light (`badge-bg-dark`) so the severity inks read the same in both modes.
 
 ### Named Rules
@@ -235,32 +235,35 @@ The Explore search field (square) and the My meds input (pill) currently disagre
 ### Buttons
 Quiet and tactile; they look like paper until pressed.
 - **Shape:** full pill (999px).
-- **Default:** Bone Surface fill, ink text, 1px hairline outline, 6px 12px padding.
+- **Default:** Bone Surface fill, ink text, 1px Weathered Grey outline, 6px 12px padding.
 - **Pressed / Selected** (`aria-pressed="true"`): fills with Field Ink, text turns paper. Used for the active view (Explore / My meds) and the Color, 2D and Mechanisms toggles.
 - **Focus:** 2px ink outline, 2px offset (global `:focus-visible`).
 - **Link button:** unstyled underlined text for in-panel navigation.
 
 ### Chips
-- **Medication chip:** solid Field Ink pill with paper text and a × remove button; one per medication in My meds.
+- **Medication chip:** solid Field Ink pill with paper text and a × remove button whose hit area is 44px (negative margins keep the chip compact); one per medication in My meds.
 
 ### Severity Badges
 The guide's stamp. Pill, light badge background, 1px `currentColor` outline, uppercase mono 600 at 11px, in the severity's ink. Always printed with its word (AVOID, CAUTION, MONITOR, MINIMAL); colour never stands alone.
 
 ### Cards / Containers
 - **Detail panel:** square, Bone Surface, 1px `currentColor` border, 16px padding, docked bottom-right. Interaction rows inside are separated by 20%-ink hairlines.
-- **Warning entries (My meds):** not cards; disclosure rows (`<details>`) separated by top hairlines, 12px vertical padding.
+- **Warning entries (My meds):** not cards; disclosure rows (`<details>`) separated by top hairlines, with a 44px-minimum summary. Each affected drug whose severity differs from the row's carries its own badge.
 - **Notices / banner:** hairline outline on surface; the danger banner uses an Oxblood outline.
 
 ### Inputs / Fields
-- **Medication input:** pill, Bone Surface, hairline outline, 10px 14px padding; suggestions below on a 12px-radius surface with 8px-radius rows that fill with paper on hover/focus.
-- **Explore search:** square, Bone Surface, hairline outline, 8px 10px padding, max 420px; results as a ruled list with muted aliases and a muted match count.
+- **Medication input:** pill, Bone Surface, Weathered Grey outline, 10px 14px padding; suggestions below on a 12px-radius surface with 8px-radius rows that fill with paper on hover/focus.
+- **Explore search:** square, Bone Surface, Weathered Grey outline, 8px 10px padding, max 420px; results as a ruled list with muted aliases and a muted match count.
 - **Focus:** global 2px ink outline.
 
 ### Navigation
 Two pill buttons top-right (Explore, My meds) plus the Color toggle; the active view is ink-filled. Every view state (tab, query, selected node, tint) lives in the URL so any view can be shared.
 
 ### Interaction Graph
-The fold-out map. 2D (d3) and 3D (3d-force-graph) render the same data. At rest: muted grey nodes, hairline links at 45% opacity, group-member links dotted; mechanisms are unfilled ink outlines. On selection the node fills with ink, its links take their severity ink with weight by severity (avoid 2.4 > caution 2 > monitor 1.6 > minimal 1.2 dashed), and everything else dims to 8–15%. Keyboard focus thickens the node outline to 3px ink. Screen-reader rows mirror the graph so it is never the only path.
+The fold-out map. 2D (d3) and 3D (3d-force-graph) render the same data. At rest: muted grey nodes, interaction links in their severity ink at reduced opacity (minimal dashed), group-member links dotted hairlines; mechanisms are unfilled ink outlines. On selection the node fills with ink, its links take their severity ink with weight by severity (avoid 2.4 > caution 2 > monitor 1.6 > minimal 1.2 dashed), and everything else dims to 8–15%. Keyboard focus thickens the node outline to 3px ink. Screen-reader rows mirror the graph so it is never the only path.
+
+### Map Legend
+A collapsed "How to read the map" disclosure, bottom-left over the graph: square, Bone Surface, hairline outline, mono summary with a +/− marker and a 44px target. Open, it shows the three node shapes, the outlined group/class form, the four severity line samples at their real weights, and one line explaining the Color toggle. With nothing selected and no search, the Explore bar offers "New here? Try grapefruit".
 
 ### Motion
 Paper and ink cross-fade over 400ms `ease` when the tint or colour mode changes; graph focus/dim changes fade over 200ms. Both are removed under `prefers-reduced-motion`.

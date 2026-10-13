@@ -9,9 +9,12 @@ import { computeFocus, filterRenderGraph, toRenderGraph } from '../graph/renderG
 import type { Palette } from '../theme/tokens.ts'
 import type { ViewState } from '../urlState.ts'
 import { browseKeys, stepKey } from './browse.ts'
+import { Legend } from './Legend.tsx'
 import { SidePanel } from './SidePanel.tsx'
 import { Search } from './Search.tsx'
 import './explore.css'
+
+const STARTER = nodeKey('food', 'grapefruit')
 
 export interface ExploreTabProps {
   graph: GraphPayload
@@ -92,14 +95,6 @@ export function ExploreTab({
 
   return (
     <div className="explore">
-      <GraphView
-        graph={renderGraph}
-        view={view}
-        motion={!env.reducedMotion}
-        focus={focus}
-        palette={palette}
-        onSelect={onGraphSelect}
-      />
       <div className="explore__bar">
         <Search nodes={nodes} state={state} update={update} />
         {medsFilter && (
@@ -122,7 +117,25 @@ export function ExploreTab({
         >
           Mechanisms
         </button>
+        {!selected && !state.q && known.has(STARTER) && (
+          <p className="explore__hint">
+            New here?{' '}
+            <button className="link-button" onClick={() => select(STARTER)}>
+              Try grapefruit
+            </button>
+          </p>
+        )}
       </div>
+      <Legend />
+      {/* After the controls in DOM order so keyboard users reach search first. */}
+      <GraphView
+        graph={renderGraph}
+        view={view}
+        motion={!env.reducedMotion}
+        focus={focus}
+        palette={palette}
+        onSelect={onGraphSelect}
+      />
       {view === '3d' && selected && (
         <div className="sr-only" aria-live="polite">
           <p>Interactions for the selected item:</p>
