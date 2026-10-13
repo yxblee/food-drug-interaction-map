@@ -118,7 +118,8 @@ h3 {
   color: var(--ink);
   cursor: pointer;
 }
-.pill-button[aria-pressed='true'] {
+.pill-button[aria-pressed='true'],
+.pill-button[aria-selected='true'] {
   background: var(--ink);
   color: var(--paper);
 }

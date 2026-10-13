@@ -112,6 +112,7 @@ export function InteractionRow({
             <li key={k}>
               <a href={c.url} target="_blank" rel="noreferrer">
                 {c.title}
+                <span className="sr-only"> (opens in new tab)</span>
               </a>{' '}
               <span className="mono-label">{c.type}</span>
             </li>
