@@ -1,0 +1,470 @@
+{
+  "schemaVersion": 2,
+  "generatedAt": "2026-10-13T02:17:45.956Z",
+  "title": "Design System: Food–Drug Interaction Map",
+  "extensions": {
+    "colorMeta": {
+      "paper": {
+        "role": "neutral",
+        "displayName": "Stone Paper",
+        "canonical": "#e8e6e1",
+        "tonalRamp": [
+          "oklch(15% 0.007 88.6)",
+          "oklch(25% 0.007 88.6)",
+          "oklch(35% 0.007 88.6)",
+          "oklch(45% 0.007 88.6)",
+          "oklch(55% 0.007 88.6)",
+          "oklch(70% 0.007 88.6)",
+          "oklch(85% 0.007 88.6)",
+          "oklch(95% 0.007 88.6)"
+        ]
+      },
+      "ink": {
+        "role": "primary",
+        "displayName": "Field Ink",
+        "canonical": "#1c1b19",
+        "tonalRamp": [
+          "oklch(15% 0.004 84.6)",
+          "oklch(25% 0.004 84.6)",
+          "oklch(35% 0.004 84.6)",
+          "oklch(45% 0.004 84.6)",
+          "oklch(55% 0.004 84.6)",
+          "oklch(70% 0.004 84.6)",
+          "oklch(85% 0.004 84.6)",
+          "oklch(95% 0.004 84.6)"
+        ]
+      },
+      "muted": {
+        "role": "neutral",
+        "displayName": "Weathered Grey",
+        "canonical": "#67645e",
+        "tonalRamp": [
+          "oklch(15% 0.01 84.6)",
+          "oklch(25% 0.01 84.6)",
+          "oklch(35% 0.01 84.6)",
+          "oklch(45% 0.01 84.6)",
+          "oklch(55% 0.01 84.6)",
+          "oklch(70% 0.01 84.6)",
+          "oklch(85% 0.01 84.6)",
+          "oklch(95% 0.01 84.6)"
+        ]
+      },
+      "line": {
+        "role": "neutral",
+        "displayName": "Hairline",
+        "canonical": "#b9b5ad",
+        "tonalRamp": [
+          "oklch(15% 0.012 84.6)",
+          "oklch(25% 0.012 84.6)",
+          "oklch(35% 0.012 84.6)",
+          "oklch(45% 0.012 84.6)",
+          "oklch(55% 0.012 84.6)",
+          "oklch(70% 0.012 84.6)",
+          "oklch(85% 0.012 84.6)",
+          "oklch(95% 0.012 84.6)"
+        ]
+      },
+      "surface": {
+        "role": "neutral",
+        "displayName": "Bone Surface",
+        "canonical": "#f8f7f4",
+        "tonalRamp": [
+          "oklch(15% 0.004 91.4)",
+          "oklch(25% 0.004 91.4)",
+          "oklch(35% 0.004 91.4)",
+          "oklch(45% 0.004 91.4)",
+          "oklch(55% 0.004 91.4)",
+          "oklch(70% 0.004 91.4)",
+          "oklch(85% 0.004 91.4)",
+          "oklch(95% 0.004 91.4)"
+        ]
+      },
+      "paper-dark": {
+        "role": "neutral",
+        "displayName": "Stone Paper (dark)",
+        "canonical": "#1b1a18",
+        "tonalRamp": [
+          "oklch(15% 0.004 84.6)",
+          "oklch(25% 0.004 84.6)",
+          "oklch(35% 0.004 84.6)",
+          "oklch(45% 0.004 84.6)",
+          "oklch(55% 0.004 84.6)",
+          "oklch(70% 0.004 84.6)",
+          "oklch(85% 0.004 84.6)",
+          "oklch(95% 0.004 84.6)"
+        ]
+      },
+      "ink-dark": {
+        "role": "primary",
+        "displayName": "Field Ink (dark)",
+        "canonical": "#ecebe7",
+        "tonalRamp": [
+          "oklch(15% 0.005 95.1)",
+          "oklch(25% 0.005 95.1)",
+          "oklch(35% 0.005 95.1)",
+          "oklch(45% 0.005 95.1)",
+          "oklch(55% 0.005 95.1)",
+          "oklch(70% 0.005 95.1)",
+          "oklch(85% 0.005 95.1)",
+          "oklch(95% 0.005 95.1)"
+        ]
+      },
+      "muted-dark": {
+        "role": "neutral",
+        "displayName": "Weathered Grey (dark)",
+        "canonical": "#a29e96",
+        "tonalRamp": [
+          "oklch(15% 0.012 84.6)",
+          "oklch(25% 0.012 84.6)",
+          "oklch(35% 0.012 84.6)",
+          "oklch(45% 0.012 84.6)",
+          "oklch(55% 0.012 84.6)",
+          "oklch(70% 0.012 84.6)",
+          "oklch(85% 0.012 84.6)",
+          "oklch(95% 0.012 84.6)"
+        ]
+      },
+      "line-dark": {
+        "role": "neutral",
+        "displayName": "Hairline (dark)",
+        "canonical": "#3d3b37",
+        "tonalRamp": [
+          "oklch(15% 0.007 84.6)",
+          "oklch(25% 0.007 84.6)",
+          "oklch(35% 0.007 84.6)",
+          "oklch(45% 0.007 84.6)",
+          "oklch(55% 0.007 84.6)",
+          "oklch(70% 0.007 84.6)",
+          "oklch(85% 0.007 84.6)",
+          "oklch(95% 0.007 84.6)"
+        ]
+      },
+      "surface-dark": {
+        "role": "neutral",
+        "displayName": "Bone Surface (dark)",
+        "canonical": "#25241f",
+        "tonalRamp": [
+          "oklch(15% 0.009 97.7)",
+          "oklch(25% 0.009 97.7)",
+          "oklch(35% 0.009 97.7)",
+          "oklch(45% 0.009 97.7)",
+          "oklch(55% 0.009 97.7)",
+          "oklch(70% 0.009 97.7)",
+          "oklch(85% 0.009 97.7)",
+          "oklch(95% 0.009 97.7)"
+        ]
+      },
+      "badge-bg-dark": {
+        "role": "neutral",
+        "displayName": "Badge Ground (dark)",
+        "canonical": "#f1efea",
+        "tonalRamp": [
+          "oklch(15% 0.007 88.6)",
+          "oklch(25% 0.007 88.6)",
+          "oklch(35% 0.007 88.6)",
+          "oklch(45% 0.007 88.6)",
+          "oklch(55% 0.007 88.6)",
+          "oklch(70% 0.007 88.6)",
+          "oklch(85% 0.007 88.6)",
+          "oklch(95% 0.007 88.6)"
+        ]
+      },
+      "paper-sand": {
+        "role": "tertiary",
+        "displayName": "Sand Paper",
+        "canonical": "#ecd9a0",
+        "tonalRamp": [
+          "oklch(15% 0.076 91.8)",
+          "oklch(25% 0.076 91.8)",
+          "oklch(35% 0.076 91.8)",
+          "oklch(45% 0.076 91.8)",
+          "oklch(55% 0.076 91.8)",
+          "oklch(70% 0.076 91.8)",
+          "oklch(85% 0.076 91.8)",
+          "oklch(95% 0.076 91.8)"
+        ]
+      },
+      "paper-slate": {
+        "role": "tertiary",
+        "displayName": "Slate Paper",
+        "canonical": "#c5d0dc",
+        "tonalRamp": [
+          "oklch(15% 0.021 250.4)",
+          "oklch(25% 0.021 250.4)",
+          "oklch(35% 0.021 250.4)",
+          "oklch(45% 0.021 250.4)",
+          "oklch(55% 0.021 250.4)",
+          "oklch(70% 0.021 250.4)",
+          "oklch(85% 0.021 250.4)",
+          "oklch(95% 0.021 250.4)"
+        ]
+      },
+      "paper-sage": {
+        "role": "tertiary",
+        "displayName": "Sage Paper",
+        "canonical": "#bcd4a9",
+        "tonalRamp": [
+          "oklch(15% 0.064 131.5)",
+          "oklch(25% 0.064 131.5)",
+          "oklch(35% 0.064 131.5)",
+          "oklch(45% 0.064 131.5)",
+          "oklch(55% 0.064 131.5)",
+          "oklch(70% 0.064 131.5)",
+          "oklch(85% 0.064 131.5)",
+          "oklch(95% 0.064 131.5)"
+        ]
+      },
+      "paper-plum": {
+        "role": "tertiary",
+        "displayName": "Plum Paper",
+        "canonical": "#d8c4d4",
+        "tonalRamp": [
+          "oklch(15% 0.031 332.5)",
+          "oklch(25% 0.031 332.5)",
+          "oklch(35% 0.031 332.5)",
+          "oklch(45% 0.031 332.5)",
+          "oklch(55% 0.031 332.5)",
+          "oklch(70% 0.031 332.5)",
+          "oklch(85% 0.031 332.5)",
+          "oklch(95% 0.031 332.5)"
+        ]
+      },
+      "sev-avoid": {
+        "role": "secondary",
+        "displayName": "Oxblood",
+        "canonical": "#7a2a1c",
+        "tonalRamp": [
+          "oklch(15% 0.115 32.2)",
+          "oklch(25% 0.115 32.2)",
+          "oklch(35% 0.115 32.2)",
+          "oklch(45% 0.115 32.2)",
+          "oklch(55% 0.115 32.2)",
+          "oklch(70% 0.115 32.2)",
+          "oklch(85% 0.115 32.2)",
+          "oklch(95% 0.115 32.2)"
+        ]
+      },
+      "sev-caution": {
+        "role": "secondary",
+        "displayName": "Raw Umber Ochre",
+        "canonical": "#6e4f00",
+        "tonalRamp": [
+          "oklch(15% 0.092 82.4)",
+          "oklch(25% 0.092 82.4)",
+          "oklch(35% 0.092 82.4)",
+          "oklch(45% 0.092 82.4)",
+          "oklch(55% 0.092 82.4)",
+          "oklch(70% 0.092 82.4)",
+          "oklch(85% 0.092 82.4)",
+          "oklch(95% 0.092 82.4)"
+        ]
+      },
+      "sev-monitor": {
+        "role": "secondary",
+        "displayName": "Graphite",
+        "canonical": "#3d3d3d",
+        "tonalRamp": [
+          "oklch(15% 0 89.9)",
+          "oklch(25% 0 89.9)",
+          "oklch(35% 0 89.9)",
+          "oklch(45% 0 89.9)",
+          "oklch(55% 0 89.9)",
+          "oklch(70% 0 89.9)",
+          "oklch(85% 0 89.9)",
+          "oklch(95% 0 89.9)"
+        ]
+      },
+      "sev-minimal": {
+        "role": "secondary",
+        "displayName": "Pencil Grey",
+        "canonical": "#5c5c5c",
+        "tonalRamp": [
+          "oklch(15% 0 89.9)",
+          "oklch(25% 0 89.9)",
+          "oklch(35% 0 89.9)",
+          "oklch(45% 0 89.9)",
+          "oklch(55% 0 89.9)",
+          "oklch(70% 0 89.9)",
+          "oklch(85% 0 89.9)",
+          "oklch(95% 0 89.9)"
+        ]
+      }
+    },
+    "typographyMeta": {
+      "headline": {
+        "displayName": "Headline",
+        "purpose": "View titles (My meds, Foods to watch)."
+      },
+      "title": {
+        "displayName": "Title",
+        "purpose": "Severity group headings and panel entry names."
+      },
+      "body": {
+        "displayName": "Body",
+        "purpose": "Summaries, advice and list entries."
+      },
+      "label": {
+        "displayName": "Mono Label",
+        "purpose": "Uppercase classification tags, app title, breadcrumbs."
+      },
+      "badge": {
+        "displayName": "Badge",
+        "purpose": "Severity badges only."
+      },
+      "graph-label": {
+        "displayName": "Graph Label",
+        "purpose": "Node names in the 2D graph."
+      },
+      "fine-print": {
+        "displayName": "Fine Print",
+        "purpose": "Disclaimer footer."
+      }
+    },
+    "shadows": [],
+    "motion": [
+      {
+        "name": "theme-crossfade",
+        "value": "background-color 400ms ease, color 400ms ease",
+        "purpose": "Paper/ink change on tint or colour-mode switch; off under reduced motion."
+      },
+      {
+        "name": "graph-focus",
+        "value": "opacity 200ms",
+        "purpose": "Graph nodes and links dimming on selection; off under reduced motion."
+      }
+    ],
+    "breakpoints": [
+      {
+        "name": "compact",
+        "value": "768px"
+      }
+    ],
+    "effects": [
+      {
+        "name": "film-grain",
+        "value": "fixed fractalNoise SVG overlay, baseFrequency 0.9, 2 octaves, opacity 0.08, z-index 100",
+        "purpose": "Matte printed-paper texture over everything."
+      }
+    ]
+  },
+  "components": [
+    {
+      "name": "Pill Button",
+      "kind": "button",
+      "refersTo": "button-pill",
+      "description": "View toggles and controls; paper until pressed.",
+      "html": "<button class=\"ds-btn\">Explore</button>",
+      "css": ".ds-btn{font:15px/1.5 system-ui,sans-serif;color:var(--ink,#1c1b19);background:var(--surface,#f8f7f4);border:1px solid var(--line,#b9b5ad);border-radius:999px;padding:6px 12px;cursor:pointer}.ds-btn:focus-visible{outline:2px solid var(--ink,#1c1b19);outline-offset:2px}.ds-btn:hover{background:var(--paper,#e8e6e1)}"
+    },
+    {
+      "name": "Pill Button (pressed)",
+      "kind": "button",
+      "refersTo": "button-pill-pressed",
+      "description": "Active view or toggle on: ink fill.",
+      "html": "<button class=\"ds-btn ds-btn-on\" aria-pressed=\"true\">My meds</button>",
+      "css": ".ds-btn{font:15px/1.5 system-ui,sans-serif;color:var(--ink,#1c1b19);background:var(--surface,#f8f7f4);border:1px solid var(--line,#b9b5ad);border-radius:999px;padding:6px 12px;cursor:pointer}.ds-btn:focus-visible{outline:2px solid var(--ink,#1c1b19);outline-offset:2px}.ds-btn-on{background:var(--ink,#1c1b19);color:var(--paper,#e8e6e1)}"
+    },
+    {
+      "name": "Medication Chip",
+      "kind": "chip",
+      "refersTo": "chip-medication",
+      "description": "One per medication in My meds, with remove.",
+      "html": "<span class=\"ds-chip\">Warfarin <button aria-label=\"Remove Warfarin\">×</button></span>",
+      "css": ".ds-chip{display:inline-flex;gap:6px;align-items:center;padding:4px 6px 4px 12px;border-radius:999px;background:var(--ink,#1c1b19);color:var(--paper,#e8e6e1);font:15px/1.5 system-ui,sans-serif}.ds-chip button{border:0;background:none;color:inherit;cursor:pointer;font:inherit}.ds-chip button:focus-visible{outline:2px solid currentColor;outline-offset:2px}"
+    },
+    {
+      "name": "Severity Badges",
+      "kind": "custom",
+      "refersTo": "badge-avoid",
+      "description": "The guide stamp: severity word in its earth-pigment ink.",
+      "html": "<span class=\"ds-badge\" style=\"color:#7a2a1c\">Avoid</span> <span class=\"ds-badge\" style=\"color:#6e4f00\">Caution</span> <span class=\"ds-badge\" style=\"color:#3d3d3d\">Monitor</span> <span class=\"ds-badge\" style=\"color:#5c5c5c\">Minimal</span>",
+      "css": ".ds-badge{display:inline-block;padding:2px 8px;border-radius:999px;background:var(--badge-bg,#f8f7f4);border:1px solid currentColor;font:600 11px/1.4 ui-monospace,Menlo,monospace;text-transform:uppercase;letter-spacing:.08em}"
+    },
+    {
+      "name": "Medication Input",
+      "kind": "input",
+      "refersTo": "input-medication",
+      "description": "Pill field for adding medications; brand names resolve.",
+      "html": "<label class=\"ds-label\">Add a medication<input class=\"ds-input\" type=\"search\" placeholder=\"e.g. warfarin or Coumadin\"></label>",
+      "css": ".ds-label{display:block;font:11px/1.2 ui-monospace,Menlo,monospace;text-transform:uppercase;letter-spacing:.12em;color:var(--muted,#67645e)}.ds-input{display:block;width:100%;margin-top:6px;padding:10px 14px;border-radius:999px;border:1px solid var(--line,#b9b5ad);background:var(--surface,#f8f7f4);color:var(--ink,#1c1b19);font:15px/1.5 system-ui,sans-serif}.ds-input:focus-visible{outline:2px solid var(--ink,#1c1b19);outline-offset:2px}"
+    },
+    {
+      "name": "Explore Search",
+      "kind": "input",
+      "refersTo": "input-search",
+      "description": "Square search over the graph.",
+      "html": "<input class=\"ds-search\" type=\"search\" placeholder=\"Search drugs, foods, mechanisms  ( / )\">",
+      "css": ".ds-search{width:100%;max-width:420px;padding:8px 10px;border:1px solid var(--line,#b9b5ad);border-radius:0;background:var(--surface,#f8f7f4);color:var(--ink,#1c1b19);font:15px/1.5 system-ui,sans-serif}.ds-search:focus-visible{outline:2px solid var(--ink,#1c1b19);outline-offset:2px}"
+    },
+    {
+      "name": "Top Navigation",
+      "kind": "nav",
+      "refersTo": "button-pill",
+      "description": "Mono title left, view pills right.",
+      "html": "<nav class=\"ds-nav\"><span class=\"ds-title\">Food–Drug Interaction Map</span><span class=\"ds-tabs\"><button class=\"ds-btn ds-btn-on\" aria-pressed=\"true\">Explore</button><button class=\"ds-btn\">My meds</button><button class=\"ds-btn\">Color</button></span></nav>",
+      "css": ".ds-btn{font:15px/1.5 system-ui,sans-serif;color:var(--ink,#1c1b19);background:var(--surface,#f8f7f4);border:1px solid var(--line,#b9b5ad);border-radius:999px;padding:6px 12px;cursor:pointer}.ds-btn:focus-visible{outline:2px solid var(--ink,#1c1b19);outline-offset:2px}.ds-btn-on{background:var(--ink,#1c1b19);color:var(--paper,#e8e6e1)}.ds-nav{display:flex;align-items:center;gap:12px;padding:12px 16px}.ds-title{margin-right:auto;font:11px/1.2 ui-monospace,Menlo,monospace;text-transform:uppercase;letter-spacing:.12em;color:var(--muted,#67645e)}.ds-tabs{display:flex;gap:6px}"
+    },
+    {
+      "name": "Detail Panel",
+      "kind": "card",
+      "refersTo": "panel-detail",
+      "description": "A page of the guide: entry, badges, advice, sources.",
+      "html": "<section class=\"ds-panel\"><div class=\"ds-crumb\">Food · Grapefruit and relatives</div><h2>Grapefruit</h2><div class=\"ds-row\"><span class=\"ds-badge\" style=\"color:#7a2a1c\">Avoid</span> <u>Amiodarone</u><p>Grapefruit juice raises amiodarone exposure, and the label says to avoid it.</p></div></section>",
+      "css": ".ds-panel{width:min(26rem,100%);padding:16px;background:var(--surface,#f8f7f4);color:var(--ink,#1c1b19);border:1px solid currentColor;font:15px/1.5 system-ui,sans-serif}.ds-panel h2{margin:8px 0;font-family:\"Helvetica Neue\",Helvetica,Arial,sans-serif;font-weight:700;letter-spacing:-.01em}.ds-crumb{font:11px/1.2 ui-monospace,Menlo,monospace;text-transform:uppercase;letter-spacing:.12em;color:var(--muted,#67645e)}.ds-row{padding:12px 0;border-top:1px solid color-mix(in srgb,currentColor 20%,transparent)}.ds-badge{display:inline-block;padding:2px 8px;border-radius:999px;background:var(--badge-bg,#f8f7f4);border:1px solid currentColor;font:600 11px/1.4 ui-monospace,Menlo,monospace;text-transform:uppercase;letter-spacing:.08em}"
+    }
+  ],
+  "narrative": {
+    "northStar": "The Field Guide",
+    "overview": "A printed reference you carry to the table. Everything sits on matte paper with a faint film grain, ruled with hairlines and labeled in small monospaced capitals, like specimen tags in a naturalist's guide. Text is ink; the only colored marks that carry meaning are the severity inks, stamped in earth pigments onto light badges. The interface is quiet so the warnings can be read without alarm.\n\nDensity is moderate and editorial: one column of findings grouped by severity, a ruled list of entries, a detail panel that reads like a page of the guide. The graph in Explore is the guide's fold-out map: muted grey nodes and faint links until something is selected, then the relevant paths take on severity ink and everything else recedes.\n\nContext is carried by paper colour, not decoration. With the Color toggle on, the paper itself shifts to say what kind of thing you are looking at: sand for the overview, slate for a drug, sage for a food, plum for a mechanism. This rejects three things by name: sterile clinical/hospital UI (white plus medical blue, red-cross alarmism), glowing neon data-viz dashboards, and SaaS defaults (gradient buttons, card grids, rounded-shadow boxes).",
+    "keyCharacteristics": [
+      "Matte tinted paper with an 8% fractal-noise grain over everything.",
+      "Ink on paper; colour reserved for severity and for kind-of-thing wayfinding.",
+      "Monospaced uppercase labels as the guide's tagging voice.",
+      "Hairline (1px) rules and outlines instead of filled boxes.",
+      "Soft pill controls that fill with ink when active.",
+      "Light and dark modes, each with every tint, all contrast-tested to WCAG AA."
+    ],
+    "rules": [
+      {
+        "name": "The Pigment Is Meaning Rule",
+        "body": "Severity inks appear only where a severity is being stated: badges, focused interaction links, the danger banner. Never as decoration, headings, or brand colour.",
+        "section": "colors"
+      },
+      {
+        "name": "The Paper Says What It Is Rule",
+        "body": "A tint always signals the selected kind (drug, food, mechanism, overview). Tints are never decorative, never mixed within one view, and always optional behind the Color toggle; grey is the default.",
+        "section": "colors"
+      },
+      {
+        "name": "The Tested Pair Rule",
+        "body": "Every ink/paper, muted/surface and severity/badge pair must pass the AA tests in `theme/tokens.test.ts`. A new colour is not added until its pairs are in that test.",
+        "section": "colors"
+      },
+      {
+        "name": "The Typewritten Tag Rule",
+        "body": "Anything that classifies (kind, group, section, severity) is set in uppercase monospace with open tracking. Anything a person reads as a sentence is set in the body sans, sentence case.",
+        "section": "typography"
+      },
+      {
+        "name": "The Hairline First Rule",
+        "body": "Reach for a 1px rule or outline before a shadow. A shadow is allowed only on something that floats over the graph or page, never on in-flow content.",
+        "section": "elevation"
+      }
+    ],
+    "dos": [
+      "**Do** set classifications in uppercase mono labels (11px, 0.12em) and sentences in the body sans.",
+      "**Do** pair every severity colour with its word in a badge.",
+      "**Do** use the paper tint only to signal the selected kind, and only when the Color toggle is on.",
+      "**Do** separate content with 1px hairlines before reaching for fills or shadows.",
+      "**Do** add new colour pairs to `theme/tokens.test.ts` and keep them at AA (4.5:1) in every tint and mode.",
+      "**Do** keep the disclaimer footer visible on every view."
+    ],
+    "donts": [
+      "**Don't** use sterile clinical styling: white backgrounds with medical blue, red crosses, or alarm-red warnings.",
+      "**Don't** make the graph a glowing neon dashboard; it stays ink and paper on a matte ground.",
+      "**Don't** use SaaS defaults: gradient buttons, card grids, or rounded boxes with drop shadows.",
+      "**Don't** use severity inks for decoration, branding or headings.",
+      "**Don't** put shadows on in-flow content; shadows, if ever used, are for floating layers only."
+    ]
+  }
+}
