@@ -177,8 +177,8 @@ Each tint is a full six-role palette (paper, ink, muted, line, badge background,
 ### Neutral
 - **Stone Paper** (`paper`): page background; the default "grey" world.
 - **Bone Surface** (`surface`): raised things ink sits on: inputs, search results, the detail panel, badge backgrounds, unpressed pills.
-- **Weathered Grey** (`muted`): mono labels, secondary text, aliases, footer, graph labels and unselected nodes.
-- **Hairline** (`line`): 1px rules, input outlines, graph links at rest.
+- **Weathered Grey** (`muted`): mono labels, secondary text, aliases, footer, placeholders, graph labels and unselected nodes; also the outline of every control (inputs, pill buttons), which needs 3:1 non-text contrast.
+- **Hairline** (`line`): 1px dividing rules and graph links at rest. Decorative only: never the sole boundary of a control.
 - Dark mode inverts paper and ink (`paper-dark`, `ink-dark`, …) but keeps badge backgrounds light (`badge-bg-dark`) so the severity inks read the same in both modes.
 
 ### Named Rules
@@ -235,25 +235,25 @@ The Explore search field (square) and the My meds input (pill) currently disagre
 ### Buttons
 Quiet and tactile; they look like paper until pressed.
 - **Shape:** full pill (999px).
-- **Default:** Bone Surface fill, ink text, 1px hairline outline, 6px 12px padding.
+- **Default:** Bone Surface fill, ink text, 1px Weathered Grey outline, 6px 12px padding.
 - **Pressed / Selected** (`aria-pressed="true"`): fills with Field Ink, text turns paper. Used for the active view (Explore / My meds) and the Color, 2D and Mechanisms toggles.
 - **Focus:** 2px ink outline, 2px offset (global `:focus-visible`).
 - **Link button:** unstyled underlined text for in-panel navigation.
 
 ### Chips
-- **Medication chip:** solid Field Ink pill with paper text and a × remove button; one per medication in My meds.
+- **Medication chip:** solid Field Ink pill with paper text and a × remove button whose hit area is 44px (negative margins keep the chip compact); one per medication in My meds.
 
 ### Severity Badges
 The guide's stamp. Pill, light badge background, 1px `currentColor` outline, uppercase mono 600 at 11px, in the severity's ink. Always printed with its word (AVOID, CAUTION, MONITOR, MINIMAL); colour never stands alone.
 
 ### Cards / Containers
 - **Detail panel:** square, Bone Surface, 1px `currentColor` border, 16px padding, docked bottom-right. Interaction rows inside are separated by 20%-ink hairlines.
-- **Warning entries (My meds):** not cards; disclosure rows (`<details>`) separated by top hairlines, 12px vertical padding.
+- **Warning entries (My meds):** not cards; disclosure rows (`<details>`) separated by top hairlines, with a 44px-minimum summary. Each affected drug whose severity differs from the row's carries its own badge.
 - **Notices / banner:** hairline outline on surface; the danger banner uses an Oxblood outline.
 
 ### Inputs / Fields
-- **Medication input:** pill, Bone Surface, hairline outline, 10px 14px padding; suggestions below on a 12px-radius surface with 8px-radius rows that fill with paper on hover/focus.
-- **Explore search:** square, Bone Surface, hairline outline, 8px 10px padding, max 420px; results as a ruled list with muted aliases and a muted match count.
+- **Medication input:** pill, Bone Surface, Weathered Grey outline, 10px 14px padding; suggestions below on a 12px-radius surface with 8px-radius rows that fill with paper on hover/focus.
+- **Explore search:** square, Bone Surface, Weathered Grey outline, 8px 10px padding, max 420px; results as a ruled list with muted aliases and a muted match count.
 - **Focus:** global 2px ink outline.
 
 ### Navigation

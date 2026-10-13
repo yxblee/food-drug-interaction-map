@@ -107,6 +107,9 @@ export function MyMedsTab({ graph, meds, setMeds, onSeeOnMap }: MyMedsTabProps) 
 
       <section className="meds__results" aria-labelledby="results-title">
         <h2 id="results-title">Foods to watch</h2>
+        <p role="status" className="meds__status">
+          {meds.length > 0 && resultsSummary(warnings)}
+        </p>
         {meds.length === 0 ? (
           <p>
             Add the medications you take, such as warfarin, simvastatin or levothyroxine, to see
@@ -214,3 +217,11 @@ function WarningRow({ warning: w, ix }: { warning: FoodWarning; ix: Index }) {
 }
 
 const chipId = (id: string) => `med-chip-${id}`
+
+const plural = (n: number, one: string, many: string) => `${n} ${n === 1 ? one : many}`
+
+function resultsSummary(warnings: FoodWarning[]): string {
+  const avoid = warnings.filter((w) => w.severity === 'avoid').length
+  const watch = plural(warnings.length, 'food to watch', 'foods to watch')
+  return avoid ? `${watch}, ${avoid} to avoid` : watch
+}

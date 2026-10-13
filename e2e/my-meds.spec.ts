@@ -60,3 +60,40 @@ test('a brand name for a med already listed says so instead of "no match"', asyn
   await expect(chips).toHaveCount(1)
   await expect(chips.first()).toBeFocused()
 })
+
+test('results are announced and controls are readable and easy to hit', async ({ page }) => {
+  await page.goto('./')
+  await page.getByRole('tab', { name: 'My meds' }).click()
+  const input = page.getByLabel('Add a medication')
+  for (const med of ['warfarin', 'simvastatin']) {
+    await input.fill(med)
+    await input.press('Enter')
+  }
+
+  await expect(page.getByRole('status').filter({ hasText: 'foods to watch' })).toHaveText(
+    /^\d+ foods to watch, 1 to avoid$/,
+  )
+
+  const minHit = async (box: { width: number; height: number } | null, dims: 'h' | 'wh') => {
+    expect(box).not.toBeNull()
+    expect(box!.height).toBeGreaterThanOrEqual(44)
+    if (dims === 'wh') expect(box!.width).toBeGreaterThanOrEqual(44)
+  }
+  await minHit(await page.getByRole('button', { name: 'Remove Warfarin' }).boundingBox(), 'wh')
+  await minHit(await page.locator('.warning summary').first().boundingBox(), 'h')
+
+  const colors = await input.evaluate((el) => {
+    const probe = document.createElement('span')
+    probe.style.color = 'var(--muted)'
+    document.body.append(probe)
+    const muted = getComputedStyle(probe).color
+    probe.remove()
+    return {
+      muted,
+      border: getComputedStyle(el).borderTopColor,
+      placeholder: getComputedStyle(el, '::placeholder').color,
+    }
+  })
+  expect(colors.border).toBe(colors.muted)
+  expect(colors.placeholder).toBe(colors.muted)
+})

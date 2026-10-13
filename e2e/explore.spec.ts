@@ -41,3 +41,21 @@ test('stale node links clear themselves', async ({ page }) => {
   await expect(page.locator('.notice')).toContainText('no longer in the dataset')
   await expect(page).not.toHaveURL(/node=/)
 })
+
+test('explore controls keep the 16px gutter and a readable search field', async ({ page }) => {
+  await page.goto('./')
+  const mechanisms = page.getByRole('button', { name: 'Mechanisms' })
+  expect((await mechanisms.boundingBox())!.x).toBeGreaterThanOrEqual(16)
+
+  const search = page.getByLabel('Search drugs, foods and mechanisms')
+  const [border, placeholder, muted] = await search.evaluate((el) => {
+    const probe = document.createElement('span')
+    probe.style.color = 'var(--muted)'
+    document.body.append(probe)
+    const m = getComputedStyle(probe).color
+    probe.remove()
+    return [getComputedStyle(el).borderTopColor, getComputedStyle(el, '::placeholder').color, m]
+  })
+  expect(border).toBe(muted)
+  expect(placeholder).toBe(muted)
+})

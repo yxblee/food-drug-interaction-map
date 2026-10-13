@@ -81,13 +81,14 @@
   flex-direction: column;
   align-items: flex-start;
   gap: 4px;
-  padding-bottom: 8px;
+  padding: 0 16px 8px;
 }
 .explore__bar > * {
   pointer-events: auto;
 }
 .explore__bar .search {
   width: 100%;
+  padding: 0;
 }
 .search__results {
   background: var(--surface);
