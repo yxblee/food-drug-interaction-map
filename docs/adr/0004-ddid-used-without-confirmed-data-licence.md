@@ -1,0 +1,3 @@
+# DDID is used as a candidate source although its data licence is unconfirmed
+
+DDID publishes its records as freely downloadable CSVs, but neither the site nor the paper states a licence for the data; the CC BY 4.0 licence covers the paper only. We use it anyway because we take only the fact that a food–drug pair was studied, plus the record's PMID, and never copy its records, grades or text into `data/`. The CSVs are cached locally and not redistributed, DDID grades only decide which pairs are worth checking, and each Pending interaction cites the underlying study, not DDID. If DDID's authors object, we remove the `ddid` Source and its Pending interactions.
