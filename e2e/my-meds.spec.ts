@@ -241,3 +241,57 @@ test('an expanded warning shows each Drug detail once', async ({ page }) => {
   const summary = (await row.locator('.irow__summary').textContent())!.trim()
   await expect(warning.getByText(summary, { exact: true })).toHaveCount(1)
 })
+
+test('type is readable: severity meaning is body text, footer is 14px+, chip Brand name is AA in both modes', async ({
+  page,
+}) => {
+  await page.goto('./')
+  await page.getByRole('tab', { name: 'My meds' }).click()
+  const input = page.getByLabel('Add a medication')
+  await input.fill('Coumadin')
+  await input.press('Enter')
+
+  const meaning = page.locator('.meds__sev .sev-meaning').first()
+  await expect(meaning).toBeVisible()
+  const m = await meaning.evaluate((el) => {
+    const cs = getComputedStyle(el)
+    return {
+      size: parseFloat(cs.fontSize),
+      ratio: parseFloat(cs.lineHeight) / parseFloat(cs.fontSize),
+      transform: cs.textTransform,
+    }
+  })
+  expect(m.size).toBeGreaterThanOrEqual(15)
+  expect(m.ratio).toBeGreaterThanOrEqual(1.4)
+  expect(m.transform).toBe('none')
+
+  const footer = await page
+    .locator('.app__footer')
+    .evaluate((el) => parseFloat(getComputedStyle(el).fontSize))
+  expect(footer).toBeGreaterThanOrEqual(14)
+
+  for (const scheme of ['light', 'dark'] as const) {
+    await page.emulateMedia({ colorScheme: scheme })
+    const ratio = await page
+      .locator('.chip__brand')
+      .first()
+      .evaluate((el) => {
+        const lum = (rgb: string) => {
+          const [r, g, b] = rgb
+            .match(/[\d.]+/g)!
+            .slice(0, 3)
+            .map((v) => {
+              const c = Number(v) / 255
+              return c <= 0.04045 ? c / 12.92 : ((c + 0.055) / 1.055) ** 2.4
+            })
+          return 0.2126 * r + 0.7152 * g + 0.0722 * b
+        }
+        const [hi, lo] = [
+          lum(getComputedStyle(el).color),
+          lum(getComputedStyle(el.closest('.chip')!).backgroundColor),
+        ].sort((a, b) => b - a)
+        return (hi + 0.05) / (lo + 0.05)
+      })
+    expect(ratio, scheme).toBeGreaterThanOrEqual(4.5)
+  }
+})

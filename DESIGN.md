@@ -56,9 +56,14 @@ typography:
     fontSize: "9px"
     fontWeight: 400
     letterSpacing: "0.1em"
+  severity-meaning:
+    fontFamily: "system-ui, -apple-system, 'Segoe UI', sans-serif"
+    fontSize: "15px"
+    fontWeight: 400
+    lineHeight: 1.5
   fine-print:
     fontFamily: "system-ui, -apple-system, 'Segoe UI', sans-serif"
-    fontSize: "12px"
+    fontSize: "14px"
     fontWeight: 400
     lineHeight: 1.5
 rounded:
@@ -200,10 +205,11 @@ Each tint is a full six-role palette (paper, ink, muted, line, badge background,
 - **Headline** (700, 28px, -0.01em): view titles such as "My meds" and "Foods to watch".
 - **Title** (700, 18px, -0.01em): severity group headings; the detail panel's entry name uses the browser-default h2 size.
 - **Body** (400, 15px, 1.5): summaries, advice, list entries. Plain-language sentences, kept within the panel's 26rem or the results column.
-- **Label** (400, 11px, uppercase, 0.12em): the app title, section tags ("ADD A MEDICATION"), severity group subtitles, panel breadcrumbs ("FOOD · GRAPEFRUIT AND RELATIVES").
+- **Label** (400, 11px, uppercase, 0.12em): the app title, section tags ("ADD A MEDICATION"), panel breadcrumbs ("FOOD · GRAPEFRUIT AND RELATIVES").
 - **Badge** (600, 11px, uppercase, 0.08em): severity badges only.
 - **Graph label** (9px mono, 0.1em): node names in the 2D graph.
-- **Fine print** (12px): the persistent disclaimer footer.
+- **Severity meaning** (400, 15px, sentence case, line-height 1.5, Weathered Grey): the one sentence under each severity group heading in My meds and the Explore panel. Body text, not a label; `.mono-label` stays for true metadata.
+- **Fine print** (14px): the persistent disclaimer footer.
 
 ### Named Rules
 **The Typewritten Tag Rule.** Anything that classifies (kind, group, section, severity) is set in uppercase monospace with open tracking. Anything a person reads as a sentence is set in the body sans, sentence case.
@@ -241,7 +247,7 @@ Quiet and tactile; they look like paper until pressed.
 - **Link button:** unstyled underlined text for in-panel navigation.
 
 ### Chips
-- **Medication chip:** solid Field Ink pill with paper text and a × remove button whose hit area is 44px (negative margins keep the chip compact); one per medication in My meds.
+- **Medication chip:** solid Field Ink pill with paper text and a × remove button whose hit area is 44px (negative margins keep the chip compact); one per medication in My meds. The Brand name in parentheses uses a chip-specific muted ink (`--chip-muted`, paper mixed 80% toward ink per tint and mode in `theme/tokens.ts`), at least 4.5:1 on the ink fill in every tint and mode.
 - **Not-checked chip:** same pill, but transparent with a 1px dashed ink outline and ink text, plus a "not checked" mono tag before the ×. Marks a name the Dataset doesn't know; always paired with the dashed "Not checked: …" line above Foods to watch.
 - **Undo line:** in My meds' status region, "List cleared · Undo" with Undo as an underlined text button (44px tall), shown for 10 seconds after Clear all.
 
@@ -273,7 +279,7 @@ Paper and ink cross-fade over 400ms `ease` when the tint or colour mode changes;
 ## Do's and Don'ts
 
 ### Do:
-- **Do** set classifications in uppercase mono labels (11px, 0.12em) and sentences in the body sans.
+- **Do** set classifications in uppercase mono labels (11px, 0.12em) and sentences (including severity meanings) in the body sans.
 - **Do** pair every severity colour with its word in a badge.
 - **Do** use the paper tint only to signal the selected kind, and only when the Color toggle is on.
 - **Do** separate content with 1px hairlines before reaching for fills or shadows.

@@ -36,7 +36,7 @@ export function SeverityGroupHeading({ severity }: { severity: Severity }) {
       <h3 id={`sev-${severity}`}>
         <SeverityBadge severity={severity} decorative /> {SEVERITY_LABEL[severity]}
       </h3>
-      <p className="mono-label">{SEVERITY_LEGEND[severity]}</p>
+      <p className="sev-meaning">{SEVERITY_LEGEND[severity]}</p>
     </>
   )
 }

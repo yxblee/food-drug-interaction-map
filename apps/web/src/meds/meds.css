@@ -76,6 +76,9 @@
   background: var(--ink);
   color: var(--paper);
 }
+.chip .chip__brand {
+  color: var(--chip-muted);
+}
 .chip button {
   /* 44px hit area without growing the chip */
   min-width: 44px;

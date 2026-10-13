@@ -210,7 +210,7 @@ export function MyMedsTab({
           {meds.map((id) => (
             <li key={id} id={chipId(id)} tabIndex={-1} className="chip">
               {name(id)}
-              {brands[id] && <span className="mono-label"> ({brands[id]})</span>}
+              {brands[id] && <span className="chip__brand mono-label"> ({brands[id]})</span>}
               <button aria-label={`Remove ${name(id)}`} onClick={() => removeMed(id)}>
                 ✕
               </button>

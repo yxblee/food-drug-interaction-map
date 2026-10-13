@@ -390,3 +390,23 @@ test('the panel stops above the footer, which stays clickable and visible', asyn
   expect(r.hits).toEqual([true, true, true])
   expect(r.visible).toBe(true)
 })
+
+test('Explore panel Severity meaning is sentence-case body text', async ({ page }) => {
+  await page.goto('./')
+  const search = page.getByLabel('Search drugs, foods and mechanisms')
+  await search.fill('grapefruit')
+  await search.press('Enter')
+  const meaning = page.getByRole('complementary').locator('.sev-meaning').first()
+  await expect(meaning).toBeVisible()
+  const m = await meaning.evaluate((el) => {
+    const cs = getComputedStyle(el)
+    return {
+      size: parseFloat(cs.fontSize),
+      ratio: parseFloat(cs.lineHeight) / parseFloat(cs.fontSize),
+      transform: cs.textTransform,
+    }
+  })
+  expect(m.size).toBeGreaterThanOrEqual(15)
+  expect(m.ratio).toBeGreaterThanOrEqual(1.4)
+  expect(m.transform).toBe('none')
+})
