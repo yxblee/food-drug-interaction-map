@@ -356,3 +356,17 @@ test('Prev and Next are named by the kind being browsed', async ({ page }) => {
   await expect(panel.getByRole('button', { name: /Previous food/ })).toBeVisible()
   await expect(panel.getByRole('button', { name: /Next food/ })).toBeVisible()
 })
+
+test('every pill button is at least 44px tall and the panel close is 44x44', async ({ page }) => {
+  await page.goto('./')
+  await page.getByRole('button', { name: 'Try grapefruit' }).click()
+  await expect(page.getByRole('button', { name: 'Close panel' })).toBeVisible()
+  const boxes = await page
+    .locator('.pill-button:visible')
+    .evaluateAll((els) => els.map((e) => e.getBoundingClientRect().toJSON()))
+  expect(boxes.length).toBeGreaterThan(4)
+  for (const b of boxes) expect(Math.round(b.height)).toBeGreaterThanOrEqual(44)
+  const close = await page.getByRole('button', { name: 'Close panel' }).boundingBox()
+  expect(Math.round(close!.width)).toBe(44)
+  expect(Math.round(close!.height)).toBe(44)
+})

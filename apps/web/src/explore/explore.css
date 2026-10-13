@@ -115,7 +115,7 @@
 .explore__hint {
   /* Sits over the 2D graph's labels on narrow screens. */
   margin: 4px 0 0 -4px;
-  padding: 0 4px;
+  padding: 4px;
   background: var(--paper);
 }
 .legend {
@@ -164,5 +164,10 @@
 }
 .legend p {
   margin: 8px 0 0;
-  font-size: 13px;
+  font-size: 12px;
+}
+
+.panel__top .pill-button {
+  min-width: 44px;
+  padding: 0;
 }

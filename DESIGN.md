@@ -235,7 +235,7 @@ The Explore search field (square) and the My meds input (pill) currently disagre
 ### Buttons
 Quiet and tactile; they look like paper until pressed.
 - **Shape:** full pill (999px).
-- **Default:** Bone Surface fill, ink text, 1px Weathered Grey outline, 6px 12px padding.
+- **Default:** Bone Surface fill, ink text, 1px Weathered Grey outline, 6px 12px padding, 44px minimum height (the panel's close button is a 44×44 square). Colour is set on the pill itself so fill and text switch together on a theme change.
 - **Pressed / Selected** (`aria-pressed="true"`): fills with Field Ink, text turns paper. Used for the active view (Explore / My meds) and the Color, 2D and Mechanisms toggles.
 - **Focus:** 2px ink outline, 2px offset (global `:focus-visible`).
 - **Link button:** unstyled underlined text for in-panel navigation.

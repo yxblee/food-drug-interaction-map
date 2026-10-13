@@ -106,6 +106,9 @@ h3 {
   background: var(--surface);
   border-radius: 999px;
   padding: 6px 12px;
+  min-height: 44px;
+  /* Own colour, not inherited from body: fill and text swap together on theme change. */
+  color: var(--ink);
   cursor: pointer;
 }
 .pill-button[aria-pressed='true'] {
