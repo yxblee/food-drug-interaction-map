@@ -435,3 +435,47 @@ test('Explore search is a combobox: arrows move, Enter picks, Escape closes', as
   await search.press('Escape')
   await expect(search).toHaveAttribute('aria-expanded', 'false')
 })
+
+test('Explore points to My meds only while the list is empty, and focus follows', async ({
+  page,
+}) => {
+  await page.goto('./')
+  const pointer = page.getByRole('button', { name: 'Check them in My meds' })
+  await expect(pointer).toBeVisible()
+  await pointer.click()
+  await expect(page.getByRole('heading', { name: 'My meds' })).toBeVisible()
+  await expect(page.getByLabel('Add a medication')).toBeFocused()
+
+  await page.getByLabel('Add a medication').fill('warfarin')
+  await page.getByLabel('Add a medication').press('Enter')
+  await page.getByRole('tab', { name: 'Explore' }).click()
+  await expect(page.getByRole('button', { name: 'Try grapefruit' })).toBeVisible()
+  await expect(pointer).toHaveCount(0)
+})
+
+test('the header shows the product name, keeps Color apart from the view tabs, and does not overflow', async ({
+  page,
+}) => {
+  await page.goto('./')
+  const title = page.getByRole('heading', { name: 'Food–Drug Interaction Map', level: 1 })
+  await expect(title).toBeVisible()
+  const box = (await title.boundingBox())!
+  const vp = page.viewportSize()!
+  expect(box.width).toBeGreaterThan(0)
+  expect(box.height).toBeGreaterThan(0)
+  expect(box.x).toBeGreaterThanOrEqual(0)
+  expect(box.x + box.width).toBeLessThanOrEqual(vp.width)
+  expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true)
+
+  const last = (await page.getByRole('tab', { name: 'My meds' }).boundingBox())!
+  const color = page.getByRole('button', { name: 'Color', exact: true })
+  const c = (await color.boundingBox())!
+  expect(c.x - (last.x + last.width)).toBeGreaterThanOrEqual(16)
+  expect(
+    await page.locator('.app__bar').evaluate((b) => b.getBoundingClientRect().height),
+  ).toBeLessThanOrEqual(130)
+
+  const before = await color.getAttribute('aria-pressed')
+  await color.click()
+  expect(await color.getAttribute('aria-pressed')).not.toBe(before)
+})

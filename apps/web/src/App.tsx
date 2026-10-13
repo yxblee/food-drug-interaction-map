@@ -16,6 +16,7 @@ export function App() {
   const [error, setError] = useState<string | null>(null)
   const [mapNote, setMapNote] = useState('')
   const focusMap = useRef(false)
+  const focusMeds = useRef(false)
   const { meds, setMeds, brands, setBrands, notChecked, setNotChecked, dropped } = useMeds(graph)
   const ix = useMemo(() => (graph ? buildIndex(graph.nodes, graph.interactions) : null), [graph])
   // Derived, so it follows the Medication list while the filter is on.
@@ -43,6 +44,18 @@ export function App() {
     focusMap.current = false
     document.querySelector<HTMLElement>('.graph-host')?.focus()
   }, [state.tab, graph])
+
+  // After the Explore pointer to My meds, keyboard focus follows to the Add box.
+  useEffect(() => {
+    if (!focusMeds.current || state.tab !== 'meds' || !graph) return
+    focusMeds.current = false
+    document.getElementById('med-input')?.focus()
+  }, [state.tab, graph])
+
+  const openMeds = () => {
+    focusMeds.current = true
+    update({ tab: 'meds' }, { push: true })
+  }
 
   const retry = () => {
     setError(null)
@@ -72,7 +85,7 @@ export function App() {
           ))}
         </nav>
         <button
-          className="pill-button app__palette"
+          className="app__palette"
           aria-pressed={state.tint}
           onClick={() => update({ tint: !state.tint })}
         >
@@ -106,6 +119,8 @@ export function App() {
             palette={palette}
             medsFilter={medsFilter}
             clearMedsFilter={() => update({ meds: false })}
+            hasMeds={meds.length > 0}
+            openMeds={openMeds}
           />
         ) : (
           <MyMedsTab

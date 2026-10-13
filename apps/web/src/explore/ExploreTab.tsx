@@ -23,6 +23,8 @@ export interface ExploreTabProps {
   palette: Palette
   medsFilter: Set<string> | null
   clearMedsFilter: () => void
+  hasMeds: boolean
+  openMeds: () => void
 }
 
 export function ExploreTab({
@@ -32,6 +34,8 @@ export function ExploreTab({
   palette,
   medsFilter,
   clearMedsFilter,
+  hasMeds,
+  openMeds,
 }: ExploreTabProps) {
   // Search, browsing and highlighting all work within what the graph currently shows.
   const nodes = useMemo(
@@ -123,6 +127,15 @@ export function ExploreTab({
             <button className="link-button" onClick={() => select(STARTER)}>
               Try grapefruit
             </button>
+            {/* Only while the list is empty: otherwise the person already knows My meds. */}
+            {!hasMeds && (
+              <>
+                {' · Taking medicines? '}
+                <button className="link-button" onClick={openMeds}>
+                  Check them in My meds
+                </button>
+              </>
+            )}
           </p>
         )}
       </div>
