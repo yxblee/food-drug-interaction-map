@@ -5,6 +5,7 @@
   "scripts": {
     "build:db": "node apps/api/scripts/build-db.ts data dist/data.db",
     "export:static": "node apps/api/scripts/export-static.ts dist/data.db apps/web/public",
+    "build:static": "node --run build:db && node --run export:static && VITE_STATIC_DATA=1 vp -C apps/web build",
     "start": "node apps/api/src/server.ts"
   },
   "devDependencies": {

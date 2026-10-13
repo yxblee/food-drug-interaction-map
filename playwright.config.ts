@@ -15,8 +15,7 @@ export default defineConfig({
   ],
   webServer: {
     // The static GitHub Pages build, served under its repo subpath.
-    command:
-      'node apps/api/scripts/build-db.ts data dist/data.db && node apps/api/scripts/export-static.ts dist/data.db apps/web/public && vp -C apps/web build && vp -C apps/web preview --port 4173 --strictPort',
+    command: 'node --run build:static && vp -C apps/web preview --port 4173 --strictPort',
     url: 'http://localhost:4173/food-drug-interaction-map/api/graph.json',
     env: { VITE_STATIC_DATA: '1' },
     reuseExistingServer: !process.env.CI,
