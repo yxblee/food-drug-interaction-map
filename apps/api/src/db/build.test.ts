@@ -50,9 +50,9 @@ describe('buildDb', () => {
   it('changes the version when content changes', () => {
     const dir = tmp()
     mkdirSync(join(dir, 'drugs'))
-    writeFileSync(join(dir, 'drugs/x.yaml'), 'id: x\nname: X\n')
+    writeFileSync(join(dir, 'drugs/x.yaml'), 'id: x\nname: X\ngroup: true\n')
     const a = buildDb(dir, join(dir, 'a.db'))
-    writeFileSync(join(dir, 'drugs/x.yaml'), 'id: x\nname: X2\n')
+    writeFileSync(join(dir, 'drugs/x.yaml'), 'id: x\nname: X2\ngroup: true\n')
     const b = buildDb(dir, join(dir, 'b.db'))
     expect(a).not.toEqual(b)
   })

@@ -149,4 +149,89 @@ describe('validateDataset', () => {
       expect.stringMatching(/^interactions\/sample-fruits--statins\.yaml: citations: /),
     )
   })
+
+  it('accepts every source value', () => {
+    for (const source of ['curated', 'openfda', 'foodrugs', 'ddid']) {
+      const raw = base()
+      raw.interactions[0] = interaction('grapefruit', 'simvastatin', { source })
+      expect(errorsOf(raw)).toEqual([])
+    }
+  })
+
+  it('allows a pending interaction with no reviewed_at and only study citations', () => {
+    const raw = base()
+    raw.interactions.push(
+      interaction('grapefruit', 'statins', {
+        status: 'pending',
+        source: 'ddid',
+        reviewed_at: undefined,
+        citations: [{ type: 'study', title: 't', url: 'https://example.org' }],
+      }),
+    )
+    expect(errorsOf(raw)).toEqual([])
+  })
+
+  it('requires reviewed_at once an interaction is approved or rejected', () => {
+    for (const status of ['approved', 'rejected']) {
+      const raw = base()
+      raw.interactions.push(
+        interaction('grapefruit', 'statins', { status, reviewed_at: undefined }),
+      )
+      expect(errorsOf(raw)).toContainEqual(
+        expect.stringMatching(/^interactions\/grapefruit--statins\.yaml: reviewed_at: /),
+      )
+    }
+  })
+
+  it('requires an approved interaction to have a label, review or guideline citation', () => {
+    const raw = base()
+    raw.interactions[0] = interaction('grapefruit', 'simvastatin', {
+      citations: [{ type: 'study', title: 't', url: 'https://example.org' }],
+    })
+    expect(errorsOf(raw)).toContainEqual(
+      expect.stringMatching(
+        /^interactions\/grapefruit--simvastatin\.yaml: citations: approved interaction needs a label, review or guideline citation/,
+      ),
+    )
+  })
+
+  it('fails a non-class drug or a mechanism no approved interaction references', () => {
+    const raw = base()
+    raw.drugs.push({ file: 'drugs/orphan.yaml', data: { id: 'orphan', name: 'Orphan' } })
+    raw.mechanisms.push({
+      file: 'mechanisms/unused.yaml',
+      data: { id: 'unused', name: 'Unused', kind: 'other', explanation: 'x' },
+    })
+    raw.interactions.push(
+      interaction('grapefruit', 'orphan', { status: 'pending', reviewed_at: undefined }),
+      interaction('sample-fruits', 'orphan', { status: 'rejected', mechanisms: ['unused'] }),
+    )
+    const errors = errorsOf(raw)
+    expect(errors).toContainEqual('drugs/orphan.yaml: no approved interaction references this drug')
+    expect(errors).toContainEqual(
+      'mechanisms/unused.yaml: no approved interaction references this mechanism',
+    )
+  })
+
+  it('counts a drug as referenced when an approved interaction targets its class', () => {
+    const raw = base()
+    raw.drugs.push({
+      file: 'drugs/atorvastatin.yaml',
+      data: { id: 'atorvastatin', name: 'Atorvastatin', parent: 'statins' },
+    })
+    expect(errorsOf(raw)).toEqual([])
+  })
+
+  it('exempts classes, food groups and foods from the reference rule', () => {
+    const raw = base()
+    raw.drugs.push({
+      file: 'drugs/other-class.yaml',
+      data: { id: 'other-class', name: 'Other', group: true },
+    })
+    raw.foods.push({
+      file: 'foods/kale.yaml',
+      data: { id: 'kale', name: 'Kale', category: 'vegetable' },
+    })
+    expect(errorsOf(raw)).toEqual([])
+  })
 })

@@ -102,5 +102,18 @@ export function validateDataset(raw: RawDataset): ValidationResult {
     }
   }
 
+  const approved = interactions.filter((i) => i.status === 'approved')
+  const usedDrugs = new Set(approved.map((i) => i.drug))
+  const usedMechanisms = new Set(approved.flatMap((i) => i.mechanisms))
+  for (const d of drugs) {
+    // a member drug is covered when an approved interaction targets it or its class
+    if (!d.group && !usedDrugs.has(d.id) && !(d.parent && usedDrugs.has(d.parent)))
+      errors.push(`${fileOf.get(d)}: no approved interaction references this drug`)
+  }
+  for (const m of mechanisms) {
+    if (!usedMechanisms.has(m.id))
+      errors.push(`${fileOf.get(m)}: no approved interaction references this mechanism`)
+  }
+
   return errors.length ? { errors } : { dataset: { drugs, foods, mechanisms, interactions } }
 }
