@@ -1,5 +1,6 @@
 id: "diazepam"
 name: "Diazepam"
+rxnorm: "3322"
 aliases: ["Valium"]
 parent: "benzodiazepines"
 drug_class: "Benzodiazepine"

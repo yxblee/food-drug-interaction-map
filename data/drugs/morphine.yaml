@@ -1,5 +1,6 @@
 id: "morphine"
 name: "Morphine"
+rxnorm: "7052"
 aliases: ["MS Contin"]
 parent: "opioids"
 drug_class: "Opioid analgesic"

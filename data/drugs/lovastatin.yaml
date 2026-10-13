@@ -1,5 +1,6 @@
 id: "lovastatin"
 name: "Lovastatin"
+rxnorm: "6472"
 aliases: ["Mevacor", "Altoprev"]
 parent: "statins"
 drug_class: "HMG-CoA reductase inhibitor"

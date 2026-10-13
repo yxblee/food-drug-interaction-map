@@ -1,5 +1,6 @@
 id: "enalapril"
 name: "Enalapril"
+rxnorm: "3827"
 aliases: ["Vasotec"]
 parent: "ace-inhibitors"
 drug_class: "ACE inhibitor"

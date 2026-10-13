@@ -1,5 +1,6 @@
 id: "ibandronate"
 name: "Ibandronate"
+rxnorm: "115264"
 aliases: ["Boniva"]
 parent: "bisphosphonates"
 drug_class: "Bisphosphonate"

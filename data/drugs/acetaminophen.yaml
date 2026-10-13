@@ -1,4 +1,5 @@
 id: "acetaminophen"
 name: "Acetaminophen"
+rxnorm: "161"
 aliases: ["Tylenol", "paracetamol"]
 drug_class: "Analgesic"

@@ -1,5 +1,6 @@
 id: "minocycline"
 name: "Minocycline"
+rxnorm: "6980"
 aliases: ["Minocin", "Solodyn"]
 parent: "tetracyclines"
 drug_class: "Tetracycline antibiotic"

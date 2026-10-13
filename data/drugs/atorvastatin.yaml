@@ -1,5 +1,6 @@
 id: "atorvastatin"
 name: "Atorvastatin"
+rxnorm: "83367"
 aliases: ["Lipitor"]
 parent: "statins"
 drug_class: "HMG-CoA reductase inhibitor"

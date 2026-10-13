@@ -1,4 +1,5 @@
 id: "theophylline"
 name: "Theophylline"
+rxnorm: "10438"
 aliases: ["Theo-24", "Elixophyllin"]
 drug_class: "Methylxanthine bronchodilator"

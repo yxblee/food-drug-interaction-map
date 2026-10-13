@@ -1,5 +1,6 @@
 id: "levofloxacin"
 name: "Levofloxacin"
+rxnorm: "82122"
 aliases: ["Levaquin"]
 parent: "fluoroquinolones"
 drug_class: "Fluoroquinolone antibiotic"

@@ -1,4 +1,5 @@
 id: "levodopa"
 name: "Levodopa"
+rxnorm: "6375"
 aliases: ["Sinemet", "Rytary"]
 drug_class: "Dopamine precursor"

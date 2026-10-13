@@ -1,5 +1,6 @@
 id: "alendronate"
 name: "Alendronate"
+rxnorm: "46041"
 aliases: ["Fosamax"]
 parent: "bisphosphonates"
 drug_class: "Bisphosphonate"

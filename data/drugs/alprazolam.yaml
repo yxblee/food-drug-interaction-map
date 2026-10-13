@@ -1,5 +1,6 @@
 id: "alprazolam"
 name: "Alprazolam"
+rxnorm: "596"
 aliases: ["Xanax"]
 parent: "benzodiazepines"
 drug_class: "Benzodiazepine"

@@ -1,4 +1,5 @@
 id: "amiodarone"
 name: "Amiodarone"
+rxnorm: "703"
 aliases: ["Pacerone"]
 drug_class: "Antiarrhythmic"
