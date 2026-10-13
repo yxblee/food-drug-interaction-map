@@ -479,3 +479,41 @@ test('the header shows the product name, keeps Color apart from the view tabs, a
   await color.click()
   expect(await color.getAttribute('aria-pressed')).not.toBe(before)
 })
+
+test('the view switcher is a tablist with one tab stop and arrow-key activation', async ({
+  page,
+}) => {
+  await page.goto('./')
+  const list = page.getByRole('tablist', { name: 'View' })
+  await expect(list.getByRole('tab')).toHaveCount(2)
+  const explore = list.getByRole('tab', { name: 'Explore' })
+  const meds = list.getByRole('tab', { name: 'My meds' })
+  await expect(explore).toHaveAttribute('aria-selected', 'true')
+  await expect(explore).not.toHaveAttribute('aria-pressed')
+  await expect(explore).toHaveAttribute('tabindex', '0')
+  await expect(meds).toHaveAttribute('tabindex', '-1')
+  await expect(page.getByRole('button', { name: 'Color', exact: true })).toBeVisible()
+  await expect(list.getByRole('button')).toHaveCount(0)
+
+  await explore.focus()
+  await page.keyboard.press('ArrowRight')
+  await expect(meds).toBeFocused()
+  await expect(meds).toHaveAttribute('aria-selected', 'true')
+  await expect(meds).toHaveAttribute('tabindex', '0')
+  await expect(page).toHaveURL(/tab=meds/)
+  const panel = page.getByRole('tabpanel', { name: 'My meds' })
+  await expect(panel).toBeVisible()
+  expect(await meds.getAttribute('aria-controls')).toBe(await panel.getAttribute('id'))
+  await page.keyboard.press('Home')
+  await expect(explore).toBeFocused()
+  await page.keyboard.press('End')
+  await expect(meds).toBeFocused()
+  await page.keyboard.press('ArrowRight')
+  await expect(explore).toHaveAttribute('aria-selected', 'true')
+  await expect(page.getByRole('tabpanel', { name: 'Explore' })).toBeVisible()
+})
+
+test('the side panel is a landmark named after the selected item', async ({ page }) => {
+  await page.goto('./?node=food%3Agrapefruit')
+  await expect(page.getByRole('complementary', { name: 'Grapefruit', exact: true })).toBeVisible()
+})

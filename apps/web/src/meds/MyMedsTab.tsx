@@ -229,18 +229,6 @@ export function MyMedsTab({
             </li>
           ))}
         </ul>
-        {(meds.length > 0 || notChecked.length > 0) && (
-          <div className="meds__actions">
-            <button className="pill-button" onClick={clearAll}>
-              Clear all
-            </button>
-            {meds.length > 0 && (
-              <button className="pill-button" onClick={onSeeOnMap}>
-                See on map
-              </button>
-            )}
-          </div>
-        )}
       </section>
 
       <section className="meds__results" aria-labelledby="results-title">
@@ -282,6 +270,20 @@ export function MyMedsTab({
           })
         )}
       </section>
+
+      {/* After the results in reading order, so the first Avoid row sits high on phones. */}
+      {(meds.length > 0 || notChecked.length > 0) && (
+        <div className="meds__actions">
+          <button className="pill-button" onClick={clearAll}>
+            Clear all
+          </button>
+          {meds.length > 0 && (
+            <button className="pill-button" onClick={onSeeOnMap}>
+              See on map
+            </button>
+          )}
+        </div>
+      )}
     </div>
   )
 }

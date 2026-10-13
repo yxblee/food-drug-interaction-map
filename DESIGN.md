@@ -242,7 +242,7 @@ The Explore search field (square) and the My meds input (pill) currently disagre
 Quiet and tactile; they look like paper until pressed.
 - **Shape:** full pill (999px).
 - **Default:** Bone Surface fill, ink text, 1px Weathered Grey outline, 6px 12px padding, 44px minimum height (the panel's close button is a 44×44 square). Colour is set on the pill itself so fill and text switch together on a theme change.
-- **Pressed / Selected** (`aria-pressed="true"`): fills with Field Ink, text turns paper. Used for the active view (Explore / My meds) and the 2D and Mechanisms toggles. Color is a setting, not a view: it sits apart from the view tabs behind a hairline rule, drawn as a text button with a square check mark (filled when on) rather than a pill. On phones the product name shows as the 11px mono label on its own line above the tabs; at rest with an empty Medication list, the Explore hint adds "Taking medicines? Check them in My meds" beside "Try grapefruit".
+- **Pressed / Selected** (`aria-pressed="true"`; the view tabs use `aria-selected`): fills with Field Ink, text turns paper. Used for the active view (Explore / My meds, a tablist with arrow keys and one tab stop) and the 2D and Mechanisms toggles. Color is a setting, not a view: it sits apart from the view tabs behind a hairline rule, drawn as a text button with a square check mark (filled when on) rather than a pill. On phones the product name shows as the 11px mono label on its own line above the tabs; at rest with an empty Medication list, the Explore hint adds "Taking medicines? Check them in My meds" beside "Try grapefruit".
 - **Focus:** 2px ink outline, 2px offset (global `:focus-visible`).
 - **Link button:** unstyled underlined text for in-panel navigation.
 
@@ -266,7 +266,7 @@ The guide's stamp. Pill, light badge background, 1px `currentColor` outline, upp
 - **Focus:** global 2px ink outline.
 
 ### Navigation
-Two pill buttons top-right (Explore, My meds) plus the Color toggle; the active view is ink-filled. Every view state (tab, query, selected node, tint) lives in the URL so any view can be shared.
+Two pill buttons top-right (Explore, My meds) plus the Color toggle; the active view is ink-filled. In My meds the picker and chips come first, then Foods to watch, then Clear all and See on map (below the picker on desktop, after the results on phones), so the first Avoid row sits high. Every view state (tab, query, selected node, tint) lives in the URL so any view can be shared.
 
 ### Interaction Graph
 The fold-out map. 2D (d3) and 3D (3d-force-graph) render the same data. At rest: muted grey nodes, interaction links in their severity ink at reduced opacity (minimal dashed), group-member links dotted hairlines; mechanisms are unfilled ink outlines. On selection the node fills with ink, its links take their severity ink with weight by severity (avoid 2.4 > caution 2 > monitor 1.6 > minimal 1.2 dashed), and everything else dims to 8–15%. Keyboard focus thickens the node outline to 3px ink. Screen-reader rows mirror the graph so it is never the only path.

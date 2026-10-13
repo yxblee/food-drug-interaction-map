@@ -420,3 +420,29 @@ test('See on map keeps the filter in the URL as a flag, moves focus to the map a
   await expect(page.getByRole('button', { name: /Showing your meds/ })).toHaveCount(0)
   expect(page.url()).not.toContain('meds=1')
 })
+
+test('Foods to watch comes before Clear all, so the first Avoid row sits high on phones', async ({
+  page,
+}, info) => {
+  await page.goto('./?tab=meds')
+  for (const m of ['simvastatin', 'amlodipine']) {
+    const input = page.getByLabel('Add a medication')
+    await input.fill(m)
+    await input.press('Enter')
+  }
+  const row = page
+    .locator('section.meds__sev', { has: page.locator('#sev-avoid') })
+    .locator('li')
+    .first()
+  const clear = page.getByRole('button', { name: 'Clear all' })
+  await expect(row).toBeVisible()
+  const r = (await row.boundingBox())!
+  const c = (await clear.boundingBox())!
+  expect(r.y).toBeLessThan(c.y)
+  if (info.project.name === 'mobile') {
+    expect(r.y).toBeLessThan(page.viewportSize()!.height * 1.2)
+  }
+  await clear.click()
+  await expect(page.getByRole('button', { name: 'Undo' })).toBeVisible()
+  await expect(page.getByLabel('Add a medication')).toBeFocused()
+})

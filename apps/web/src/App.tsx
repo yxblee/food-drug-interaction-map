@@ -10,6 +10,8 @@ import { useTheme } from './theme/useTheme.ts'
 import { useUrlState } from './useUrlState.ts'
 import './App.css'
 
+const TABS = ['explore', 'meds'] as const
+
 export function App() {
   const [state, update] = useUrlState()
   const [graph, setGraph] = useState<GraphPayload | null>(null)
@@ -70,20 +72,32 @@ export function App() {
     <div className="app">
       <header className="app__bar">
         <h1 className="app__title mono-label">Food–Drug Interaction Map</h1>
-        <nav className="app__tabs" role="tablist" aria-label="Mode">
-          {(['explore', 'meds'] as const).map((tab) => (
+        <div className="app__tabs" role="tablist" aria-label="View">
+          {TABS.map((tab, i) => (
             <button
               key={tab}
+              id={`tab-${tab}`}
               role="tab"
               className="pill-button"
               aria-selected={state.tab === tab}
-              aria-pressed={state.tab === tab}
+              aria-controls="view-panel"
+              tabIndex={state.tab === tab ? 0 : -1}
               onClick={() => update({ tab }, { push: true })}
+              onKeyDown={(e) => {
+                const to = { ArrowRight: i + 1, ArrowLeft: i - 1, Home: 0, End: TABS.length - 1 }[
+                  e.key
+                ]
+                if (to === undefined) return
+                e.preventDefault()
+                const next = TABS[(to + TABS.length) % TABS.length]!
+                update({ tab: next }, { push: true })
+                document.getElementById(`tab-${next}`)?.focus()
+              }}
             >
               {tab === 'explore' ? 'Explore' : 'My meds'}
             </button>
           ))}
-        </nav>
+        </div>
         <button
           className="app__palette"
           aria-pressed={state.tint}
@@ -109,37 +123,47 @@ export function App() {
       )}
 
       <main className="app__main">
-        {!graph ? (
-          !error && <p className="app__loading mono-label">Loading…</p>
-        ) : state.tab === 'explore' ? (
-          <ExploreTab
-            graph={graph}
-            state={state}
-            update={update}
-            palette={palette}
-            medsFilter={medsFilter}
-            clearMedsFilter={() => update({ meds: false })}
-            hasMeds={meds.length > 0}
-            openMeds={openMeds}
-          />
-        ) : (
-          <MyMedsTab
-            graph={graph}
-            meds={meds}
-            setMeds={setMeds}
-            brands={brands}
-            setBrands={setBrands}
-            notChecked={notChecked}
-            setNotChecked={setNotChecked}
-            onSeeOnMap={() => {
-              focusMap.current = true
-              setMapNote(
-                `Showing your ${meds.length} ${meds.length === 1 ? 'medicine' : 'medicines'}`,
-              )
-              update({ tab: 'explore', node: null, q: '', mech: true, meds: true }, { push: true })
-            }}
-          />
-        )}
+        <div
+          id="view-panel"
+          role="tabpanel"
+          className="app__panel"
+          aria-labelledby={`tab-${state.tab}`}
+        >
+          {!graph ? (
+            !error && <p className="app__loading mono-label">Loading…</p>
+          ) : state.tab === 'explore' ? (
+            <ExploreTab
+              graph={graph}
+              state={state}
+              update={update}
+              palette={palette}
+              medsFilter={medsFilter}
+              clearMedsFilter={() => update({ meds: false })}
+              hasMeds={meds.length > 0}
+              openMeds={openMeds}
+            />
+          ) : (
+            <MyMedsTab
+              graph={graph}
+              meds={meds}
+              setMeds={setMeds}
+              brands={brands}
+              setBrands={setBrands}
+              notChecked={notChecked}
+              setNotChecked={setNotChecked}
+              onSeeOnMap={() => {
+                focusMap.current = true
+                setMapNote(
+                  `Showing your ${meds.length} ${meds.length === 1 ? 'medicine' : 'medicines'}`,
+                )
+                update(
+                  { tab: 'explore', node: null, q: '', mech: true, meds: true },
+                  { push: true },
+                )
+              }}
+            />
+          )}
+        </div>
       </main>
 
       <p className="sr-only" role="status">
