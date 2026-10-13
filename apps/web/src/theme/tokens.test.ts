@@ -35,6 +35,9 @@ describe('palettes', () => {
         expect(contrastRatio(p.muted, p.paper)).toBeGreaterThanOrEqual(4.5)
         expect(contrastRatio(p.muted, p.surface)).toBeGreaterThanOrEqual(4.5)
       })
+      it(`${tint}/${mode}: chip Brand name (chipMuted) on the ink-filled chip is AA`, () => {
+        expect(contrastRatio(p.chipMuted, p.ink)).toBeGreaterThanOrEqual(4.5)
+      })
       it(`${tint}/${mode}: ink on surface is AA`, () => {
         expect(contrastRatio(p.ink, p.surface)).toBeGreaterThanOrEqual(4.5)
       })

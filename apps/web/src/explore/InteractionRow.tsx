@@ -1,4 +1,11 @@
-import type { GraphNode, Interaction, Kind, Mechanism, ResolvedInteraction } from '@fdi/schema'
+import type {
+  GraphNode,
+  Interaction,
+  Kind,
+  Mechanism,
+  ResolvedInteraction,
+  Severity,
+} from '@fdi/schema'
 import { nodeKey } from '@fdi/schema/domain'
 import { SeverityBadge } from './SeverityBadge.tsx'
 
@@ -10,11 +17,24 @@ interface Props {
   onSelect?: (key: string) => void
   /** The Explore panel states these once per Severity group instead of on every row. */
   grouped?: { inherited: boolean }
+  /** The Severity group heading above this row; its badge shows only when the row's own Severity differs. */
+  groupSeverity?: Severity
+  /** My meds puts the pharmacist sentence before the advice; Explore keeps it after. */
+  cautionFirst?: boolean
 }
 
 const paragraphs = (text: string) => text.split(/\n\s*\n/).map((p, i) => <p key={i}>{p.trim()}</p>)
 
-export function InteractionRow({ row, nodes, mechanisms, perspective, onSelect, grouped }: Props) {
+export function InteractionRow({
+  row,
+  nodes,
+  mechanisms,
+  perspective,
+  onSelect,
+  grouped,
+  groupSeverity,
+  cautionFirst,
+}: Props) {
   const i = row.interaction
   // The Drug class or Food group this row is inherited from, on the viewed side.
   const inheritedFrom = row.inheritedFrom
@@ -33,10 +53,16 @@ export function InteractionRow({ row, nodes, mechanisms, perspective, onSelect, 
       n?.name
     )
 
+  const caution = i.severity === 'avoid' && !grouped && (
+    <p className="irow__caution">
+      Serious interaction. Check with your pharmacist or doctor before combining.
+    </p>
+  )
+
   return (
     <li className="irow">
       <div className="irow__head">
-        {!grouped && <SeverityBadge severity={i.severity} />}
+        {!grouped && groupSeverity !== i.severity && <SeverityBadge severity={i.severity} />}
         <span className="irow__name">
           {counterpart.map((n, k) => (
             <span key={k}>
@@ -50,14 +76,11 @@ export function InteractionRow({ row, nodes, mechanisms, perspective, onSelect, 
         <p className="mono-label">Applies to {inheritedFrom.name}</p>
       )}
       <p className="irow__summary">{i.summary}</p>
+      {cautionFirst && caution}
       <p className="irow__advice">
         <strong>What to do:</strong> {i.advice}
       </p>
-      {i.severity === 'avoid' && !grouped && (
-        <p className="irow__caution">
-          Serious interaction. Check with your pharmacist or doctor before combining.
-        </p>
-      )}
+      {!cautionFirst && caution}
       <details className="irow__more">
         <summary>Details and sources</summary>
         <div className="irow__details">{paragraphs(i.details)}</div>
@@ -89,6 +112,7 @@ export function InteractionRow({ row, nodes, mechanisms, perspective, onSelect, 
             <li key={k}>
               <a href={c.url} target="_blank" rel="noreferrer">
                 {c.title}
+                <span className="sr-only"> (opens in new tab)</span>
               </a>{' '}
               <span className="mono-label">{c.type}</span>
             </li>

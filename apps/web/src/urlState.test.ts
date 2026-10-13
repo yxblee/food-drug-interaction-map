@@ -11,6 +11,7 @@ describe('urlState', () => {
       view: null,
       mech: true,
       tint: false,
+      meds: false,
     })
   })
   it('round-trips every field', () => {
@@ -21,8 +22,15 @@ describe('urlState', () => {
       view: '2d',
       mech: false,
       tint: true,
+      meds: true,
     } as const
     expect(decode('?' + encode(s))).toEqual(s)
+  })
+  it('carries the meds filter as a bare flag, never drug names', () => {
+    expect(encode({ ...DEFAULT_STATE, meds: true })).toBe('meds=1')
+    expect(decode('?meds=1').meds).toBe(true)
+    expect(decode('?meds=warfarin').meds).toBe(false)
+    expect(decode('').meds).toBe(false)
   })
   it('omits defaults when encoding', () => {
     expect(encode(DEFAULT_STATE)).toBe('')

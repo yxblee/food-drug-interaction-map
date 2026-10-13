@@ -56,9 +56,14 @@ typography:
     fontSize: "9px"
     fontWeight: 400
     letterSpacing: "0.1em"
+  severity-meaning:
+    fontFamily: "system-ui, -apple-system, 'Segoe UI', sans-serif"
+    fontSize: "15px"
+    fontWeight: 400
+    lineHeight: 1.5
   fine-print:
     fontFamily: "system-ui, -apple-system, 'Segoe UI', sans-serif"
-    fontSize: "12px"
+    fontSize: "14px"
     fontWeight: 400
     lineHeight: 1.5
 rounded:
@@ -200,10 +205,11 @@ Each tint is a full six-role palette (paper, ink, muted, line, badge background,
 - **Headline** (700, 28px, -0.01em): view titles such as "My meds" and "Foods to watch".
 - **Title** (700, 18px, -0.01em): severity group headings; the detail panel's entry name uses the browser-default h2 size.
 - **Body** (400, 15px, 1.5): summaries, advice, list entries. Plain-language sentences, kept within the panel's 26rem or the results column.
-- **Label** (400, 11px, uppercase, 0.12em): the app title, section tags ("ADD A MEDICATION"), severity group subtitles, panel breadcrumbs ("FOOD · GRAPEFRUIT AND RELATIVES").
+- **Label** (400, 11px, uppercase, 0.12em): the app title, section tags ("ADD A MEDICATION"), panel breadcrumbs ("FOOD · GRAPEFRUIT AND RELATIVES").
 - **Badge** (600, 11px, uppercase, 0.08em): severity badges only.
 - **Graph label** (9px mono, 0.1em): node names in the 2D graph.
-- **Fine print** (12px): the persistent disclaimer footer.
+- **Severity meaning** (400, 15px, sentence case, line-height 1.5, Weathered Grey): the one sentence under each severity group heading in My meds and the Explore panel. Body text, not a label; `.mono-label` stays for true metadata.
+- **Fine print** (14px): the persistent disclaimer footer.
 
 ### Named Rules
 **The Typewritten Tag Rule.** Anything that classifies (kind, group, section, severity) is set in uppercase monospace with open tracking. Anything a person reads as a sentence is set in the body sans, sentence case.
@@ -236,12 +242,12 @@ The Explore search field (square) and the My meds input (pill) currently disagre
 Quiet and tactile; they look like paper until pressed.
 - **Shape:** full pill (999px).
 - **Default:** Bone Surface fill, ink text, 1px Weathered Grey outline, 6px 12px padding, 44px minimum height (the panel's close button is a 44×44 square). Colour is set on the pill itself so fill and text switch together on a theme change.
-- **Pressed / Selected** (`aria-pressed="true"`): fills with Field Ink, text turns paper. Used for the active view (Explore / My meds) and the Color, 2D and Mechanisms toggles.
+- **Pressed / Selected** (`aria-pressed="true"`; the view tabs use `aria-selected`): fills with Field Ink, text turns paper. Used for the active view (Explore / My meds, a tablist with arrow keys and one tab stop) and the 2D and Mechanisms toggles. Color is a setting, not a view: it sits apart from the view tabs behind a hairline rule, drawn as a text button with a square check mark (filled when on) rather than a pill. On phones the product name shows as the 11px mono label on its own line above the tabs; at rest with an empty Medication list, the Explore hint adds "Taking medicines? Check them in My meds" beside "Try grapefruit".
 - **Focus:** 2px ink outline, 2px offset (global `:focus-visible`).
 - **Link button:** unstyled underlined text for in-panel navigation.
 
 ### Chips
-- **Medication chip:** solid Field Ink pill with paper text and a × remove button whose hit area is 44px (negative margins keep the chip compact); one per medication in My meds.
+- **Medication chip:** solid Field Ink pill with paper text and a × remove button whose hit area is 44px (negative margins keep the chip compact); one per medication in My meds. The Brand name in parentheses uses a chip-specific muted ink (`--chip-muted`, paper mixed 80% toward ink per tint and mode in `theme/tokens.ts`), at least 4.5:1 on the ink fill in every tint and mode.
 - **Not-checked chip:** same pill, but transparent with a 1px dashed ink outline and ink text, plus a "not checked" mono tag before the ×. Marks a name the Dataset doesn't know; always paired with the dashed "Not checked: …" line above Foods to watch.
 - **Undo line:** in My meds' status region, "List cleared · Undo" with Undo as an underlined text button (44px tall), shown for 10 seconds after Clear all.
 
@@ -250,16 +256,17 @@ The guide's stamp. Pill, light badge background, 1px `currentColor` outline, upp
 
 ### Cards / Containers
 - **Detail panel:** square, Bone Surface, 1px `currentColor` border, 16px padding, docked bottom-right. Interaction rows are grouped under Severity headings (avoid, caution, monitor, minimal), the same badge, word and subtitle as My meds; a group states once what its rows share ("Applies to …" when every row inherits from the same parent, the Avoid caution sentence), and rows keep only their own summary, advice and details, separated by 20%-ink hairlines. No position counter; Prev/Next are named by the kind browsed ("← Previous food").
-- **Warning entries (My meds):** not cards; disclosure rows (`<details>`) separated by top hairlines, with a 44px-minimum summary. Each affected drug whose severity differs from the row's carries its own badge; expanded, each Drug's detail appears once, with no separate summary list above it.
+- **Warning entries (My meds):** not cards; rows separated by top hairlines. Avoid and Caution rows are open: a lead line (Food, affected Drugs) then each Drug's "What to do" advice, loaded eagerly, with Mechanism, Example exchange and Sources behind one 44px-minimum "Details and sources" disclosure (never nested). Monitor and Minimal rows stay a collapsed `<details>`. The Severity badge appears once, in the group heading; a row or Drug shows its own badge only when its Severity differs from the group's.
 - **Notices / banner:** hairline outline on surface; the danger banner uses an Oxblood outline.
 
 ### Inputs / Fields
+- **Both inputs (Explore search, medication):** inherit the body font at 16px (iOS Safari zooms smaller text on focus) and are at least 44px tall. Both are ARIA comboboxes over a listbox: ArrowUp/Down move the active option, Enter picks it (first by default), Escape closes.
 - **Medication input:** pill, Bone Surface, Weathered Grey outline, 10px 14px padding; suggestions below on a 12px-radius surface with 8px-radius rows that fill with paper on hover/focus.
 - **Explore search:** square, Bone Surface, Weathered Grey outline, 8px 10px padding, max 420px; results as a ruled list with muted aliases and a muted match count.
 - **Focus:** global 2px ink outline.
 
 ### Navigation
-Two pill buttons top-right (Explore, My meds) plus the Color toggle; the active view is ink-filled. Every view state (tab, query, selected node, tint) lives in the URL so any view can be shared.
+Two pill buttons top-right (Explore, My meds) plus the Color toggle; the active view is ink-filled. In My meds the picker and chips come first, then Foods to watch, then Clear all and See on map (below the picker on desktop, after the results on phones), so the first Avoid row sits high. Every view state (tab, query, selected node, tint) lives in the URL so any view can be shared.
 
 ### Interaction Graph
 The fold-out map. 2D (d3) and 3D (3d-force-graph) render the same data. At rest: muted grey nodes, interaction links in their severity ink at reduced opacity (minimal dashed), group-member links dotted hairlines; mechanisms are unfilled ink outlines. On selection the node fills with ink, its links take their severity ink with weight by severity (avoid 2.4 > caution 2 > monitor 1.6 > minimal 1.2 dashed), and everything else dims to 8–15%. Keyboard focus thickens the node outline to 3px ink. Screen-reader rows mirror the graph so it is never the only path.
@@ -273,7 +280,7 @@ Paper and ink cross-fade over 400ms `ease` when the tint or colour mode changes;
 ## Do's and Don'ts
 
 ### Do:
-- **Do** set classifications in uppercase mono labels (11px, 0.12em) and sentences in the body sans.
+- **Do** set classifications in uppercase mono labels (11px, 0.12em) and sentences (including severity meanings) in the body sans.
 - **Do** pair every severity colour with its word in a badge.
 - **Do** use the paper tint only to signal the selected kind, and only when the Color toggle is on.
 - **Do** separate content with 1px hairlines before reaching for fills or shadows.

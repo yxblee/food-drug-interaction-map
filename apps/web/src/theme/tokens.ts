@@ -10,7 +10,19 @@ export interface Palette {
   badgeBg: string
   /** Raised surface (inputs, popovers, banners) that ink text sits on. */
   surface: string
+  /** Secondary text on a medication chip (ink fill): paper pulled toward ink, still AA on ink. */
+  chipMuted: string
 }
+
+const mix = (a: string, b: string, t: number): string =>
+  '#' +
+  [1, 3, 5]
+    .map((i) =>
+      Math.round(parseInt(a.slice(i, i + 2), 16) * t + parseInt(b.slice(i, i + 2), 16) * (1 - t))
+        .toString(16)
+        .padStart(2, '0'),
+    )
+    .join('')
 
 const p = (
   paper: string,
@@ -26,6 +38,7 @@ const p = (
   line,
   badgeBg,
   surface,
+  chipMuted: mix(paper, ink, 0.8),
 })
 
 export const PALETTES: Record<TintName, Record<Mode, Palette>> = {

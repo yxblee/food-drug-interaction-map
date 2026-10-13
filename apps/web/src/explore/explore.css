@@ -1,9 +1,10 @@
+/* Absolute within .app__main, so its bottom edge is the footer's top edge. */
 .panel {
-  position: fixed;
+  position: absolute;
   right: 0;
   bottom: 0;
   width: min(26rem, 100%);
-  max-height: 80vh;
+  max-height: 80%;
   overflow-y: auto;
   padding: 1rem;
   background: var(--surface);
@@ -13,7 +14,7 @@
 /* On phones the panel is a bottom sheet: leave room above it for the framed selection. */
 @media (max-width: 40rem) {
   .panel {
-    max-height: 58vh;
+    max-height: 58%;
   }
 }
 .panel__top {
@@ -66,7 +67,11 @@
 .link-button {
   background: none;
   border: 0;
-  padding: 0;
+  display: inline-block;
+  padding: 1px 0;
+  margin: -1px 0;
+  min-height: 24px;
+  box-sizing: border-box;
   color: inherit;
   text-decoration: underline;
   cursor: pointer;

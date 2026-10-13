@@ -106,11 +106,11 @@ test('picking a search result closes the list until you type again', async ({ pa
   await search.fill('grapefruit')
   const results = page.locator('.search__results')
   await results
-    .getByRole('button', { name: /Grapefruit$/ })
+    .getByRole('option', { name: /Grapefruit$/ })
     .first()
     .click()
   await expect(page.getByRole('complementary')).toBeVisible()
-  await expect(results).toHaveCount(0)
+  await expect(results).toBeHidden()
 
   await search.fill('grape')
   await expect(results).toBeVisible()
@@ -369,4 +369,167 @@ test('every pill button is at least 44px tall and the panel close is 44x44', asy
   const close = await page.getByRole('button', { name: 'Close panel' }).boundingBox()
   expect(Math.round(close!.width)).toBe(44)
   expect(Math.round(close!.height)).toBe(44)
+})
+
+test('the panel stops above the footer, which stays clickable and visible', async ({ page }) => {
+  await page.goto('./')
+  await page.getByRole('button', { name: 'Try grapefruit' }).click()
+  await expect(page.getByRole('complementary')).toBeVisible()
+  const r = await page.evaluate(() => {
+    const f = document.querySelector('footer')!.getBoundingClientRect()
+    const p = document.querySelector('.panel')!.getBoundingClientRect()
+    const y = f.top + f.height / 2
+    const hit = (x: number) => !!document.elementFromPoint(x, y)?.closest('footer')
+    return {
+      gap: f.top - p.bottom,
+      hits: [f.left + 4, f.left + f.width / 2, f.right - 4].map(hit),
+      visible: f.bottom <= innerHeight + 0.5,
+    }
+  })
+  expect(r.gap).toBeGreaterThanOrEqual(-0.5)
+  expect(r.hits).toEqual([true, true, true])
+  expect(r.visible).toBe(true)
+})
+
+test('Explore panel Severity meaning is sentence-case body text', async ({ page }) => {
+  await page.goto('./')
+  const search = page.getByLabel('Search drugs, foods and mechanisms')
+  await search.fill('grapefruit')
+  await search.press('Enter')
+  const meaning = page.getByRole('complementary').locator('.sev-meaning').first()
+  await expect(meaning).toBeVisible()
+  const m = await meaning.evaluate((el) => {
+    const cs = getComputedStyle(el)
+    return {
+      size: parseFloat(cs.fontSize),
+      ratio: parseFloat(cs.lineHeight) / parseFloat(cs.fontSize),
+      transform: cs.textTransform,
+    }
+  })
+  expect(m.size).toBeGreaterThanOrEqual(15)
+  expect(m.ratio).toBeGreaterThanOrEqual(1.4)
+  expect(m.transform).toBe('none')
+})
+
+test('Explore search is a combobox: arrows move, Enter picks, Escape closes', async ({ page }) => {
+  await page.goto('./')
+  const search = page.getByLabel('Search drugs, foods and mechanisms')
+  await expect(search).toHaveAttribute('role', 'combobox')
+  await expect(search).toHaveAttribute('aria-expanded', 'false')
+  await search.fill('grape')
+  await expect(search).toHaveAttribute('aria-expanded', 'true')
+  const options = page.getByRole('listbox').getByRole('option')
+  expect(await options.count()).toBeGreaterThan(1)
+  await expect(options.first()).toHaveAttribute('aria-selected', 'true')
+  await search.press('ArrowDown')
+  await expect(options.nth(1)).toHaveAttribute('aria-selected', 'true')
+  const second = (await options.nth(1).textContent()) ?? ''
+  await search.press('Enter')
+  await expect(search).toHaveAttribute('aria-expanded', 'false')
+  await expect(page).toHaveURL(/node=/)
+  await expect(page.getByRole('complementary')).toBeVisible()
+  expect(second.length).toBeGreaterThan(0)
+
+  await search.fill('grap')
+  await expect(search).toHaveAttribute('aria-expanded', 'true')
+  await search.press('Escape')
+  await expect(search).toHaveAttribute('aria-expanded', 'false')
+})
+
+test('Explore points to My meds only while the list is empty, and focus follows', async ({
+  page,
+}) => {
+  await page.goto('./')
+  const pointer = page.getByRole('button', { name: 'Check them in My meds' })
+  await expect(pointer).toBeVisible()
+  await pointer.click()
+  await expect(page.getByRole('heading', { name: 'My meds' })).toBeVisible()
+  await expect(page.getByLabel('Add a medication')).toBeFocused()
+
+  await page.getByLabel('Add a medication').fill('warfarin')
+  await page.getByLabel('Add a medication').press('Enter')
+  await page.getByRole('tab', { name: 'Explore' }).click()
+  await expect(page.getByRole('button', { name: 'Try grapefruit' })).toBeVisible()
+  await expect(pointer).toHaveCount(0)
+})
+
+test('the header shows the product name, keeps Color apart from the view tabs, and does not overflow', async ({
+  page,
+}) => {
+  await page.goto('./')
+  const title = page.getByRole('heading', { name: 'Food–Drug Interaction Map', level: 1 })
+  await expect(title).toBeVisible()
+  const box = (await title.boundingBox())!
+  const vp = page.viewportSize()!
+  expect(box.width).toBeGreaterThan(0)
+  expect(box.height).toBeGreaterThan(0)
+  expect(box.x).toBeGreaterThanOrEqual(0)
+  expect(box.x + box.width).toBeLessThanOrEqual(vp.width)
+  expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true)
+
+  const last = (await page.getByRole('tab', { name: 'My meds' }).boundingBox())!
+  const color = page.getByRole('button', { name: 'Color', exact: true })
+  const c = (await color.boundingBox())!
+  expect(c.x - (last.x + last.width)).toBeGreaterThanOrEqual(16)
+  expect(
+    await page.locator('.app__bar').evaluate((b) => b.getBoundingClientRect().height),
+  ).toBeLessThanOrEqual(130)
+
+  const before = await color.getAttribute('aria-pressed')
+  await color.click()
+  expect(await color.getAttribute('aria-pressed')).not.toBe(before)
+})
+
+test('the view switcher is a tablist with one tab stop and arrow-key activation', async ({
+  page,
+}) => {
+  await page.goto('./')
+  const list = page.getByRole('tablist', { name: 'View' })
+  await expect(list.getByRole('tab')).toHaveCount(2)
+  const explore = list.getByRole('tab', { name: 'Explore' })
+  const meds = list.getByRole('tab', { name: 'My meds' })
+  await expect(explore).toHaveAttribute('aria-selected', 'true')
+  await expect(explore).not.toHaveAttribute('aria-pressed')
+  await expect(explore).toHaveAttribute('tabindex', '0')
+  await expect(meds).toHaveAttribute('tabindex', '-1')
+  await expect(page.getByRole('button', { name: 'Color', exact: true })).toBeVisible()
+  await expect(list.getByRole('button')).toHaveCount(0)
+
+  await explore.focus()
+  await page.keyboard.press('ArrowRight')
+  await expect(meds).toBeFocused()
+  await expect(meds).toHaveAttribute('aria-selected', 'true')
+  await expect(meds).toHaveAttribute('tabindex', '0')
+  await expect(page).toHaveURL(/tab=meds/)
+  const panel = page.getByRole('tabpanel', { name: 'My meds' })
+  await expect(panel).toBeVisible()
+  expect(await meds.getAttribute('aria-controls')).toBe(await panel.getAttribute('id'))
+  await page.keyboard.press('Home')
+  await expect(explore).toBeFocused()
+  await page.keyboard.press('End')
+  await expect(meds).toBeFocused()
+  await page.keyboard.press('ArrowRight')
+  await expect(explore).toHaveAttribute('aria-selected', 'true')
+  await expect(page.getByRole('tabpanel', { name: 'Explore' })).toBeVisible()
+})
+
+test('the side panel is a landmark named after the selected item', async ({ page }) => {
+  await page.goto('./?node=food%3Agrapefruit')
+  await expect(page.getByRole('complementary', { name: 'Grapefruit', exact: true })).toBeVisible()
+})
+
+test('panel link-buttons are 24px tall; new-tab sources say so', async ({ page }) => {
+  await page.goto('./?node=food:grapefruit')
+  const panel = page.getByRole('complementary')
+  const links = panel.locator('button.link-button')
+  await expect(links.first()).toBeVisible()
+  for (const b of await links.all()) {
+    expect((await b.boundingBox())!.height).toBeGreaterThanOrEqual(24)
+  }
+  await panel
+    .locator('details')
+    .first()
+    .evaluate((d) => ((d as HTMLDetailsElement).open = true))
+  const src = panel.locator('a[target=_blank]').first()
+  await expect(src).toHaveAccessibleName(/\(opens in new tab\)$/)
 })

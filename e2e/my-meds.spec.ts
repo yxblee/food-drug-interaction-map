@@ -42,7 +42,7 @@ test('each affected drug shows its own severity inside a food warning', async ({
   }
 
   const avoid = page.locator('section.meds__sev', { has: page.locator('#sev-avoid') })
-  const grapefruit = avoid.locator('.warning summary', { hasText: 'Grapefruit' })
+  const grapefruit = avoid.locator('.warning__lead', { hasText: 'Grapefruit' })
   await expect(grapefruit.locator('.warning__drug', { hasText: 'Simvastatin' })).not.toContainText(
     'Minimal',
   )
@@ -52,7 +52,63 @@ test('each affected drug shows its own severity inside a food warning', async ({
   await expect(grapefruit.locator('.warning__drugs')).toContainText(
     'no meaningful effect on Amlodipine',
   )
-  await expect(grapefruit.locator('.warning__drugs')).not.toContainText('affects Simvastatin, Amlo')
+  await expect(grapefruit).toHaveText(
+    /^Grapefruit and relatives.*: avoid with Simvastatin; no meaningful effect on Amlodipine Minimal$/,
+  )
+})
+
+test('Avoid and Caution show advice up front, with one disclosure for the detail and one Severity badge per group', async ({
+  page,
+}) => {
+  await page.goto('./')
+  await page.getByRole('tab', { name: 'My meds' }).click()
+  const input = page.getByLabel('Add a medication')
+  for (const med of ['simvastatin', 'amlodipine']) {
+    await input.fill(med)
+    await input.press('Enter')
+  }
+
+  const avoid = page.locator('section.meds__sev', { has: page.locator('#sev-avoid') })
+  const warning = avoid.locator('.warning', { hasText: 'Grapefruit' })
+  const simva = warning.locator('li.irow', { hasText: 'Simvastatin' })
+  await expect(simva.locator('.irow__advice')).toBeVisible()
+  await expect(simva.locator('.irow__advice')).toContainText('What to do:')
+  const more = simva.locator('details.irow__more')
+  await expect(more.getByText('Sources', { exact: true })).toBeHidden()
+  await expect(more.getByText('Mechanism', { exact: true })).toBeHidden()
+  await more.locator('summary').click()
+  await expect(more.getByText('Sources', { exact: true })).toBeVisible()
+  await expect(more.getByText('Mechanism', { exact: true })).toBeVisible()
+  // One level only: no disclosure inside the disclosure.
+  await expect(more.locator('details')).toHaveCount(0)
+  await expect(warning.locator('.warning > details')).toHaveCount(0)
+
+  // "Avoid" once (the group heading); Amlodipine's own Minimal badge still shows.
+  await expect(avoid.locator('.badge', { hasText: /^Avoid$/ })).toHaveCount(1)
+  await expect(warning.locator('.badge', { hasText: /^Minimal$/ }).first()).toBeVisible()
+  await expect(warning.locator('.badge', { hasText: /^Avoid$/ })).toHaveCount(0)
+
+  // The pharmacist sentence comes before the advice.
+  const order = await simva.evaluate((el) => {
+    const pos = (sel: string) => [...el.children].indexOf(el.querySelector(sel)!)
+    return [pos('.irow__caution'), pos('.irow__advice')]
+  })
+  expect(order[0]).toBeGreaterThanOrEqual(0)
+  expect(order[0]).toBeLessThan(order[1])
+})
+
+test('Monitor rows stay collapsed', async ({ page }) => {
+  await page.goto('./')
+  await page.getByRole('tab', { name: 'My meds' }).click()
+  const input = page.getByLabel('Add a medication')
+  await input.fill('lithium')
+  await input.press('Enter')
+
+  const monitor = page.locator('section.meds__sev', { has: page.locator('#sev-monitor') })
+  const coffee = monitor.locator('.warning > details', { hasText: 'Coffee' })
+  await expect(coffee).toHaveCount(1)
+  await expect(coffee).not.toHaveAttribute('open', '')
+  await expect(coffee.locator('summary')).toHaveText(/^Coffee: watch for changes with Lithium$/)
 })
 
 test('no-match in My meds gives a next step and says absence is not safety', async ({ page }) => {
@@ -93,7 +149,7 @@ test('results are announced and controls are readable and easy to hit', async ({
   }
 
   await expect(page.getByRole('status').filter({ hasText: 'foods to watch' })).toHaveText(
-    /^\d+ foods to watch, 1 to avoid$/,
+    /^\d+ foods to watch, including 1 to avoid$/,
   )
 
   const minHit = async (box: { width: number; height: number } | null, dims: 'h' | 'wh') => {
@@ -235,9 +291,158 @@ test('an expanded warning shows each Drug detail once', async ({ page }) => {
   await input.fill('simvastatin')
   await input.press('Enter')
   const warning = page.locator('.warning', { hasText: 'Grapefruit' })
-  await warning.locator('summary').click()
   const row = warning.locator('li.irow', { hasText: 'Simvastatin' })
   await expect(row).toBeVisible()
   const summary = (await row.locator('.irow__summary').textContent())!.trim()
   await expect(warning.getByText(summary, { exact: true })).toHaveCount(1)
+})
+
+test('type is readable: severity meaning is body text, footer is 14px+, chip Brand name is AA in both modes', async ({
+  page,
+}) => {
+  await page.goto('./')
+  await page.getByRole('tab', { name: 'My meds' }).click()
+  const input = page.getByLabel('Add a medication')
+  await input.fill('Coumadin')
+  await input.press('Enter')
+
+  const meaning = page.locator('.meds__sev .sev-meaning').first()
+  await expect(meaning).toBeVisible()
+  const m = await meaning.evaluate((el) => {
+    const cs = getComputedStyle(el)
+    return {
+      size: parseFloat(cs.fontSize),
+      ratio: parseFloat(cs.lineHeight) / parseFloat(cs.fontSize),
+      transform: cs.textTransform,
+    }
+  })
+  expect(m.size).toBeGreaterThanOrEqual(15)
+  expect(m.ratio).toBeGreaterThanOrEqual(1.4)
+  expect(m.transform).toBe('none')
+
+  const footer = await page
+    .locator('.app__footer')
+    .evaluate((el) => parseFloat(getComputedStyle(el).fontSize))
+  expect(footer).toBeGreaterThanOrEqual(14)
+
+  for (const scheme of ['light', 'dark'] as const) {
+    await page.emulateMedia({ colorScheme: scheme })
+    const ratio = await page
+      .locator('.chip__brand')
+      .first()
+      .evaluate((el) => {
+        const lum = (rgb: string) => {
+          const [r, g, b] = rgb
+            .match(/[\d.]+/g)!
+            .slice(0, 3)
+            .map((v) => {
+              const c = Number(v) / 255
+              return c <= 0.04045 ? c / 12.92 : ((c + 0.055) / 1.055) ** 2.4
+            })
+          return 0.2126 * r + 0.7152 * g + 0.0722 * b
+        }
+        const [hi, lo] = [
+          lum(getComputedStyle(el).color),
+          lum(getComputedStyle(el.closest('.chip')!).backgroundColor),
+        ].sort((a, b) => b - a)
+        return (hi + 0.05) / (lo + 0.05)
+      })
+    expect(ratio, scheme).toBeGreaterThanOrEqual(4.5)
+  }
+})
+
+test('the Medication list survives leaving the site and coming back', async ({ page }) => {
+  await page.goto('./')
+  await page.getByRole('tab', { name: 'My meds' }).click()
+  const input = page.getByLabel('Add a medication')
+  await input.fill('warfarin')
+  await input.press('Enter')
+  const chips = page.getByRole('list', { name: 'Your medications' })
+  await expect(chips).toContainText('Warfarin')
+  const url = page.url()
+
+  await page.goto('about:blank')
+  await page.goBack()
+  await page.getByRole('tab', { name: 'My meds' }).click()
+  await expect(chips).toContainText('Warfarin')
+
+  await page.goto('about:blank')
+  await page.goto(url)
+  await page.getByRole('tab', { name: 'My meds' }).click()
+  await expect(chips).toContainText('Warfarin')
+})
+
+test('inputs are 16px and at least 44px tall', async ({ page }) => {
+  await page.goto('./')
+  const search = page.getByLabel('Search drugs, foods and mechanisms')
+  await page.getByRole('tab', { name: 'My meds' }).click()
+  const med = page.getByLabel('Add a medication')
+  for (const el of [med]) {
+    const m = await el.evaluate((e) => ({
+      size: getComputedStyle(e).fontSize,
+      h: e.getBoundingClientRect().height,
+    }))
+    expect(m.size).toBe('16px')
+    expect(m.h).toBeGreaterThanOrEqual(44)
+  }
+  await page.getByRole('tab', { name: 'Explore' }).click()
+  const m = await search.evaluate((e) => ({
+    size: getComputedStyle(e).fontSize,
+    h: e.getBoundingClientRect().height,
+  }))
+  expect(m.size).toBe('16px')
+  expect(m.h).toBeGreaterThanOrEqual(44)
+})
+
+test('See on map keeps the filter in the URL as a flag, moves focus to the map and announces', async ({
+  page,
+}) => {
+  await page.goto('./')
+  await page.getByRole('tab', { name: 'My meds' }).click()
+  const input = page.getByLabel('Add a medication')
+  for (const med of ['warfarin', 'simvastatin', 'amlodipine']) {
+    await input.fill(med)
+    await input.press('Enter')
+  }
+  await page.getByRole('button', { name: /See on map/ }).click()
+
+  await expect(page).toHaveURL(/meds=1/)
+  expect(new URL(page.url()).search).not.toMatch(/warfarin|simvastatin|amlodipine|drug/i)
+  await expect(page.locator('.graph-host')).toBeFocused()
+  await expect(
+    page.getByRole('status').filter({ hasText: 'Showing your 3 medicines' }),
+  ).toBeAttached()
+
+  await page.reload()
+  await expect(page.getByRole('button', { name: /Showing your meds/ })).toBeVisible()
+
+  await page.getByRole('button', { name: /Showing your meds/ }).click()
+  await expect(page.getByRole('button', { name: /Showing your meds/ })).toHaveCount(0)
+  expect(page.url()).not.toContain('meds=1')
+})
+
+test('Foods to watch comes before Clear all, so the first Avoid row sits high on phones', async ({
+  page,
+}, info) => {
+  await page.goto('./?tab=meds')
+  for (const m of ['simvastatin', 'amlodipine']) {
+    const input = page.getByLabel('Add a medication')
+    await input.fill(m)
+    await input.press('Enter')
+  }
+  const row = page
+    .locator('section.meds__sev', { has: page.locator('#sev-avoid') })
+    .locator('li')
+    .first()
+  const clear = page.getByRole('button', { name: 'Clear all' })
+  await expect(row).toBeVisible()
+  const r = (await row.boundingBox())!
+  const c = (await clear.boundingBox())!
+  expect(r.y).toBeLessThan(c.y)
+  if (info.project.name === 'mobile') {
+    expect(r.y).toBeLessThan(page.viewportSize()!.height * 1.2)
+  }
+  await clear.click()
+  await expect(page.getByRole('button', { name: 'Undo' })).toBeVisible()
+  await expect(page.getByLabel('Add a medication')).toBeFocused()
 })
