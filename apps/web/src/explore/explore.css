@@ -10,6 +10,12 @@
   border: 1px solid currentColor;
   z-index: 10;
 }
+/* On phones the panel is a bottom sheet: leave room above it for the framed selection. */
+@media (max-width: 40rem) {
+  .panel {
+    max-height: 58vh;
+  }
+}
 .panel__top {
   display: flex;
   gap: 0.75rem;

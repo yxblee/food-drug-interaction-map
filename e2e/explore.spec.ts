@@ -204,3 +204,51 @@ test('the legend closes when the panel opens and can be reopened', async ({ page
   await legend.getByText('How to read the map').click()
   await expect(legend).toHaveJSProperty('open', true)
 })
+
+// Names of the 2D labels that are actually drawn (display: none removes them).
+const shownLabels = (page: import('@playwright/test').Page, sel: string) =>
+  page.evaluate(
+    (s) =>
+      [...document.querySelectorAll(`svg.graph2d g.node${s} .label`)]
+        .filter((l) => getComputedStyle(l).display !== 'none')
+        .map((l) => l.textContent),
+    sel,
+  )
+
+test('2D labels show for groups at rest and for the selection with its neighbours', async ({
+  page,
+}, info) => {
+  await page.goto('./')
+  if (info.project.name !== 'mobile') await page.getByRole('button', { name: '2D' }).click()
+  await expect(page.locator('svg.graph2d g.node').first()).toBeAttached()
+  await expect.poll(() => shownLabels(page, '.node--group')).not.toHaveLength(0)
+  expect(await shownLabels(page, ':not(.node--group)')).toHaveLength(0)
+  // Names stay in the accessible names.
+  await expect(page.getByRole('button', { name: 'Food: Grapefruit' })).toBeAttached()
+
+  await page.getByRole('button', { name: 'Try grapefruit' }).click()
+  await expect.poll(() => shownLabels(page, ':not(.node--group)')).toContain('GRAPEFRUIT')
+  expect(await shownLabels(page, ':not(.node--group)')).toContain('SIMVASTATIN')
+})
+
+test('the mobile panel leaves room for the framed selection', async ({ page }, info) => {
+  test.skip(info.project.name !== 'mobile')
+  await page.goto('./')
+  await page.getByRole('button', { name: 'Try grapefruit' }).click()
+  const panel = page.getByRole('complementary')
+  await expect(panel).toBeVisible()
+  const h = await panel.evaluate((p) => p.getBoundingClientRect().height / innerHeight)
+  expect(h).toBeLessThanOrEqual(0.6)
+})
+
+test('the grapefruit hint is hidden while showing your meds', async ({ page }) => {
+  await page.goto('./')
+  await expect(page.getByRole('button', { name: 'Try grapefruit' })).toBeVisible()
+  await page.getByRole('tab', { name: 'My meds' }).click()
+  const input = page.getByLabel('Add a medication')
+  await input.fill('warfarin')
+  await input.press('Enter')
+  await page.getByRole('button', { name: /See on map/ }).click()
+  await expect(page.getByRole('button', { name: /Showing your meds/ })).toBeVisible()
+  await expect(page.getByRole('button', { name: 'Try grapefruit' })).toHaveCount(0)
+})

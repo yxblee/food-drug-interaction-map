@@ -94,6 +94,10 @@
   fill: var(--muted);
   pointer-events: none;
 }
+/* At rest only groups, focused nodes and the hovered or keyboard-focused node carry a label. */
+.graph2d .node:not(.is-labelled):not(:hover):not(:focus-visible) .label {
+  display: none;
+}
 .graph2d .node.is-selected .label {
   fill: var(--ink);
   font-weight: 700;

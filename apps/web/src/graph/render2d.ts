@@ -100,6 +100,7 @@ export function create2d(opts: RendererOptions): GraphRenderer {
       .selectAll<SVGGElement, SimNode>('g.node')
       .classed('is-dim', (n) => !inFocus(n.key))
       .classed('is-selected', (n) => n.key === selected)
+      .classed('is-labelled', (n) => !!n.group || (!!f && f.has(n.key)))
     root
       .selectAll<SVGLineElement, SimLink>('line.link')
       .classed('is-dim', (l) => !!f && !(f.has(endKey(l.source)) && f.has(endKey(l.target))))
