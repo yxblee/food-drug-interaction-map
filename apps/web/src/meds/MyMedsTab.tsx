@@ -1,7 +1,7 @@
 import { Fragment, useEffect, useMemo, useRef, useState } from 'react'
 import type { GraphPayload, NodeDetail } from '@fdi/schema'
 import { SEVERITIES } from '@fdi/schema'
-import { buildIndex, groupTerm, nodeKey, searchNodes, type Index } from '@fdi/schema/domain'
+import { buildIndex, groupTerm, nodeKey, searchNodes } from '@fdi/schema/domain'
 import { fetchNode } from '../api.ts'
 import { InteractionRow } from '../explore/InteractionRow.tsx'
 import { SeverityBadge, SeverityGroupHeading } from '../explore/SeverityBadge.tsx'
@@ -274,7 +274,7 @@ export function MyMedsTab({
                 <SeverityGroupHeading severity={sev} />
                 <ul className="meds__list">
                   {group.map((w) => (
-                    <WarningRow key={w.food.id} warning={w} ix={ix} />
+                    <WarningRow key={w.food.id} warning={w} />
                   ))}
                 </ul>
               </section>
@@ -286,7 +286,7 @@ export function MyMedsTab({
   )
 }
 
-function WarningRow({ warning: w, ix }: { warning: FoodWarning; ix: Index }) {
+function WarningRow({ warning: w }: { warning: FoodWarning }) {
   const [detail, setDetail] = useState<NodeDetail | null>(null)
   const [failed, setFailed] = useState(false)
   const affectedIds = new Set(w.affected.map((h) => h.interaction.id))
