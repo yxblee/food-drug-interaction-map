@@ -9,7 +9,7 @@ Two ways in, over one curated dataset:
 
 > Informational only — not medical advice. Talk to your pharmacist or doctor before changing your diet or medications.
 
-**Live demo:** [yxblee.github.io/food-drug-interaction-map](https://yxblee.github.io/food-drug-interaction-map/). A static proof of concept of the full-stack app: the dataset as of the last deploy from `main`, redeployed after every green push.
+**Live demo:** [yxblee.github.io/food-drug-interaction-map](https://yxblee.github.io/food-drug-interaction-map/). A static proof of concept of the full-stack app: the Dataset as of the last deploy from `main`, redeployed after every green push.
 
 **Status:** core app built (schema, API, 53 cited interactions, Explore, My meds, end-to-end tests). See the [design spec](docs/superpowers/specs/2026-10-08-core-app-design.md), [implementation plan](docs/superpowers/plans/2026-10-08-core-app.md), [glossary](GLOSSARY.md) and [data sources](docs/data-sources.md).
 
@@ -25,7 +25,7 @@ Needs Node ≥ 24.11 and pnpm. Layout: `apps/api` (Hono), `apps/web` (React), `p
 | `pnpm --filter @fdi/web build` | Production web build to `apps/web/dist` |
 | `pnpm start` | Serve the API on `PORT` (default 8787) |
 | `pnpm run export:static` | Export the read API as JSON into `apps/web/public/api` (needs `dist/data.db`) |
-| `VITE_STATIC_DATA=1 pnpm --filter @fdi/web build` | Static GitHub Pages build (reads exported JSON, served under `/food-drug-interaction-map/`) |
+| `pnpm run build:static` | Static GitHub Pages build: DB, export, then web build under `/food-drug-interaction-map/` (as deployed and as e2e tests it) |
 | `vp check` / `vp test` | Lint, format and type check / unit tests (as in CI) |
 | `vp exec playwright test` | End-to-end tests (against the static build) |
 
