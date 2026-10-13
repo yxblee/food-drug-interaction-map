@@ -95,14 +95,6 @@ export function ExploreTab({
 
   return (
     <div className="explore">
-      <GraphView
-        graph={renderGraph}
-        view={view}
-        motion={!env.reducedMotion}
-        focus={focus}
-        palette={palette}
-        onSelect={onGraphSelect}
-      />
       <div className="explore__bar">
         <Search nodes={nodes} state={state} update={update} />
         {medsFilter && (
@@ -135,6 +127,15 @@ export function ExploreTab({
         )}
       </div>
       <Legend />
+      {/* After the controls in DOM order so keyboard users reach search first. */}
+      <GraphView
+        graph={renderGraph}
+        view={view}
+        motion={!env.reducedMotion}
+        focus={focus}
+        palette={palette}
+        onSelect={onGraphSelect}
+      />
       {view === '3d' && selected && (
         <div className="sr-only" aria-live="polite">
           <p>Interactions for the selected item:</p>

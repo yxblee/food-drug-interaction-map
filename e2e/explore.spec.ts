@@ -83,3 +83,35 @@ test('links carry severity ink before anything is selected', async ({ page }, in
   await expect(avoidLink).toBeAttached()
   await expect(avoidLink).toHaveCSS('stroke', 'rgb(122, 42, 28)')
 })
+
+test('keyboard users reach search before any graph node', async ({ page }) => {
+  await page.goto('./')
+  await expect(page.locator('.graph-host')).toBeAttached()
+  for (let i = 0; i < 12; i++) {
+    await page.keyboard.press('Tab')
+    const where = await page.evaluate(() => {
+      const el = document.activeElement
+      if (el?.closest('.graph-host')) return 'graph'
+      return el?.getAttribute('aria-label') === 'Search drugs, foods and mechanisms' ? 'search' : ''
+    })
+    expect(where).not.toBe('graph')
+    if (where === 'search') return
+  }
+  throw new Error('search not reached within 12 tabs')
+})
+
+test('picking a search result closes the list until you type again', async ({ page }) => {
+  await page.goto('./')
+  const search = page.getByLabel('Search drugs, foods and mechanisms')
+  await search.fill('grapefruit')
+  const results = page.locator('.search__results')
+  await results
+    .getByRole('button', { name: /Grapefruit$/ })
+    .first()
+    .click()
+  await expect(page.getByRole('complementary')).toBeVisible()
+  await expect(results).toHaveCount(0)
+
+  await search.fill('grape')
+  await expect(results).toBeVisible()
+})
