@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from 'react'
+import { useEffect, useMemo, useRef, useState } from 'react'
 import type { GraphPayload, Kind } from '@fdi/schema'
 import { buildIndex, splitKey } from '@fdi/schema/domain'
 import { fetchGraph } from './api.ts'
@@ -14,13 +14,14 @@ export function App() {
   const [state, update] = useUrlState()
   const [graph, setGraph] = useState<GraphPayload | null>(null)
   const [error, setError] = useState<string | null>(null)
-  const [filterMeds, setFilterMeds] = useState(false)
+  const [mapNote, setMapNote] = useState('')
+  const focusMap = useRef(false)
   const { meds, setMeds, brands, setBrands, notChecked, setNotChecked, dropped } = useMeds(graph)
   const ix = useMemo(() => (graph ? buildIndex(graph.nodes, graph.interactions) : null), [graph])
   // Derived, so it follows the Medication list while the filter is on.
   const medsFilter = useMemo(
-    () => (filterMeds && ix ? mapKeysFor(ix, checkMeds(ix, meds), meds) : null),
-    [filterMeds, ix, meds],
+    () => (state.meds && meds.length > 0 && ix ? mapKeysFor(ix, checkMeds(ix, meds), meds) : null),
+    [state.meds, ix, meds],
   )
 
   const [attempt, setAttempt] = useState(0)
@@ -35,6 +36,13 @@ export function App() {
       live = false
     }
   }, [attempt])
+
+  // After "See on map", keyboard focus follows the person to the graph.
+  useEffect(() => {
+    if (!focusMap.current || state.tab !== 'explore' || !graph) return
+    focusMap.current = false
+    document.querySelector<HTMLElement>('.graph-host')?.focus()
+  }, [state.tab, graph])
 
   const retry = () => {
     setError(null)
@@ -97,7 +105,7 @@ export function App() {
             update={update}
             palette={palette}
             medsFilter={medsFilter}
-            clearMedsFilter={() => setFilterMeds(false)}
+            clearMedsFilter={() => update({ meds: false })}
           />
         ) : (
           <MyMedsTab
@@ -109,12 +117,19 @@ export function App() {
             notChecked={notChecked}
             setNotChecked={setNotChecked}
             onSeeOnMap={() => {
-              setFilterMeds(true)
-              update({ tab: 'explore', node: null, q: '', mech: true }, { push: true })
+              focusMap.current = true
+              setMapNote(
+                `Showing your ${meds.length} ${meds.length === 1 ? 'medicine' : 'medicines'}`,
+              )
+              update({ tab: 'explore', node: null, q: '', mech: true, meds: true }, { push: true })
             }}
           />
         )}
       </main>
+
+      <p className="sr-only" role="status">
+        {state.meds ? mapNote : ''}
+      </p>
 
       <footer className="app__footer">
         Informational only — not medical advice. Talk to your pharmacist or doctor before changing

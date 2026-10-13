@@ -6,6 +6,8 @@ export interface ViewState {
   view: '3d' | '2d' | null
   mech: boolean
   tint: boolean
+  /** Map filtered to the Medication list. Only a flag: the list itself stays on the device. */
+  meds: boolean
 }
 
 export const DEFAULT_STATE: ViewState = {
@@ -15,6 +17,7 @@ export const DEFAULT_STATE: ViewState = {
   view: null,
   mech: true,
   tint: false,
+  meds: false,
 }
 const NODE_KEY = /^(drug|food|mechanism):[a-z0-9]+(?:-[a-z0-9]+)*$/
 
@@ -30,6 +33,7 @@ export function decode(search: string): ViewState {
     view: view === '3d' || view === '2d' ? view : null,
     mech: p.get('mech') !== '0',
     tint: p.get('tint') === '1',
+    meds: p.get('meds') === '1',
   }
 }
 
@@ -41,6 +45,7 @@ export function encode(s: ViewState): string {
   if (s.view) p.set('view', s.view)
   if (!s.mech) p.set('mech', '0')
   if (s.tint) p.set('tint', '1')
+  if (s.meds) p.set('meds', '1')
   return p.toString()
 }
 

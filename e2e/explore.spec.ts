@@ -106,11 +106,11 @@ test('picking a search result closes the list until you type again', async ({ pa
   await search.fill('grapefruit')
   const results = page.locator('.search__results')
   await results
-    .getByRole('button', { name: /Grapefruit$/ })
+    .getByRole('option', { name: /Grapefruit$/ })
     .first()
     .click()
   await expect(page.getByRole('complementary')).toBeVisible()
-  await expect(results).toHaveCount(0)
+  await expect(results).toBeHidden()
 
   await search.fill('grape')
   await expect(results).toBeVisible()
@@ -409,4 +409,29 @@ test('Explore panel Severity meaning is sentence-case body text', async ({ page 
   expect(m.size).toBeGreaterThanOrEqual(15)
   expect(m.ratio).toBeGreaterThanOrEqual(1.4)
   expect(m.transform).toBe('none')
+})
+
+test('Explore search is a combobox: arrows move, Enter picks, Escape closes', async ({ page }) => {
+  await page.goto('./')
+  const search = page.getByLabel('Search drugs, foods and mechanisms')
+  await expect(search).toHaveAttribute('role', 'combobox')
+  await expect(search).toHaveAttribute('aria-expanded', 'false')
+  await search.fill('grape')
+  await expect(search).toHaveAttribute('aria-expanded', 'true')
+  const options = page.getByRole('listbox').getByRole('option')
+  expect(await options.count()).toBeGreaterThan(1)
+  await expect(options.first()).toHaveAttribute('aria-selected', 'true')
+  await search.press('ArrowDown')
+  await expect(options.nth(1)).toHaveAttribute('aria-selected', 'true')
+  const second = (await options.nth(1).textContent()) ?? ''
+  await search.press('Enter')
+  await expect(search).toHaveAttribute('aria-expanded', 'false')
+  await expect(page).toHaveURL(/node=/)
+  await expect(page.getByRole('complementary')).toBeVisible()
+  expect(second.length).toBeGreaterThan(0)
+
+  await search.fill('grap')
+  await expect(search).toHaveAttribute('aria-expanded', 'true')
+  await search.press('Escape')
+  await expect(search).toHaveAttribute('aria-expanded', 'false')
 })

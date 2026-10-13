@@ -295,3 +295,73 @@ test('type is readable: severity meaning is body text, footer is 14px+, chip Bra
     expect(ratio, scheme).toBeGreaterThanOrEqual(4.5)
   }
 })
+
+test('the Medication list survives leaving the site and coming back', async ({ page }) => {
+  await page.goto('./')
+  await page.getByRole('tab', { name: 'My meds' }).click()
+  const input = page.getByLabel('Add a medication')
+  await input.fill('warfarin')
+  await input.press('Enter')
+  const chips = page.getByRole('list', { name: 'Your medications' })
+  await expect(chips).toContainText('Warfarin')
+  const url = page.url()
+
+  await page.goto('about:blank')
+  await page.goBack()
+  await page.getByRole('tab', { name: 'My meds' }).click()
+  await expect(chips).toContainText('Warfarin')
+
+  await page.goto('about:blank')
+  await page.goto(url)
+  await page.getByRole('tab', { name: 'My meds' }).click()
+  await expect(chips).toContainText('Warfarin')
+})
+
+test('inputs are 16px and at least 44px tall', async ({ page }) => {
+  await page.goto('./')
+  const search = page.getByLabel('Search drugs, foods and mechanisms')
+  await page.getByRole('tab', { name: 'My meds' }).click()
+  const med = page.getByLabel('Add a medication')
+  for (const el of [med]) {
+    const m = await el.evaluate((e) => ({
+      size: getComputedStyle(e).fontSize,
+      h: e.getBoundingClientRect().height,
+    }))
+    expect(m.size).toBe('16px')
+    expect(m.h).toBeGreaterThanOrEqual(44)
+  }
+  await page.getByRole('tab', { name: 'Explore' }).click()
+  const m = await search.evaluate((e) => ({
+    size: getComputedStyle(e).fontSize,
+    h: e.getBoundingClientRect().height,
+  }))
+  expect(m.size).toBe('16px')
+  expect(m.h).toBeGreaterThanOrEqual(44)
+})
+
+test('See on map keeps the filter in the URL as a flag, moves focus to the map and announces', async ({
+  page,
+}) => {
+  await page.goto('./')
+  await page.getByRole('tab', { name: 'My meds' }).click()
+  const input = page.getByLabel('Add a medication')
+  for (const med of ['warfarin', 'simvastatin', 'amlodipine']) {
+    await input.fill(med)
+    await input.press('Enter')
+  }
+  await page.getByRole('button', { name: /See on map/ }).click()
+
+  await expect(page).toHaveURL(/meds=1/)
+  expect(new URL(page.url()).search).not.toMatch(/warfarin|simvastatin|amlodipine|drug/i)
+  await expect(page.locator('.graph-host')).toBeFocused()
+  await expect(
+    page.getByRole('status').filter({ hasText: 'Showing your 3 medicines' }),
+  ).toBeAttached()
+
+  await page.reload()
+  await expect(page.getByRole('button', { name: /Showing your meds/ })).toBeVisible()
+
+  await page.getByRole('button', { name: /Showing your meds/ }).click()
+  await expect(page.getByRole('button', { name: /Showing your meds/ })).toHaveCount(0)
+  expect(page.url()).not.toContain('meds=1')
+})

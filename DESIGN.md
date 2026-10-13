@@ -260,6 +260,7 @@ The guide's stamp. Pill, light badge background, 1px `currentColor` outline, upp
 - **Notices / banner:** hairline outline on surface; the danger banner uses an Oxblood outline.
 
 ### Inputs / Fields
+- **Both inputs (Explore search, medication):** inherit the body font at 16px (iOS Safari zooms smaller text on focus) and are at least 44px tall. Both are ARIA comboboxes over a listbox: ArrowUp/Down move the active option, Enter picks it (first by default), Escape closes.
 - **Medication input:** pill, Bone Surface, Weathered Grey outline, 10px 14px padding; suggestions below on a 12px-radius surface with 8px-radius rows that fill with paper on hover/focus.
 - **Explore search:** square, Bone Surface, Weathered Grey outline, 8px 10px padding, max 420px; results as a ruled list with muted aliases and a muted match count.
 - **Focus:** global 2px ink outline.

@@ -42,8 +42,10 @@
 }
 .search__input {
   width: 100%;
+  min-height: 44px;
   padding: 8px 10px;
   font: inherit;
+  font-size: 16px;
   color: inherit;
   background: var(--surface);
   border: 1px solid var(--muted);
@@ -61,15 +63,17 @@
   overflow: auto;
 }
 .search__item {
-  width: 100%;
   text-align: left;
-  padding: 6px 8px;
+  padding: 10px 8px;
   font: inherit;
   color: inherit;
   background: none;
-  border: 0;
   border-bottom: 1px solid var(--line);
   cursor: pointer;
+}
+.search__item[aria-selected='true'],
+.search__item:hover {
+  background: var(--paper);
 }
 .search__alias {
   color: var(--muted);
