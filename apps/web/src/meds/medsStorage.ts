@@ -41,3 +41,29 @@ export function saveNotChecked(
   if (names.length) storage.setItem(NOT_CHECKED_KEY, JSON.stringify(names))
   else storage.removeItem(NOT_CHECKED_KEY)
 }
+
+/** The Brand name a medicine was added by (id -> name), so the chip can echo it. Display only. */
+export const BRANDS_KEY = 'fdi:meds:brands'
+
+export function loadBrands(storage: Pick<Storage, 'getItem'>): Record<string, string> {
+  let raw: unknown
+  try {
+    raw = JSON.parse(storage.getItem(BRANDS_KEY) ?? '{}')
+  } catch {
+    return {}
+  }
+  if (!raw || typeof raw !== 'object' || Array.isArray(raw)) return {}
+  return Object.fromEntries(
+    Object.entries(raw).filter(
+      (e): e is [string, string] => typeof e[1] === 'string' && e[1].trim() !== '',
+    ),
+  )
+}
+
+export function saveBrands(
+  storage: Pick<Storage, 'setItem' | 'removeItem'>,
+  brands: Record<string, string>,
+): void {
+  if (Object.keys(brands).length) storage.setItem(BRANDS_KEY, JSON.stringify(brands))
+  else storage.removeItem(BRANDS_KEY)
+}

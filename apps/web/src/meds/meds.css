@@ -57,6 +57,9 @@
 .meds__options button:focus-visible {
   background: var(--paper);
 }
+.meds__hint {
+  padding: 4px 10px 8px;
+}
 .meds__chips {
   list-style: none;
   padding: 0;

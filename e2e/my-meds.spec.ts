@@ -13,12 +13,21 @@ test('add a brand-name med, see foods to watch, persist across reload', async ({
   await input.press('Enter')
 
   const chips = page.getByRole('list', { name: 'Your medications' })
-  await expect(chips).toContainText('Warfarin')
+  await expect(chips).toContainText('Warfarin (Coumadin)')
   const caution = page.locator('section.meds__sev', { has: page.locator('#sev-caution') })
   await expect(caution).toContainText('Leafy greens')
 
   await page.reload()
-  await expect(page.getByRole('list', { name: 'Your medications' })).toContainText('Warfarin')
+  await expect(page.getByRole('list', { name: 'Your medications' })).toContainText(
+    'Warfarin (Coumadin)',
+  )
+
+  await page.getByRole('button', { name: 'Remove Warfarin' }).click()
+  await input.fill('warfarin')
+  await input.press('Enter')
+  await expect(chips).not.toContainText('Coumadin')
+  await page.reload()
+  await expect(page.getByRole('list', { name: 'Your medications' })).not.toContainText('Coumadin')
 
   expect(apiCalls.some((u) => /warfarin|coumadin/i.test(u))).toBe(false)
 })
@@ -40,6 +49,19 @@ test('each affected drug shows its own severity inside a food warning', async ({
   await expect(grapefruit.locator('.warning__drug', { hasText: 'Amlodipine' })).toContainText(
     'Minimal',
   )
+  await expect(grapefruit.locator('.warning__drugs')).toContainText(
+    'no meaningful effect on Amlodipine',
+  )
+  await expect(grapefruit.locator('.warning__drugs')).not.toContainText('affects Simvastatin, Amlo')
+})
+
+test('no-match in My meds gives a next step and says absence is not safety', async ({ page }) => {
+  await page.goto('./')
+  await page.getByRole('tab', { name: 'My meds' }).click()
+  await page.getByLabel('Add a medication').fill('Eliquis')
+  await expect(page.getByText('Check the spelling or try the generic name.')).toBeVisible()
+  await expect(page.getByText("doesn't mean a combination is safe")).toBeVisible()
+  await expect(page.getByRole('button', { name: 'Add “Eliquis” as not checked' })).toBeVisible()
 })
 
 test('a brand name for a med already listed says so instead of "no match"', async ({ page }) => {
@@ -151,7 +173,7 @@ test('Clear all announces, returns focus to the input, and Undo restores both li
   await page.goto('./')
   await page.getByRole('tab', { name: 'My meds' }).click()
   const input = page.getByLabel('Add a medication')
-  await input.fill('warfarin')
+  await input.fill('Coumadin')
   await input.press('Enter')
   await input.fill('Eliquis')
   await input.press('Enter')
@@ -164,7 +186,7 @@ test('Clear all announces, returns focus to the input, and Undo restores both li
   await page.getByRole('button', { name: 'Undo' }).click()
   await expect(input).toBeFocused()
   const chips = page.getByRole('list', { name: 'Your medications' })
-  await expect(chips).toContainText('Warfarin')
+  await expect(chips).toContainText('Warfarin (Coumadin)')
   await expect(chips).toContainText('Eliquis')
   await expect(page.getByRole('button', { name: 'Undo' })).toHaveCount(0)
 })

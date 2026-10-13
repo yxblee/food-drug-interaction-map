@@ -1,7 +1,14 @@
 import { useEffect, useMemo, useState } from 'react'
 import type { GraphPayload } from '@fdi/schema'
 import { safeStorage } from '../storage.ts'
-import { loadMeds, loadNotChecked, saveMeds, saveNotChecked } from './medsStorage.ts'
+import {
+  loadBrands,
+  loadMeds,
+  loadNotChecked,
+  saveBrands,
+  saveMeds,
+  saveNotChecked,
+} from './medsStorage.ts'
 
 /** The Medication list, owned at App level so it outlives tab switches. Loads once the graph arrives. */
 export function useMeds(graph: GraphPayload | null) {
@@ -9,6 +16,7 @@ export function useMeds(graph: GraphPayload | null) {
   const [state, setState] = useState<{
     ids: string[]
     notChecked: string[]
+    brands: Record<string, string>
     dropped: number
   } | null>(null)
 
@@ -20,6 +28,7 @@ export function useMeds(graph: GraphPayload | null) {
     setState({
       ids: loaded.ids,
       notChecked: storage ? loadNotChecked(storage) : [],
+      brands: storage ? loadBrands(storage) : {},
       dropped: loaded.dropped.length,
     })
   }
@@ -44,6 +53,18 @@ export function useMeds(graph: GraphPayload | null) {
     }
   }, [notChecked, storage])
 
+  const brands = state?.brands
+  useEffect(() => {
+    if (!storage || !brands) return
+    try {
+      saveBrands(storage, brands)
+    } catch {
+      // storage full or blocked: the label only lasts this visit
+    }
+  }, [brands, storage])
+
+  const setBrands = (update: (b: Record<string, string>) => Record<string, string>) =>
+    setState((s) => (s ? { ...s, brands: update(s.brands) } : s))
   const setNotChecked = (update: (m: string[]) => string[]) =>
     setState((s) => (s ? { ...s, notChecked: update(s.notChecked) } : s))
   const setMeds = (update: (m: string[]) => string[]) =>
@@ -51,6 +72,8 @@ export function useMeds(graph: GraphPayload | null) {
   return {
     meds: ids ?? [],
     setMeds,
+    brands: brands ?? {},
+    setBrands,
     notChecked: notChecked ?? [],
     setNotChecked,
     dropped: state?.dropped ?? 0,

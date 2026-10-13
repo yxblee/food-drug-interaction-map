@@ -12,6 +12,8 @@ export interface MyMedsTabProps {
   graph: GraphPayload
   meds: string[]
   setMeds: (update: (m: string[]) => string[]) => void
+  brands: Record<string, string>
+  setBrands: (update: (b: Record<string, string>) => Record<string, string>) => void
   notChecked: string[]
   setNotChecked: (update: (m: string[]) => string[]) => void
   onSeeOnMap: () => void
@@ -21,6 +23,8 @@ export function MyMedsTab({
   graph,
   meds,
   setMeds,
+  brands,
+  setBrands,
   notChecked,
   setNotChecked,
   onSeeOnMap,
@@ -29,7 +33,11 @@ export function MyMedsTab({
   const [query, setQuery] = useState('')
   const [notice, setNotice] = useState('')
   // The list before "Clear all", in memory only, for UNDO_MS.
-  const [undo, setUndo] = useState<{ ids: string[]; names: string[] } | null>(null)
+  const [undo, setUndo] = useState<{
+    ids: string[]
+    names: string[]
+    brands: Record<string, string>
+  } | null>(null)
   const undoTimer = useRef<number>(undefined)
   const input = useRef<HTMLInputElement>(null)
   useEffect(() => () => window.clearTimeout(undoTimer.current), [])
@@ -56,6 +64,12 @@ export function MyMedsTab({
     }
     setNotice('')
     setMeds((m) => (m.includes(id) ? m : [...m, id]))
+    // Echo the Brand name the person typed, so the chip matches the box on their shelf.
+    if (matched !== name(id)) setBrands((b) => ({ ...b, [id]: matched }))
+  }
+  const removeMed = (id: string) => {
+    setMeds((m) => m.filter((x) => x !== id))
+    setBrands(({ [id]: _gone, ...rest }) => rest)
   }
   const addNotChecked = (raw: string) => {
     const typed = raw.trim()
@@ -70,8 +84,9 @@ export function MyMedsTab({
     setNotChecked((n) => [...n, typed])
   }
   const clearAll = () => {
-    setUndo({ ids: meds, names: notChecked })
+    setUndo({ ids: meds, names: notChecked, brands })
     setMeds(() => [])
+    setBrands(() => ({}))
     setNotChecked(() => [])
     setNotice('List cleared')
     window.clearTimeout(undoTimer.current)
@@ -84,6 +99,7 @@ export function MyMedsTab({
   const undoClear = () => {
     if (!undo) return
     setMeds(() => undo.ids)
+    setBrands(() => undo.brands)
     setNotChecked(() => undo.names)
     setNotice('List restored')
     dropUndo()
@@ -122,6 +138,10 @@ export function MyMedsTab({
             {options.length === 0 && query.trim() && (
               <>
                 <li className="mono-label">No match in our dataset</li>
+                <li className="meds__hint">
+                  Check the spelling or try the generic name. Not being in our dataset doesn't mean
+                  a combination is safe.
+                </li>
                 <li>
                   <button onClick={() => addNotChecked(query)}>
                     Add “{query.trim()}” as not checked
@@ -153,10 +173,8 @@ export function MyMedsTab({
           {meds.map((id) => (
             <li key={id} id={chipId(id)} tabIndex={-1} className="chip">
               {name(id)}
-              <button
-                aria-label={`Remove ${name(id)}`}
-                onClick={() => setMeds((m) => m.filter((x) => x !== id))}
-              >
+              {brands[id] && <span className="mono-label"> ({brands[id]})</span>}
+              <button aria-label={`Remove ${name(id)}`} onClick={() => removeMed(id)}>
                 ✕
               </button>
             </li>
@@ -238,6 +256,25 @@ function WarningRow({ warning: w, ix }: { warning: FoodWarning; ix: Index }) {
   const [detail, setDetail] = useState<NodeDetail | null>(null)
   const [failed, setFailed] = useState(false)
   const affectedIds = new Set(w.affected.map((h) => h.interaction.id))
+  // A Drug whose own Severity is minimal, under a more severe row, is named apart.
+  const negligible = w.affected.filter(
+    (h) => h.interaction.severity === 'minimal' && w.severity !== 'minimal',
+  )
+  const affecting = w.affected.filter((h) => !negligible.includes(h))
+  const drugChip = (h: FoodWarning['affected'][number], i: number) => (
+    <Fragment key={`${h.drug.id}:${h.interaction.id}`}>
+      {i > 0 && ', '}
+      <span className="warning__drug">
+        {h.drug.name}
+        {h.interaction.severity !== w.severity && (
+          <>
+            {' '}
+            <SeverityBadge severity={h.interaction.severity} />
+          </>
+        )}
+      </span>
+    </Fragment>
+  )
   return (
     <li className="warning">
       <details
@@ -253,21 +290,9 @@ function WarningRow({ warning: w, ix }: { warning: FoodWarning; ix: Index }) {
           {w.food.group && <span className="mono-label"> {groupTerm('food')}</span>}
           <span className="warning__drugs">
             {' '}
-            affects{' '}
-            {w.affected.map((h, i) => (
-              <Fragment key={`${h.drug.id}:${h.interaction.id}`}>
-                {i > 0 && ', '}
-                <span className="warning__drug">
-                  {h.drug.name}
-                  {h.interaction.severity !== w.severity && (
-                    <>
-                      {' '}
-                      <SeverityBadge severity={h.interaction.severity} />
-                    </>
-                  )}
-                </span>
-              </Fragment>
-            ))}
+            {affecting.length > 0 && <>affects {affecting.map(drugChip)}</>}
+            {affecting.length > 0 && negligible.length > 0 && '; '}
+            {negligible.length > 0 && <>no meaningful effect on {negligible.map(drugChip)}</>}
           </span>
         </summary>
         <ul className="warning__affected">

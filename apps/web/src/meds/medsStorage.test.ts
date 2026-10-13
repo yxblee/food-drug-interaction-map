@@ -1,9 +1,12 @@
 import { describe, expect, it } from 'vite-plus/test'
 import {
+  BRANDS_KEY,
   MEDS_KEY,
   NOT_CHECKED_KEY,
+  loadBrands,
   loadMeds,
   loadNotChecked,
+  saveBrands,
   saveMeds,
   saveNotChecked,
 } from './medsStorage.ts'
@@ -57,5 +60,18 @@ describe('medsStorage', () => {
     expect(loadNotChecked(fake({ [NOT_CHECKED_KEY]: '[1, " Eliquis ", "", "Eliquis"]' }))).toEqual([
       'Eliquis',
     ])
+  })
+  it('keeps Brand names under their own key and tolerates corrupt or legacy data', () => {
+    const s = fake()
+    saveMeds(s, ['warfarin'])
+    saveBrands(s, { warfarin: 'Coumadin' })
+    expect(s.m.get(MEDS_KEY)).toBe('["warfarin"]')
+    expect(loadBrands(s)).toEqual({ warfarin: 'Coumadin' })
+    saveBrands(s, {})
+    expect(s.m.has(BRANDS_KEY)).toBe(false)
+    expect(loadBrands(fake())).toEqual({})
+    expect(loadBrands(fake({ [BRANDS_KEY]: '{not json' }))).toEqual({})
+    expect(loadBrands(fake({ [BRANDS_KEY]: '["a"]' }))).toEqual({})
+    expect(loadBrands(fake({ [BRANDS_KEY]: '{"a":"X","b":1,"c":" "}' }))).toEqual({ a: 'X' })
   })
 })

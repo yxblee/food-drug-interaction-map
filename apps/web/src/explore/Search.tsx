@@ -53,6 +53,12 @@ export function Search({ nodes, state, update }: Props) {
       <p className="search__count mono-label" role="status" aria-live="polite">
         {searching ? matchCountLabel(results.length) : ''}
       </p>
+      {searching && results.length === 0 && (
+        <p className="search__empty">
+          Check the spelling or try the generic name. Not being in our dataset doesn't mean a
+          combination is safe.
+        </p>
+      )}
       {results.length > 0 && !picked && (
         <ul className="search__results">
           {results.map((r) => (

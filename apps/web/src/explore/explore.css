@@ -101,6 +101,11 @@
 .search__results {
   background: var(--surface);
 }
+.search__empty {
+  margin: 4px 0 0;
+  padding: 8px 12px;
+  background: var(--surface);
+}
 .explore__hint {
   /* Sits over the 2D graph's labels on narrow screens. */
   margin: 4px 0 0 -4px;

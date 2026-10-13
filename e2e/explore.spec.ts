@@ -115,3 +115,13 @@ test('picking a search result closes the list until you type again', async ({ pa
   await search.fill('grape')
   await expect(results).toBeVisible()
 })
+
+test('a search with no match suggests a next step and says absence is not safety', async ({
+  page,
+}) => {
+  await page.goto('./')
+  await page.getByLabel('Search drugs, foods and mechanisms').fill('Eliquis')
+  await expect(page.getByText('0 matches')).toBeVisible()
+  await expect(page.getByText('Check the spelling or try the generic name.')).toBeVisible()
+  await expect(page.getByText("doesn't mean a combination is safe")).toBeVisible()
+})
