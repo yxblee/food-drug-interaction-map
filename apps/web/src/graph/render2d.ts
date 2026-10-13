@@ -26,6 +26,7 @@ type SimLink = Omit<RenderLink, 'source' | 'target'> & {
 }
 
 const endKey = (e: string | SimNode) => (typeof e === 'string' ? e : e.key)
+const nodeDomId = (key: string) => `g2d-${key.replace(/[^\w-]/g, '_')}`
 const KIND_LABEL = { drug: 'Drug', food: 'Food', mechanism: 'Mechanism' } as const
 
 // Shapes: Drug = circle, Food = square, Mechanism = diamond.
@@ -113,11 +114,7 @@ export function create2d(opts: RendererOptions): GraphRenderer {
   return {
     mount(el) {
       host = el
-      svg = select(el)
-        .append('svg')
-        .attr('class', 'graph2d')
-        .attr('role', 'group')
-        .attr('aria-label', 'Interaction graph')
+      svg = select(el).append('svg').attr('class', 'graph2d').attr('role', 'presentation')
       root = svg.append('g')
       zoomer = zoom<SVGSVGElement, unknown>()
         .scaleExtent([0.2, 4])
@@ -154,18 +151,12 @@ export function create2d(opts: RendererOptions): GraphRenderer {
         .data(nodes)
         .join('g')
         .attr('class', (n) => `node node--${n.kind}${n.group ? ' node--group' : ''}`)
-        .attr('tabindex', 0)
+        .attr('id', (n) => nodeDomId(n.key))
         .attr('role', 'button')
         .attr('aria-label', (n) => `${KIND_LABEL[n.kind]}${n.group ? ' group' : ''}: ${n.name}`)
         .on('click', (e: MouseEvent, n) => {
           e.stopPropagation()
           onSelect(n.key)
-        })
-        .on('keydown', (e: KeyboardEvent, n) => {
-          if (e.key === 'Enter' || e.key === ' ') {
-            e.preventDefault()
-            onSelect(n.key)
-          }
         })
       node
         .filter((n) => n.group)
@@ -212,6 +203,28 @@ export function create2d(opts: RendererOptions): GraphRenderer {
       if (reframe) requestFit()
     },
 
+    points() {
+      if (!root) return []
+      const f = focus.focus
+      return nodes
+        .filter((n) => !f || f.has(n.key))
+        .map((n) => {
+          const r = document.getElementById(nodeDomId(n.key))?.getBoundingClientRect()
+          return {
+            key: n.key,
+            label: `${KIND_LABEL[n.kind]}: ${n.name}`,
+            x: r ? r.x + r.width / 2 : 0,
+            y: r ? r.y + r.height / 2 : 0,
+          }
+        })
+    },
+
+    setActive(key) {
+      root?.selectAll<SVGGElement, SimNode>('g.node').classed('is-active', (n) => n.key === key)
+      if (key) host?.setAttribute('aria-activedescendant', nodeDomId(key))
+      else host?.removeAttribute('aria-activedescendant')
+    },
+
     setInset(i) {
       inset = i
     },
@@ -231,6 +244,7 @@ export function create2d(opts: RendererOptions): GraphRenderer {
       sim?.stop()
       observer?.disconnect()
       svg?.remove()
+      host?.removeAttribute('aria-activedescendant')
       host = null
       svg = null
       root = null

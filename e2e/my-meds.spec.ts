@@ -61,7 +61,7 @@ test('no-match in My meds gives a next step and says absence is not safety', asy
   await page.getByLabel('Add a medication').fill('Eliquis')
   await expect(page.getByText('Check the spelling or try the generic name.')).toBeVisible()
   await expect(page.getByText("doesn't mean a combination is safe")).toBeVisible()
-  await expect(page.getByRole('button', { name: 'Add “Eliquis” as not checked' })).toBeVisible()
+  await expect(page.getByRole('option', { name: 'Add “Eliquis” as not checked' })).toBeVisible()
 })
 
 test('a brand name for a med already listed says so instead of "no match"', async ({ page }) => {
@@ -162,7 +162,7 @@ test('an unknown name can be added from the suggestion list', async ({ page }) =
   await page.goto('./')
   await page.getByRole('tab', { name: 'My meds' }).click()
   await page.getByLabel('Add a medication').fill('Eliquis')
-  await page.getByRole('button', { name: 'Add “Eliquis” as not checked' }).click()
+  await page.getByRole('option', { name: 'Add “Eliquis” as not checked' }).click()
   await expect(page.getByRole('list', { name: 'Your medications' })).toContainText('Eliquis')
   await expect(page.getByText('Not checked: Eliquis.')).toBeVisible()
 })
@@ -189,4 +189,41 @@ test('Clear all announces, returns focus to the input, and Undo restores both li
   await expect(chips).toContainText('Warfarin (Coumadin)')
   await expect(chips).toContainText('Eliquis')
   await expect(page.getByRole('button', { name: 'Undo' })).toHaveCount(0)
+})
+
+test('Severity headings announce the word once', async ({ page }) => {
+  await page.goto('./')
+  await page.getByRole('tab', { name: 'My meds' }).click()
+  const input = page.getByLabel('Add a medication')
+  await input.fill('Coumadin')
+  await input.press('Enter')
+  const headings = page.getByRole('heading', { level: 3 })
+  await expect(headings.first()).toBeVisible()
+  for (const h of await headings.all()) {
+    await expect(h).toHaveAccessibleName(/^(Avoid|Caution|Monitor|Minimal)$/)
+  }
+})
+
+test('medication suggestions are a combobox over a listbox', async ({ page }) => {
+  await page.goto('./')
+  await page.getByRole('tab', { name: 'My meds' }).click()
+  const input = page.getByRole('combobox', { name: 'Add a medication' })
+  await expect(input).toHaveAttribute('aria-expanded', 'false')
+  await input.fill('a')
+  await expect(input).toHaveAttribute('aria-expanded', 'true')
+  const options = page.getByRole('listbox').getByRole('option')
+  expect(await options.count()).toBeGreaterThan(1)
+  await expect(options.first()).toHaveAttribute('aria-selected', 'true')
+  const second = options.nth(1)
+  const secondId = await second.getAttribute('id')
+  await input.press('ArrowDown')
+  await expect(input).toHaveAttribute('aria-activedescendant', secondId!)
+  await expect(second).toHaveAttribute('aria-selected', 'true')
+  const label = (await second.textContent())!.split('(')[0]!.replace('· on your list', '').trim()
+  await input.press('Enter')
+  await expect(page.getByRole('list', { name: 'Your medications' })).toContainText(label)
+
+  await input.fill('a')
+  await input.press('Escape')
+  await expect(input).toHaveAttribute('aria-expanded', 'false')
 })

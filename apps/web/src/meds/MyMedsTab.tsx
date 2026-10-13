@@ -40,6 +40,7 @@ export function MyMedsTab({
   } | null>(null)
   const undoTimer = useRef<number>(undefined)
   const input = useRef<HTMLInputElement>(null)
+  const [activeIdx, setActiveIdx] = useState(0)
   useEffect(() => () => window.clearTimeout(undoTimer.current), [])
   const dropUndo = () => {
     window.clearTimeout(undoTimer.current)
@@ -51,6 +52,14 @@ export function MyMedsTab({
     [graph],
   )
   const options = useMemo(() => searchNodes(candidates, query, 8), [candidates, query])
+  // Pickable rows: the matches, or the single "add as not checked" row when there are none.
+  const showNoMatch = options.length === 0 && !!query.trim()
+  const rowCount = showNoMatch ? 1 : options.length
+  const active = Math.min(activeIdx, Math.max(rowCount - 1, 0))
+  const pick = (i: number) => {
+    if (options[i]) add(options[i].id, options[i].matched)
+    else addNotChecked(query)
+  }
   const warnings = useMemo(() => checkMeds(ix, meds), [ix, meds])
   const name = (id: string) => ix.nodes.get(nodeKey('drug', id))?.name ?? id
   const add = (id: string, matched: string) => {
@@ -123,43 +132,71 @@ export function MyMedsTab({
           autoComplete="off"
           placeholder="e.g. warfarin or Coumadin"
           value={query}
+          role="combobox"
+          aria-expanded={rowCount > 0}
+          aria-controls="med-options"
+          aria-autocomplete="list"
+          aria-activedescendant={rowCount > 0 ? `med-option-${active}` : undefined}
           onChange={(e) => {
             setQuery(e.target.value)
+            setActiveIdx(0)
             setNotice('')
           }}
           onKeyDown={(e) => {
-            if (e.key !== 'Enter') return
-            if (options[0]) add(options[0].id, options[0].matched)
-            else addNotChecked(query)
+            if (e.key === 'Enter') {
+              if (rowCount) pick(active)
+            } else if (e.key === 'Escape' && query) {
+              // Closes the list; typing again reopens it.
+              e.preventDefault()
+              setQuery('')
+            } else if ((e.key === 'ArrowDown' || e.key === 'ArrowUp') && rowCount) {
+              e.preventDefault()
+              setActiveIdx((active + (e.key === 'ArrowDown' ? 1 : rowCount - 1)) % rowCount)
+            }
           }}
         />
-        {query && (
-          <ul className="meds__options">
-            {options.length === 0 && query.trim() && (
-              <>
-                <li className="mono-label">No match in our dataset</li>
-                <li className="meds__hint">
-                  Check the spelling or try the generic name. Not being in our dataset doesn't mean
-                  a combination is safe.
-                </li>
-                <li>
-                  <button onClick={() => addNotChecked(query)}>
-                    Add “{query.trim()}” as not checked
-                  </button>
-                </li>
-              </>
-            )}
-            {options.map((o) => (
-              <li key={o.id}>
-                <button onClick={() => add(o.id, o.matched)}>
-                  {o.name}
-                  {o.matched !== o.name && <span className="mono-label"> ({o.matched})</span>}
-                  {meds.includes(o.id) && <span className="mono-label"> · on your list</span>}
-                </button>
-              </li>
-            ))}
-          </ul>
+        {showNoMatch && (
+          <div className="meds__nomatch">
+            <p className="mono-label">No match in our dataset</p>
+            <p className="meds__hint">
+              Check the spelling or try the generic name. Not being in our dataset doesn't mean a
+              combination is safe.
+            </p>
+          </div>
         )}
+        <ul
+          id="med-options"
+          role="listbox"
+          aria-label="Matching medications"
+          className="meds__options"
+          hidden={rowCount === 0}
+        >
+          {showNoMatch && (
+            <li
+              id="med-option-0"
+              role="option"
+              aria-selected={active === 0}
+              className="meds__option"
+              onClick={() => addNotChecked(query)}
+            >
+              Add “{query.trim()}” as not checked
+            </li>
+          )}
+          {options.map((o, i) => (
+            <li
+              key={o.id}
+              id={`med-option-${i}`}
+              role="option"
+              aria-selected={active === i}
+              className="meds__option"
+              onClick={() => add(o.id, o.matched)}
+            >
+              {o.name}
+              {o.matched !== o.name && <span className="mono-label"> ({o.matched})</span>}
+              {meds.includes(o.id) && <span className="mono-label"> · on your list</span>}
+            </li>
+          ))}
+        </ul>
         <p role="status" className="meds__status">
           {undo ? (
             <>
@@ -235,7 +272,7 @@ export function MyMedsTab({
             return (
               <section key={sev} aria-labelledby={`sev-${sev}`} className="meds__sev">
                 <h3 id={`sev-${sev}`}>
-                  <SeverityBadge severity={sev} /> {SEVERITY_LABEL[sev]}
+                  <SeverityBadge severity={sev} decorative /> {SEVERITY_LABEL[sev]}
                 </h3>
                 <p className="mono-label">{SEVERITY_LEGEND[sev]}</p>
                 <ul className="meds__list">

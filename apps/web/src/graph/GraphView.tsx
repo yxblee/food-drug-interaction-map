@@ -1,5 +1,6 @@
-import { useEffect, useRef } from 'react'
+import { useEffect, useRef, useState, type KeyboardEvent } from 'react'
 import type { Palette } from '../theme/tokens.ts'
+import { nearestInDirection, stepInOrder, type NavDir, type NavPoint } from './nav.ts'
 import { create2d } from './render2d.ts'
 import { NO_INSET, type Inset, type RenderGraph } from './renderGraph.ts'
 import type { Focus, GraphRenderer } from './types.ts'
@@ -93,5 +94,70 @@ export function GraphView(props: Props) {
   useEffect(() => renderer.current?.setFocus(props.focus), [props.focus])
   useEffect(() => renderer.current?.setTheme(props.palette), [props.palette])
 
-  return <div ref={host} className="graph-host" />
+  // One tab stop; arrows move an active node inside it (roving, via aria-activedescendant in 2D).
+  const [announce, setAnnounce] = useState('')
+  const active = useRef<string | null>(null)
+  const activate = (p: NavPoint | null) => {
+    if (!p) return
+    active.current = p.key
+    renderer.current?.setActive(p.key)
+    // 2D exposes the node through aria-activedescendant; 3D has no DOM nodes to point at.
+    if (props.view === '3d') setAnnounce(p.label)
+  }
+  const onFocus = (e: React.FocusEvent) => {
+    if (e.target !== e.currentTarget) return
+    const pts = renderer.current?.points() ?? []
+    const start =
+      pts.find((p) => p.key === active.current) ??
+      pts.find((p) => p.key === props.focus.selected) ??
+      pts[0]
+    activate(start ?? null)
+  }
+  const onBlur = () => renderer.current?.setActive(null)
+  const onKeyDown = (e: KeyboardEvent) => {
+    const r = renderer.current
+    if (!r || e.altKey || e.ctrlKey || e.metaKey) return
+    const pts = r.points()
+    const here = pts.find((p) => p.key === active.current) ?? null
+    const dir: NavDir | undefined = {
+      ArrowLeft: 'left',
+      ArrowRight: 'right',
+      ArrowUp: 'up',
+      ArrowDown: 'down',
+    }[e.key] as NavDir | undefined
+    if (dir) {
+      const next = here
+        ? (nearestInDirection(here, pts, dir) ??
+          stepInOrder(pts, here.key, dir === 'left' || dir === 'up' ? -1 : 1))
+        : stepInOrder(pts, null, 1)
+      activate(next)
+    } else if (e.key === 'Home') activate(pts[0] ?? null)
+    else if (e.key === 'End') activate(pts[pts.length - 1] ?? null)
+    else if ((e.key === 'Enter' || e.key === ' ') && here) props.onSelect(here.key)
+    else if (e.key === 'Escape') host.current?.blur()
+    else return
+    e.preventDefault()
+  }
+
+  return (
+    <>
+      <div
+        ref={host}
+        className="graph-host"
+        tabIndex={0}
+        role="application"
+        aria-label="Map of foods, drugs and mechanisms"
+        aria-describedby="graph-help"
+        onFocus={onFocus}
+        onBlur={onBlur}
+        onKeyDown={onKeyDown}
+      />
+      <p id="graph-help" className="sr-only">
+        Use the arrow keys to move between items, Enter to open one, Escape to leave the map.
+      </p>
+      <div className="sr-only" role="status">
+        {announce}
+      </div>
+    </>
+  )
 }

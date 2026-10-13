@@ -14,9 +14,16 @@ export const SEVERITY_LEGEND: Record<Severity, string> = {
   minimal: 'Documented but rarely clinically important.',
 }
 
-export function SeverityBadge({ severity }: { severity: Severity }) {
+/** Named by the Severity word alone; `decorative` hides it where the word is already in a heading. */
+export function SeverityBadge({
+  severity,
+  decorative,
+}: {
+  severity: Severity
+  decorative?: boolean
+}) {
   return (
-    <span className={`badge badge--${severity}`} title={SEVERITY_LEGEND[severity]}>
+    <span className={`badge badge--${severity}`} aria-hidden={decorative || undefined}>
       {SEVERITY_LABEL[severity]}
     </span>
   )

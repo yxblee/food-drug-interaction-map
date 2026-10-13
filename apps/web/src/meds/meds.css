@@ -44,18 +44,17 @@
   background: var(--surface);
   border-radius: 12px;
 }
-.meds__options button {
-  width: 100%;
-  text-align: left;
-  border: 0;
-  background: none;
+.meds__option {
   padding: 8px 10px;
   cursor: pointer;
   border-radius: 8px;
 }
-.meds__options button:hover,
-.meds__options button:focus-visible {
+.meds__option:hover,
+.meds__option[aria-selected='true'] {
   background: var(--paper);
+}
+.meds__nomatch {
+  padding: 4px 10px 0;
 }
 .meds__hint {
   padding: 4px 10px 8px;

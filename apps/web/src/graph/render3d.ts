@@ -41,6 +41,8 @@ export function create3d(opts: RendererOptions): GraphRenderer {
   let palette: Palette | null = null
   let focus: Focus = { selected: null, focus: null }
   let onSelect: (key: string | null) => void = () => {}
+  let active: string | null = null
+  const groups = new Map<string, Group>()
   const materials = new Map<string, MeshLambertMaterial>()
   const labels = new Map<string, SpriteText>()
 
@@ -51,8 +53,9 @@ export function create3d(opts: RendererOptions): GraphRenderer {
   function styleNode(key: string) {
     if (!palette) return
     const m = materials.get(key)
+    groups.get(key)?.scale.setScalar(key === active ? 1.7 : 1)
     if (m) {
-      m.color.set(key === focus.selected ? palette.ink : palette.muted)
+      m.color.set(key === focus.selected || key === active ? palette.ink : palette.muted)
       m.opacity = inFocus(key) ? 0.95 : 0.12
     }
     const s = labels.get(key)
@@ -134,6 +137,7 @@ export function create3d(opts: RendererOptions): GraphRenderer {
     })
     materials.set(n.key, material)
     const group = new Group()
+    groups.set(n.key, group)
     group.add(new Mesh(geometry, material))
     if (n.group) group.add(new Mesh(new TorusGeometry(r * 1.45, 0.35, 8, 40), material))
     const label = new SpriteText(n.name.toUpperCase(), 3)
@@ -198,6 +202,7 @@ export function create3d(opts: RendererOptions): GraphRenderer {
       if (!fg) return
       materials.clear()
       labels.clear()
+      groups.clear()
       fg.graphData({
         nodes: g.nodes.map((n) => ({ ...n })),
         links: g.links.map((l) => ({ ...l })),
@@ -214,6 +219,29 @@ export function create3d(opts: RendererOptions): GraphRenderer {
       const controls = fg.controls() as unknown as { autoRotate: boolean }
       controls.autoRotate = opts.motion && !f.selected
       if (reframe) requestFit()
+    },
+
+    points() {
+      if (!fg) return []
+      const f = focus.focus
+      return (fg.graphData().nodes as FGNode[])
+        .filter((n) => (!f || f.has(n.key)) && n.x != null)
+        .map((n) => {
+          const s = fg!.graph2ScreenCoords(n.x!, n.y!, n.z!)
+          return {
+            key: n.key,
+            label: `${n.kind[0]!.toUpperCase()}${n.kind.slice(1)}: ${n.name}`,
+            x: s.x,
+            y: s.y,
+          }
+        })
+    },
+
+    setActive(key) {
+      const prev = active
+      active = key
+      if (prev) styleNode(prev)
+      if (key) styleNode(key)
     },
 
     setInset(i) {

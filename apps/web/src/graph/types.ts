@@ -1,4 +1,5 @@
 import type { Palette } from '../theme/tokens.ts'
+import type { NavPoint } from './nav.ts'
 import type { Inset, RenderGraph } from './renderGraph.ts'
 
 export interface Focus {
@@ -17,6 +18,10 @@ export interface GraphRenderer {
   setInset(inset: Inset): void
   /** Frame the focused (or all) nodes in the space the inset leaves. */
   fit(): void
+  /** Nodes in focus (or all) with their screen positions, in browse order, for keyboard moves. */
+  points(): NavPoint[]
+  /** The keyboard-active node, shown with a ring (2D) or highlight (3D); null clears it. */
+  setActive(key: string | null): void
   onSelect(cb: (key: string | null) => void): void
   destroy(): void
 }

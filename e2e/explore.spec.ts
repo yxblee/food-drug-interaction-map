@@ -252,3 +252,76 @@ test('the grapefruit hint is hidden while showing your meds', async ({ page }) =
   await expect(page.getByRole('button', { name: /Showing your meds/ })).toBeVisible()
   await expect(page.getByRole('button', { name: 'Try grapefruit' })).toHaveCount(0)
 })
+
+test('the 2D graph is one tab stop; arrows move the active node and Enter opens it', async ({
+  page,
+}, info) => {
+  await page.goto('./')
+  if (info.project.name !== 'mobile') await page.getByRole('button', { name: '2D' }).click()
+  const graph = page.getByRole('application', { name: 'Map of foods, drugs and mechanisms' })
+  await expect(page.locator('svg.graph2d g.node').first()).toBeAttached()
+  await expect(page.locator('svg.graph2d [tabindex]')).toHaveCount(0)
+
+  // Tabbing in lands on the graph once, and the next Tab leaves it.
+  await graph.focus()
+  await page.keyboard.press('Tab')
+  expect(await graph.evaluate((el) => el.contains(document.activeElement))).toBe(false)
+  await page.keyboard.press('Shift+Tab')
+  await expect(graph).toBeFocused()
+
+  const active = () => graph.getAttribute('aria-activedescendant')
+  await expect.poll(active).toBeTruthy()
+  const first = await active()
+  await expect(page.locator(`[id="${first}"]`)).toHaveClass(/is-active/)
+  await expect
+    .poll(async () => {
+      await page.keyboard.press('ArrowRight')
+      await page.keyboard.press('ArrowDown')
+      return active()
+    })
+    .not.toBe(first)
+
+  const name = await page.locator(`[id="${await active()}"]`).getAttribute('aria-label')
+  await page.keyboard.press('Enter')
+  const panel = page.locator('.panel')
+  await expect(panel).toBeVisible()
+  await expect(panel).toContainText(name!.replace(/^[^:]+: /, ''))
+})
+
+test('the 3D graph is one tab stop with arrow and Enter navigation', async ({ page }, info) => {
+  test.skip(info.project.name === 'mobile', '3D is the desktop default')
+  await page.goto('./')
+  const graph = page.getByRole('application', { name: 'Map of foods, drugs and mechanisms' })
+  await expect(page.locator('.graph3d canvas')).toBeAttached()
+  await graph.focus()
+  await expect(
+    page.getByRole('status').filter({ hasText: /^(Food|Drug|Mechanism): / }),
+  ).toHaveCount(1)
+  const heard = page.getByRole('status').filter({ hasText: /^(Food|Drug|Mechanism): / })
+  const first = await heard.textContent()
+  await expect
+    .poll(async () => {
+      await page.keyboard.press('ArrowRight')
+      await page.keyboard.press('ArrowDown')
+      return heard.textContent()
+    })
+    .not.toBe(first)
+  const name = (await heard.textContent())!.replace(/^[^:]+: /, '')
+  await page.keyboard.press('Enter')
+  await expect(page.locator('.panel')).toContainText(name)
+  await page.keyboard.press('Escape')
+  await page.keyboard.press('Tab')
+  expect(await graph.evaluate((el) => el.contains(document.activeElement))).toBe(false)
+})
+
+test('severity badges are named by the Severity word only', async ({ page }, info) => {
+  await page.goto('./')
+  if (info.project.name !== 'mobile') await page.getByRole('button', { name: '2D' }).click()
+  await page.getByLabel('Search drugs, foods and mechanisms').fill('grapefruit')
+  await page.getByLabel('Search drugs, foods and mechanisms').press('Enter')
+  const badges = page.locator('.panel .badge')
+  await expect(badges.first()).toBeVisible()
+  const names = await badges.evaluateAll((els) => els.map((e) => e.textContent?.trim()))
+  expect(names.every((n) => ['Avoid', 'Caution', 'Monitor', 'Minimal'].includes(n!))).toBe(true)
+  expect(await badges.evaluateAll((els) => els.every((e) => !e.hasAttribute('title')))).toBe(true)
+})
