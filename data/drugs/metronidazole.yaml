@@ -1,4 +1,5 @@
 id: "metronidazole"
 name: "Metronidazole"
+rxnorm: "6922"
 aliases: ["Flagyl"]
 drug_class: "Nitroimidazole antibiotic"

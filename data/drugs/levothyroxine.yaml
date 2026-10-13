@@ -1,4 +1,5 @@
 id: "levothyroxine"
 name: "Levothyroxine"
+rxnorm: "10582"
 aliases: ["Synthroid", "Levoxyl", "Euthyrox", "Unithroid"]
 drug_class: "Thyroid hormone"

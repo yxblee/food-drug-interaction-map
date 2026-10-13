@@ -1,4 +1,5 @@
 id: "nifedipine"
 name: "Nifedipine"
+rxnorm: "7417"
 aliases: ["Procardia", "Adalat CC"]
 drug_class: "Calcium channel blocker"

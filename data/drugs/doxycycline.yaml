@@ -1,5 +1,6 @@
 id: "doxycycline"
 name: "Doxycycline"
+rxnorm: "3640"
 aliases: ["Vibramycin", "Doryx"]
 parent: "tetracyclines"
 drug_class: "Tetracycline antibiotic"

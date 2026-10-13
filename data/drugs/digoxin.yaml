@@ -1,4 +1,5 @@
 id: "digoxin"
 name: "Digoxin"
+rxnorm: "3407"
 aliases: ["Lanoxin"]
 drug_class: "Cardiac glycoside"

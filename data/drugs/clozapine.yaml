@@ -1,4 +1,5 @@
 id: "clozapine"
 name: "Clozapine"
+rxnorm: "2626"
 aliases: ["Clozaril"]
 drug_class: "Atypical antipsychotic"

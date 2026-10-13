@@ -1,4 +1,5 @@
 id: "felodipine"
 name: "Felodipine"
+rxnorm: "4316"
 aliases: ["Plendil"]
 drug_class: "Calcium channel blocker"

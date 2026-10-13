@@ -1,4 +1,5 @@
 id: "cyclosporine"
 name: "Cyclosporine"
+rxnorm: "3008"
 aliases: ["Neoral", "Sandimmune", "Gengraf"]
 drug_class: "Calcineurin inhibitor"

@@ -1,4 +1,5 @@
 id: "warfarin"
 name: "Warfarin"
+rxnorm: "11289"
 aliases: ["Coumadin", "Jantoven"]
 drug_class: "Vitamin K antagonist anticoagulant"

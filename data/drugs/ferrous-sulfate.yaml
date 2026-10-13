@@ -1,4 +1,5 @@
 id: "ferrous-sulfate"
 name: "Iron (ferrous sulfate)"
+rxnorm: "24947"
 aliases: ["Feosol", "iron pills"]
 drug_class: "Iron supplement"

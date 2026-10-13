@@ -1,4 +1,5 @@
 id: "tetracycline"
 name: "Tetracycline"
+rxnorm: "10395"
 parent: "tetracyclines"
 drug_class: "Tetracycline antibiotic"

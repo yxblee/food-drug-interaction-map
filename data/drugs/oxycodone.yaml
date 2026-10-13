@@ -1,5 +1,6 @@
 id: "oxycodone"
 name: "Oxycodone"
+rxnorm: "7804"
 aliases: ["OxyContin", "Roxicodone"]
 parent: "opioids"
 drug_class: "Opioid analgesic"

@@ -1,5 +1,6 @@
 id: "sertraline"
 name: "Sertraline"
+rxnorm: "36437"
 aliases: ["Zoloft"]
 parent: "ssris"
 drug_class: "Selective serotonin reuptake inhibitor"

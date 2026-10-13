@@ -1,4 +1,5 @@
 id: "amlodipine"
 name: "Amlodipine"
+rxnorm: "17767"
 aliases: ["Norvasc"]
 drug_class: "Calcium channel blocker"

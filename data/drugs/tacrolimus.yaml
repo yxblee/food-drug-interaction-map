@@ -1,4 +1,5 @@
 id: "tacrolimus"
 name: "Tacrolimus"
+rxnorm: "42316"
 aliases: ["Prograf", "Envarsus XR"]
 drug_class: "Calcineurin inhibitor"

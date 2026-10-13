@@ -1,4 +1,5 @@
 id: "lithium"
 name: "Lithium"
+rxnorm: "6448"
 aliases: ["Lithobid"]
 drug_class: "Mood stabilizer"

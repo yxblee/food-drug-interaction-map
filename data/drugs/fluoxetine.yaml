@@ -1,5 +1,6 @@
 id: "fluoxetine"
 name: "Fluoxetine"
+rxnorm: "4493"
 aliases: ["Prozac"]
 parent: "ssris"
 drug_class: "Selective serotonin reuptake inhibitor"

@@ -1,4 +1,5 @@
 id: "combined-oral-contraceptives"
 name: "Combined oral contraceptives"
+rxnorm: "4124"
 aliases: ["birth control pill"]
 drug_class: "Estrogen-progestin contraceptive"

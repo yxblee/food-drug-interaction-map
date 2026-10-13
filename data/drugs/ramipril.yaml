@@ -1,5 +1,6 @@
 id: "ramipril"
 name: "Ramipril"
+rxnorm: "35296"
 aliases: ["Altace"]
 parent: "ace-inhibitors"
 drug_class: "ACE inhibitor"
