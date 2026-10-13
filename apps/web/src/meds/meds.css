@@ -133,9 +133,6 @@
 .warning__drugs {
   color: var(--muted);
 }
-.warning__affected {
-  padding-left: 18px;
-}
 @media (max-width: 768px) {
   .meds {
     grid-template-columns: 1fr;

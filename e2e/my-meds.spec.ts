@@ -227,3 +227,17 @@ test('medication suggestions are a combobox over a listbox', async ({ page }) =>
   await input.press('Escape')
   await expect(input).toHaveAttribute('aria-expanded', 'false')
 })
+
+test('an expanded warning shows each Drug detail once', async ({ page }) => {
+  await page.goto('./')
+  await page.getByRole('tab', { name: 'My meds' }).click()
+  const input = page.getByLabel('Add a medication')
+  await input.fill('simvastatin')
+  await input.press('Enter')
+  const warning = page.locator('.warning', { hasText: 'Grapefruit' })
+  await warning.locator('summary').click()
+  const row = warning.locator('li.irow', { hasText: 'Simvastatin' })
+  await expect(row).toBeVisible()
+  const summary = (await row.locator('.irow__summary').textContent())!.trim()
+  await expect(warning.getByText(summary, { exact: true })).toHaveCount(1)
+})

@@ -4,7 +4,7 @@ import { SEVERITIES } from '@fdi/schema'
 import { buildIndex, groupTerm, nodeKey, searchNodes, type Index } from '@fdi/schema/domain'
 import { fetchNode } from '../api.ts'
 import { InteractionRow } from '../explore/InteractionRow.tsx'
-import { SEVERITY_LABEL, SEVERITY_LEGEND, SeverityBadge } from '../explore/SeverityBadge.tsx'
+import { SeverityBadge, SeverityGroupHeading } from '../explore/SeverityBadge.tsx'
 import { checkMeds, type FoodWarning } from './checkMeds.ts'
 import './meds.css'
 
@@ -271,10 +271,7 @@ export function MyMedsTab({
             if (!group.length) return null
             return (
               <section key={sev} aria-labelledby={`sev-${sev}`} className="meds__sev">
-                <h3 id={`sev-${sev}`}>
-                  <SeverityBadge severity={sev} decorative /> {SEVERITY_LABEL[sev]}
-                </h3>
-                <p className="mono-label">{SEVERITY_LEGEND[sev]}</p>
+                <SeverityGroupHeading severity={sev} />
                 <ul className="meds__list">
                   {group.map((w) => (
                     <WarningRow key={w.food.id} warning={w} ix={ix} />
@@ -332,21 +329,6 @@ function WarningRow({ warning: w, ix }: { warning: FoodWarning; ix: Index }) {
             {negligible.length > 0 && <>no meaningful effect on {negligible.map(drugChip)}</>}
           </span>
         </summary>
-        <ul className="warning__affected">
-          {w.affected.map((h) => (
-            <li key={`${h.drug.id}:${h.interaction.id}`}>
-              <strong>{h.drug.name}</strong>
-              {h.inheritedFrom && (
-                <span className="mono-label">
-                  {' '}
-                  (applies to all{' '}
-                  {ix.nodes.get(nodeKey('drug', h.inheritedFrom))?.name ?? h.inheritedFrom})
-                </span>
-              )}
-              : {h.interaction.summary} <em>{h.interaction.advice}</em>
-            </li>
-          ))}
-        </ul>
         {failed && <p role="alert">Couldn't load details. Close and reopen to try again.</p>}
         {detail && (
           <ul className="panel__rows">

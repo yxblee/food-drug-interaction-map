@@ -28,3 +28,15 @@ export function SeverityBadge({
     </span>
   )
 }
+
+/** Group heading shared by My meds and the Explore panel: badge, word, then the plain subtitle once. */
+export function SeverityGroupHeading({ severity }: { severity: Severity }) {
+  return (
+    <>
+      <h3 id={`sev-${severity}`}>
+        <SeverityBadge severity={severity} decorative /> {SEVERITY_LABEL[severity]}
+      </h3>
+      <p className="mono-label">{SEVERITY_LEGEND[severity]}</p>
+    </>
+  )
+}

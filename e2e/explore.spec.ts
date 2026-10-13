@@ -9,8 +9,8 @@ test('search, select and share a food', async ({ page }, info) => {
 
   const panel = page.getByRole('complementary')
   await expect(panel.getByRole('heading', { name: 'Grapefruit', exact: true })).toBeVisible()
-  const row = panel.locator('li.irow', { hasText: 'Simvastatin' })
-  await expect(row.locator('.badge')).toHaveText('Avoid')
+  const avoid = panel.locator('section.panel__sev', { has: page.locator('#sev-avoid') })
+  await expect(avoid.locator('li.irow', { hasText: 'Simvastatin' })).toBeVisible()
   await expect(page).toHaveURL(/node=food%3Agrapefruit/)
 
   await page.reload()
@@ -324,4 +324,35 @@ test('severity badges are named by the Severity word only', async ({ page }, inf
   const names = await badges.evaluateAll((els) => els.map((e) => e.textContent?.trim()))
   expect(names.every((n) => ['Avoid', 'Caution', 'Monitor', 'Minimal'].includes(n!))).toBe(true)
   expect(await badges.evaluateAll((els) => els.every((e) => !e.hasAttribute('title')))).toBe(true)
+})
+
+test('the panel groups Interactions by Severity and states shared lines once', async ({ page }) => {
+  await page.goto('./')
+  const search = page.getByLabel('Search drugs, foods and mechanisms')
+  await search.fill('grapefruit')
+  await search.press('Enter')
+  const panel = page.getByRole('complementary')
+  const headings = panel.getByRole('heading', { level: 3 })
+  await expect(headings.first()).toBeVisible()
+  const order = ['Avoid', 'Caution', 'Monitor', 'Minimal']
+  const names = (await headings.allTextContents()).map((t) => t.trim())
+  expect(names.length).toBeGreaterThan(0)
+  expect(names).toEqual(order.filter((w) => names.includes(w)))
+  await expect(panel.getByText('Serious interaction.')).toHaveCount(1)
+  await expect(
+    panel
+      .locator('section.panel__sev', { has: page.locator('#sev-avoid') })
+      .getByText('Serious interaction.'),
+  ).toHaveCount(1)
+  await expect(panel).not.toContainText(/\d+ \/ \d+/)
+})
+
+test('Prev and Next are named by the kind being browsed', async ({ page }) => {
+  await page.goto('./')
+  const search = page.getByLabel('Search drugs, foods and mechanisms')
+  await search.fill('grapefruit')
+  await search.press('Enter')
+  const panel = page.getByRole('complementary')
+  await expect(panel.getByRole('button', { name: /Previous food/ })).toBeVisible()
+  await expect(panel.getByRole('button', { name: /Next food/ })).toBeVisible()
 })

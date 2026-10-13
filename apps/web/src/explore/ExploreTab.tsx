@@ -156,7 +156,6 @@ export function ExploreTab({
       {selected && (
         <SidePanel
           nodeKey={selected}
-          position={{ index: Math.max(keys.indexOf(selected), 0), total: keys.length }}
           onSelect={select}
           onPrev={prev}
           onNext={next}
