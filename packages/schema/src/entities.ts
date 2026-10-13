@@ -70,20 +70,38 @@ export const Citation = z.strictObject({
 })
 export type Citation = z.infer<typeof Citation>
 
-export const Interaction = z.strictObject({
-  id: InteractionId,
-  food: Slug,
-  drug: Slug,
-  mechanisms: z.array(Slug).min(1),
-  severity: Severity,
-  effect: z.enum(['increases', 'decreases']),
-  summary: Text,
-  advice: Text,
-  details: Text,
-  example: z.strictObject({ patient: Text, pharmacist: Text }).optional(),
-  citations: z.array(Citation).min(1),
-  status: z.enum(['approved', 'pending', 'rejected']),
-  source: z.enum(['curated', 'openfda']),
-  reviewed_at: z.iso.date(),
-})
+export const Interaction = z
+  .strictObject({
+    id: InteractionId,
+    food: Slug,
+    drug: Slug,
+    mechanisms: z.array(Slug).min(1),
+    severity: Severity,
+    effect: z.enum(['increases', 'decreases']),
+    summary: Text,
+    advice: Text,
+    details: Text,
+    example: z.strictObject({ patient: Text, pharmacist: Text }).optional(),
+    citations: z.array(Citation).min(1),
+    status: z.enum(['approved', 'pending', 'rejected']),
+    source: z.enum(['curated', 'openfda', 'foodrugs', 'ddid']),
+    reviewed_at: z.iso.date().optional(),
+  })
+  .check((ctx) => {
+    const i = ctx.value
+    if (i.status !== 'pending' && !i.reviewed_at)
+      ctx.issues.push({
+        code: 'custom',
+        input: i,
+        path: ['reviewed_at'],
+        message: `required once an interaction is ${i.status}`,
+      })
+    if (i.status === 'approved' && !i.citations.some((c) => c.type !== 'study'))
+      ctx.issues.push({
+        code: 'custom',
+        input: i,
+        path: ['citations'],
+        message: 'approved interaction needs a label, review or guideline citation',
+      })
+  })
 export type Interaction = z.infer<typeof Interaction>
