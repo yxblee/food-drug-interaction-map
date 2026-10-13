@@ -19,6 +19,8 @@ interface Props {
   grouped?: { inherited: boolean }
   /** The Severity group heading above this row; its badge shows only when the row's own Severity differs. */
   groupSeverity?: Severity
+  /** My meds puts the pharmacist sentence before the advice; Explore keeps it after. */
+  cautionFirst?: boolean
 }
 
 const paragraphs = (text: string) => text.split(/\n\s*\n/).map((p, i) => <p key={i}>{p.trim()}</p>)
@@ -31,6 +33,7 @@ export function InteractionRow({
   onSelect,
   grouped,
   groupSeverity,
+  cautionFirst,
 }: Props) {
   const i = row.interaction
   // The Drug class or Food group this row is inherited from, on the viewed side.
@@ -50,6 +53,12 @@ export function InteractionRow({
       n?.name
     )
 
+  const caution = i.severity === 'avoid' && !grouped && (
+    <p className="irow__caution">
+      Serious interaction. Check with your pharmacist or doctor before combining.
+    </p>
+  )
+
   return (
     <li className="irow">
       <div className="irow__head">
@@ -67,14 +76,11 @@ export function InteractionRow({
         <p className="mono-label">Applies to {inheritedFrom.name}</p>
       )}
       <p className="irow__summary">{i.summary}</p>
+      {cautionFirst && caution}
       <p className="irow__advice">
         <strong>What to do:</strong> {i.advice}
       </p>
-      {i.severity === 'avoid' && !grouped && (
-        <p className="irow__caution">
-          Serious interaction. Check with your pharmacist or doctor before combining.
-        </p>
-      )}
+      {!cautionFirst && caution}
       <details className="irow__more">
         <summary>Details and sources</summary>
         <div className="irow__details">{paragraphs(i.details)}</div>

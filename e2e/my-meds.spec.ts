@@ -52,7 +52,9 @@ test('each affected drug shows its own severity inside a food warning', async ({
   await expect(grapefruit.locator('.warning__drugs')).toContainText(
     'no meaningful effect on Amlodipine',
   )
-  await expect(grapefruit.locator('.warning__drugs')).not.toContainText('affects Simvastatin, Amlo')
+  await expect(grapefruit).toHaveText(
+    /^Grapefruit and relatives.*: avoid with Simvastatin; no meaningful effect on Amlodipine Minimal$/,
+  )
 })
 
 test('Avoid and Caution show advice up front, with one disclosure for the detail and one Severity badge per group', async ({
@@ -86,9 +88,27 @@ test('Avoid and Caution show advice up front, with one disclosure for the detail
   await expect(warning.locator('.badge', { hasText: /^Minimal$/ }).first()).toBeVisible()
   await expect(warning.locator('.badge', { hasText: /^Avoid$/ })).toHaveCount(0)
 
-  // Monitor and Minimal rows stay collapsed.
-  const collapsed = page.locator('section.meds__sev:has(#sev-minimal) .warning > details').first()
-  if (await collapsed.count()) await expect(collapsed).not.toHaveAttribute('open', '')
+  // The pharmacist sentence comes before the advice.
+  const order = await simva.evaluate((el) => {
+    const pos = (sel: string) => [...el.children].indexOf(el.querySelector(sel)!)
+    return [pos('.irow__caution'), pos('.irow__advice')]
+  })
+  expect(order[0]).toBeGreaterThanOrEqual(0)
+  expect(order[0]).toBeLessThan(order[1])
+})
+
+test('Monitor rows stay collapsed', async ({ page }) => {
+  await page.goto('./')
+  await page.getByRole('tab', { name: 'My meds' }).click()
+  const input = page.getByLabel('Add a medication')
+  await input.fill('lithium')
+  await input.press('Enter')
+
+  const monitor = page.locator('section.meds__sev', { has: page.locator('#sev-monitor') })
+  const coffee = monitor.locator('.warning > details', { hasText: 'Coffee' })
+  await expect(coffee).toHaveCount(1)
+  await expect(coffee).not.toHaveAttribute('open', '')
+  await expect(coffee.locator('summary')).toHaveText(/^Coffee: watch for changes with Lithium$/)
 })
 
 test('no-match in My meds gives a next step and says absence is not safety', async ({ page }) => {
@@ -129,7 +149,7 @@ test('results are announced and controls are readable and easy to hit', async ({
   }
 
   await expect(page.getByRole('status').filter({ hasText: 'foods to watch' })).toHaveText(
-    /^\d+ foods to watch, 1 to avoid$/,
+    /^\d+ foods to watch, including 1 to avoid$/,
   )
 
   const minHit = async (box: { width: number; height: number } | null, dims: 'h' | 'wh') => {

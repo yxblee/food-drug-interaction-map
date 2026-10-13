@@ -1,6 +1,6 @@
 import { Fragment, useEffect, useMemo, useRef, useState } from 'react'
 import type { GraphPayload, NodeDetail } from '@fdi/schema'
-import { SEVERITIES } from '@fdi/schema'
+import { SEVERITIES, type Severity } from '@fdi/schema'
 import { buildIndex, groupTerm, nodeKey, searchNodes } from '@fdi/schema/domain'
 import { fetchNode } from '../api.ts'
 import { InteractionRow } from '../explore/InteractionRow.tsx'
@@ -323,10 +323,13 @@ function WarningRow({ warning: w }: { warning: FoodWarning }) {
   const lead = (
     <>
       <strong>{w.food.name}</strong>
-      {w.food.group && <span className="mono-label"> {groupTerm('food')}</span>}
+      {w.food.group && <span className="mono-label"> {groupTerm('food')}</span>}:{' '}
       <span className="warning__drugs">
-        {' '}
-        {affecting.length > 0 && <>affects {affecting.map(drugChip)}</>}
+        {affecting.length > 0 && (
+          <>
+            {LEAD_VERB[w.severity]} {affecting.map(drugChip)}
+          </>
+        )}
         {affecting.length > 0 && negligible.length > 0 && '; '}
         {negligible.length > 0 && <>no meaningful effect on {negligible.map(drugChip)}</>}
       </span>
@@ -348,6 +351,7 @@ function WarningRow({ warning: w }: { warning: FoodWarning }) {
                 mechanisms={detail.mechanisms}
                 perspective="food"
                 groupSeverity={w.severity}
+                cautionFirst
               />
             ))}
         </ul>
@@ -375,6 +379,13 @@ function WarningRow({ warning: w }: { warning: FoodWarning }) {
   )
 }
 
+const LEAD_VERB: Record<Severity, string> = {
+  avoid: 'avoid with',
+  caution: 'take care with',
+  monitor: 'watch for changes with',
+  minimal: 'little effect on',
+}
+
 const chipId = (id: string) => `med-chip-${id}`
 
 const plural = (n: number, one: string, many: string) => `${n} ${n === 1 ? one : many}`
@@ -386,5 +397,7 @@ function resultsSummary(warnings: FoodWarning[] | null, notChecked: number): str
   if (!warnings) return unchecked
   const avoid = warnings.filter((w) => w.severity === 'avoid').length
   const watch = plural(warnings.length, 'food to watch', 'foods to watch')
-  return [avoid ? `${watch}, ${avoid} to avoid` : watch, unchecked].filter(Boolean).join(', ')
+  return [avoid ? `${watch}, including ${avoid} to avoid` : watch, unchecked]
+    .filter(Boolean)
+    .join(', ')
 }
