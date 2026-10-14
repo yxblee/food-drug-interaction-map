@@ -2,7 +2,6 @@ import { stringify } from 'yaml'
 import { z } from 'zod'
 import { validateDataset, Drug, Food, Interaction, Mechanism, Severity } from '@fdi/schema'
 import type { RawDataset } from '@fdi/schema'
-import { buildIndex, interactionsForDrug, interactionsForFood } from '@fdi/schema/domain'
 
 // Label sections searched for food mentions (openFDA field names).
 export const SECTIONS = [
@@ -164,26 +163,16 @@ export async function runPipeline(
 
   // Skip pairs that already have a file (any status) or an Inherited interaction.
   const existing = new Set(raw.interactions.map((f) => stem(f.file)))
-  const node = (kind: 'drug' | 'food') => (e: Drug | Food) => ({
-    kind,
-    id: e.id,
-    name: e.name,
-    aliases: e.aliases,
-    group: e.group,
-    parent: e.parent,
-  })
-  const ix = buildIndex(
-    [...ds.drugs.map(node('drug')), ...ds.foods.map(node('food'))],
-    ds.interactions.filter((i) => i.status !== 'rejected'),
-  )
+  const live = ds.interactions.filter((i) => i.status !== 'rejected')
   const candidates = [...pairs.entries()].filter(([id, p]) => {
     if (existing.has(id)) {
       skip.existing++
       return false
     }
-    const covered =
-      interactionsForDrug(ix, p.drug.id).some((r) => r.interaction.food === p.food.id) ||
-      interactionsForFood(ix, p.food.id).some((r) => r.interaction.drug === p.drug.id)
+    // Any of food/group × drug/class already resolves for this pair (spec §2 group resolution).
+    const foods = [p.food.id, p.food.parent]
+    const drugs = [p.drug.id, p.drug.parent]
+    const covered = live.some((i) => foods.includes(i.food) && drugs.includes(i.drug))
     if (covered) skip.inherited++
     return !covered
   })

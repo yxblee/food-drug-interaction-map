@@ -201,6 +201,21 @@ describe('runPipeline (openfda)', () => {
     expect(r.report).toContain('Inherited interaction: 1')
   })
 
+  it('skips a pair covered by a Food group × Drug class Interaction', async () => {
+    const raw = dataset()
+    raw.foods = [
+      food('grapefruit-relatives', { group: true, category: 'fruit' }),
+      food('grapefruit', { aliases: ['grapefruit juice'], category: 'fruit', parent: 'grapefruit-relatives' }),
+      ...raw.foods.filter((f) => f.file !== 'foods/grapefruit.yaml'),
+    ]
+    raw.interactions.push(interaction('grapefruit-relatives--statins'))
+    const t = setup({}, raw)
+    await t.run()
+    const drafted = t.drafted.map((d) => `${d.food.id}--${d.drug.id}`)
+    expect(drafted).not.toContain('grapefruit--simvastatin')
+    expect(drafted).not.toContain('grapefruit--atorvastatin')
+  })
+
   it('ranks pairs by label mentions and takes the first --limit', async () => {
     const t = setup({ 'grapefruit--simvastatin': keep(SIMVA) })
     const r = await t.run(1)
