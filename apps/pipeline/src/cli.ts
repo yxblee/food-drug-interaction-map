@@ -50,11 +50,13 @@ const SYSTEM = `You help curate a public reference on food-drug interactions fro
 Decide whether the label text documents a real interaction between the given Food and Drug, i.e. the Food changes the Drug's action.
 Discard (keep=false, with a short reason) incidental mentions such as an excipient ("benzyl alcohol"), "no clinically significant food effect", or mentions about a different drug.
 When keeping, write summary, advice and details in your own words for a general reader, without copying label sentences.
-Choose mechanisms only from the ids provided; do not invent any. Severity is only a suggestion: avoid, caution, monitor or minimal.
+Prefer the provided mechanism ids. Only when none fits, propose a new Mechanism in new_mechanisms (kebab-case id, name, kind, one or two plain-language sentences) and also list its id in mechanisms; otherwise leave new_mechanisms empty.
+When Drug classes are provided the Drug is new to the catalogue: set parent to the id of the one class it belongs to, or '' if none clearly fits. Never invent a class. With no classes provided, set parent to ''.
+Severity is only a suggestion: avoid, caution, monitor or minimal.
 Give excerpt as one short passage copied character for character from the label text. If you cannot, discard.`
 
 let client: Anthropic | undefined
-async function draft({ food, drug, text, mechanisms }: DraftInput): Promise<Draft> {
+async function draft({ food, drug, text, mechanisms, classes }: DraftInput): Promise<Draft> {
   client ??= new Anthropic() // reads ANTHROPIC_API_KEY
   const res = await client.messages.parse({
     model: MODEL,
@@ -67,6 +69,11 @@ async function draft({ food, drug, text, mechanisms }: DraftInput): Promise<Draf
         content: [
           `Food: ${food.name}${food.aliases.length ? ` (also: ${food.aliases.join(', ')})` : ''}`,
           `Drug: ${drug.name}`,
+          ...(classes.length
+            ? [
+                `Drug classes (choose parent from these):\n${classes.map((c) => `- ${c.id}: ${c.name}`).join('\n')}`,
+              ]
+            : []),
           `Mechanisms:\n${mechanisms.map((m) => `- ${m.id}: ${m.name} (${m.kind})`).join('\n')}`,
           `Label text:\n${text}`,
         ].join('\n\n'),
@@ -78,11 +85,24 @@ async function draft({ food, drug, text, mechanisms }: DraftInput): Promise<Draf
   return res.parsed_output
 }
 
+// RxNav: name -> ingredient (tty IN) CUI. ponytail: first exact-or-normalised hit, no retries.
+async function ingredientCui(name: string): Promise<string | undefined> {
+  const q = new URLSearchParams({ name, search: '2' })
+  const res = await fetch(`https://rxnav.nlm.nih.gov/REST/rxcui.json?${q}`)
+  if (!res.ok) throw new Error(`RxNav ${res.status} for "${name}"`)
+  const ids = ((await res.json()) as { idGroup?: { rxnormId?: string[] } }).idGroup?.rxnormId ?? []
+  for (const id of ids) {
+    const p = await fetch(`https://rxnav.nlm.nih.gov/REST/rxcui/${id}/properties.json`)
+    if (p.ok && (await p.json()).properties?.tty === 'IN') return id
+  }
+}
+
 const cachePath = (key: string) =>
   join(CACHE_DIR, `${createHash('sha1').update(key).digest('hex')}.json`)
 const ports: Ports = {
   searchLabels,
   draft,
+  ingredientCui,
   readDataset: readDataDir,
   writeFile: write,
   cache: {
@@ -118,7 +138,9 @@ try {
     { limit: values.limit ? Number(values.limit) : 25, dataDir: 'data', reportPath },
     ports,
   )
-  console.log(`Wrote ${r.written.length} Pending interactions and ${reportPath}`)
+  console.log(
+    `Wrote ${r.written.length} files (Pending interactions, plus any proposed Drugs and Mechanisms) and ${reportPath}`,
+  )
   for (const f of r.written) console.log(`  ${f}`)
 } catch (e) {
   console.error((e as Error).message)
