@@ -84,6 +84,20 @@ test('links carry severity ink before anything is selected', async ({ page }, in
   await expect(avoidLink).toHaveCSS('stroke', 'rgb(122, 42, 28)')
 })
 
+test('links are visible at rest in 2D', async ({ page }, info) => {
+  await page.goto('./')
+  if (info.project.name !== 'mobile') await page.getByRole('button', { name: '2D' }).click()
+  const opacity = async (sel: string) =>
+    Number(
+      await page
+        .locator(sel)
+        .first()
+        .evaluate((e) => getComputedStyle(e).opacity),
+    )
+  expect(await opacity('svg.graph2d .link.sev-avoid')).toBeGreaterThanOrEqual(0.7)
+  expect(await opacity('svg.graph2d .link--member')).toBeGreaterThanOrEqual(0.55)
+})
+
 test('keyboard users reach search before any graph node', async ({ page }) => {
   await page.goto('./')
   await expect(page.locator('.graph-host')).toBeAttached()

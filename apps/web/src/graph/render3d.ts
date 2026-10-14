@@ -176,15 +176,16 @@ export function create3d(opts: RendererOptions): GraphRenderer {
         .linkColor((l) => {
           const link = l as FGLink
           if (!palette) return '#888888'
-          // Severity ink at rest and on focused paths; dimmed links fall back to the hairline.
+          // Severity ink at rest and on focused paths; other links use muted ink (hairline is too faint).
           return link.severity && (!focus.focus || linkInFocus(link))
             ? SEVERITY_COLORS[link.severity]
-            : palette.line
+            : palette.muted
         })
-        .linkOpacity(0.4)
+        .linkOpacity(0.7)
         .linkWidth((l) => {
           const link = l as FGLink
-          if (!linkInFocus(link) || !focus.selected) return 0
+          if (!focus.selected) return link.severity ? 0.5 : 0
+          if (!linkInFocus(link)) return 0
           return link.severity ? 2 - SEVERITY_RANK[link.severity] * 0.4 : 0.4
         })
         .linkDirectionalParticles((l) =>

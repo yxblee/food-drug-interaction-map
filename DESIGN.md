@@ -183,7 +183,7 @@ Each tint is a full six-role palette (paper, ink, muted, line, badge background,
 - **Stone Paper** (`paper`): page background; the default "grey" world.
 - **Bone Surface** (`surface`): raised things ink sits on: inputs, search results, the detail panel, badge backgrounds, unpressed pills.
 - **Weathered Grey** (`muted`): mono labels, secondary text, aliases, footer, placeholders, graph labels and unselected nodes; also the outline of every control (inputs, pill buttons), which needs 3:1 non-text contrast.
-- **Hairline** (`line`): 1px dividing rules and graph links at rest. Decorative only: never the sole boundary of a control.
+- **Hairline** (`line`): 1px dividing rules. Decorative only: never the sole boundary of a control.
 - Dark mode inverts paper and ink (`paper-dark`, `ink-dark`, …) but keeps badge backgrounds light (`badge-bg-dark`) so the severity inks read the same in both modes.
 
 ### Named Rules
@@ -269,7 +269,7 @@ The guide's stamp. Pill, light badge background, 1px `currentColor` outline, upp
 Two pill buttons top-right (Explore, My meds) plus the Color toggle; the active view is ink-filled. In My meds the picker and chips come first, then Foods to watch, then Clear all and See on map (below the picker on desktop, after the results on phones), so the first Avoid row sits high. Every view state (tab, query, selected node, tint) lives in the URL so any view can be shared.
 
 ### Interaction Graph
-The fold-out map. 2D (d3) and 3D (3d-force-graph) render the same data. At rest: muted grey nodes, interaction links in their severity ink at reduced opacity (minimal dashed), group-member links dotted hairlines; mechanisms are unfilled ink outlines. On selection the node fills with ink, its links take their severity ink with weight by severity (avoid 2.4 > caution 2 > monitor 1.6 > minimal 1.2 dashed), and everything else dims to 8–15%. Keyboard focus thickens the node outline to 3px ink. Screen-reader rows mirror the graph so it is never the only path.
+The fold-out map. 2D (d3) and 3D (3d-force-graph) render the same data. At rest: muted grey nodes, interaction links in their severity ink (minimal dashed; 2D opacity 0.75, 3D thin 0.5 cylinders at 0.7), group-member links dotted muted ink at 0.6; mechanisms are unfilled ink outlines. On selection the node fills with ink, its links take their severity ink with weight by severity (avoid 2.4 > caution 2 > monitor 1.6 > minimal 1.2 dashed), and everything else dims to 8–15%. Keyboard focus thickens the node outline to 3px ink. Screen-reader rows mirror the graph so it is never the only path.
 
 ### Map Legend
 A collapsed "How to read the map" disclosure, bottom-left over the graph: square, Bone Surface, hairline outline, mono summary with a +/− marker and a 44px target. Open, it shows the three node shapes, the outlined group/class form, the four severity line samples at their real weights, and one line explaining the Color toggle. With nothing selected and no search, the Explore bar offers "New here? Try grapefruit".
