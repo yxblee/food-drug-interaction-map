@@ -176,6 +176,7 @@ export function create3d(opts: RendererOptions): GraphRenderer {
       fg = new ForceGraph3D(el, { controlType: 'orbit' })
         .nodeId('key')
         .showNavInfo(false)
+        .nodeLabel(() => '') // our own label replaces the default tooltip
         .enableNodeDrag(false)
         .nodeThreeObject((n) => makeNode(n as FGNode))
         .linkColor((l) => {
