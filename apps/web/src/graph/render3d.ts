@@ -56,6 +56,7 @@ export function create3d(opts: RendererOptions): GraphRenderer {
   let focus: Focus = { selected: null, focus: null }
   let onSelect: (key: string | null) => void = () => {}
   let active: string | null = null
+  let hovered: string | null = null
   const groups = new Map<string, Group>()
   const materials = new Map<string, MeshLambertMaterial>()
   const labels = new Map<string, SpriteText>()
@@ -67,15 +68,16 @@ export function create3d(opts: RendererOptions): GraphRenderer {
   function styleNode(key: string) {
     if (!palette) return
     const m = materials.get(key)
-    groups.get(key)?.scale.setScalar(key === active ? 1.7 : 1)
+    const hot = key === hovered
+    groups.get(key)?.scale.setScalar(key === active ? 1.7 : hot ? 1.4 : 1)
     if (m) {
-      m.color.set(key === focus.selected || key === active ? palette.ink : palette.muted)
-      m.opacity = inFocus(key) ? 0.95 : 0.12
+      m.color.set(key === focus.selected || key === active || hot ? palette.ink : palette.muted)
+      m.opacity = hot ? 1 : inFocus(key) ? 0.95 : 0.12
     }
     const s = labels.get(key)
     if (s) {
-      s.color = inFocus(key) ? palette.ink : palette.muted
-      s.material.opacity = inFocus(key) ? 1 : 0.15
+      s.color = inFocus(key) || hot ? palette.ink : palette.muted
+      s.material.opacity = inFocus(key) || hot ? 1 : 0.15
     }
   }
 
@@ -125,6 +127,9 @@ export function create3d(opts: RendererOptions): GraphRenderer {
     paint()
     fg.cameraPosition(pos, at, opts.motion ? 800 : 0)
   }
+
+  const touchesHover = (l: FGLink) =>
+    !!hovered && (endKey(l.source) === hovered || endKey(l.target) === hovered)
 
   function paint() {
     if (!fg || !palette) return
@@ -177,6 +182,8 @@ export function create3d(opts: RendererOptions): GraphRenderer {
           const link = l as FGLink
           if (!palette) return '#888888'
           // Severity ink at rest and on focused paths; other links use muted ink (hairline is too faint).
+          if (touchesHover(link))
+            return link.severity ? SEVERITY_COLORS[link.severity] : palette.ink
           return link.severity && (!focus.focus || linkInFocus(link))
             ? SEVERITY_COLORS[link.severity]
             : palette.muted
@@ -184,9 +191,10 @@ export function create3d(opts: RendererOptions): GraphRenderer {
         .linkOpacity(0.7)
         .linkWidth((l) => {
           const link = l as FGLink
-          if (!focus.selected) return link.severity ? 0.5 : 0
-          if (!linkInFocus(link)) return 0
-          return link.severity ? 2 - SEVERITY_RANK[link.severity] * 0.4 : 0.4
+          const lift = touchesHover(link) ? 0.4 : 0
+          if (!focus.selected) return (link.severity ? 0.5 : 0) + lift
+          if (!linkInFocus(link)) return lift
+          return (link.severity ? 2 - SEVERITY_RANK[link.severity] * 0.4 : 0.4) + lift
         })
         .linkDirectionalParticles((l) =>
           opts.motion &&
@@ -200,6 +208,17 @@ export function create3d(opts: RendererOptions): GraphRenderer {
         .linkDirectionalParticleSpeed(0.006)
         .linkDirectionalParticleColor(() => palette?.ink ?? '#000000')
         .onNodeClick((n) => onSelect((n as FGNode).key))
+        .onNodeHover((n) => {
+          const prev = hovered
+          hovered = n ? (n as FGNode).key : null
+          if (el) el.style.cursor = hovered ? 'pointer' : ''
+          if (prev) styleNode(prev)
+          if (hovered) styleNode(hovered)
+          if (fg) {
+            fg.linkColor(fg.linkColor())
+            fg.linkWidth(fg.linkWidth())
+          }
+        })
         .onBackgroundClick(() => onSelect(null))
         // Lay out up front so the first frame is already settled and can be framed.
         .warmupTicks(250)
@@ -218,6 +237,7 @@ export function create3d(opts: RendererOptions): GraphRenderer {
 
     setData(g) {
       if (!fg) return
+      hovered = null
       materials.clear()
       labels.clear()
       groups.clear()

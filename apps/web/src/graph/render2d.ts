@@ -136,6 +136,14 @@ export function create2d(opts: RendererOptions): GraphRenderer {
       )
   }
 
+  function paintHover(key: string | null) {
+    if (!root) return
+    root.selectAll<SVGGElement, SimNode>('g.node').classed('is-hover', (n) => n.key === key)
+    root
+      .selectAll<SVGLineElement, SimLink>('line.link')
+      .classed('is-hover', (l) => !!key && (endKey(l.source) === key || endKey(l.target) === key))
+  }
+
   return {
     mount(el) {
       host = el
@@ -182,6 +190,13 @@ export function create2d(opts: RendererOptions): GraphRenderer {
         .on('click', (e: MouseEvent, n) => {
           e.stopPropagation()
           onSelect(n.key)
+        })
+        // Mouse only, so touch never leaves a stuck hover.
+        .on('pointerenter', (e: PointerEvent, n) => {
+          if (e.pointerType === 'mouse') paintHover(n.key)
+        })
+        .on('pointerleave', (e: PointerEvent) => {
+          if (e.pointerType === 'mouse') paintHover(null)
         })
       node
         .filter((n) => n.group)

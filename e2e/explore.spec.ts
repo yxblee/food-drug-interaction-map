@@ -98,6 +98,55 @@ test('links are visible at rest in 2D', async ({ page }, info) => {
   expect(await opacity('svg.graph2d .link--member')).toBeGreaterThanOrEqual(0.55)
 })
 
+test('hovering a 2D node lifts its links and leaves unrelated ones alone', async ({
+  page,
+}, info) => {
+  test.skip(info.project.name === 'mobile', 'hover is mouse-only')
+  await page.goto('./')
+  await page.getByRole('button', { name: '2D' }).click()
+  const node = page.getByRole('button', { name: 'Food: Grapefruit' })
+  await expect(node).toBeAttached()
+  const width = (l: ReturnType<typeof page.locator>) =>
+    l.evaluate((e) => getComputedStyle(e).strokeWidth)
+  const key = await node.evaluate((e) => e.id)
+  const lines = page.locator('svg.graph2d .link')
+  // Pick one link touching grapefruit and one that does not, by endpoint position.
+  const pick = async (touching: boolean) => {
+    const idx = await page.evaluate(
+      ([id, touching]) => {
+        const n = document.getElementById(id as string)!.getBoundingClientRect()
+        const cx = n.x + n.width / 2
+        const cy = n.y + n.height / 2
+        const ls = [...document.querySelectorAll('svg.graph2d .link')]
+        return ls.findIndex((l) => {
+          const r = l.getBoundingClientRect()
+          const near = (x: number, y: number) => Math.hypot(x - cx, y - cy) < 4
+          const x1 = +l.getAttribute('x1')!
+          const hit = [
+            [r.left, r.top],
+            [r.right, r.bottom],
+            [r.left, r.bottom],
+            [r.right, r.top],
+          ].some(([x, y]) => near(x!, y!))
+          return x1 === x1 && hit === touching
+        })
+      },
+      [key, touching] as const,
+    )
+    return lines.nth(idx)
+  }
+  const mine = await pick(true)
+  const other = await pick(false)
+  const before = [await width(mine), await width(other)]
+  await node.hover()
+  await expect(mine).toHaveClass(/is-hover/)
+  await expect(other).not.toHaveClass(/is-hover/)
+  expect(await width(mine)).not.toBe(before[0])
+  expect(await width(other)).toBe(before[1])
+  await page.mouse.move(0, 0)
+  await expect(mine).not.toHaveClass(/is-hover/)
+})
+
 test('keyboard users reach search before any graph node', async ({ page }) => {
   await page.goto('./')
   await expect(page.locator('.graph-host')).toBeAttached()

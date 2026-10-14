@@ -53,6 +53,13 @@
   stroke-width: 1.2;
   stroke-dasharray: 4 3;
 }
+.graph2d .link.is-hover {
+  opacity: 1;
+  stroke-width: 2;
+}
+.graph2d .link.is-dim.is-hover {
+  opacity: 0.5;
+}
 .graph2d .link.is-dim {
   opacity: 0.08;
 }
@@ -76,6 +83,12 @@
   stroke-width: 1;
 }
 .graph2d .node.is-selected .shape {
+  fill: var(--ink);
+}
+.graph2d .node.is-hover .shape {
+  fill: var(--ink);
+}
+.graph2d .node.is-hover .label {
   fill: var(--ink);
 }
 .graph2d .node.is-dim {
