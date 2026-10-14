@@ -1,7 +1,7 @@
 import { readFileSync } from 'node:fs'
 import { describe, expect, it } from 'vite-plus/test'
 import { parse } from 'yaml'
-import type { RawDataset } from '@fdi/schema'
+import { validateDataset, type RawDataset } from '@fdi/schema'
 import { runPipeline, type Draft, type DraftInput, type Label, type Ports } from './pipeline.ts'
 
 const fixtures: Record<string, Label[]> = JSON.parse(
@@ -91,6 +91,8 @@ const keep = (excerpt: string, extra: Partial<Draft> = {}): Draft => ({
   mechanisms: ['cyp3a4-inhibition'],
   severity: 'avoid',
   excerpt,
+  parent: '',
+  new_mechanisms: [],
   ...extra,
 })
 const discard = (reason: string): Draft => ({ ...keep(''), keep: false, reason })
@@ -103,9 +105,11 @@ function setup(
   const written: Record<string, string> = {}
   const searched: string[] = []
   const drafted: DraftInput[] = []
+  const cuis: string[] = []
   const store = new Map(Object.entries(prior))
   const ports: Ports = {
     searchLabels: async (term) => (searched.push(term), fixtures[term.toLowerCase()] ?? []),
+    ingredientCui: async (name) => (cuis.push(name), { ranolazine: '35829' }[name.toLowerCase()]),
     draft: async (input) => {
       drafted.push(input)
       return drafts[`${input.food.id}--${input.drug.id}`] ?? discard('unscripted')
@@ -116,7 +120,7 @@ function setup(
   }
   const run = (limit?: number) =>
     runPipeline('openfda', { limit, dataDir: 'data', reportPath: 'report.md' }, ports)
-  return { run, written, searched, drafted, store }
+  return { run, written, searched, drafted, store, cuis }
 }
 
 const SIMVA = 'Avoid grapefruit juice when taking simvastatin.'
@@ -183,10 +187,9 @@ describe('runPipeline (openfda)', () => {
     expect(r.report).toMatch(/Dropped[^]*grapefruit--verapamil/)
   })
 
-  it('skips combination products, uncatalogued ingredients and labels without ingredient data, and counts them', async () => {
+  it('skips combination products and labels without ingredient data, and counts them', async () => {
     const r = await setup({}).run()
     expect(r.report).toContain('Combination-product labels: 2')
-    expect(r.report).toContain('Ingredients not in the catalogue: 1') // ranolazine
     expect(r.report).toContain('Labels without ingredient data: 1')
   })
 
@@ -256,6 +259,145 @@ describe('runPipeline (openfda)', () => {
     const t = setup({ 'grapefruit--simvastatin': keep(SIMVA, { mechanisms: ['made-up'] }) })
     const r = await t.run()
     expect(t.written['data/interactions/grapefruit--simvastatin.yaml']).toBeUndefined()
-    expect(r.report).toContain('no existing Mechanism fits')
+    expect(r.report).toContain('no Mechanism fits')
+  })
+
+  describe('new Drugs and Mechanisms', () => {
+    const RANO = 'grapefruit juice or grapefruit-containing products'
+    const ranolazine = (extra: Partial<Draft> = {}) => keep(RANO, { parent: 'statins', ...extra }) // statins is the only class in dataset()
+
+    it('proposes a Drug for an unknown ingredient, with Aliases, rxnorm and a suggested parent', async () => {
+      const t = setup({ 'grapefruit--ranolazine': ranolazine() })
+      const r = await t.run()
+      expect(parse(t.written['data/drugs/ranolazine.yaml'])).toEqual({
+        id: 'ranolazine',
+        name: 'Ranolazine',
+        rxnorm: '35829',
+        aliases: ['Ranexa'],
+        parent: 'statins',
+      })
+      expect(t.drafted.find((d) => d.drug.id === 'ranolazine')?.classes.map((c) => c.id)).toEqual([
+        'statins',
+      ])
+      expect(r.report).toMatch(/Proposed new Drugs \(1\)[^]*ranolazine[^]*Ranexa/)
+    })
+
+    it('ignores a parent that is not an existing Drug class, and proposes the Drug only once', async () => {
+      const t = setup({ 'grapefruit--ranolazine': ranolazine({ parent: 'made-up' }) })
+      await t.run()
+      expect(parse(t.written['data/drugs/ranolazine.yaml']).parent).toBeUndefined()
+      expect(t.cuis).toEqual(['Ranolazine'])
+    })
+
+    it('writes no Drug when its draft is discarded, nor one for a catalogued ingredient', async () => {
+      const t = setup({ 'grapefruit--simvastatin': keep(SIMVA) })
+      const r = await t.run()
+      expect(Object.keys(t.written).filter((f) => f.startsWith('data/drugs/'))).toEqual([])
+      expect(r.report).toContain('Proposed new Drugs (0)')
+    })
+
+    it('does not propose a Drug whose label CUI is already in the catalogue', async () => {
+      const raw = dataset()
+      raw.drugs.push(drug('ranexa-brand', { rxnorm: '616749' })) // product-level CUI on the label
+      const t = setup({ 'grapefruit--ranexa-brand': keep(RANO) }, raw)
+      await t.run()
+      expect(t.drafted.map((d) => d.drug.id)).toContain('ranexa-brand')
+      expect(t.written['data/drugs/ranolazine.yaml']).toBeUndefined()
+      expect(t.written['data/interactions/grapefruit--ranexa-brand.yaml']).toBeDefined()
+    })
+
+    it('discards a new Drug whose ingredient CUI is already a catalogue Drug', async () => {
+      const raw = dataset()
+      raw.drugs.push(drug('ranolazine-er', { rxnorm: '35829' }))
+      const t = setup({ 'grapefruit--ranolazine': ranolazine() }, raw)
+      const r = await t.run()
+      expect(t.written['data/drugs/ranolazine.yaml']).toBeUndefined()
+      expect(r.report).toContain('already in the catalogue as ranolazine-er')
+    })
+
+    it('counts a new Drug against --limit', async () => {
+      // simvastatin has two labels so it takes the single slot; ranolazine is never drafted
+      const t = setup({ 'grapefruit--simvastatin': keep(SIMVA) })
+      await t.run(1)
+      expect(t.drafted.map((d) => d.drug.id)).toEqual(['simvastatin'])
+      expect(t.cuis).toEqual([])
+    })
+
+    it('writes an LLM-proposed Mechanism and references it from the Interaction', async () => {
+      const m = {
+        id: 'cyp3a-inhibition-gut',
+        name: 'Gut CYP3A inhibition',
+        kind: 'enzyme' as const,
+        explanation: 'Grapefruit blocks an enzyme in the gut wall that breaks the drug down.',
+      }
+      const t = setup({
+        'grapefruit--simvastatin': keep(SIMVA, {
+          mechanisms: ['cyp3a-inhibition-gut'],
+          new_mechanisms: [m],
+        }),
+      })
+      const r = await t.run()
+      expect(parse(t.written['data/mechanisms/cyp3a-inhibition-gut.yaml'])).toEqual(m)
+      expect(parse(t.written['data/interactions/grapefruit--simvastatin.yaml']).mechanisms).toEqual(
+        ['cyp3a-inhibition-gut'],
+      )
+      expect(r.report).toMatch(/Proposed new Mechanisms \(1\)[^]*cyp3a-inhibition-gut/)
+    })
+
+    it('drops an invalid or duplicate Mechanism proposal', async () => {
+      const bad = { id: 'Not A Slug', name: 'x', kind: 'enzyme' as const, explanation: 'x' }
+      const t = setup({
+        'grapefruit--simvastatin': keep(SIMVA, {
+          mechanisms: ['Not A Slug'],
+          new_mechanisms: [bad],
+        }),
+      })
+      await t.run()
+      expect(t.written['data/interactions/grapefruit--simvastatin.yaml']).toBeUndefined()
+      expect(Object.keys(t.written).filter((f) => f.includes('mechanisms/'))).toEqual([])
+    })
+
+    it('fails validation until an Interaction referencing the new files is Approved, then passes', async () => {
+      const raw: RawDataset = {
+        drugs: [drug('antianginals', { group: true })],
+        foods: [food('grapefruit', { aliases: ['grapefruit juice'], category: 'fruit' })],
+        mechanisms: [],
+        interactions: [],
+      }
+      const t = setup(
+        {
+          'grapefruit--ranolazine': keep(RANO, {
+            parent: 'antianginals',
+            mechanisms: ['gut-cyp3a'],
+            new_mechanisms: [
+              { id: 'gut-cyp3a', name: 'Gut CYP3A', kind: 'enzyme', explanation: 'x' },
+            ],
+          }),
+        },
+        raw,
+      )
+      await t.run()
+      const load = (dir: string) =>
+        Object.entries(t.written)
+          .filter(([f]) => f.startsWith(`data/${dir}/`))
+          .map(([f, c]) => ({ file: f.replace('data/', ''), data: parse(c) }))
+      const withInteraction = (status: 'pending' | 'approved') => ({
+        drugs: [...raw.drugs, ...load('drugs')],
+        foods: raw.foods,
+        mechanisms: load('mechanisms'),
+        interactions: load('interactions').map((i) => ({
+          ...i,
+          data: { ...i.data, status, ...(status === 'approved' && { reviewed_at: '2026-10-14' }) },
+        })),
+      })
+      const pending = validateDataset(withInteraction('pending'))
+      expect('errors' in pending && pending.errors).toEqual(
+        expect.arrayContaining([
+          expect.stringMatching(/drugs\/ranolazine\.yaml.*no approved interaction/),
+          expect.stringMatching(/mechanisms\/gut-cyp3a\.yaml.*no approved interaction/),
+        ]),
+      )
+      expect('errors' in validateDataset(withInteraction('approved'))).toBe(false)
+    })
   })
 })
