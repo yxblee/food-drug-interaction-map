@@ -3,6 +3,8 @@
 // and escaped with a backslash. Only `TM_interactions` and `texts` are parsed; every other table
 // (notably the gene-expression ones) is skipped untouched.
 
+import { createReadStream } from 'node:fs'
+
 type Cell = string | number | null
 
 const ESCAPES: Record<string, string> = {
@@ -94,4 +96,16 @@ export async function readFooDrugs(
     }
   }
   return { records, unmatched, pmids }
+}
+
+// Lines of the dump, split on \n only. (node:readline also splits on a lone \r and on U+2028/9, which
+// appear raw inside the dump's abstracts and would cut a row in two.)
+export async function* dumpLines(path: string): AsyncGenerator<string> {
+  let rest = ''
+  for await (const chunk of createReadStream(path, { encoding: 'utf8' })) {
+    const parts = (rest + chunk).split('\n')
+    rest = parts.pop()!
+    yield* parts
+  }
+  if (rest) yield rest
 }

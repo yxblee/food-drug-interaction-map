@@ -1,7 +1,7 @@
-import { createReadStream } from 'node:fs'
-import { createInterface } from 'node:readline'
+import { fileURLToPath } from 'node:url'
 import { describe, expect, it } from 'vite-plus/test'
 import { parse } from 'yaml'
+import { dumpLines } from './foodrugs.ts'
 import { validateDataset, type RawDataset } from '@fdi/schema'
 import {
   runPipeline,
@@ -118,7 +118,7 @@ function setup(drafts: Record<string, Draft>, raw: RawDataset = dataset()) {
     readDataset: () => raw,
     writeFile: (path, content) => void (written[path] = content),
     cache: { get: async (k) => store.get(k), set: async (k, v) => void store.set(k, v) },
-    foodrugsLines: () => createInterface({ input: createReadStream(dump), crlfDelay: Infinity }),
+    foodrugsLines: () => dumpLines(fileURLToPath(dump)),
     rxcui: async (name) => (rxnavCalls.push(name), CUIS[name.toLowerCase()]),
     pubmed: async (pmid) => (pubmedCalls.push(pmid), ABSTRACTS[pmid]),
   }
