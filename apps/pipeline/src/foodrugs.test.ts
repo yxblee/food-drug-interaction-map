@@ -82,6 +82,7 @@ const ABSTRACTS: Record<string, { title: string; abstract: string }> = {
   '1000005': abstract('Verapamil levels with grapefruit.'),
   '1000007': abstract('Grapefruit juice study.'),
   '1000012': abstract('Atorvastatin and grapefruit juice.'),
+  '1000009': abstract('Grapefruit raised ranolazine exposure.'),
 }
 
 const keep = (excerpt: string, extra: Partial<Draft> = {}): Draft => ({
@@ -94,6 +95,8 @@ const keep = (excerpt: string, extra: Partial<Draft> = {}): Draft => ({
   mechanisms: ['cyp3a4-inhibition'],
   severity: 'avoid',
   excerpt,
+  parent: '',
+  new_mechanisms: [],
   ...extra,
 })
 
@@ -119,7 +122,7 @@ function setup(drafts: Record<string, Draft>, raw: RawDataset = dataset()) {
     writeFile: (path, content) => void (written[path] = content),
     cache: { get: async (k) => store.get(k), set: async (k, v) => void store.set(k, v) },
     foodrugsLines: () => dumpLines(fileURLToPath(dump)),
-    rxcui: async (name) => (rxnavCalls.push(name), CUIS[name.toLowerCase()]),
+    ingredientCui: async (name) => (rxnavCalls.push(name), CUIS[name.toLowerCase()]),
     pubmed: async (pmid) => (pubmedCalls.push(pmid), ABSTRACTS[pmid]),
   }
   const run = (limit?: number) =>
@@ -138,6 +141,7 @@ describe('runPipeline (foodrugs)', () => {
     // document never become pairs; grapefruit--verapamil survives through its PubMed document 5
     expect(pairs).toEqual([
       'grapefruit--atorvastatin',
+      'grapefruit--ranolazine',
       'grapefruit--simvastatin',
       'grapefruit--verapamil',
     ])
@@ -157,8 +161,33 @@ describe('runPipeline (foodrugs)', () => {
     // brand "Zocor" and "simvastatin" resolve to the same CUI, hence the same pair
     expect(t.drafted.find((d) => d.drug.id === 'simvastatin')).toBeDefined()
     expect(t.rxnavCalls.filter((n) => n.toLowerCase() === 'simvastatin')).toHaveLength(1)
-    expect(r.report).toContain('Drugs with a CUI not in the catalogue: 1') // ranolazine
     expect(r.report).toMatch(/Drug names that did not resolve[^]*- 6'-acetyl-mystery, x: 1/)
+  })
+
+  it('proposes a Drug whose ingredient CUI is not in the catalogue, with its CUI and suggested class', async () => {
+    const raw = dataset()
+    raw.drugs.push(entity('drugs', 'antianginals', { group: true }))
+    const t = setup(
+      {
+        'grapefruit--ranolazine': keep('Grapefruit raised ranolazine exposure.', {
+          parent: 'antianginals',
+        }),
+      },
+      raw,
+    )
+    const r = await t.run()
+    expect(parse(t.written['data/drugs/ranolazine.yaml'])).toEqual({
+      id: 'ranolazine',
+      name: 'Ranolazine',
+      rxnorm: '35829',
+      parent: 'antianginals',
+    })
+    expect(t.drafted.find((d) => d.drug.id === 'ranolazine')?.classes.map((c) => c.id)).toEqual([
+      'statins',
+      'antianginals',
+    ])
+    expect(t.rxnavCalls.filter((n) => n === 'ranolazine')).toHaveLength(1)
+    expect(r.report).toMatch(/Proposed new Drugs \(1\)[^]*- ranolazine: Ranolazine; rxnorm 35829/)
   })
 
   it('cites up to 3 PMIDs per pair as study Citations, most-mentioning first', async () => {
@@ -211,7 +240,7 @@ describe('runPipeline (foodrugs)', () => {
     const t = setup({})
     const r = await t.run(1)
     expect(t.drafted.map((d) => d.drug.id)).toEqual(['simvastatin'])
-    expect(r.report).toContain('Pairs beyond the limit: 2')
+    expect(r.report).toContain('Pairs beyond the limit: 3')
   })
 
   it('skips a pair covered by a Food × Drug class Interaction', async () => {
@@ -219,7 +248,7 @@ describe('runPipeline (foodrugs)', () => {
     raw.interactions.push(approved('grapefruit--statins'))
     const t = setup({}, raw)
     const r = await t.run()
-    expect(t.drafted.map((d) => d.drug.id)).toEqual(['verapamil'])
+    expect(t.drafted.map((d) => d.drug.id)).toEqual(['ranolazine', 'verapamil'])
     expect(r.report).toContain('Inherited interaction: 2')
   })
 
@@ -252,6 +281,7 @@ describe('runPipeline (foodrugs)', () => {
         {
           searchLabels: async () => [],
           draft: async () => keep(''),
+          ingredientCui: async () => undefined,
           readDataset: dataset,
           writeFile: () => {},
           cache: { get: async () => undefined, set: async () => {} },

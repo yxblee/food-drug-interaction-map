@@ -1,6 +1,14 @@
 import { stringify } from 'yaml'
 import { z } from 'zod'
-import { validateDataset, Drug, Food, Interaction, Mechanism, Severity } from '@fdi/schema'
+import {
+  validateDataset,
+  MECHANISM_KINDS,
+  Drug,
+  Food,
+  Interaction,
+  Mechanism,
+  Severity,
+} from '@fdi/schema'
 import type { RawDataset } from '@fdi/schema'
 import { readFooDrugs } from './foodrugs.ts'
 
@@ -21,6 +29,7 @@ export interface Label {
   effective_time: string // YYYYMMDD
   openfda?: {
     generic_name?: string[]
+    brand_name?: string[]
     substance_name?: string[]
     manufacturer_name?: string[]
     rxcui?: string[]
@@ -39,6 +48,17 @@ export const Draft = z.object({
   mechanisms: z.array(z.string()),
   severity: Severity, // suggested only
   excerpt: z.string(), // verbatim from the label text
+  // Only when the Drug is new: one of the offered Drug class ids, or '' for none.
+  parent: z.string(),
+  // Only when no existing Mechanism fits; reference its id in `mechanisms` too.
+  new_mechanisms: z.array(
+    z.object({
+      id: z.string(),
+      name: z.string(),
+      kind: z.enum(MECHANISM_KINDS),
+      explanation: z.string(),
+    }),
+  ),
 })
 export type Draft = z.infer<typeof Draft>
 
@@ -47,19 +67,23 @@ export interface DraftInput {
   drug: Drug
   text: string
   mechanisms: Mechanism[]
+  // Drug classes the new Drug's parent may be chosen from; empty when the Drug is not new.
+  classes: Drug[]
   kind?: 'label' | 'abstract' // what `text` is; labels by default
 }
 
 // What the foodrugs Source needs on top of Ports.
 export interface FooDrugsPorts {
   foodrugsLines(): AsyncIterable<string> // the cached dump, one line at a time
-  rxcui(name: string): Promise<string | undefined> // RxNav: drug name -> RxNorm CUI
   pubmed(pmid: string): Promise<{ title: string; abstract: string } | undefined> // E-utilities
 }
 
 export interface Ports {
   searchLabels(term: string): Promise<Label[]>
   draft(input: DraftInput): Promise<Draft>
+  // RxNav: ingredient-level RxNorm CUI for a drug or brand name (openFDA's rxcui values are
+  // product-level); undefined for unknown names and combination products.
+  ingredientCui(name: string): Promise<string | undefined>
   readDataset(dir: string): RawDataset
   writeFile(path: string, content: string): void
   cache: {
@@ -86,6 +110,12 @@ const labelText = (l: Label) =>
 const escapeRe = (s: string) => s.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')
 const mentions = (text: string, terms: string[]) =>
   new RegExp(`\\b(?:${terms.map(escapeRe).join('|')})\\b`, 'i').test(text)
+const slug = (s: string) =>
+  s
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, '-')
+    .replace(/^-|-$/g, '')
+const sentence = (s: string) => s.charAt(0).toUpperCase() + s.slice(1).toLowerCase()
 const stem = (file: string) => file.replace(/^.*\//, '').replace(/\.ya?ml$/, '')
 // "ATORVASTATIN CALCIUM TRIHYDRATE" counts as atorvastatin; salts follow the name.
 const sameIngredient = (ingredient: string, name: string) => {
@@ -133,12 +163,14 @@ export async function runPipeline(
     return labels
   }
 
+  const classes = ds.drugs.filter((d) => d.group)
   const drugs = ds.drugs.filter((d) => !d.group)
+  // Drugs proposed in this run, keyed by id so one ingredient is proposed once.
+  const proposed = new Map<string, Drug>()
   const pairs = new Map<string, Pair>()
   const skip = {
     combination: new Set<string>(),
     noIngredient: new Set<string>(),
-    notInCatalogue: new Set<string>(),
     existing: 0,
     inherited: 0,
   }
@@ -146,7 +178,6 @@ export async function runPipeline(
   const fd = {
     unmatched: new Map<string, number>(), // food names with no catalogue match
     unresolved: new Map<string, number>(), // drug names RxNav could not resolve
-    unknownCuis: new Set<string>(), // resolved, but no catalogue Drug has this CUI (#42 will propose them)
     noAbstract: new Set<string>(), // pairs none of whose cited PMIDs has an abstract
   }
   const pairFor = (food: Food, drug: Drug) => {
@@ -166,9 +197,9 @@ export async function runPipeline(
   }
 
   if (source === 'foodrugs') {
-    const { foodrugsLines, rxcui } = ports
-    if (!foodrugsLines || !rxcui || !ports.pubmed)
-      throw new Error('the foodrugs source needs the foodrugsLines, rxcui and pubmed ports')
+    const { foodrugsLines } = ports
+    if (!foodrugsLines || !ports.pubmed)
+      throw new Error('the foodrugs source needs the foodrugsLines and pubmed ports')
     const foodByName = new Map(
       ds.foods.flatMap((f) => [f.name, ...f.aliases].map((n) => [n.toLowerCase(), f] as const)),
     )
@@ -178,15 +209,19 @@ export async function runPipeline(
       const pmid = dump.pmids.get(r.textId)
       if (!pmid) continue // not a PubMed document
       const name = r.drug.trim().toLowerCase()
-      const cui = await lookup(`rxnav:${name}`, () => rxcui(name))
+      const cui = await lookup(`rxnav:${name}`, () => ports.ingredientCui(name))
       if (!cui) {
         fd.unresolved.set(name, (fd.unresolved.get(name) ?? 0) + 1)
         continue
       }
-      const drug = drugs.find((d) => d.rxnorm === cui)
+      let drug = [...drugs, ...proposed.values()].find((d) => d.rxnorm === cui)
       if (!drug) {
-        fd.unknownCuis.add(cui)
-        continue
+        // Not in the catalogue: propose it, one Drug per ingredient CUI.
+        // ponytail: named as FooDrugs spells it (may be a brand); the reviewer checks the name.
+        const parsed = Drug.safeParse({ id: slug(name), name: sentence(name), rxnorm: cui })
+        if (!parsed.success || drugs.some((d) => d.id === parsed.data.id)) continue
+        drug = parsed.data
+        proposed.set(drug.id, drug)
       }
       const pair = pairFor(foodByName.get(r.food.toLowerCase())!, drug)
       pair.pmids.set(pmid, (pair.pmids.get(pmid) ?? 0) + 1)
@@ -208,14 +243,28 @@ export async function runPipeline(
           skip.combination.add(l.set_id)
           continue
         }
-        const drug = drugs.find(
+        let drug = [...drugs, ...proposed.values()].find(
           (d) =>
             (d.rxnorm && l.openfda?.rxcui?.includes(d.rxnorm)) ||
+            d.id === slug(ingredients[0]) ||
             [d.name, ...d.aliases].some((n) => sameIngredient(ingredients[0], n)),
         )
         if (!drug) {
-          skip.notInCatalogue.add(ingredients[0].toLowerCase())
-          continue
+          // Not in the catalogue: propose it. Aliases and rxnorm are filled in below.
+          const parsed = Drug.safeParse({
+            id: slug(ingredients[0]),
+            name: sentence(ingredients[0]),
+          })
+          if (!parsed.success) continue
+          drug = parsed.data
+          proposed.set(drug.id, drug)
+        }
+        if (proposed.has(drug.id)) {
+          const have = new Set([drug.name, ...drug.aliases].map((n) => n.toLowerCase()))
+          for (const b of l.openfda?.brand_name ?? []) {
+            if (!have.has(b.toLowerCase())) drug.aliases.push(b)
+            have.add(b.toLowerCase())
+          }
         }
         pairFor(food, drug).labels.set(l.set_id, l)
       }
@@ -224,15 +273,17 @@ export async function runPipeline(
   // Skip pairs that already have a file (any status) or an Inherited interaction.
   const existing = new Set(raw.interactions.map((f) => stem(f.file)))
   const live = ds.interactions.filter((i) => i.status !== 'rejected')
+  // Any of food/group × drug/class already resolves for this pair (spec §2 group resolution).
+  const isCovered = ({ food, drug }: Pair) =>
+    live.some(
+      (i) => [food.id, food.parent].includes(i.food) && [drug.id, drug.parent].includes(i.drug),
+    )
   const candidates = [...pairs.entries()].filter(([id, p]) => {
     if (existing.has(id)) {
       skip.existing++
       return false
     }
-    // Any of food/group × drug/class already resolves for this pair (spec §2 group resolution).
-    const foods = [p.food.id, p.food.parent]
-    const drugs = [p.drug.id, p.drug.parent]
-    const covered = live.some((i) => foods.includes(i.food) && drugs.includes(i.drug))
+    const covered = isCovered(p)
     if (covered) skip.inherited++
     return !covered
   })
@@ -244,7 +295,29 @@ export async function runPipeline(
   const drafts: { id: string; data: Record<string, unknown>; excerpt: string }[] = []
   const discards: { id: string; reason: string }[] = []
   const invented: string[] = []
+  const newDrugs = new Map<string, Drug>() // proposed Drugs with a kept draft
+  const newMechanisms = new Map<string, Mechanism>()
+  const looked = new Set<string>() // proposed Drugs whose CUI was looked up
   for (const [id, p] of chosen) {
+    const isNew = proposed.has(p.drug.id)
+    if (isNew && !p.drug.rxnorm && !looked.has(p.drug.id)) {
+      const name = p.drug.name.toLowerCase()
+      p.drug.rxnorm = (await lookup(`rxnav:${name}`, () => ports.ingredientCui(name))) ?? undefined
+      looked.add(p.drug.id)
+    }
+    const sameCui = isNew && p.drug.rxnorm && drugs.find((d) => d.rxnorm === p.drug.rxnorm)
+    if (sameCui) {
+      discards.push({
+        id,
+        reason: `ingredient is already in the catalogue as ${sameCui.id}; add an Alias`,
+      })
+      continue
+    }
+    // A suggested parent from an earlier pair of this Drug may already cover this pair.
+    if (newDrugs.has(p.drug.id) && isCovered(p)) {
+      skip.inherited++
+      continue
+    }
     // The evidence the drafter sees: `sources` are the texts an excerpt must appear in verbatim.
     let text: string
     let sources: string[]
@@ -294,6 +367,7 @@ export async function runPipeline(
       drug: p.drug,
       text,
       mechanisms: ds.mechanisms,
+      classes: isNew && !newDrugs.has(p.drug.id) ? classes : [],
       kind: source === 'foodrugs' ? 'abstract' : 'label',
     })
     if (!d.keep) {
@@ -304,11 +378,22 @@ export async function runPipeline(
       invented.push(id)
       continue
     }
-    const known = new Set(ds.mechanisms.map((m) => m.id))
-    const mechanisms = d.mechanisms.filter((m) => known.has(m))
+    // Existing Mechanisms, ones proposed earlier in this run, and valid proposals from this draft.
+    const known = new Map([...ds.mechanisms, ...newMechanisms.values()].map((m) => [m.id, m]))
+    const fresh = new Map<string, Mechanism>()
+    for (const m of d.new_mechanisms) {
+      const parsed = Mechanism.safeParse(m)
+      if (parsed.success && !known.has(m.id)) fresh.set(m.id, parsed.data)
+    }
+    const mechanisms = d.mechanisms.filter((m) => known.has(m) || fresh.has(m))
     if (!mechanisms.length) {
-      discards.push({ id, reason: 'no existing Mechanism fits (new Mechanisms are out of scope)' })
+      discards.push({ id, reason: 'no Mechanism fits and none was validly proposed' })
       continue
+    }
+    for (const m of mechanisms) if (fresh.has(m)) newMechanisms.set(m, fresh.get(m)!)
+    if (isNew && !newDrugs.has(p.drug.id)) {
+      if (classes.some((c) => c.id === d.parent)) p.drug.parent = d.parent
+      newDrugs.set(p.drug.id, p.drug)
     }
     drafts.push({
       id,
@@ -331,8 +416,25 @@ export async function runPipeline(
   }
 
   // Dataset validation on the merged result; abort on anything but the expected errors.
+  // Same field order and shape as the hand-written files in data/drugs.
+  const drugFiles = [...newDrugs.values()].map((d) => ({
+    file: `drugs/${d.id}.yaml`,
+    data: {
+      id: d.id,
+      name: d.name,
+      ...(d.rxnorm && { rxnorm: d.rxnorm }),
+      ...(d.aliases.length && { aliases: d.aliases }),
+      ...(d.parent && { parent: d.parent }),
+    },
+  }))
+  const mechanismFiles = [...newMechanisms.values()].map((m) => ({
+    file: `mechanisms/${m.id}.yaml`,
+    data: m,
+  }))
   const merged = validateDataset({
     ...raw,
+    drugs: [...raw.drugs, ...drugFiles],
+    mechanisms: [...raw.mechanisms, ...mechanismFiles],
     interactions: [
       ...raw.interactions,
       ...drafts.map((d) => ({ file: `interactions/${d.id}.yaml`, data: d.data })),
@@ -348,13 +450,9 @@ export async function runPipeline(
     [...m].sort(([a, x], [b, y]) => y - x || a.localeCompare(b)).map(([n, c]) => `- ${n}: ${c}`)
   const skipped =
     source === 'foodrugs'
-      ? [
-          `- Drugs with a CUI not in the catalogue: ${fd.unknownCuis.size}`,
-          `- Pairs whose PMIDs have no abstract: ${fd.noAbstract.size}`,
-        ]
+      ? [`- Pairs whose PMIDs have no abstract: ${fd.noAbstract.size}`]
       : [
           `- Combination-product labels: ${skip.combination.size}`,
-          `- Ingredients not in the catalogue: ${skip.notInCatalogue.size}`,
           `- Labels without ingredient data: ${skip.noIngredient.size}`,
         ]
   const report = [
@@ -372,6 +470,22 @@ export async function runPipeline(
         '',
       ]
     }),
+    `## Proposed new Drugs (${newDrugs.size})`,
+    'Not in the catalogue yet. Check the name, Aliases, RxNorm CUI and suggested parent class.',
+    '',
+    ...(newDrugs.size
+      ? [...newDrugs.values()].map(
+          (d) =>
+            `- ${d.id}: ${d.name}; rxnorm ${d.rxnorm ?? 'unresolved'}; parent ${d.parent ?? 'none'}; Aliases: ${d.aliases.join(', ') || 'none'}`,
+        )
+      : ['- none']),
+    '',
+    `## Proposed new Mechanisms (${newMechanisms.size})`,
+    '',
+    ...(newMechanisms.size
+      ? [...newMechanisms.values()].map((m) => `- ${m.id}: ${m.name} (${m.kind}): ${m.explanation}`)
+      : ['- none']),
+    '',
     '## Discarded',
     ...(discards.length ? discards.map((d) => `- ${d.id}: ${d.reason}`) : ['- none']),
     '',
@@ -404,8 +518,13 @@ export async function runPipeline(
     '',
   ].join('\n')
 
-  const written = drafts.map((d) => `${options.dataDir}/interactions/${d.id}.yaml`)
-  drafts.forEach((d, i) => ports.writeFile(written[i], stringify(d.data)))
+  const out = [
+    ...drugFiles,
+    ...mechanismFiles,
+    ...drafts.map((d) => ({ file: `interactions/${d.id}.yaml`, data: d.data })),
+  ]
+  const written = out.map((f) => `${options.dataDir}/${f.file}`)
+  out.forEach((f, i) => ports.writeFile(written[i], stringify(f.data)))
   ports.writeFile(options.reportPath, report)
   return { written, report, expectedErrors }
 }
