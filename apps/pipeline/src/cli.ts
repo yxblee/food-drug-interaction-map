@@ -1,6 +1,7 @@
 // Thin CLI wrapper: builds the real ports and calls runPipeline. Not unit tested (see pipeline.test.ts).
 //   node apps/pipeline/src/cli.ts --source openfda --limit 25
 //   node apps/pipeline/src/cli.ts --source foodrugs --limit 25   (needs .cache/pipeline/FinalFooDrugs_v4.sql)
+//   node apps/pipeline/src/cli.ts --source ddid --limit 25        (needs .cache/pipeline/DDID-Interaction.csv)
 import Anthropic from '@anthropic-ai/sdk'
 import { zodOutputFormat } from '@anthropic-ai/sdk/helpers/zod'
 import { createHash } from 'node:crypto'
@@ -13,6 +14,7 @@ import {
   Draft,
   SECTIONS,
   runPipeline,
+  type DdidPorts,
   type DraftInput,
   type FooDrugsPorts,
   type Label,
@@ -151,11 +153,21 @@ function foodrugsLines() {
   return dumpLines(DUMP)
 }
 
+const DDID = join(CACHE_DIR, 'DDID-Interaction.csv')
+function ddidCsv() {
+  if (!existsSync(DDID))
+    throw new Error(
+      `${DDID} not found. Download "Interaction Information.csv" from https://bddg.hznu.edu.cn/ddid/download/ and save it as ${DDID}.`,
+    )
+  return readFileSync(DDID, 'utf8')
+}
+
 const cachePath = (key: string) =>
   join(CACHE_DIR, `${createHash('sha1').update(key).digest('hex')}.json`)
-const ports: Ports & FooDrugsPorts = {
+const ports: Ports & FooDrugsPorts & DdidPorts = {
   searchLabels,
   foodrugsLines,
+  ddidCsv,
   pubmed,
   draft,
   ingredientCui,
@@ -180,8 +192,8 @@ try {
 }
 const { values } = parseArgs({ options: { source: { type: 'string' }, limit: { type: 'string' } } })
 const source = values.source
-if (source !== 'openfda' && source !== 'foodrugs') {
-  console.error('usage: pipeline --source openfda|foodrugs [--limit N]')
+if (source !== 'openfda' && source !== 'foodrugs' && source !== 'ddid') {
+  console.error('usage: pipeline --source openfda|foodrugs|ddid [--limit N]')
   process.exit(1)
 }
 if (!process.env.ANTHROPIC_API_KEY) {
