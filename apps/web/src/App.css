@@ -26,11 +26,14 @@
   margin-left: 12px;
   padding: 0 0 0 16px;
   border: 0;
-  border-left: 1px solid var(--line);
+  border-left: 1px solid var(--btn-border);
   background: none;
-  color: var(--ink);
+  color: var(--btn-label);
   font: inherit;
   cursor: pointer;
+  transition:
+    color 200ms,
+    border-color 200ms;
 }
 .app__palette::before {
   content: '';
@@ -76,8 +79,6 @@
   font: inherit;
   font-size: 16px;
   color: inherit;
-  background: var(--surface);
-  border: 1px solid var(--muted);
 }
 .search__count {
   margin: 4px 0;

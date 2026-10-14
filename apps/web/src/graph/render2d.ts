@@ -4,6 +4,8 @@ import {
   forceLink,
   forceManyBody,
   forceSimulation,
+  forceX,
+  forceY,
   select,
   zoom,
   zoomIdentity,
@@ -38,6 +40,29 @@ function shapePath(n: RenderNode, scale = 1): string {
     return `M ${-s} ${-s} H ${s} V ${s} H ${-s} Z`
   }
   return `M 0 ${-r} L ${r} 0 L 0 ${r} L ${-r} 0 Z`
+}
+
+// Weak pull to the origin: forceCenter only shifts the mean, so it never draws
+// disconnected clusters together.
+export function createSim(nodes: SimNode[], links: SimLink[]): Simulation<SimNode, SimLink> {
+  return forceSimulation(nodes)
+    .force(
+      'link',
+      forceLink<SimNode, SimLink>(links)
+        .id((n) => n.key)
+        .distance((l) => (l.kind === 'member' ? 40 : 80))
+        .strength((l) => (l.kind === 'member' ? 0.3 : 0.6)),
+    )
+    .force('charge', forceManyBody().strength(-110))
+    .force(
+      'collide',
+      forceCollide<SimNode>((n) => nodeRadius(n) + 10),
+    )
+    .force('center', forceCenter(0, 0))
+    .force('x', forceX(0).strength(0.05))
+    .force('y', forceY(0).strength(0.05))
+    .stop()
+    .tick(300)
 }
 
 export function create2d(opts: RendererOptions): GraphRenderer {
@@ -111,6 +136,14 @@ export function create2d(opts: RendererOptions): GraphRenderer {
       )
   }
 
+  function paintHover(key: string | null) {
+    if (!root) return
+    root.selectAll<SVGGElement, SimNode>('g.node').classed('is-hover', (n) => n.key === key)
+    root
+      .selectAll<SVGLineElement, SimLink>('line.link')
+      .classed('is-hover', (l) => !!key && (endKey(l.source) === key || endKey(l.target) === key))
+  }
+
   return {
     mount(el) {
       host = el
@@ -158,6 +191,13 @@ export function create2d(opts: RendererOptions): GraphRenderer {
           e.stopPropagation()
           onSelect(n.key)
         })
+        // Mouse only, so touch never leaves a stuck hover.
+        .on('pointerenter', (e: PointerEvent, n) => {
+          if (e.pointerType === 'mouse') paintHover(n.key)
+        })
+        .on('pointerleave', (e: PointerEvent) => {
+          if (e.pointerType === 'mouse') paintHover(null)
+        })
       node
         .filter((n) => n.group)
         .append('path')
@@ -174,23 +214,8 @@ export function create2d(opts: RendererOptions): GraphRenderer {
         .attr('y', (n) => -nodeRadius(n) - 6)
         .text((n) => n.name.toUpperCase())
 
-      sim = forceSimulation(nodes)
-        .force(
-          'link',
-          forceLink<SimNode, SimLink>(links)
-            .id((n) => n.key)
-            .distance((l) => (l.kind === 'member' ? 40 : 80))
-            .strength((l) => (l.kind === 'member' ? 0.3 : 0.6)),
-        )
-        .force('charge', forceManyBody().strength(-160))
-        .force(
-          'collide',
-          forceCollide<SimNode>((n) => nodeRadius(n) + 10),
-        )
-        .force('center', forceCenter(0, 0))
-      // Lay out up front so the first frame is already settled and can be framed.
-      sim.stop()
-      sim.tick(300)
+      sim = createSim(nodes, links)
+      // createSim lays out up front so the first frame is already settled and can be framed.
       positions()
       requestFit()
       paintFocus()

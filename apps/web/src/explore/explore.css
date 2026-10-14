@@ -121,7 +121,6 @@
   /* Sits over the 2D graph's labels on narrow screens. */
   margin: 4px 0 0 -4px;
   padding: 4px;
-  background: var(--paper);
 }
 .legend {
   position: absolute;
@@ -130,10 +129,10 @@
   z-index: 2;
   max-width: min(18rem, calc(100% - 32px));
   padding: 0 12px 4px;
-  background: var(--surface);
-  border: 1px solid var(--line);
 }
 .legend summary {
+  color: var(--btn-label);
+  transition: color 200ms;
   min-height: 44px;
   display: flex;
   align-items: center;

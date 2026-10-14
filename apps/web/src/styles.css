@@ -108,20 +108,138 @@ h3 {
   color: var(--sev-minimal);
 }
 
+/* Reference-style outline control: transparent, hairline, muted label; hover darkens both. */
+:root {
+  --btn-border: color-mix(in oklch, var(--ink) 26%, transparent);
+  --btn-border-hover: color-mix(in oklch, var(--ink) 60%, transparent);
+  /* 72%, not the reference's 64%: 64% is under 4.5:1 on the sage, plum, slate and sand papers. */
+  --btn-label: color-mix(in oklch, var(--ink) 72%, transparent);
+}
 .pill-button {
-  border: 1px solid var(--muted);
-  background: var(--surface);
+  border: 1px solid var(--btn-border);
+  background: transparent;
   border-radius: 999px;
   padding: 6px 12px;
   min-height: 44px;
-  /* Own colour, not inherited from body: fill and text swap together on theme change. */
-  color: var(--ink);
+  color: var(--btn-label);
   cursor: pointer;
+  transition:
+    color 200ms,
+    border-color 200ms;
 }
 .pill-button[aria-pressed='true'],
 .pill-button[aria-selected='true'] {
   background: var(--ink);
+  border-color: var(--ink);
   color: var(--paper);
+}
+/* Label slides up on hover to reveal its copy (PillLabel). */
+.pill-label {
+  display: inline-block;
+  overflow: hidden;
+  vertical-align: bottom;
+}
+.pill-label > span {
+  display: block;
+  position: relative;
+  transition: transform 200ms;
+}
+.pill-label > span::after {
+  content: attr(data-label) / '';
+  position: absolute;
+  left: 0;
+  top: 100%;
+  white-space: nowrap;
+}
+@media (hover: hover) {
+  .pill-button:hover,
+  .app__palette:hover,
+  .legend:has(summary:hover) {
+    --btn-border: var(--btn-border-hover);
+    --btn-label: var(--ink);
+  }
+  .pill-button[aria-pressed='true']:hover,
+  .pill-button[aria-selected='true']:hover {
+    border-color: var(--ink);
+    color: var(--paper);
+  }
+  :is(button, summary):hover > .pill-label > span {
+    transform: translateY(-100%);
+  }
+}
+/* Frosted controls over the graph: see-through with blur at rest, solid on hover and focus. */
+:is(
+  .search__input,
+  .explore__bar .pill-button:not([aria-pressed='true']),
+  .explore__hint,
+  .legend
+) {
+  background: color-mix(in srgb, var(--paper) 55%, transparent);
+  -webkit-backdrop-filter: blur(8px);
+  backdrop-filter: blur(8px);
+  border: 1px solid var(--btn-border);
+  transition:
+    background-color 200ms,
+    border-color 200ms,
+    box-shadow 200ms,
+    color 200ms;
+}
+:is(
+  .search__input,
+  .explore__bar .pill-button:not([aria-pressed='true']),
+  .explore__hint,
+  .legend
+):is(:focus-within, :focus-visible),
+.legend[open] {
+  background: var(--surface);
+  border-color: var(--btn-border-hover);
+  box-shadow: 0 6px 24px rgb(0 0 0 / 0.12);
+}
+@media (hover: hover) {
+  :is(
+    .search__input,
+    .explore__bar .pill-button:not([aria-pressed='true']),
+    .explore__hint,
+    .legend
+  ):hover {
+    background: var(--surface);
+    border-color: var(--btn-border-hover);
+    box-shadow: 0 6px 24px rgb(0 0 0 / 0.12);
+  }
+}
+@media (prefers-color-scheme: dark) {
+  :is(.search__input, .explore__bar .pill-button, .explore__hint, .legend):is(
+    :hover,
+    :focus-within,
+    :focus-visible
+  ),
+  .legend[open] {
+    box-shadow: 0 6px 24px rgb(0 0 0 / 0.4);
+  }
+}
+@supports not ((backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))) {
+  :is(
+    .search__input,
+    .explore__bar .pill-button:not([aria-pressed='true']),
+    .explore__hint,
+    .legend
+  ) {
+    background: var(--surface);
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .search__input,
+  .explore__bar .pill-button,
+  .explore__hint,
+  .pill-button,
+  .app__palette,
+  .legend {
+    transition: none;
+  }
+  .pill-label > span {
+    transition: none;
+    transform: none !important;
+  }
 }
 ::placeholder {
   color: var(--muted);

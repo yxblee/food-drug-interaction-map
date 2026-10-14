@@ -1,3 +1,4 @@
+import { PillLabel } from '../PillLabel.tsx'
 import { SEVERITIES } from '@fdi/schema'
 import { SEVERITY_LABEL } from './SeverityBadge.tsx'
 
@@ -12,7 +13,9 @@ const WIDTH = { avoid: 2.4, caution: 2, monitor: 1.6, minimal: 1.2 } as const
 export function Legend() {
   return (
     <details className="legend">
-      <summary className="mono-label">How to read the map</summary>
+      <summary className="mono-label">
+        <PillLabel>How to read the map</PillLabel>
+      </summary>
       <ul className="legend__list">
         {SHAPES.map((s) => (
           <li key={s.kind}>

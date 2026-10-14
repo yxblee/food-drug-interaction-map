@@ -56,7 +56,7 @@ test('explore controls keep the 16px gutter and a readable search field', async 
     probe.remove()
     return [getComputedStyle(el).borderTopColor, getComputedStyle(el, '::placeholder').color, m]
   })
-  expect(border).toBe(muted)
+  expect(border).toContain('0.26') // hairline --btn-border, frosted by the shared recipe
   expect(placeholder).toBe(muted)
 })
 
@@ -82,6 +82,69 @@ test('links carry severity ink before anything is selected', async ({ page }, in
   const avoidLink = page.locator('svg.graph2d .link.sev-avoid').first()
   await expect(avoidLink).toBeAttached()
   await expect(avoidLink).toHaveCSS('stroke', 'rgb(122, 42, 28)')
+})
+
+test('links are visible at rest in 2D', async ({ page }, info) => {
+  await page.goto('./')
+  if (info.project.name !== 'mobile') await page.getByRole('button', { name: '2D' }).click()
+  const opacity = async (sel: string) =>
+    Number(
+      await page
+        .locator(sel)
+        .first()
+        .evaluate((e) => getComputedStyle(e).opacity),
+    )
+  expect(await opacity('svg.graph2d .link.sev-avoid')).toBeGreaterThanOrEqual(0.7)
+  expect(await opacity('svg.graph2d .link--member')).toBeGreaterThanOrEqual(0.55)
+})
+
+test('hovering a 2D node lifts its links and leaves unrelated ones alone', async ({
+  page,
+}, info) => {
+  test.skip(info.project.name === 'mobile', 'hover is mouse-only')
+  await page.goto('./')
+  await page.getByRole('button', { name: '2D' }).click()
+  const node = page.getByRole('button', { name: 'Food: Grapefruit' })
+  await expect(node).toBeAttached()
+  const width = (l: ReturnType<typeof page.locator>) =>
+    l.evaluate((e) => getComputedStyle(e).strokeWidth)
+  const key = await node.evaluate((e) => e.id)
+  const lines = page.locator('svg.graph2d .link')
+  // Pick one link touching grapefruit and one that does not, by endpoint position.
+  const pick = async (touching: boolean) => {
+    const idx = await page.evaluate(
+      ([id, touching]) => {
+        const n = document.getElementById(id as string)!.getBoundingClientRect()
+        const cx = n.x + n.width / 2
+        const cy = n.y + n.height / 2
+        const ls = [...document.querySelectorAll('svg.graph2d .link')]
+        return ls.findIndex((l) => {
+          const r = l.getBoundingClientRect()
+          const near = (x: number, y: number) => Math.hypot(x - cx, y - cy) < 4
+          const x1 = +l.getAttribute('x1')!
+          const hit = [
+            [r.left, r.top],
+            [r.right, r.bottom],
+            [r.left, r.bottom],
+            [r.right, r.top],
+          ].some(([x, y]) => near(x!, y!))
+          return x1 === x1 && hit === touching
+        })
+      },
+      [key, touching] as const,
+    )
+    return lines.nth(idx)
+  }
+  const mine = await pick(true)
+  const other = await pick(false)
+  const before = [await width(mine), await width(other)]
+  await node.hover()
+  await expect(mine).toHaveClass(/is-hover/)
+  await expect(other).not.toHaveClass(/is-hover/)
+  expect(await width(mine)).not.toBe(before[0])
+  expect(await width(other)).toBe(before[1])
+  await page.mouse.move(0, 0)
+  await expect(mine).not.toHaveClass(/is-hover/)
 })
 
 test('keyboard users reach search before any graph node', async ({ page }) => {
@@ -532,4 +595,54 @@ test('panel link-buttons are 24px tall; new-tab sources say so', async ({ page }
     .evaluate((d) => ((d as HTMLDetailsElement).open = true))
   const src = panel.locator('a[target=_blank]').first()
   await expect(src).toHaveAccessibleName(/\(opens in new tab\)$/)
+})
+
+test('reference-style buttons: 44px, filled when selected, names not doubled, no slide when reduced', async ({
+  page,
+}) => {
+  await page.goto('./')
+  const explore = page.getByRole('tab', { name: 'Explore', exact: true })
+  await expect(explore).toBeVisible()
+  await expect(page.getByRole('tab', { name: 'My meds', exact: true })).toBeVisible()
+  expect((await explore.boundingBox())!.height).toBeGreaterThanOrEqual(44)
+  const bg = await explore.evaluate((el) => getComputedStyle(el).backgroundColor)
+  const ink = await page.evaluate(() => {
+    const d = document.createElement('i')
+    d.style.color = 'var(--ink)'
+    document.body.append(d)
+    const c = getComputedStyle(d).color
+    d.remove()
+    return c
+  })
+  expect(bg).toBe(ink)
+  const mech = page.getByRole('button', { name: 'Mechanisms', exact: true })
+  expect((await mech.boundingBox())!.height).toBeGreaterThanOrEqual(44)
+  const label = mech.locator('.pill-label > span')
+  expect(await label.evaluate((el) => getComputedStyle(el).transitionProperty)).toContain(
+    'transform',
+  )
+  await page.emulateMedia({ reducedMotion: 'reduce' })
+  expect(await label.evaluate((el) => getComputedStyle(el).transitionProperty)).not.toContain(
+    'transform',
+  )
+})
+
+test('controls over the graph are frosted at rest and solid on focus', async ({ page }) => {
+  await page.goto('./')
+  await page.mouse.move(0, 0)
+  // Computed colour may be rgb(), rgba() or color(srgb … / a): alpha is the last "/ a" or 4th value.
+  const alpha = (el: import('@playwright/test').Locator) =>
+    el.evaluate((e) => {
+      const c = getComputedStyle(e).backgroundColor
+      const m = c.match(/\/\s*([\d.]+)\s*\)/) ?? c.match(/rgba\([^,]+,[^,]+,[^,]+,\s*([\d.]+)\)/)
+      return m ? Number(m[1]) : 1
+    })
+  const search = page.getByLabel('Search drugs, foods and mechanisms')
+  expect(await alpha(search)).toBeLessThan(1)
+  const mech = page.getByRole('button', { name: 'Mechanisms', exact: true })
+  await mech.click() // selected pills keep the ink fill; the unselected one is frosted
+  await page.mouse.move(0, 0)
+  expect(await mech.evaluate((e) => getComputedStyle(e).backdropFilter)).not.toBe('none')
+  await search.focus()
+  await expect.poll(() => alpha(search)).toBe(1)
 })

@@ -1,6 +1,7 @@
 import { useEffect, useMemo, useRef, useState } from 'react'
 import type { GraphPayload, Kind } from '@fdi/schema'
 import { buildIndex, splitKey } from '@fdi/schema/domain'
+import { PillLabel } from './PillLabel.tsx'
 import { fetchGraph } from './api.ts'
 import { ExploreTab } from './explore/ExploreTab.tsx'
 import { checkMeds, mapKeysFor } from './meds/checkMeds.ts'
@@ -94,7 +95,7 @@ export function App() {
                 document.getElementById(`tab-${next}`)?.focus()
               }}
             >
-              {tab === 'explore' ? 'Explore' : 'My meds'}
+              <PillLabel>{tab === 'explore' ? 'Explore' : 'My meds'}</PillLabel>
             </button>
           ))}
         </div>
@@ -103,7 +104,7 @@ export function App() {
           aria-pressed={state.tint}
           onClick={() => update({ tint: !state.tint })}
         >
-          Color
+          <PillLabel>Color</PillLabel>
         </button>
       </header>
 
@@ -111,7 +112,7 @@ export function App() {
         <div role="alert" className="app__banner">
           Couldn't load the interaction data.{' '}
           <button className="pill-button" onClick={retry}>
-            Retry
+            <PillLabel>Retry</PillLabel>
           </button>
         </div>
       )}

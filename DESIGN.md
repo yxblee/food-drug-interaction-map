@@ -183,7 +183,7 @@ Each tint is a full six-role palette (paper, ink, muted, line, badge background,
 - **Stone Paper** (`paper`): page background; the default "grey" world.
 - **Bone Surface** (`surface`): raised things ink sits on: inputs, search results, the detail panel, badge backgrounds, unpressed pills.
 - **Weathered Grey** (`muted`): mono labels, secondary text, aliases, footer, placeholders, graph labels and unselected nodes; also the outline of every control (inputs, pill buttons), which needs 3:1 non-text contrast.
-- **Hairline** (`line`): 1px dividing rules and graph links at rest. Decorative only: never the sole boundary of a control.
+- **Hairline** (`line`): 1px dividing rules. Decorative only: never the sole boundary of a control.
 - Dark mode inverts paper and ink (`paper-dark`, `ink-dark`, …) but keeps badge backgrounds light (`badge-bg-dark`) so the severity inks read the same in both modes.
 
 ### Named Rules
@@ -225,7 +225,10 @@ A full-height column: top bar (title left, view pills right), the view in a flex
 
 ## Elevation & Depth
 
-Flat by default. Layering is carried by tone (surface over paper), 1px hairlines and `currentColor` outlines, and the ink fill of active controls; the film grain sits over everything at z-index 100 and gives the matte, printed feel. No shadows exist in the current implementation. Subtle shadows are permitted for genuinely floating elements (search results over the graph, the docked detail panel) if separation ever needs more than a hairline, but they stay soft and low and never become the resting state of in-flow content.
+Flat by default. Layering is carried by tone (surface over paper), 1px hairlines and `currentColor` outlines, and the ink fill of active controls; the film grain sits over everything at z-index 100 and gives the matte, printed feel. Frosted controls over the graph (below) gain a soft shadow only on hover or focus. Subtle shadows are permitted for genuinely floating elements (search results over the graph, the docked detail panel) if separation ever needs more than a hairline, but they stay soft and low and never become the resting state of in-flow content.
+
+### Frosted Controls
+The Explore search input, the unselected explore-bar pills (2D/3D, Mechanisms), the hint and the legend sit over the graph, so at rest they are see-through: `color-mix(in srgb, var(--paper) 55%, transparent)` with `backdrop-filter: blur(8px)` and the `--btn-border` hairline; text colour is unchanged (AA). On hover (`hover: hover`), `:focus-within` or `:focus-visible` they turn solid Bone Surface, the border darkens to `--btn-border-hover` and a `0 6px 24px` shadow appears (0.12 black, 0.4 in dark), over 200ms (none under reduced motion). Selected pills keep the ink fill, an open legend is solid, and the search results list stays solid. Without `backdrop-filter` support everything falls back to solid surface. One shared selector group in `styles.css` carries the recipe.
 
 ### Named Rules
 **The Hairline First Rule.** Reach for a 1px rule or outline before a shadow. A shadow is allowed only on something that floats over the graph or page, never on in-flow content.
@@ -241,7 +244,8 @@ The Explore search field (square) and the My meds input (pill) currently disagre
 ### Buttons
 Quiet and tactile; they look like paper until pressed.
 - **Shape:** full pill (999px).
-- **Default:** Bone Surface fill, ink text, 1px Weathered Grey outline, 6px 12px padding, 44px minimum height (the panel's close button is a 44×44 square). Colour is set on the pill itself so fill and text switch together on a theme change.
+- **Default:** transparent fill, 1px outline at 26% ink, label at 72% ink (the reference's 64% falls under 4.5:1 on the tinted papers; `tokens.test.ts` guards 72% on paper and surface in every tint and mode), 6px 12px padding, 44px minimum height (the panel's close button is a 44×44 square). The same treatment covers Color, the legend's "How to read the map" summary and the panel close. Shared `--btn-border`, `--btn-border-hover` and `--btn-label` tokens live in `styles.css`.
+- **Hover** (only where `hover: hover`): outline to 60% ink, label to full ink, both over 200ms. Text pills (`PillLabel`) also slide the label up to reveal a copy beneath it; the copy is CSS content with empty alt text so the name is read once. Reduced motion drops the slide. Selected pills ignore the colour change so paper-on-ink stays legible.
 - **Pressed / Selected** (`aria-pressed="true"`; the view tabs use `aria-selected`): fills with Field Ink, text turns paper. Used for the active view (Explore / My meds, a tablist with arrow keys and one tab stop) and the 2D and Mechanisms toggles. Color is a setting, not a view: it sits apart from the view tabs behind a hairline rule, drawn as a text button with a square check mark (filled when on) rather than a pill. On phones the product name shows as the 11px mono label on its own line above the tabs; at rest with an empty Medication list, the Explore hint adds "Taking medicines? Check them in My meds" beside "Try grapefruit".
 - **Focus:** 2px ink outline, 2px offset (global `:focus-visible`).
 - **Link button:** unstyled underlined text for in-panel navigation.
@@ -262,17 +266,17 @@ The guide's stamp. Pill, light badge background, 1px `currentColor` outline, upp
 ### Inputs / Fields
 - **Both inputs (Explore search, medication):** inherit the body font at 16px (iOS Safari zooms smaller text on focus) and are at least 44px tall. Both are ARIA comboboxes over a listbox: ArrowUp/Down move the active option, Enter picks it (first by default), Escape closes.
 - **Medication input:** pill, Bone Surface, Weathered Grey outline, 10px 14px padding; suggestions below on a 12px-radius surface with 8px-radius rows that fill with paper on hover/focus.
-- **Explore search:** square, Bone Surface, Weathered Grey outline, 8px 10px padding, max 420px; results as a ruled list with muted aliases and a muted match count.
+- **Explore search:** square, frosted at rest and solid on hover or focus (see Frosted Controls), hairline outline, 8px 10px padding, max 420px; results as a ruled list with muted aliases and a muted match count.
 - **Focus:** global 2px ink outline.
 
 ### Navigation
 Two pill buttons top-right (Explore, My meds) plus the Color toggle; the active view is ink-filled. In My meds the picker and chips come first, then Foods to watch, then Clear all and See on map (below the picker on desktop, after the results on phones), so the first Avoid row sits high. Every view state (tab, query, selected node, tint) lives in the URL so any view can be shared.
 
 ### Interaction Graph
-The fold-out map. 2D (d3) and 3D (3d-force-graph) render the same data. At rest: muted grey nodes, interaction links in their severity ink at reduced opacity (minimal dashed), group-member links dotted hairlines; mechanisms are unfilled ink outlines. On selection the node fills with ink, its links take their severity ink with weight by severity (avoid 2.4 > caution 2 > monitor 1.6 > minimal 1.2 dashed), and everything else dims to 8–15%. Keyboard focus thickens the node outline to 3px ink. Screen-reader rows mirror the graph so it is never the only path.
+The fold-out map. 2D (d3) and 3D (3d-force-graph) render the same data. At rest: muted grey nodes, interaction links in their severity ink (minimal dashed; 2D opacity 0.75, 3D thin 0.5 cylinders at 0.7), group-member links dotted muted ink at 0.6; mechanisms are unfilled ink outlines. On selection the node fills with ink, its links take their severity ink with weight by severity (avoid 2.4 > caution 2 > monitor 1.6 > minimal 1.2 dashed), and everything else dims to 8–15%. Hovering a node with a mouse lifts it without selecting: it turns full ink and shows its label (3D also grows it to 1.4x and shows a pointer cursor), and its links go full strength and a little wider (3D +0.4 width, severity ink or ink for structure links; 2D opacity 1, 2px). Hover never undoes selection dimming on other elements, and touch never triggers it. Keyboard focus thickens the node outline to 3px ink. Screen-reader rows mirror the graph so it is never the only path.
 
 ### Map Legend
-A collapsed "How to read the map" disclosure, bottom-left over the graph: square, Bone Surface, hairline outline, mono summary with a +/− marker and a 44px target. Open, it shows the three node shapes, the outlined group/class form, the four severity line samples at their real weights, and one line explaining the Color toggle. With nothing selected and no search, the Explore bar offers "New here? Try grapefruit".
+A collapsed "How to read the map" disclosure, bottom-left over the graph: square, frosted when closed and solid when open or hovered, hairline outline, mono summary with a +/− marker and a 44px target. Open, it shows the three node shapes, the outlined group/class form, the four severity line samples at their real weights, and one line explaining the Color toggle. With nothing selected and no search, the Explore bar offers "New here? Try grapefruit".
 
 ### Motion
 Paper and ink cross-fade over 400ms `ease` when the tint or colour mode changes; graph focus/dim changes fade over 200ms. Both are removed under `prefers-reduced-motion`.

@@ -14,7 +14,7 @@ export interface Palette {
   chipMuted: string
 }
 
-const mix = (a: string, b: string, t: number): string =>
+export const mix = (a: string, b: string, t: number): string =>
   '#' +
   [1, 3, 5]
     .map((i) =>

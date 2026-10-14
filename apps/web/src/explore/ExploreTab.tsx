@@ -1,6 +1,7 @@
 import { useCallback, useEffect, useMemo, useState } from 'react'
 import type { GraphPayload } from '@fdi/schema'
 import { buildIndex, nodeKey, searchNodes } from '@fdi/schema/domain'
+import { PillLabel } from '../PillLabel.tsx'
 import { chooseView } from '../graph/chooseView.ts'
 import { GraphView } from '../graph/GraphView.tsx'
 import { useEnv } from '../graph/useEnv.ts'
@@ -103,7 +104,7 @@ export function ExploreTab({
         <Search nodes={nodes} state={state} update={update} />
         {medsFilter && (
           <button className="pill-button" onClick={clearMedsFilter}>
-            Showing your meds ✕
+            <PillLabel>Showing your meds ✕</PillLabel>
           </button>
         )}
         {canToggle && (
@@ -111,7 +112,7 @@ export function ExploreTab({
             className="pill-button"
             onClick={() => update({ view: view === '3d' ? '2d' : '3d' })}
           >
-            {view === '3d' ? '2D' : '3D'}
+            <PillLabel>{view === '3d' ? '2D' : '3D'}</PillLabel>
           </button>
         )}
         <button
@@ -119,7 +120,7 @@ export function ExploreTab({
           aria-pressed={state.mech}
           onClick={() => update({ mech: !state.mech })}
         >
-          Mechanisms
+          <PillLabel>Mechanisms</PillLabel>
         </button>
         {!selected && !state.q && !medsFilter && known.has(STARTER) && (
           <p className="explore__hint">
