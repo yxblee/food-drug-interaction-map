@@ -21,6 +21,8 @@ The licences above apply to the papers. Check each database's own terms before a
 The curation pipeline proposes Pending interactions from two of these databases. It takes only the food–drug pair and the PubMed IDs of the studies behind it, and cites those studies, not the database.
 
 - **FooDrugs**: data is CC BY 4.0 ([Zenodo record](https://zenodo.org/records/6638469)). Only its text-mined pairs are used, never the ones inferred from gene expression.
+  - Run it with `node --run pipeline -- --source foodrugs`. Download `FinalFooDrugs_v4.sql` (about 1.6 GB) into `.cache/pipeline/` first. The dump is streamed line by line, with no MySQL.
+  - Only the `TM_interactions` and `texts` tables are read. A pair is kept when its food name equals a catalogue Food name or Alias (ignoring case), its drug name resolves through RxNav to a catalogue Drug's RxNorm CUI, and a PubMed document mentions it. Up to 3 PMIDs per pair become `study` Citations, and the draft is checked against their abstracts. The dump has no drug identifiers or confidence scores.
 - **DDID**: its CSVs are freely downloadable, but no licence for the data is stated. We use it anyway on the terms in [ADR 0004](adr/0004-ddid-used-without-confirmed-data-licence.md). Only pairs graded harmful or negative are used.
 - **FARFOOD**: not used. Its paper is CC BY-NC-ND and it has no downloadable data.
 

@@ -286,7 +286,7 @@ describe('runPipeline (openfda)', () => {
       const t = setup({ 'grapefruit--ranolazine': ranolazine({ parent: 'made-up' }) })
       await t.run()
       expect(parse(t.written['data/drugs/ranolazine.yaml']).parent).toBeUndefined()
-      expect(t.cuis).toEqual(['Ranolazine'])
+      expect(t.cuis).toEqual(['ranolazine'])
     })
 
     it('writes no Drug when its draft is discarded, nor one for a catalogued ingredient', async () => {
