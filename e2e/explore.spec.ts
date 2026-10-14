@@ -56,7 +56,7 @@ test('explore controls keep the 16px gutter and a readable search field', async 
     probe.remove()
     return [getComputedStyle(el).borderTopColor, getComputedStyle(el, '::placeholder').color, m]
   })
-  expect(border).toBe(muted)
+  expect(border).toContain('0.26') // hairline --btn-border, frosted by the shared recipe
   expect(placeholder).toBe(muted)
 })
 
@@ -625,4 +625,24 @@ test('reference-style buttons: 44px, filled when selected, names not doubled, no
   expect(await label.evaluate((el) => getComputedStyle(el).transitionProperty)).not.toContain(
     'transform',
   )
+})
+
+test('controls over the graph are frosted at rest and solid on focus', async ({ page }) => {
+  await page.goto('./')
+  await page.mouse.move(0, 0)
+  // Computed colour may be rgb(), rgba() or color(srgb … / a): alpha is the last "/ a" or 4th value.
+  const alpha = (el: import('@playwright/test').Locator) =>
+    el.evaluate((e) => {
+      const c = getComputedStyle(e).backgroundColor
+      const m = c.match(/\/\s*([\d.]+)\s*\)/) ?? c.match(/rgba\([^,]+,[^,]+,[^,]+,\s*([\d.]+)\)/)
+      return m ? Number(m[1]) : 1
+    })
+  const search = page.getByLabel('Search drugs, foods and mechanisms')
+  expect(await alpha(search)).toBeLessThan(1)
+  const mech = page.getByRole('button', { name: 'Mechanisms', exact: true })
+  await mech.click() // selected pills keep the ink fill; the unselected one is frosted
+  await page.mouse.move(0, 0)
+  expect(await mech.evaluate((e) => getComputedStyle(e).backdropFilter)).not.toBe('none')
+  await search.focus()
+  await expect.poll(() => alpha(search)).toBe(1)
 })

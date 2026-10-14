@@ -79,8 +79,6 @@
   font: inherit;
   font-size: 16px;
   color: inherit;
-  background: var(--surface);
-  border: 1px solid var(--muted);
 }
 .search__count {
   margin: 4px 0;

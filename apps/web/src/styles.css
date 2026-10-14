@@ -167,7 +167,70 @@ h3 {
     transform: translateY(-100%);
   }
 }
+/* Frosted controls over the graph: see-through with blur at rest, solid on hover and focus. */
+:is(
+  .search__input,
+  .explore__bar .pill-button:not([aria-pressed='true']),
+  .explore__hint,
+  .legend
+) {
+  background: color-mix(in srgb, var(--paper) 55%, transparent);
+  -webkit-backdrop-filter: blur(8px);
+  backdrop-filter: blur(8px);
+  border: 1px solid var(--btn-border);
+  transition:
+    background-color 200ms,
+    border-color 200ms,
+    box-shadow 200ms,
+    color 200ms;
+}
+:is(
+  .search__input,
+  .explore__bar .pill-button:not([aria-pressed='true']),
+  .explore__hint,
+  .legend
+):is(:focus-within, :focus-visible),
+.legend[open] {
+  background: var(--surface);
+  border-color: var(--btn-border-hover);
+  box-shadow: 0 6px 24px rgb(0 0 0 / 0.12);
+}
+@media (hover: hover) {
+  :is(
+    .search__input,
+    .explore__bar .pill-button:not([aria-pressed='true']),
+    .explore__hint,
+    .legend
+  ):hover {
+    background: var(--surface);
+    border-color: var(--btn-border-hover);
+    box-shadow: 0 6px 24px rgb(0 0 0 / 0.12);
+  }
+}
+@media (prefers-color-scheme: dark) {
+  :is(.search__input, .explore__bar .pill-button, .explore__hint, .legend):is(
+    :hover,
+    :focus-within,
+    :focus-visible
+  ),
+  .legend[open] {
+    box-shadow: 0 6px 24px rgb(0 0 0 / 0.4);
+  }
+}
+@supports not ((backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))) {
+  :is(
+    .search__input,
+    .explore__bar .pill-button:not([aria-pressed='true']),
+    .explore__hint,
+    .legend
+  ) {
+    background: var(--surface);
+  }
+}
 @media (prefers-reduced-motion: reduce) {
+  .search__input,
+  .explore__bar .pill-button,
+  .explore__hint,
   .pill-button,
   .app__palette,
   .legend {
