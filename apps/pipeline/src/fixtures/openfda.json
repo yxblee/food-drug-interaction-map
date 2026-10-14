@@ -1,0 +1,184 @@
+{
+  "grapefruit": [
+    {
+      "set_id": "02245025-218d-4297-aeb6-91fefa178291",
+      "effective_time": "20251125",
+      "openfda": {
+        "generic_name": ["SIMVASTATIN"],
+        "substance_name": ["SIMVASTATIN"],
+        "brand_name": ["Simvastatin"],
+        "manufacturer_name": ["A-S Medication Solutions"],
+        "rxcui": ["200345"]
+      },
+      "drug_interactions": [
+        "7 DRUG INTERACTIONS See full prescribing information for details regarding concomitant use of simvastatin with other drugs or grapefruit juice that increase the risk of myopathy and rhabdomyolysis. Grapefruit Juice Clinical Impact: Grapefruit juice can raise the plasma levels of simvastatin and may increase the risk of myopathy and rhabdomyolysis. Intervention: Avoid grapefruit juice when taking simvastatin."
+      ]
+    },
+    {
+      "set_id": "00896fff-081d-4553-be8c-1999a8a73dda",
+      "effective_time": "20260226",
+      "openfda": {
+        "generic_name": ["SIMVASTATIN"],
+        "substance_name": ["SIMVASTATIN"],
+        "brand_name": ["SIMVASTATIN"],
+        "manufacturer_name": ["PD-Rx Pharmaceuticals, Inc."],
+        "rxcui": ["198211"]
+      },
+      "drug_interactions": [
+        "7 DRUG INTERACTIONS See full prescribing information for details regarding concomitant use of simvastatin with other drugs or grapefruit juice that increase the risk of myopathy and rhabdomyolysis. Grapefruit Juice Clinical Impact: Grapefruit juice can raise the plasma levels of simvastatin and may increase the risk of myopathy and rhabdomyolysis. Intervention: Avoid grapefruit juice when taking simvastatin."
+      ]
+    },
+    {
+      "set_id": "00afce9b-48c9-487a-a738-e359c005c707",
+      "effective_time": "20250828",
+      "openfda": {
+        "generic_name": ["ATORVASTATIN CALCIUM"],
+        "substance_name": ["ATORVASTATIN CALCIUM TRIHYDRATE"],
+        "brand_name": ["Atorvastatin calcium"],
+        "manufacturer_name": ["Bryant Ranch Prepack"],
+        "rxcui": ["259255"]
+      },
+      "drug_interactions": [
+        "7 DRUG INTERACTIONS See full prescribing information for details regarding concomitant use of atorvastatin calcium with other drugs or grapefruit juice that increase the risk of myopathy and rhabdomyolysis ( 2. Grapefruit Juice Clinical Impact: Grapefruit juice consumption, especially excessive consumption, more than 1. Intervention: Avoid intake of large quantities of grapefruit juice, more than 1."
+      ]
+    },
+    {
+      "set_id": "008de8fd-150f-4022-8ccb-c8bfa94875c7",
+      "effective_time": "20260324",
+      "openfda": {
+        "generic_name": ["LEVOTHYROXINE SODIUM"],
+        "substance_name": ["LEVOTHYROXINE SODIUM"],
+        "brand_name": ["Levothyroxine sodium"],
+        "manufacturer_name": ["A-S Medication Solutions"],
+        "rxcui": ["966249"]
+      },
+      "drug_interactions": [
+        "Grapefruit juice may delay the absorption of levothyroxine and reduce its bioavailability."
+      ]
+    },
+    {
+      "set_id": "006cf920-04ae-0b53-cb91-85481972abc2",
+      "effective_time": "20240522",
+      "openfda": {
+        "generic_name": ["VERAPAMIL HYDROCHLORIDE"],
+        "substance_name": ["VERAPAMIL HYDROCHLORIDE"],
+        "brand_name": ["Verapamil Hydrochloride"],
+        "manufacturer_name": ["Bryant Ranch Prepack"],
+        "rxcui": ["897666"]
+      },
+      "drug_interactions": [
+        "Grapefruit juice: Grapefruit juice may increase plasma levels of verapamil."
+      ]
+    },
+    {
+      "set_id": "00979fb3-d70f-493d-94ca-2914cbadaa9d",
+      "effective_time": "20260129",
+      "openfda": {
+        "generic_name": ["RANOLAZINE"],
+        "substance_name": ["RANOLAZINE"],
+        "brand_name": ["Ranolazine"],
+        "manufacturer_name": ["Viona Pharmaceuticals Inc"],
+        "rxcui": ["616749", "728231"]
+      },
+      "drug_interactions": [
+        "Moderate CYP3A Inhibitors Limit the dose of ranolazine to 500 mg twice daily in patients on moderate CYP3A inhibitors, including diltiazem, verapamil, erythromycin, fluconazole, and grapefruit juice or grapefruit-containing products [see Dosage and Administration (2."
+      ]
+    },
+    {
+      "set_id": "043c4742-081d-4bc4-bf27-dad92bb2dfbc",
+      "effective_time": "20260212",
+      "openfda": {
+        "generic_name": ["AMLODIPINE AND ATORVASTATIN"],
+        "substance_name": ["AMLODIPINE BESYLATE", "ATORVASTATIN CALCIUM TRIHYDRATE"],
+        "brand_name": ["Amlodipine and Atorvastatin"],
+        "manufacturer_name": ["Bryant Ranch Prepack"],
+        "rxcui": ["597987"]
+      },
+      "drug_interactions": [
+        "No drug interaction studies have been conducted with amlodipine and atorvastatin and other drugs, although studies have been conducted in the individual amlodipine and atorvastatin components, as described below: Amlodipine See full prescribing information for details regarding concomitant use of amlodipine and atorvastatin tablets with other drugs or grapefruit juice that increase the risk of myopathy and rhabdomyolysis (2. Grapefruit Juice Clinical Impact: Grapefruit juice consumption, especially excessive consumption, more than 1. Intervention: Avoid intake of large quantities of grapefruit juice, more than 1."
+      ]
+    },
+    {
+      "set_id": "1346631f-e6db-4c5c-a6af-5aa7b80a011d",
+      "effective_time": "20250523",
+      "openfda": {
+        "generic_name": ["AMLODIPINE AND ATORVASTATIN"],
+        "substance_name": ["AMLODIPINE BESYLATE", "ATORVASTATIN CALCIUM TRIHYDRATE"],
+        "brand_name": ["Amlodipine and Atorvastatin"],
+        "manufacturer_name": ["Alembic Pharmaceuticals Inc."],
+        "rxcui": [
+          "404011",
+          "404013",
+          "597967",
+          "597971",
+          "597974",
+          "597977",
+          "597980",
+          "597984",
+          "597987",
+          "597990",
+          "597993"
+        ]
+      },
+      "drug_interactions": [
+        "No drug interaction studies have been conducted with amlodipine and atorvastatin and other drugs, although studies have been conducted in the individual amlodipine and atorvastatin components, as described below: Amlodipine • See full prescribing information for details regarding concomitant use of amlodipine and atorvastatin with other drugs or grapefruit juice that increase the risk of myopathy and rhabdomyolysis ( 2. Grapefruit Juice Clinical Impact: Grapefruit juice consumption, especially excessive consumption, more than 1. Intervention: Avoid intake of large quantities of grapefruit juice, more than 1."
+      ]
+    },
+    {
+      "set_id": "00139e9f-3fd0-4dcf-a437-fb68a9988cea",
+      "effective_time": "20240404",
+      "openfda": {},
+      "drug_interactions": [
+        "Grapefruit juice Grapefruit and grapefruit juice affect metabolism, increasing blood concentrations of cyclosporine, thus should be avoided."
+      ]
+    }
+  ],
+  "grapefruit juice": [
+    {
+      "set_id": "00896fff-081d-4553-be8c-1999a8a73dda",
+      "effective_time": "20260226",
+      "openfda": {
+        "generic_name": ["SIMVASTATIN"],
+        "substance_name": ["SIMVASTATIN"],
+        "brand_name": ["SIMVASTATIN"],
+        "manufacturer_name": ["PD-Rx Pharmaceuticals, Inc."],
+        "rxcui": ["198211"]
+      },
+      "drug_interactions": [
+        "7 DRUG INTERACTIONS See full prescribing information for details regarding concomitant use of simvastatin with other drugs or grapefruit juice that increase the risk of myopathy and rhabdomyolysis. Grapefruit Juice Clinical Impact: Grapefruit juice can raise the plasma levels of simvastatin and may increase the risk of myopathy and rhabdomyolysis. Intervention: Avoid grapefruit juice when taking simvastatin."
+      ]
+    }
+  ],
+  "alcohol": [
+    {
+      "set_id": "00000000-0000-4000-8000-000000000001",
+      "effective_time": "20250101",
+      "openfda": {
+        "generic_name": ["SIMVASTATIN"],
+        "substance_name": ["SIMVASTATIN"],
+        "brand_name": ["SIMVASTATIN"],
+        "manufacturer_name": ["PD-Rx Pharmaceuticals, Inc."],
+        "rxcui": ["198211"]
+      },
+      "drug_interactions": [
+        "Each mL contains benzyl alcohol as a preservative. Avoid alcohol-containing mouthwash near the infusion site."
+      ]
+    }
+  ],
+  "red wine": [
+    {
+      "set_id": "00000000-0000-4000-8000-000000000002",
+      "effective_time": "20250101",
+      "openfda": {
+        "generic_name": ["TADALAFIL"],
+        "substance_name": ["TADALAFIL"],
+        "brand_name": ["tadalafil"],
+        "manufacturer_name": ["A-S Medication Solutions"],
+        "rxcui": ["403957"]
+      },
+      "drug_interactions": [
+        "Large amounts of red wine may lower blood pressure further. Avoid red wine in large amounts while taking tadalafil."
+      ]
+    }
+  ]
+}

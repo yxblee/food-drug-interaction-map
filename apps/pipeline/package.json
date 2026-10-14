@@ -1,0 +1,11 @@
+{
+  "name": "@fdi/pipeline",
+  "private": true,
+  "type": "module",
+  "dependencies": {
+    "@anthropic-ai/sdk": "^0.100.0",
+    "@fdi/schema": "workspace:*",
+    "yaml": "^2.9.1",
+    "zod": "^4.6.5"
+  }
+}
