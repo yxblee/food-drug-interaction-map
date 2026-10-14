@@ -205,7 +205,11 @@ describe('runPipeline (openfda)', () => {
     const raw = dataset()
     raw.foods = [
       food('grapefruit-relatives', { group: true, category: 'fruit' }),
-      food('grapefruit', { aliases: ['grapefruit juice'], category: 'fruit', parent: 'grapefruit-relatives' }),
+      food('grapefruit', {
+        aliases: ['grapefruit juice'],
+        category: 'fruit',
+        parent: 'grapefruit-relatives',
+      }),
       ...raw.foods.filter((f) => f.file !== 'foods/grapefruit.yaml'),
     ]
     raw.interactions.push(interaction('grapefruit-relatives--statins'))
