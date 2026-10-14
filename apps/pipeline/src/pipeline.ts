@@ -10,6 +10,7 @@ import {
   Severity,
 } from '@fdi/schema'
 import type { RawDataset } from '@fdi/schema'
+import { readDdid } from './ddid.ts'
 import { readFooDrugs } from './foodrugs.ts'
 
 // Label sections searched for food mentions (openFDA field names).
@@ -78,6 +79,11 @@ export interface FooDrugsPorts {
   pubmed(pmid: string): Promise<{ title: string; abstract: string } | undefined> // E-utilities
 }
 
+// What the ddid Source needs on top of Ports.
+export interface DdidPorts {
+  ddidCsv(): string // the cached DDID Interaction CSV
+}
+
 export interface Ports {
   searchLabels(term: string): Promise<Label[]>
   draft(input: DraftInput): Promise<Draft>
@@ -137,11 +143,11 @@ const MAX_PMIDS = 3
 const REPORT_NAMES = 100 // the long tail of food and drug names is noise
 
 export async function runPipeline(
-  source: 'openfda' | 'foodrugs',
+  source: 'openfda' | 'foodrugs' | 'ddid',
   options: Options,
-  ports: Ports & Partial<FooDrugsPorts>,
+  ports: Ports & Partial<FooDrugsPorts> & Partial<DdidPorts>,
 ): Promise<Result> {
-  if (source !== 'openfda' && source !== 'foodrugs')
+  if (source !== 'openfda' && source !== 'foodrugs' && source !== 'ddid')
     throw new Error(`unsupported source: ${String(source)}`)
   const raw = ports.readDataset(options.dataDir)
   // Parse the catalogue (defaults applied). Whole-dataset validation runs on the merged result below,
@@ -179,6 +185,7 @@ export async function runPipeline(
     unmatched: new Map<string, number>(), // food names with no catalogue match
     unresolved: new Map<string, number>(), // drug names RxNav could not resolve
     noAbstract: new Set<string>(), // pairs none of whose cited PMIDs has an abstract
+    noPmid: 0, // ddid rows without a usable PMID
   }
   const pairFor = (food: Food, drug: Drug) => {
     const key = `${food.id}--${drug.id}`
@@ -196,35 +203,48 @@ export async function runPipeline(
     return value
   }
 
-  if (source === 'foodrugs') {
-    const { foodrugsLines } = ports
-    if (!foodrugsLines || !ports.pubmed)
-      throw new Error('the foodrugs source needs the foodrugsLines and pubmed ports')
+  if (source !== 'openfda') {
+    if (!ports.pubmed) throw new Error(`the ${source} source needs the pubmed port`)
     const foodByName = new Map(
       ds.foods.flatMap((f) => [f.name, ...f.aliases].map((n) => [n.toLowerCase(), f] as const)),
     )
-    const dump = await readFooDrugs(foodrugsLines(), (n) => foodByName.has(n.toLowerCase()))
-    fd.unmatched = dump.unmatched
-    for (const r of dump.records) {
-      const pmid = dump.pmids.get(r.textId)
-      if (!pmid) continue // not a PubMed document
-      const name = r.drug.trim().toLowerCase()
+    const isFood = (n: string) => foodByName.has(n.toLowerCase())
+    // Shared by foodrugs and ddid: a database record (food name, drug name, PMID) becomes a pair's PMID.
+    const addRecord = async (foodName: string, drugName: string, pmid: string) => {
+      const name = drugName.trim().toLowerCase()
       const cui = await lookup(`rxnav:${name}`, () => ports.ingredientCui(name))
       if (!cui) {
         fd.unresolved.set(name, (fd.unresolved.get(name) ?? 0) + 1)
-        continue
+        return
       }
       let drug = [...drugs, ...proposed.values()].find((d) => d.rxnorm === cui)
       if (!drug) {
         // Not in the catalogue: propose it, one Drug per ingredient CUI.
-        // ponytail: named as FooDrugs spells it (may be a brand); the reviewer checks the name.
+        // ponytail: named as the database spells it (may be a brand); the reviewer checks the name.
         const parsed = Drug.safeParse({ id: slug(name), name: sentence(name), rxnorm: cui })
-        if (!parsed.success || drugs.some((d) => d.id === parsed.data.id)) continue
+        if (!parsed.success || drugs.some((d) => d.id === parsed.data.id)) return
         drug = parsed.data
         proposed.set(drug.id, drug)
       }
-      const pair = pairFor(foodByName.get(r.food.toLowerCase())!, drug)
+      const pair = pairFor(foodByName.get(foodName.toLowerCase())!, drug)
       pair.pmids.set(pmid, (pair.pmids.get(pmid) ?? 0) + 1)
+    }
+    if (source === 'foodrugs') {
+      if (!ports.foodrugsLines) throw new Error('the foodrugs source needs the foodrugsLines port')
+      const dump = await readFooDrugs(ports.foodrugsLines(), isFood)
+      fd.unmatched = dump.unmatched
+      for (const r of dump.records) {
+        const pmid = dump.pmids.get(r.textId)
+        if (pmid) await addRecord(r.food, r.drug, pmid) // else not a PubMed document
+      }
+    } else {
+      if (!ports.ddidCsv) throw new Error('the ddid source needs the ddidCsv port')
+      const csv = readDdid(ports.ddidCsv(), isFood)
+      fd.unmatched = csv.unmatched
+      for (const r of csv.records) {
+        if (r.pmid) await addRecord(r.food, r.drug, r.pmid)
+        else fd.noPmid++
+      }
     }
   } else
     for (const food of ds.foods) {
@@ -322,7 +342,7 @@ export async function runPipeline(
     let text: string
     let sources: string[]
     let citations: Record<string, string>[]
-    if (source === 'foodrugs') {
+    if (source !== 'openfda') {
       const top = [...p.pmids]
         .sort(([a, na], [b, nb]) => nb - na || Number(a) - Number(b))
         .slice(0, MAX_PMIDS)
@@ -368,7 +388,7 @@ export async function runPipeline(
       text,
       mechanisms: ds.mechanisms,
       classes: isNew && !newDrugs.has(p.drug.id) ? classes : [],
-      kind: source === 'foodrugs' ? 'abstract' : 'label',
+      kind: source === 'openfda' ? 'label' : 'abstract',
     })
     if (!d.keep) {
       discards.push({ id, reason: d.reason })
@@ -445,18 +465,21 @@ export async function runPipeline(
   if (unexpected.length) throw new Error(`validation failed:\n${unexpected.join('\n')}`)
   const expectedErrors = errors
 
-  const evidence = source === 'foodrugs' ? 'abstract' : 'label'
+  const evidence = source === 'openfda' ? 'label' : 'abstract'
   const ranked = (m: Map<string, number>) =>
     [...m].sort(([a, x], [b, y]) => y - x || a.localeCompare(b)).map(([n, c]) => `- ${n}: ${c}`)
   const skipped =
-    source === 'foodrugs'
-      ? [`- Pairs whose PMIDs have no abstract: ${fd.noAbstract.size}`]
-      : [
+    source === 'openfda'
+      ? [
           `- Combination-product labels: ${skip.combination.size}`,
           `- Labels without ingredient data: ${skip.noIngredient.size}`,
         ]
+      : [
+          ...(source === 'ddid' ? [`- Rows without a usable PMID: ${fd.noPmid}`] : []),
+          `- Pairs whose PMIDs have no abstract: ${fd.noAbstract.size}`,
+        ]
   const report = [
-    `## Proposed Pending interactions (${source === 'foodrugs' ? 'FooDrugs' : 'openFDA'})`,
+    `## Proposed Pending interactions (${{ openfda: 'openFDA', foodrugs: 'FooDrugs', ddid: 'DDID' }[source]})`,
     '',
     `${drafts.length} drafted from ${chosen.length} pairs. Every Severity below is suggested, confirm against the primary Citation. Excerpts are verbatim from the cited ${evidence} and appear only here.`,
     '',
@@ -498,7 +521,7 @@ export async function runPipeline(
     ...skipped,
     `- Pairs beyond the limit: ${candidates.length - chosen.length}`,
     '',
-    ...(source === 'foodrugs'
+    ...(source !== 'openfda'
       ? [
           '## Unmatched food names (by frequency)',
           ...(fd.unmatched.size ? ranked(fd.unmatched).slice(0, REPORT_NAMES) : ['- none']),

@@ -1,0 +1,14 @@
+Drug_ID,Drug_Name,Brand_Name,Drug_Dose,Dosage_Form,Food_Herb_ID,Food_Herb_Name,Type,Component,Dose,Note,Time,Result,Experimental_Species,Experimental_Design,Experimental_Individuals_Number,Test_Method,Test_Sample,Effect,Potential_Target,Target_ID,Conclusion,PMID,Reference,DOI,Relationship_classification
+D1,Simvastatin,NA,NA,NA,F1,Grapefruit,Food,NA,NA,NA,NA,"AUC rose, Cmax rose",Homo Sapiens,"Open-label, randomized",12,HPLC,Plasma,Harmful,CYP3A4,P08684,"Fixture text, with a comma and a ""quoted"" word",2000001,"Fixture title, with a comma",10.1/a,HFDI
+D1,Simvastatin,NA,NA,NA,F1,Grapefruit Juice,Food,NA,NA,NA,NA,NA,Homo Sapiens,NA,12,HPLC,Plasma,Negative,CYP3A4,P08684,NA,2000002,NA,NA,HFDI
+D1,Simvastatin,NA,NA,NA,F1,grapefruit,Food,NA,NA,NA,NA,NA,Homo Sapiens,NA,12,HPLC,Plasma,harmful,CYP3A4,P08684,NA,2000001,NA,NA,HFDI
+D1,Simvastatin,NA,NA,NA,F2,Pomegranate,Food,NA,NA,NA,NA,NA,Homo Sapiens,NA,10,HPLC,Plasma,Harmful,CYP3A4,P08684,NA,2000003,NA,NA,HFDI
+D2,Verapamil,NA,NA,NA,F1,Grapefruit,Food,NA,NA,NA,NA,NA,Homo Sapiens,NA,10,HPLC,Plasma,Positive,CYP3A4,P08684,NA,2000004,NA,NA,HFDI
+D2,Verapamil,NA,NA,NA,F1,Grapefruit,Food,NA,NA,NA,NA,NA,Homo Sapiens,NA,10,HPLC,Plasma,Possible,CYP3A4,P08684,NA,2000004,NA,NA,HFDI
+D2,Verapamil,NA,NA,NA,F1,Grapefruit,Food,NA,NA,NA,NA,NA,Homo Sapiens,NA,10,HPLC,Plasma,No Effect,CYP3A4,P08684,NA,2000004,NA,NA,HFDI
+D3,Atorvastatin,NA,NA,NA,F1,Grapefruit,Food,NA,NA,NA,NA,NA,Homo Sapiens,NA,10,HPLC,Plasma,Harmful,CYP3A4,P08684,NA,NA,NA,NA,HFDI
+D3,Atorvastatin,NA,NA,NA,F1,Grapefruit,Food,NA,NA,NA,NA,NA,Homo Sapiens,NA,10,HPLC,Plasma,Harmful,CYP3A4,P08684,NA,not a pmid,NA,NA,HFDI
+D4,Mysterydrug,NA,NA,NA,F1,Grapefruit,Food,NA,NA,NA,NA,NA,Homo Sapiens,NA,10,HPLC,Plasma,Harmful,CYP3A4,P08684,NA,2000005,NA,NA,HFDI
+D1,Simvastatin,NA,NA,NA,F9,Noni,Food,NA,NA,NA,NA,NA,Homo Sapiens,NA,10,HPLC,Plasma,Harmful,CYP3A4,P08684,NA,2000006,NA,NA,HFDI
+D1,Simvastatin,NA,NA,NA,F9,Noni,Food,NA,NA,NA,NA,NA,Homo Sapiens,NA,10,HPLC,Plasma,Harmful,CYP3A4,P08684,NA,2000006,NA,NA,HFDI
+D5,Tadalafil,NA,NA,NA,F1,Grapefruit,Food,NA,NA,NA,NA,NA,Homo Sapiens,NA,10,HPLC,Plasma,Harmful,CYP3A4,P08684,NA,2000007,NA,NA,HFDI
