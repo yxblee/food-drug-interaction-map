@@ -4,6 +4,8 @@ import {
   forceLink,
   forceManyBody,
   forceSimulation,
+  forceX,
+  forceY,
   select,
   zoom,
   zoomIdentity,
@@ -38,6 +40,29 @@ function shapePath(n: RenderNode, scale = 1): string {
     return `M ${-s} ${-s} H ${s} V ${s} H ${-s} Z`
   }
   return `M 0 ${-r} L ${r} 0 L 0 ${r} L ${-r} 0 Z`
+}
+
+// Weak pull to the origin: forceCenter only shifts the mean, so it never draws
+// disconnected clusters together.
+export function createSim(nodes: SimNode[], links: SimLink[]): Simulation<SimNode, SimLink> {
+  return forceSimulation(nodes)
+    .force(
+      'link',
+      forceLink<SimNode, SimLink>(links)
+        .id((n) => n.key)
+        .distance((l) => (l.kind === 'member' ? 40 : 80))
+        .strength((l) => (l.kind === 'member' ? 0.3 : 0.6)),
+    )
+    .force('charge', forceManyBody().strength(-110))
+    .force(
+      'collide',
+      forceCollide<SimNode>((n) => nodeRadius(n) + 10),
+    )
+    .force('center', forceCenter(0, 0))
+    .force('x', forceX(0).strength(0.05))
+    .force('y', forceY(0).strength(0.05))
+    .stop()
+    .tick(300)
 }
 
 export function create2d(opts: RendererOptions): GraphRenderer {
@@ -174,23 +199,8 @@ export function create2d(opts: RendererOptions): GraphRenderer {
         .attr('y', (n) => -nodeRadius(n) - 6)
         .text((n) => n.name.toUpperCase())
 
-      sim = forceSimulation(nodes)
-        .force(
-          'link',
-          forceLink<SimNode, SimLink>(links)
-            .id((n) => n.key)
-            .distance((l) => (l.kind === 'member' ? 40 : 80))
-            .strength((l) => (l.kind === 'member' ? 0.3 : 0.6)),
-        )
-        .force('charge', forceManyBody().strength(-160))
-        .force(
-          'collide',
-          forceCollide<SimNode>((n) => nodeRadius(n) + 10),
-        )
-        .force('center', forceCenter(0, 0))
-      // Lay out up front so the first frame is already settled and can be framed.
-      sim.stop()
-      sim.tick(300)
+      sim = createSim(nodes, links)
+      // createSim lays out up front so the first frame is already settled and can be framed.
       positions()
       requestFit()
       paintFocus()

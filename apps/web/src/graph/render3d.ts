@@ -34,6 +34,20 @@ const endKey = (e: string | FGNode) => (typeof e === 'string' ? e : e.key)
 // Fit uses node centres; near nodes render big under perspective, so leave extra room.
 const NODE_MARGIN = 96
 
+// d3-force-3d isn't a direct dependency, so use a minimal custom force.
+function originPull(k: number) {
+  let nodes: { x: number; y: number; z: number; vx: number; vy: number; vz: number }[] = []
+  const force = (alpha: number) => {
+    for (const n of nodes) {
+      n.vx -= n.x * k * alpha
+      n.vy -= n.y * k * alpha
+      n.vz -= n.z * k * alpha
+    }
+  }
+  force.initialize = (ns: typeof nodes) => (nodes = ns)
+  return force
+}
+
 export function create3d(opts: RendererOptions): GraphRenderer {
   let fg: InstanceType<typeof ForceGraph3D> | null = null
   let host: HTMLElement | null = null
@@ -189,6 +203,9 @@ export function create3d(opts: RendererOptions): GraphRenderer {
         // Lay out up front so the first frame is already settled and can be framed.
         .warmupTicks(250)
         .cooldownTicks(100)
+      // Weak pull to the origin so disconnected clusters sit close together.
+      fg.d3Force('charge')?.strength(-70)
+      fg.d3Force('pull', originPull(0.05) as never)
       const controls = fg.controls() as unknown as { autoRotate: boolean; autoRotateSpeed: number }
       controls.autoRotate = opts.motion
       controls.autoRotateSpeed = 0.6
