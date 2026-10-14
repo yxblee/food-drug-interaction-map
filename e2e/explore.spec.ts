@@ -596,3 +596,33 @@ test('panel link-buttons are 24px tall; new-tab sources say so', async ({ page }
   const src = panel.locator('a[target=_blank]').first()
   await expect(src).toHaveAccessibleName(/\(opens in new tab\)$/)
 })
+
+test('reference-style buttons: 44px, filled when selected, names not doubled, no slide when reduced', async ({
+  page,
+}) => {
+  await page.goto('./')
+  const explore = page.getByRole('tab', { name: 'Explore', exact: true })
+  await expect(explore).toBeVisible()
+  await expect(page.getByRole('tab', { name: 'My meds', exact: true })).toBeVisible()
+  expect((await explore.boundingBox())!.height).toBeGreaterThanOrEqual(44)
+  const bg = await explore.evaluate((el) => getComputedStyle(el).backgroundColor)
+  const ink = await page.evaluate(() => {
+    const d = document.createElement('i')
+    d.style.color = 'var(--ink)'
+    document.body.append(d)
+    const c = getComputedStyle(d).color
+    d.remove()
+    return c
+  })
+  expect(bg).toBe(ink)
+  const mech = page.getByRole('button', { name: 'Mechanisms', exact: true })
+  expect((await mech.boundingBox())!.height).toBeGreaterThanOrEqual(44)
+  const label = mech.locator('.pill-label > span')
+  expect(await label.evaluate((el) => getComputedStyle(el).transitionProperty)).toContain(
+    'transform',
+  )
+  await page.emulateMedia({ reducedMotion: 'reduce' })
+  expect(await label.evaluate((el) => getComputedStyle(el).transitionProperty)).not.toContain(
+    'transform',
+  )
+})

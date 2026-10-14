@@ -4,6 +4,7 @@ import {
   PALETTES,
   SEVERITY_COLORS,
   contrastRatio,
+  mix,
   tintFor,
   type Mode,
   type TintName,
@@ -37,6 +38,12 @@ describe('palettes', () => {
       })
       it(`${tint}/${mode}: chip Brand name (chipMuted) on the ink-filled chip is AA`, () => {
         expect(contrastRatio(p.chipMuted, p.ink)).toBeGreaterThanOrEqual(4.5)
+      })
+      it(`${tint}/${mode}: button label (72% ink) on paper and surface is AA`, () => {
+        // Matches --btn-label in styles.css; sRGB mix approximates the oklch one.
+        for (const bg of [p.paper, p.surface]) {
+          expect(contrastRatio(mix(p.ink, bg, 0.72), bg)).toBeGreaterThanOrEqual(4.5)
+        }
       })
       it(`${tint}/${mode}: ink on surface is AA`, () => {
         expect(contrastRatio(p.ink, p.surface)).toBeGreaterThanOrEqual(4.5)

@@ -1,3 +1,4 @@
+import { PillLabel } from '../PillLabel.tsx'
 import { useEffect, useRef, useState } from 'react'
 import { SEVERITIES, type Drug, type Food, type Mechanism, type NodeDetail } from '@fdi/schema'
 import { groupTerm, nodeKey as keyOf, splitKey } from '@fdi/schema/domain'
@@ -158,10 +159,10 @@ export function SidePanel({ nodeKey, onSelect, onPrev, onNext, onClose, onNotFou
 
       <nav className="panel__nav" aria-label="Browse">
         <button className="pill-button" onClick={onPrev}>
-          ← Previous {kind}
+          <PillLabel>{`← Previous ${kind}`}</PillLabel>
         </button>
         <button className="pill-button" onClick={onNext}>
-          Next {kind} →
+          <PillLabel>{`Next ${kind} →`}</PillLabel>
         </button>
       </nav>
     </aside>
