@@ -1,0 +1,36 @@
+id: coffee--adenosine
+food: coffee
+drug: adenosine
+mechanisms:
+  - adenosine-receptor-antagonism
+severity: caution
+effect: decreases
+summary: Caffeine from coffee blocks adenosine receptors, so it can weaken or
+  even reverse adenosine's effect during stress testing.
+advice: Avoid coffee and other caffeine sources before an adenosine stress test,
+  following your imaging centre's instructions (often 12-24 hours). Tell the
+  staff if you had caffeine recently.
+details: Adenosine used for cardiac stress imaging works by activating adenosine
+  receptors to widen blood vessels. Caffeine blocks these same receptors. In a
+  study of 105 patients having adenosine stress cardiac MRI, those who drank
+  coffee within 4 hours showed an inverted myocardial T1 response instead of the
+  normal one, and those who drank it the day before still showed a reduced
+  response compared with non-drinkers. This means the stress may be inadequate
+  and the test could give false negative results.
+citations:
+  - type: study
+    title: Caffeine intake inverts the effect of adenosine on myocardial perfusion
+      during stress as measured by T1 mapping.
+    url: https://pubmed.ncbi.nlm.nih.gov/27473274/
+    pmid: "27473274"
+  - type: study
+    title: Caffeine Suppresses the Activation of Hepatic Stellate Cells
+      cAMP-Independently by Antagonizing Adenosine Receptors.
+    url: https://pubmed.ncbi.nlm.nih.gov/28458351/
+    pmid: "28458351"
+  - type: study
+    title: Dietary caffeine consumption modulates fMRI measures.
+    url: https://pubmed.ncbi.nlm.nih.gov/12377150/
+    pmid: "12377150"
+status: pending
+source: foodrugs

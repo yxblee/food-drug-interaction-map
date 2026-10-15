@@ -1,0 +1,6 @@
+id: comt-inhibition-reduced-inactivation
+name: Reduced inactivation by O-methylation (COMT)
+kind: enzyme
+explanation: Some compounds slow the enzyme catechol-O-methyltransferase, which
+  normally breaks down catecholamines such as adrenaline. Slower breakdown
+  leaves more active hormone, so its effects are stronger or last longer.

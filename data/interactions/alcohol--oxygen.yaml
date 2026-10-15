@@ -1,0 +1,39 @@
+id: alcohol--oxygen
+food: alcohol
+drug: oxygen
+mechanisms:
+  - cns-depression
+severity: caution
+effect: decreases
+summary: Alcohol can lower blood oxygen levels, especially in low-oxygen
+  settings such as moderate altitude.
+advice: Avoid or limit alcohol at altitude and when blood oxygen is already low.
+  This includes sleep apnea and people who rely on supplemental oxygen. Ask a
+  clinician about alcohol if you have breathing problems.
+details: In healthy men at 3000 m, 50 g of alcohol lowered arterial oxygen
+  pressure by about 4 mm Hg and raised carbon dioxide. This suggests alcohol
+  blunts the early breathing adjustment to low oxygen. At sea level the same
+  dose made no difference. In another study, 1 g/kg of alcohol lowered oxygen
+  saturation during induced hypoxia by about 4%, even though arterial oxygen
+  pressure was unchanged. Chemoreflex responses were not altered. The authors
+  suggested alcohol may reduce hemoglobin's affinity for oxygen. This evidence
+  comes from small studies of healthy volunteers. Oxygen is not a conventional
+  drug here, and the effect is on oxygenation, not on the drug itself.
+citations:
+  - type: study
+    title: Increased Rate of Yeast Cultivation from Packaged Beer with
+      Environmentally Relevant Anaerobic Handling.
+    url: https://pubmed.ncbi.nlm.nih.gov/36314915/
+    pmid: "36314915"
+  - type: study
+    title: Effect of alcohol on acute ventilatory adaptation to mild hypoxia at
+      moderate altitude.
+    url: https://pubmed.ncbi.nlm.nih.gov/7755228/
+    pmid: "7755228"
+  - type: study
+    title: Effects of alcohol on sympathetic activity, hemodynamics, and chemoreflex
+      sensitivity.
+    url: https://pubmed.ncbi.nlm.nih.gov/9180629/
+    pmid: "9180629"
+status: pending
+source: foodrugs

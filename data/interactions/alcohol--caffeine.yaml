@@ -1,0 +1,38 @@
+id: alcohol--caffeine
+food: alcohol
+drug: caffeine
+mechanisms:
+  - adenosine-receptor-antagonism
+severity: caution
+effect: decreases
+summary: Caffeine can partly mask alcohol's drowsiness and slowing, but it does
+  not remove alcohol's impairment of performance.
+advice: Don't rely on coffee or caffeinated drinks to sober up or to make
+  driving or other risky tasks safe after drinking. You may feel more alert
+  while still being impaired.
+details: In controlled trials in young adults, alcohol increased errors and
+  slowed psychomotor speed, and lowered alertness. Caffeine (about 110-125 mg)
+  partly countered the slowing on a digit-symbol task and weakly reduced errors
+  on some tasks. A high caffeine dose restored subjective alertness. Caffeine
+  did not fix the overall performance deficits caused by alcohol. The effects
+  were largely independent, so a person may feel more awake than their actual
+  performance warrants. One survey of young adolescents also linked daily
+  caffeine use to starting alcohol, but that is an association and not a drug
+  effect.
+citations:
+  - type: study
+    title: Interactions between alcohol and caffeine in relation to psychomotor
+      speed and accuracy.
+    url: https://pubmed.ncbi.nlm.nih.gov/12404692/
+    pmid: "12404692"
+  - type: study
+    title: Caffeine consumption and onset of alcohol use among early adolescents.
+    url: https://pubmed.ncbi.nlm.nih.gov/35987370/
+    pmid: "35987370"
+  - type: study
+    title: Effects of caffeine and alcohol on mood and performance changes following
+      consumption of lager.
+    url: https://pubmed.ncbi.nlm.nih.gov/23377024/
+    pmid: "23377024"
+status: pending
+source: foodrugs

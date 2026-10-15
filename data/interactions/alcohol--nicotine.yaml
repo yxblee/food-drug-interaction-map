@@ -1,0 +1,39 @@
+id: alcohol--nicotine
+food: alcohol
+drug: nicotine
+mechanisms:
+  - additive-stimulant
+severity: monitor
+effect: decreases
+summary: Heavy drinking appears to speed up nicotine breakdown, and alcohol and
+  nicotine together have combined effects on mood and heart measures.
+advice: If you smoke or use nicotine replacement and drink heavily, you may need
+  different nicotine doses, and cessation support may need adjusting as drinking
+  stops. Be aware that combined use adds to heart rate and blood pressure
+  effects.
+details: In men being treated for alcohol dependence, a marker of how fast the
+  body processes nicotine fell by about half over seven weeks of abstinence.
+  This suggests chronic heavy alcohol use speeds up nicotine metabolism, which
+  then slows after drinking stops. Daily nicotine intake did not change. In a
+  separate controlled study of smokers, nicotine and alcohol mostly had additive
+  subjective and cardiovascular effects. Nicotine reduced alcohol's sedating and
+  intoxicating feelings, and responses differed by sex.
+citations:
+  - type: study
+    title: Cessation of alcohol consumption decreases rate of nicotine metabolism in
+      male alcohol-dependent smokers.
+    url: https://pubmed.ncbi.nlm.nih.gov/27107849/
+    pmid: "27107849"
+  - type: study
+    title: Prenatal exposure to nicotine in mice is associated with alterations in
+      development and cellular and synaptic effects of alcohol in a brainstem
+      arousal nucleus.
+    url: https://pubmed.ncbi.nlm.nih.gov/33838245/
+    pmid: "33838245"
+  - type: study
+    title: Subjective and cardiovascular responses to nicotine combined with alcohol
+      in male and female smokers.
+    url: https://pubmed.ncbi.nlm.nih.gov/7659768/
+    pmid: "7659768"
+status: pending
+source: foodrugs

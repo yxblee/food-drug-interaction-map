@@ -1,0 +1,37 @@
+id: tea--caffeine
+food: tea
+drug: caffeine
+mechanisms:
+  - reduced-absorption
+severity: minimal
+effect: decreases
+summary: Tea polyphenols can bind caffeine and slow its absorption, but tea also
+  raised blood pressure briefly more than caffeine alone.
+advice: Count caffeine from tea along with other sources. People sensitive to
+  blood pressure rises should be aware that strong tea can bump blood pressure
+  for about 30 minutes. Regular tea drinking did not change 24-hour blood
+  pressure in the study.
+details: In mice, caffeine bound to oxidized tea polyphenols (as in fermented
+  Pu-er tea) reached lower peak blood levels (about 26-33% lower) than caffeine
+  from coffee. More caffeine was lost in the feces, and the stimulant effect on
+  movement was weaker. In humans, green and black tea caused larger short-term
+  blood pressure rises at 30 minutes than the same amount of caffeine in water,
+  which had faded by 60 minutes. Five cups daily for a week did not
+  significantly alter 24-hour blood pressure relative to caffeine.
+citations:
+  - type: study
+    title: Effects on blood pressure of drinking green and black tea.
+    url: https://pubmed.ncbi.nlm.nih.gov/10404946/
+    pmid: "10404946"
+  - type: study
+    title: Absorption of caffeine in fermented Pu-er tea is inhibited in mice.
+    url: https://pubmed.ncbi.nlm.nih.gov/24836454/
+    pmid: "24836454"
+  - type: study
+    title: "Maternal total caffeine intake, mainly from Japanese and Chinese tea,
+      during pregnancy was associated with risk of preterm birth: the Osaka
+      Maternal and Child Health Study."
+    url: https://pubmed.ncbi.nlm.nih.gov/25773355/
+    pmid: "25773355"
+status: pending
+source: foodrugs

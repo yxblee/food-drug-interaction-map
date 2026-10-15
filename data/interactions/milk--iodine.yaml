@@ -1,0 +1,39 @@
+id: milk--iodine
+food: milk
+drug: iodine
+mechanisms:
+  - additive-dietary-intake
+severity: minimal
+effect: increases
+summary: Milk naturally contains iodine, so regular milk intake raises your
+  total iodine intake and status, which adds to any iodine supplement you take.
+advice: If you take iodine supplements or iodine-containing medicines, count the
+  iodine from milk and dairy toward your daily total. Stay under the upper
+  intake limit, and ask your clinician about thyroid conditions.
+details: Population survey data link frequent consumption of milk products with
+  a lower chance of inadequate iodine intake in children and adults. Studies in
+  dairy cows show that milk iodine rises with iodine in the animal's feed or
+  with iodine injections. Goitrogens in feed, such as rapeseed glucosinolates,
+  lower it. Milk can therefore be a large iodine source, and very high-iodine
+  milk could push people above the tolerable upper intake level. The effect is
+  additive dietary iodine, not a change in how the body handles iodine.
+citations:
+  - type: study
+    title: Influence of various iodine supplementation levels and two different
+      iodine species on the iodine content of the milk of cows fed rapeseed meal
+      or distillers dried grains with solubles as the protein source.
+    url: https://pubmed.ncbi.nlm.nih.gov/19700713/
+    pmid: "19700713"
+  - type: study
+    title: Impact of iodine supplementation of dairy cows on milk production and
+      iodine concentrations in milk.
+    url: https://pubmed.ncbi.nlm.nih.gov/15731828/
+    pmid: "15731828"
+  - type: study
+    title: "Trends in Iodine Status Among U.S. Children and Adults: A
+      Cross-Sectional Analysis of National Health and Nutrition Examination
+      Survey Data from 2001-2004 to 2017-2020."
+    url: https://pubmed.ncbi.nlm.nih.gov/35822552/
+    pmid: "35822552"
+status: pending
+source: foodrugs

@@ -1,0 +1,38 @@
+id: coffee--oxygen
+food: coffee
+drug: oxygen
+mechanisms:
+  - adenosine-receptor-antagonism
+severity: minimal
+effect: decreases
+summary: In young rodents, caffeine lessened the harm caused by breathing high
+  concentrations of oxygen, protecting developing brain cells and the retina.
+advice: This is a preclinical finding and no reason to change your coffee
+  habits. Oxygen therapy, especially for premature infants, should follow
+  medical guidance. Any caffeine given to infants is a prescribed treatment, not
+  a dietary choice.
+details: In neonatal rats and mice exposed to excess oxygen, caffeine given
+  beforehand reduced nerve-cell death and loss of new neurons, and it lowered
+  the damage to retinal blood vessels. The retinal protection depended partly on
+  blocking adenosine A2A receptors, and an antioxidant action was also proposed.
+  In healthy adults, caffeine also raised peak oxygen uptake and ventilation
+  during exercise. These are effects on the body's handling of oxygen, not a
+  hazardous interaction. So caffeine appears to reduce the toxic effects of
+  high-dose oxygen rather than strengthen oxygen's benefits.
+citations:
+  - type: study
+    title: Acute caffeine intake increases muscle oxygen saturation during a maximal
+      incremental exercise test.
+    url: https://pubmed.ncbi.nlm.nih.gov/31782534/
+    pmid: "31782534"
+  - type: study
+    title: Caffeine protects neuronal cells against injury caused by hyperoxia in
+      the immature brain.
+    url: https://pubmed.ncbi.nlm.nih.gov/24129198/
+    pmid: "24129198"
+  - type: study
+    title: Caffeine preferentially protects against oxygen-induced retinopathy.
+    url: https://pubmed.ncbi.nlm.nih.gov/28420694/
+    pmid: "28420694"
+status: pending
+source: foodrugs

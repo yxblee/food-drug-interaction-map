@@ -1,0 +1,38 @@
+id: coffee--theobromine
+food: coffee
+drug: theobromine
+mechanisms:
+  - additive-stimulant
+  - adenosine-receptor-antagonism
+severity: minimal
+effect: increases
+summary: Caffeine from coffee and theobromine both stimulate the nervous system,
+  so taking them together may add up to a stronger stimulant effect.
+advice: Be aware that coffee and theobromine sources (such as cocoa or
+  chocolate) can stack their stimulant effects. Cut back if you feel jittery,
+  restless or have a racing heart. The evidence comes from animal studies.
+details: In mice, caffeine and theobromine each raised ambulatory activity at
+  moderate doses. Very high theobromine doses lowered activity, impaired
+  avoidance performance and were lethal. Both drugs also boosted the
+  activity-raising effect of methamphetamine. Both are methylxanthines that
+  block adenosine receptors, so their central stimulant effects overlap. The
+  findings are from animals at high doses, so how well they apply to people
+  drinking coffee is uncertain.
+citations:
+  - type: study
+    title: Behavioral evaluation of psycho-pharmacological and psychotoxic actions
+      of methylxanthines by ambulatory activity and discrete avoidance in mice.
+    url: https://pubmed.ncbi.nlm.nih.gov/1507275/
+    pmid: "1507275"
+  - type: study
+    title: Stimulation of Clostridium perfringens enterotoxin formation by caffeine
+      and theobromine.
+    url: https://pubmed.ncbi.nlm.nih.gov/6271685/
+    pmid: "6271685"
+  - type: study
+    title: Influence of some common methylxanthines on contractile responses and
+      calcium mobilization of ileal, vas deferens and bladder smooth muscle.
+    url: https://pubmed.ncbi.nlm.nih.gov/6668464/
+    pmid: "6668464"
+status: pending
+source: foodrugs
