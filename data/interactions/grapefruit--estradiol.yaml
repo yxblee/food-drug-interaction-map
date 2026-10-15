@@ -1,0 +1,25 @@
+id: grapefruit--estradiol
+food: grapefruit
+drug: estradiol
+mechanisms:
+  - cyp3a4-inhibition
+severity: monitor
+effect: increases
+summary: Grapefruit juice may raise estradiol levels by slowing its breakdown by
+  CYP3A4, which could cause more side effects.
+advice: Tell your doctor or pharmacist if you regularly drink grapefruit juice
+  while using this estradiol product. Report any new or worsening
+  estrogen-related side effects.
+details: Estrogens are partly broken down by the CYP3A4 enzyme. The label groups
+  grapefruit juice with CYP3A4 inhibitors such as erythromycin and ketoconazole.
+  These may raise estrogen blood levels and lead to side effects. No formal
+  interaction studies were done with this product. The vaginal ring gives lower
+  systemic exposure than oral estrogens, so the real-world size of the effect is
+  unclear.
+citations:
+  - type: label
+    title: ESTRADIOL [Pfizer Laboratories Div Pfizer Inc]
+    url: https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=110b9865-5a07-4d45-b560-e89947f12600
+    setid: 110b9865-5a07-4d45-b560-e89947f12600
+status: pending
+source: openfda

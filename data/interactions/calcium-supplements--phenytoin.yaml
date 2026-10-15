@@ -1,0 +1,24 @@
+id: calcium-supplements--phenytoin
+food: calcium-supplements
+drug: phenytoin
+mechanisms:
+  - reduced-absorption
+severity: caution
+effect: decreases
+summary: Calcium carbonate antacids and calcium products can lower phenytoin
+  absorption and blood levels.
+advice: Do not take phenytoin and calcium-containing antacids at the same time
+  of day. Space them apart, and tell your prescriber if you use antacids
+  regularly so phenytoin levels can be checked.
+details: The label lists antacids, including calcium carbonate, among agents
+  that may decrease phenytoin serum levels by affecting how well it is absorbed.
+  Lower levels could weaken seizure control. The label recommends not taking
+  phenytoin and antacids at the same time of day, and notes that
+  over-the-counter antacids can change phenytoin levels.
+citations:
+  - type: label
+    title: PHENYTOIN SODIUM [Major Pharmaceuticals]
+    url: https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=46d5c0d1-a97b-46d9-8cf4-994780673337
+    setid: 46d5c0d1-a97b-46d9-8cf4-994780673337
+status: pending
+source: openfda

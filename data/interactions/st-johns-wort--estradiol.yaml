@@ -1,0 +1,24 @@
+id: st-johns-wort--estradiol
+food: st-johns-wort
+drug: estradiol
+mechanisms:
+  - cyp3a4-induction
+severity: caution
+effect: decreases
+summary: St. John's wort can lower estradiol levels by speeding up its breakdown
+  in the body.
+advice: Tell your prescriber or pharmacist if you take or plan to start St.
+  John's wort. Watch for returning menopausal symptoms or changes in bleeding
+  patterns, and consider avoiding the combination.
+details: Estrogens, including estradiol, are partly broken down by the liver
+  enzyme CYP3A4. St. John's wort (Hypericum perforatum) induces this enzyme,
+  which may lower estrogen concentrations in the blood. The result can be weaker
+  treatment effects and/or changes in the uterine bleeding pattern, such as
+  breakthrough bleeding or spotting.
+citations:
+  - type: label
+    title: ESTRADIOL [Redpharm Drug]
+    url: https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=58beabb8-6902-b26a-e063-6294a90a67f8
+    setid: 58beabb8-6902-b26a-e063-6294a90a67f8
+status: pending
+source: openfda

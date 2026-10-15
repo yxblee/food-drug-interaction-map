@@ -1,0 +1,29 @@
+id: sauerkraut--linezolid
+food: sauerkraut
+drug: linezolid
+mechanisms:
+  - tyramine-pressor-response
+severity: caution
+effect: increases
+summary: Sauerkraut is high in tyramine, which can cause a dangerous blood
+  pressure spike in people taking linezolid.
+advice: Avoid eating large amounts of sauerkraut and other high-tyramine foods
+  (aged cheeses, cured meats, soy sauce, tap beer, red wine) while taking
+  linezolid. Small portions are less of a concern. Tell your doctor if you get a
+  severe headache, a pounding heartbeat or other signs of high blood pressure.
+details: Linezolid weakly and reversibly blocks monoamine oxidase, the enzyme
+  that normally breaks down tyramine from food. Fermented foods such as
+  sauerkraut can contain a lot of tyramine. When it isn't broken down, tyramine
+  can trigger a significant rise in blood pressure. In studies of healthy
+  adults, a marked pressor response occurred when linezolid was given with
+  tyramine doses above 100 mg. The label therefore tells patients to avoid large
+  amounts of high-tyramine foods and drinks. Tyramine also builds up in
+  protein-rich foods that are stored for a long time or kept poorly
+  refrigerated.
+citations:
+  - type: label
+    title: LINEZOLID [A-S Medication Solutions]
+    url: https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=3d630d3d-510d-43a4-8703-8b6234831564
+    setid: 3d630d3d-510d-43a4-8703-8b6234831564
+status: pending
+source: openfda

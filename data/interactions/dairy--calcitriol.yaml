@@ -1,0 +1,29 @@
+id: dairy--calcitriol
+food: dairy
+drug: calcitriol
+mechanisms:
+  - additive-calcium-hypercalcemia
+severity: caution
+effect: increases
+summary: A sudden increase in dairy intake adds calcium and can cause high blood
+  calcium during calcitriol treatment.
+advice: Keep your dairy and other calcium intake steady while taking calcitriol.
+  Talk to your prescriber before making big diet changes, and don't add calcium
+  supplements unless told to. Report symptoms of high calcium and keep up with
+  your scheduled blood calcium tests.
+details: Calcitriol is the active form of vitamin D. It increases how much
+  calcium the gut absorbs. Dairy products are rich in calcium, so a sudden jump
+  in consumption can raise blood calcium too far. The label lists an abrupt rise
+  in calcium intake from diet, with increased dairy consumption as its example,
+  as a possible trigger for hypercalcemia. If hypercalcemia occurs, calcitriol
+  should be stopped right away. It can be restarted at a lower dose once calcium
+  levels are back to normal. Patients are expected to get enough calcium, at
+  least 600 mg a day. Their daily dietary calcium should be estimated and
+  adjusted as needed.
+citations:
+  - type: label
+    title: CALCITRIOL [BIONPHARMA INC.]
+    url: https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=626f23d5-31e6-41ca-a696-191a4f2bc7ef
+    setid: 626f23d5-31e6-41ca-a696-191a4f2bc7ef
+status: pending
+source: openfda

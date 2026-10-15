@@ -1,0 +1,28 @@
+id: soy-sauce--linezolid
+food: soy-sauce
+drug: linezolid
+mechanisms:
+  - tyramine-pressor-response
+severity: caution
+effect: increases
+summary: Soy sauce contains tyramine, which can cause a dangerous blood pressure
+  rise when combined with linezolid.
+advice: Avoid large amounts of high-tyramine foods and drinks, including soy
+  sauce, while taking linezolid. Small amounts are less likely to be a problem.
+  Tell your doctor if you have high blood pressure or notice a severe headache
+  or pounding heartbeat.
+details: Linezolid reversibly blocks monoamine oxidase, an enzyme that normally
+  breaks down tyramine. Fermented foods such as soy sauce can contain tyramine.
+  With the enzyme blocked, tyramine builds up and can trigger a strong rise in
+  blood pressure. The label notes a significant pressor response in healthy
+  adults given linezolid with more than 100 mg of tyramine. It advises avoiding
+  large quantities of high-tyramine foods and drinks. Tyramine content can also
+  rise if protein-rich foods are stored for a long time or kept improperly
+  refrigerated.
+citations:
+  - type: label
+    title: LINEZOLID [A-S Medication Solutions]
+    url: https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=3d630d3d-510d-43a4-8703-8b6234831564
+    setid: 3d630d3d-510d-43a4-8703-8b6234831564
+status: pending
+source: openfda

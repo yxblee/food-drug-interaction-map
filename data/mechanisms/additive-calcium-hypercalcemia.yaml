@@ -1,0 +1,6 @@
+id: additive-calcium-hypercalcemia
+name: Added calcium load (hypercalcemia)
+kind: pharmacodynamic
+explanation: Some drugs, such as active vitamin D forms, increase calcium
+  absorption from the gut. Taking extra calcium alongside them can raise blood
+  calcium to unsafe levels.
