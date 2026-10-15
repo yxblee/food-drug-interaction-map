@@ -1,0 +1,27 @@
+id: grapefruit--clopidogrel
+food: grapefruit
+drug: clopidogrel
+mechanisms:
+  - cyp3a4-inhibition
+severity: avoid
+effect: decreases
+summary: Grapefruit juice sharply reduced the amount of clopidogrel's active
+  form in the blood, which may weaken its antiplatelet effect.
+advice: Avoid grapefruit juice while taking clopidogrel, and ask your prescriber
+  or pharmacist if you are unsure.
+details: Clopidogrel is a prodrug that must be converted by liver and gut
+  enzymes, including CYP3A4 and CYP2C19, into its active form. Compounds in
+  grapefruit juice block these enzymes, so less active drug is produced. In
+  healthy volunteers who drank grapefruit juice for three days before a 600 mg
+  clopidogrel dose, peak active metabolite levels fell to about 13% of normal
+  and overall exposure to about 14%. The parent drug was not significantly
+  changed. Platelet inhibition was markedly reduced in the participants tested.
+  This could mean less protection against clots in people who depend on
+  clopidogrel.
+citations:
+  - type: study
+    title: Grapefruit juice inhibits the metabolic activation of clopidogrel.
+    url: https://pubmed.ncbi.nlm.nih.gov/24067745/
+    pmid: "24067745"
+status: pending
+source: ddid

@@ -1,0 +1,25 @@
+id: grapefruit--etoposide
+food: grapefruit
+drug: etoposide
+mechanisms:
+  - reduced-absorption
+severity: caution
+effect: decreases
+summary: Grapefruit juice taken before oral etoposide lowered the amount of drug
+  absorbed instead of raising it.
+advice: Don't use grapefruit juice to try to boost or steady oral etoposide
+  absorption. Patients taking oral etoposide should ask their oncology team
+  before having grapefruit juice regularly.
+details: In a small pilot crossover study of six patients, drinking grapefruit
+  juice before an oral 50 mg etoposide dose cut drug exposure (AUC) by about
+  26%. Median absolute bioavailability fell from about 73% without juice to
+  about 52% with it. The hoped-for reduction in patient-to-patient variability
+  did not occur. Lower exposure could mean less effective treatment. The study
+  was very small, and it did not establish the mechanism.
+citations:
+  - type: study
+    title: Effect of grapefruit juice intake on etoposide bioavailability.
+    url: https://pubmed.ncbi.nlm.nih.gov/12389073/
+    pmid: "12389073"
+status: pending
+source: ddid

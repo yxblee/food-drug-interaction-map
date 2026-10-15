@@ -1,0 +1,25 @@
+id: grapefruit--verapamil
+food: grapefruit
+drug: verapamil
+mechanisms:
+  - cyp3a4-inhibition
+severity: caution
+effect: increases
+summary: Grapefruit juice can raise verapamil levels by blocking the CYP3A4
+  enzyme that breaks it down, which may lead to toxicity.
+advice: Avoid grapefruit and grapefruit juice while taking verapamil unless your
+  prescriber or pharmacist says otherwise. Seek urgent care if you notice severe
+  dizziness, a very slow heartbeat, fainting or low blood pressure.
+details: Grapefruit juice inhibits CYP3A4, an enzyme that metabolizes verapamil.
+  The report describes a woman who developed severe verapamil toxicity after
+  taking only three 120 mg sustained-release tablets over 24 hours. The abstract
+  points to grapefruit juice's CYP3A4 inhibition as the likely reason for the
+  unexpectedly strong effect. This is a single case report, so it cannot prove
+  the cause, but the mechanism is well established.
+citations:
+  - type: study
+    title: "Grapefruit juice and verapamil: a toxic cocktail."
+    url: https://pubmed.ncbi.nlm.nih.gov/19204629/
+    pmid: "19204629"
+status: pending
+source: ddid

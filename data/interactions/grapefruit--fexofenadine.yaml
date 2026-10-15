@@ -1,0 +1,37 @@
+id: grapefruit--fexofenadine
+food: grapefruit
+drug: fexofenadine
+mechanisms:
+  - oatp-inhibition
+severity: caution
+effect: decreases
+summary: Grapefruit juice can cut the amount of fexofenadine your body absorbs
+  by roughly 30–45%, which may make the antihistamine less effective.
+advice: Avoid taking fexofenadine with grapefruit juice. Take it with plain
+  water. Orange and apple juice have a similar effect, so keep fruit juices away
+  from the dose, ideally by a few hours.
+details: Fexofenadine is taken up in the intestine by OATP transporters, mainly
+  OATP1A2. Compounds in grapefruit juice, such as naringin, block these
+  transporters, so less drug reaches the blood. In human studies, grapefruit
+  juice lowered fexofenadine AUC and peak levels to about 55–70% of the levels
+  seen with water. In one study with large juice volumes, the drop was to
+  30–40%. The effect does not appear to involve CYP3A4. No meaningful ECG
+  changes were seen. The size of the effect varies between people.
+citations:
+  - type: study
+    title: Naringin is a major and selective clinical inhibitor of organic
+      anion-transporting polypeptide 1A2 (OATP1A2) in grapefruit juice.
+    url: https://pubmed.ncbi.nlm.nih.gov/17301733/
+    pmid: "17301733"
+  - type: study
+    title: Fruit juices inhibit organic anion transporting polypeptide-mediated drug
+      uptake to decrease the oral availability of fexofenadine.
+    url: https://pubmed.ncbi.nlm.nih.gov/11823753/
+    pmid: "11823753"
+  - type: study
+    title: Grapefruit juice reduces the oral bioavailability of fexofenadine but not
+      desloratadine.
+    url: https://pubmed.ncbi.nlm.nih.gov/11978146/
+    pmid: "11978146"
+status: pending
+source: ddid

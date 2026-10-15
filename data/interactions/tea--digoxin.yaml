@@ -1,0 +1,30 @@
+id: tea--digoxin
+food: tea
+drug: digoxin
+mechanisms:
+  - reduced-absorption
+severity: caution
+effect: decreases
+summary: Green tea catechins taken with digoxin lowered digoxin blood levels by
+  roughly 30% in healthy volunteers.
+advice: If you take digoxin, avoid taking green tea or green tea extract
+  supplements at the same time. Keep your intake consistent and separate it from
+  your dose. Tell your prescriber if you change how much you take, so digoxin
+  levels can be checked.
+details: "In a study of 16 healthy volunteers, digoxin was given alone and then
+  with 630 mg of green tea catechins. Taking them together cut digoxin's total
+  exposure (AUC) by about 31% and its peak level (Cmax) by about 28%. Two weeks
+  of catechin pretreatment did not change this: exposure was still about one
+  third lower. The size of the effect differed with a variant of the ABCB1 gene,
+  which codes for the P-glycoprotein transporter. The authors had expected the
+  catechins to inhibit the gut transporter P-glycoprotein. Digoxin is a
+  P-glycoprotein substrate, but exposure fell rather than rose, so the effect
+  likely involves reduced absorption in the gut. Lower digoxin levels could
+  weaken its control of heart rhythm or heart failure."
+citations:
+  - type: study
+    title: Effect of green tea catechins on the pharmacokinetics of digoxin in humans.
+    url: https://pubmed.ncbi.nlm.nih.gov/30022812/
+    pmid: "30022812"
+status: pending
+source: ddid

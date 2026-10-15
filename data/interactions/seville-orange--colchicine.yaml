@@ -1,0 +1,31 @@
+id: seville-orange--colchicine
+food: seville-orange
+drug: colchicine
+mechanisms:
+  - reduced-absorption
+severity: minimal
+effect: decreases
+summary: Seville orange juice modestly lowered colchicine absorption and delayed
+  its peak level, opposite to what was expected.
+advice: You don't need to avoid Seville orange juice for fear of colchicine
+  toxicity based on this study. The effect on drug levels was small and its
+  clinical meaning is unclear, so stay consistent with juice intake and report
+  unusual symptoms to your prescriber or pharmacist. Follow your product label's
+  grapefruit warning unless told otherwise.
+details: In healthy volunteers, drinking Seville orange juice twice daily for 4
+  days before a single 0.6 mg colchicine dose reduced peak concentration by
+  about 24% and total exposure by about 20%. Peak time was delayed by about 1
+  hour. This happened even though the juice is expected to inhibit intestinal
+  CYP3A4 and P-glycoprotein, which would be predicted to raise colchicine
+  levels. The reduced absorption may reflect other juice components affecting
+  uptake. Grapefruit juice had no significant effect. Both juices were well
+  tolerated, but the study had no positive control, so caution is advised in
+  applying the results.
+citations:
+  - type: study
+    title: Effects of grapefruit and Seville orange juices on the pharmacokinetic
+      properties of colchicine in healthy subjects.
+    url: https://pubmed.ncbi.nlm.nih.gov/22940371/
+    pmid: "22940371"
+status: pending
+source: ddid

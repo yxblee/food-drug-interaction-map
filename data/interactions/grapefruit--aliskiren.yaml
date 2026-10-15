@@ -1,0 +1,25 @@
+id: grapefruit--aliskiren
+food: grapefruit
+drug: aliskiren
+mechanisms:
+  - oatp-inhibition
+severity: caution
+effect: decreases
+summary: Grapefruit juice sharply lowers the amount of aliskiren absorbed, which
+  could make the blood pressure medicine less effective.
+advice: Avoid taking aliskiren together with grapefruit juice. Choose another
+  beverage, such as water, when taking the medicine.
+details: In healthy volunteers who drank grapefruit juice several times a day, a
+  single dose of aliskiren reached peak blood levels about 81% lower than with
+  water, and total exposure was about 61% lower. The likely cause is that
+  compounds in grapefruit juice block uptake transporters (OATP) in the gut that
+  help aliskiren get absorbed, so less drug enters the bloodstream. Lower levels
+  may reduce blood pressure control.
+citations:
+  - type: study
+    title: Grapefruit juice greatly reduces the plasma concentrations of the OATP2B1
+      and CYP3A4 substrate aliskiren.
+    url: https://pubmed.ncbi.nlm.nih.gov/20664534/
+    pmid: "20664534"
+status: pending
+source: ddid
