@@ -1,0 +1,29 @@
+id: calcium-supplements--calcitriol
+food: calcium-supplements
+drug: calcitriol
+mechanisms:
+  - additive-calcium-hypercalcemia
+severity: caution
+effect: increases
+summary: Extra calcium on top of calcitriol can push blood calcium too high
+  (hypercalcemia).
+advice: Take calcium supplements only as directed by your prescriber. Avoid
+  adding calcium products or suddenly eating much more dairy on your own, and
+  keep up with scheduled blood calcium checks. Report symptoms of high calcium
+  to your clinician.
+details: "Calcitriol is an active form of vitamin D that increases calcium
+  absorption from the gut. Taking additional calcium-containing products without
+  supervision can raise blood calcium beyond a safe level. The label suggests a
+  steady, adequate calcium intake (at least 600 mg daily), sometimes with a
+  prescribed supplement, but warns against uncontrolled extra calcium. If
+  hypercalcemia develops, calcitriol should be stopped and restarted at a lower
+  dose once calcium normalizes. Magnesium-containing antacids are a separate
+  concern: they can cause high magnesium in patients on chronic dialysis."
+citations:
+  - type: label
+    title: CALCITRIOL [BIONPHARMA INC.]
+    url: https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=626f23d5-31e6-41ca-a696-191a4f2bc7ef
+    setid: 626f23d5-31e6-41ca-a696-191a4f2bc7ef
+status: approved
+reviewed_at: 2026-10-15
+source: openfda

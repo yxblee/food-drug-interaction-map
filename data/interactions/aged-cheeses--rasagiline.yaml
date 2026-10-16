@@ -1,0 +1,30 @@
+id: aged-cheeses--rasagiline
+food: aged-cheeses
+drug: rasagiline
+mechanisms:
+  - tyramine-pressor-response
+severity: caution
+effect: increases
+summary: Very tyramine-rich aged cheeses (such as Stilton) can cause a dangerous
+  blood pressure spike in people taking rasagiline.
+advice: Normal diets don't need tyramine restriction at the recommended doses.
+  Still, avoid foods with a very large amount of tyramine, such as heavily aged
+  cheeses. If you feel unwell soon after eating tyramine-rich food, contact your
+  healthcare provider.
+details: Rasagiline blocks MAO-B at recommended doses, and the gut and liver MAO
+  that normally breaks down dietary tyramine is mostly the A type. A tyramine
+  challenge study showed rasagiline can be taken without dietary tyramine
+  restriction. Some foods, such as aged cheeses like Stilton, may contain very
+  high amounts of tyramine (150 mg or more). Some patients are more sensitive to
+  tyramine, so these foods could cause severe hypertension, including
+  hypertensive crisis. Selectivity for MAO-B falls as the dose rises above the
+  recommended amount, which raises the risk. There have been postmarketing
+  reports of markedly raised blood pressure after eating tyramine-rich foods.
+citations:
+  - type: label
+    title: RASAGILINE [REMEDYREPACK INC.]
+    url: https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=9bf059f4-4da8-48fe-aacb-c50717d36606
+    setid: 9bf059f4-4da8-48fe-aacb-c50717d36606
+status: approved
+reviewed_at: 2026-10-15
+source: openfda

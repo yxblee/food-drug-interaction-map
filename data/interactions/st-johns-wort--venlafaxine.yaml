@@ -1,0 +1,29 @@
+id: st-johns-wort--venlafaxine
+food: st-johns-wort
+drug: venlafaxine
+mechanisms:
+  - serotonin-excess
+severity: caution
+effect: increases
+summary: St. John's wort taken with venlafaxine can add to serotonin activity
+  and raise the risk of serotonin syndrome.
+advice: Tell your prescriber before using St. John's wort supplements while on
+  venlafaxine. If you take both, watch for symptoms such as agitation, fast
+  heartbeat, sweating, tremor, muscle stiffness, or diarrhea. Symptoms are most
+  likely when starting or raising the dose. Seek care right away if they appear.
+details: Venlafaxine blocks reuptake of serotonin and norepinephrine. St. John's
+  wort also boosts serotonin activity. Together they can push serotonin too high
+  and cause serotonin syndrome, which can be life-threatening. Symptoms include
+  confusion, agitation, hallucinations, rapid heartbeat, unstable blood
+  pressure, fever, tremor, rigid muscles, seizures, and nausea or diarrhea. The
+  label advises monitoring, especially at the start of treatment and after dose
+  increases. It also advises stopping venlafaxine and the other serotonergic
+  agent if syndrome occurs.
+citations:
+  - type: label
+    title: VENLAFAXINE [REMEDYREPACK INC.]
+    url: https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=1ce5786e-22e6-4afa-8052-6eababc6aa4e
+    setid: 1ce5786e-22e6-4afa-8052-6eababc6aa4e
+status: approved
+reviewed_at: 2026-10-15
+source: openfda

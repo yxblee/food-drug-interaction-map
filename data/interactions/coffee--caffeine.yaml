@@ -1,0 +1,25 @@
+id: coffee--caffeine
+food: coffee
+drug: caffeine
+mechanisms:
+  - additive-stimulant
+severity: monitor
+effect: increases
+summary: Coffee and other caffeine sources add to the caffeine in this medicine,
+  raising the chance of jitters, sleeplessness and a fast heartbeat.
+advice: Limit coffee and other caffeinated foods, drinks or medicines while
+  using this product. One dose already has about as much caffeine as a cup of
+  coffee. If you get nervousness, trouble sleeping or a racing heartbeat, cut
+  back and ask a doctor or pharmacist.
+details: The tablet supplies roughly the caffeine of a cup of coffee. Drinking
+  coffee or having other caffeine on top of it stacks the stimulant effects. Too
+  much caffeine can cause nervousness, irritability, sleeplessness and sometimes
+  a rapid heartbeat.
+citations:
+  - type: label
+    title: CAFFEINE [United Natural Foods, Inc. dba UNFI]
+    url: https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=15e4d040-ed21-46e7-98c6-56267f388f57
+    setid: 15e4d040-ed21-46e7-98c6-56267f388f57
+status: approved
+reviewed_at: 2026-10-15
+source: openfda

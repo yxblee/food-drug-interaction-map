@@ -1,0 +1,26 @@
+id: coffee--ciprofloxacin
+food: coffee
+drug: ciprofloxacin
+mechanisms:
+  - cyp1a2-competition
+severity: caution
+effect: increases
+summary: Ciprofloxacin slows the breakdown of caffeine, so coffee's effects can
+  be stronger and last longer.
+advice: Limit coffee and other caffeinated drinks while taking ciprofloxacin.
+  Watch for jitteriness, a fast heartbeat, trouble sleeping or tremor. If these
+  occur, cut back on caffeine and tell your prescriber or pharmacist.
+details: Ciprofloxacin blocks CYP1A2, the liver enzyme that clears caffeine. It
+  reduces formation of paraxanthine, caffeine's main breakdown product. Caffeine
+  clearance falls, blood levels rise and its half-life lengthens. The label
+  notes that caffeine can accumulate when caffeine-containing products are
+  consumed during quinolone treatment. It advises monitoring for toxicity from
+  caffeine and related xanthines, and adjusting the dose where needed.
+citations:
+  - type: label
+    title: CIPROFLOXACIN HYDROCHLORIDE [HAWAII REPACK, INC.]
+    url: https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=0fe3becb-f90e-4187-a8e8-bd0de5a79ad2
+    setid: 0fe3becb-f90e-4187-a8e8-bd0de5a79ad2
+status: approved
+reviewed_at: 2026-10-15
+source: openfda
