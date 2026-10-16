@@ -1,6 +1,6 @@
-id: aged-cheeses--rasagiline-mesylate
+id: aged-cheeses--rasagiline
 food: aged-cheeses
-drug: rasagiline-mesylate
+drug: rasagiline
 mechanisms:
   - tyramine-pressor-response
 severity: caution
@@ -25,5 +25,6 @@ citations:
     title: RASAGILINE [REMEDYREPACK INC.]
     url: https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=9bf059f4-4da8-48fe-aacb-c50717d36606
     setid: 9bf059f4-4da8-48fe-aacb-c50717d36606
-status: pending
+status: approved
+reviewed_at: 2026-10-15
 source: openfda

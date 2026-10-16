@@ -24,5 +24,6 @@ citations:
     title: LINEZOLID [A-S Medication Solutions]
     url: https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=3d630d3d-510d-43a4-8703-8b6234831564
     setid: 3d630d3d-510d-43a4-8703-8b6234831564
-status: pending
+status: approved
+reviewed_at: 2026-10-15
 source: openfda

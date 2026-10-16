@@ -27,5 +27,6 @@ citations:
     title: ISONIAZID [REMEDYREPACK INC.]
     url: https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=6dab7b7b-a3a9-47ef-b423-134bc6970d8b
     setid: 6dab7b7b-a3a9-47ef-b423-134bc6970d8b
-status: pending
+status: approved
+reviewed_at: 2026-10-15
 source: openfda

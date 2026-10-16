@@ -3,7 +3,7 @@ food: coffee
 drug: ciprofloxacin
 mechanisms:
   - cyp1a2-competition
-severity: monitor
+severity: caution
 effect: increases
 summary: Ciprofloxacin slows the breakdown of caffeine, so coffee's effects can
   be stronger and last longer.
@@ -21,5 +21,6 @@ citations:
     title: CIPROFLOXACIN HYDROCHLORIDE [HAWAII REPACK, INC.]
     url: https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=0fe3becb-f90e-4187-a8e8-bd0de5a79ad2
     setid: 0fe3becb-f90e-4187-a8e8-bd0de5a79ad2
-status: pending
+status: approved
+reviewed_at: 2026-10-15
 source: openfda

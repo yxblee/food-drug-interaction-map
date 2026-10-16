@@ -21,5 +21,6 @@ citations:
     title: ESTRADIOL [Pfizer Laboratories Div Pfizer Inc]
     url: https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=110b9865-5a07-4d45-b560-e89947f12600
     setid: 110b9865-5a07-4d45-b560-e89947f12600
-status: pending
+status: approved
+reviewed_at: 2026-10-15
 source: openfda

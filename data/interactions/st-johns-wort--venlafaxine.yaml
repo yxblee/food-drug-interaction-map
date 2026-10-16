@@ -1,6 +1,6 @@
-id: st-johns-wort--venlafaxine-hydrochloride
+id: st-johns-wort--venlafaxine
 food: st-johns-wort
-drug: venlafaxine-hydrochloride
+drug: venlafaxine
 mechanisms:
   - serotonin-excess
 severity: caution
@@ -24,5 +24,6 @@ citations:
     title: VENLAFAXINE [REMEDYREPACK INC.]
     url: https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=1ce5786e-22e6-4afa-8052-6eababc6aa4e
     setid: 1ce5786e-22e6-4afa-8052-6eababc6aa4e
-status: pending
+status: approved
+reviewed_at: 2026-10-15
 source: openfda

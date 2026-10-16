@@ -20,5 +20,6 @@ citations:
     title: ESTRADIOL [Redpharm Drug]
     url: https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=58beabb8-6902-b26a-e063-6294a90a67f8
     setid: 58beabb8-6902-b26a-e063-6294a90a67f8
-status: pending
+status: approved
+reviewed_at: 2026-10-15
 source: openfda
