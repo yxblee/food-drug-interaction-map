@@ -1,5 +1,5 @@
-id: tea--lisinopril
-food: tea
+id: green-tea--lisinopril
+food: green-tea
 drug: lisinopril
 mechanisms:
   - reduced-absorption

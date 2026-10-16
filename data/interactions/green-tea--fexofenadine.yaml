@@ -1,5 +1,5 @@
-id: tea--fexofenadine
-food: tea
+id: green-tea--fexofenadine
+food: green-tea
 drug: fexofenadine
 mechanisms:
   - oatp-inhibition

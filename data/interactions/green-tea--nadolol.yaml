@@ -1,5 +1,5 @@
-id: tea--nadolol
-food: tea
+id: green-tea--nadolol
+food: green-tea
 drug: nadolol
 mechanisms:
   - oatp-inhibition

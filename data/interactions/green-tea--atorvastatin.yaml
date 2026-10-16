@@ -1,5 +1,5 @@
-id: tea--atorvastatin
-food: tea
+id: green-tea--atorvastatin
+food: green-tea
 drug: atorvastatin
 mechanisms:
   - oatp-inhibition

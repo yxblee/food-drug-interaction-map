@@ -15,7 +15,7 @@ describe('seed dataset', () => {
     const drugs = ds!.drugs.length
     // the curated seed; the curation pipeline only adds to it
     expect(drugs).toBeGreaterThanOrEqual(55)
-    expect(ds!.foods.length).toBe(39)
+    expect(ds!.foods.length).toBe(41)
     expect(ds!.mechanisms.length).toBeGreaterThanOrEqual(22)
     expect(ds!.interactions.filter((i) => i.source === 'curated').length).toBe(53)
   })

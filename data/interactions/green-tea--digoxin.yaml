@@ -1,5 +1,5 @@
-id: tea--digoxin
-food: tea
+id: green-tea--digoxin
+food: green-tea
 drug: digoxin
 mechanisms:
   - reduced-absorption
