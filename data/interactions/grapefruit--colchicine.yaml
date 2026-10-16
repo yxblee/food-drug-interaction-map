@@ -1,0 +1,32 @@
+id: grapefruit--colchicine
+food: grapefruit
+drug: colchicine
+mechanisms:
+  - cyp3a4-inhibition
+severity: avoid
+effect: increases
+summary: Grapefruit and grapefruit juice can raise colchicine levels and
+  contribute to toxicity.
+advice: Do not eat grapefruit or drink grapefruit juice while taking colchicine.
+  Seek medical help for vomiting, diarrhea, weakness, or unusual bruising or
+  infections.
+details: A child with familial Mediterranean fever on preventive colchicine
+  developed poisoning symptoms affecting the gut, nervous system, heart and
+  blood after about two months of drinking lots of natural grapefruit juice. A
+  viral respiratory infection was also present, so the juice was likely one of
+  several contributors. Grapefruit juice can block the gut enzyme CYP3A4 that
+  breaks down colchicine, so more of the drug reaches the bloodstream.
+  Colchicine has a narrow safety margin, so even modest increases can cause
+  serious toxicity.
+citations:
+  - type: "label"
+    title: "COLCHICINE [PROFICIENT RX LP]"
+    url: "https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=0f69b9c6-8c00-45e2-b950-34dc5ae62352"
+    setid: "0f69b9c6-8c00-45e2-b950-34dc5ae62352"
+  - type: study
+    title: Near fatal acute colchicine intoxication in a child. A case report.
+    url: https://pubmed.ncbi.nlm.nih.gov/11131346/
+    pmid: "11131346"
+status: approved
+source: ddid
+reviewed_at: 2026-10-15

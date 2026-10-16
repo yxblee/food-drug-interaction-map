@@ -1,0 +1,32 @@
+id: green-tea--fexofenadine
+food: green-tea
+drug: fexofenadine
+mechanisms:
+  - oatp-inhibition
+severity: caution
+effect: decreases
+summary: Green tea catechins (EGCG) can sharply reduce how much fexofenadine
+  your body absorbs, cutting exposure by about 70%.
+advice: Avoid taking fexofenadine with green tea or green tea extracts. Take it
+  with plain water, and leave a gap between the tea and the dose.
+details: In a crossover study of 10 healthy volunteers, taking fexofenadine with
+  green tea extract (about 300 mg EGCG) lowered its blood exposure by roughly
+  70% and its urinary excretion by about 67%, compared with water. Timing and
+  half-life did not change, which points to reduced absorption. Lab tests showed
+  that EGCG and the extract block OATP1A2, an uptake transporter that carries
+  fexofenadine across the intestinal wall. Pseudoephedrine taken at the same
+  time was not affected. Reduced fexofenadine levels could weaken allergy
+  symptom control.
+citations:
+  - type: "review"
+    title: "Green Tea Catechins as Perpetrators of Drug Pharmacokinetic Interactions."
+    url: "https://pubmed.ncbi.nlm.nih.gov/39748104/"
+    pmid: "39748104"
+  - type: study
+    title: Exposure of Fexofenadine, but Not Pseudoephedrine, Is Markedly Decreased
+      by Green Tea Extract in Healthy Volunteers.
+    url: https://pubmed.ncbi.nlm.nih.gov/35678032/
+    pmid: "35678032"
+status: approved
+source: ddid
+reviewed_at: 2026-10-15

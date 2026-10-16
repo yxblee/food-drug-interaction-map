@@ -1,0 +1,32 @@
+id: alcohol--isoniazid
+food: alcohol
+drug: isoniazid
+mechanisms:
+  - tyramine-pressor-response
+  - histamine-accumulation
+severity: caution
+effect: increases
+summary: Daily alcohol use raises the risk of isoniazid-related liver
+  inflammation (hepatitis); red wine may also trigger a tyramine reaction.
+advice: Avoid regular alcohol while taking isoniazid. If you drink daily, tell
+  your prescriber so liver blood tests can be done before starting and monthly.
+  Red wine and other tyramine-rich drinks and foods should be avoided because of
+  isoniazid's mild MAO-inhibiting activity.
+details: The label lists daily users of alcohol among groups with a higher
+  frequency of isoniazid-associated hepatitis, so they should be monitored
+  closely, with transaminase tests before starting and monthly during therapy.
+  Isoniazid should be stopped temporarily if values exceed three to five times
+  the upper limit of normal. Alcoholics are also more prone to nerve damage
+  (neuropathy), so vitamin B6 (pyridoxine) is recommended. Separately, because
+  isoniazid has some monoamine oxidase inhibiting activity, tyramine-containing
+  items such as red wine may cause a reaction, and histamine-containing foods
+  may cause exaggerated responses such as headache, flushing and low blood
+  pressure.
+citations:
+  - type: label
+    title: ISONIAZID [REMEDYREPACK INC.]
+    url: https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=6dab7b7b-a3a9-47ef-b423-134bc6970d8b
+    setid: 6dab7b7b-a3a9-47ef-b423-134bc6970d8b
+status: approved
+reviewed_at: 2026-10-15
+source: openfda
