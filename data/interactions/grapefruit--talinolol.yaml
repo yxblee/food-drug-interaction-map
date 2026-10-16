@@ -1,0 +1,30 @@
+id: grapefruit--talinolol
+food: grapefruit
+drug: talinolol
+mechanisms:
+  - oatp-inhibition
+severity: caution
+effect: decreases
+summary: Grapefruit juice lowers the blood levels of talinolol, a beta-blocker,
+  by about half.
+advice: Take talinolol with water rather than grapefruit juice. Grapefruit juice
+  may weaken its effect, so tell your prescriber if you drink it regularly.
+details: In 24 healthy volunteers, one glass of grapefruit juice cut talinolol's
+  total exposure and peak blood concentration to roughly 56-57% of the levels
+  seen with water. Drinking the juice daily for 6 days had a similar effect.
+  Kidney clearance, half-life and time to peak were unchanged, and the juice did
+  not change P-glycoprotein levels in the gut lining. The authors concluded that
+  the juice probably blocks an intestinal uptake transporter that helps absorb
+  talinolol, rather than blocking P-glycoprotein, so less drug enters the blood.
+citations:
+  - type: "review"
+    title: "Fruit juice inhibition of uptake transport: a new type of food-drug interaction."
+    url: "https://pubmed.ncbi.nlm.nih.gov/21039758/"
+    pmid: "21039758"
+  - type: study
+    title: Grapefruit juice ingestion significantly reduces talinolol bioavailability.
+    url: https://pubmed.ncbi.nlm.nih.gov/15903127/
+    pmid: "15903127"
+status: approved
+source: ddid
+reviewed_at: 2026-10-15

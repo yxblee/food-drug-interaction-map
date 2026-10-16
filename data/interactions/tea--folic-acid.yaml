@@ -1,0 +1,33 @@
+id: tea--folic-acid
+food: tea
+drug: folic-acid
+mechanisms:
+  - reduced-absorption
+severity: caution
+effect: decreases
+summary: Green and black tea can lower how much folic acid your body absorbs
+  when taken together.
+advice: Take folic acid tablets with water instead of tea. Leave a gap between
+  tea and your folic acid dose. If you drink tea often and have a high folate
+  need, such as in pregnancy, ask your clinician or pharmacist about timing.
+details: In healthy volunteers, folic acid taken with green or black tea gave
+  lower blood folate than folic acid taken with water. At a 0.4 mg dose, peak
+  folate fell by about 39% and total exposure fell by about 18-27%. At a 5 mg
+  dose with green tea, peak folate fell by about 27% and total exposure by about
+  40%. Earlier cell studies pointed to an effect on absorption in the intestine,
+  which fits these findings. Even weak tea extracts reduced folic acid
+  availability.
+citations:
+  - type: "review"
+    title: "Green Tea Catechins as Perpetrators of Drug Pharmacokinetic Interactions."
+    url: "https://pubmed.ncbi.nlm.nih.gov/39748104/"
+    pmid: "39748104"
+  - type: study
+    title: "Influence of green and black tea on folic acid pharmacokinetics in
+      healthy volunteers: potential risk of diminished folic acid
+      bioavailability."
+    url: https://pubmed.ncbi.nlm.nih.gov/18551467/
+    pmid: "18551467"
+status: approved
+source: ddid
+reviewed_at: 2026-10-15

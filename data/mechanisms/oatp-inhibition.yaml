@@ -1,0 +1,6 @@
+id: oatp-inhibition
+name: OATP uptake transporter inhibition
+kind: transporter
+explanation: Some food compounds block OATP transporters in the gut wall that
+  help carry certain drugs into the blood. With these transporters blocked, less
+  of the drug is absorbed and blood levels fall.

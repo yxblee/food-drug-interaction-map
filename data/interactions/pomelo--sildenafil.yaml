@@ -1,0 +1,32 @@
+id: pomelo--sildenafil
+food: pomelo
+drug: sildenafil
+mechanisms:
+  - reduced-absorption
+  - oatp-inhibition
+severity: caution
+effect: decreases
+summary: Pummelo juice lowered sildenafil blood levels by roughly 40% in a small
+  crossover study.
+advice: Avoid drinking pummelo juice shortly before or right after taking
+  sildenafil, since it may make the dose less effective.
+details: In six healthy men given 50 mg sildenafil with either pummelo juice or
+  water, the juice cut peak concentration from about 212 to 134 ng/ml and total
+  exposure from about 565 to 337 ng·hr/ml. This was the opposite of the increase
+  expected from gut CYP3A4 inhibition, as seen with grapefruit. The authors
+  suggested the cause could be effects on drug transporters or a physical or
+  chemical interaction between juice components and the drug that limits
+  absorption. The study was small, so the exact mechanism is unconfirmed.
+citations:
+  - type: "review"
+    title: "Food-drug interactions precipitated by fruit juices other than grapefruit juice: An update review."
+    url: "https://pubmed.ncbi.nlm.nih.gov/29703387/"
+    pmid: "29703387"
+  - type: study
+    title: The effects of pummelo juice on pharmacokinetics of sildenafil in healthy
+      adult male Jordanian volunteers.
+    url: https://pubmed.ncbi.nlm.nih.gov/19830413/
+    pmid: "19830413"
+status: approved
+source: ddid
+reviewed_at: 2026-10-15

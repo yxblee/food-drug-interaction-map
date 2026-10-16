@@ -1,0 +1,35 @@
+id: green-tea--lisinopril
+food: green-tea
+drug: lisinopril
+mechanisms:
+  - reduced-absorption
+severity: caution
+effect: decreases
+summary: Green tea extract cut lisinopril absorption by roughly two-thirds in
+  healthy volunteers, which could weaken its blood-pressure effect.
+advice: If you take lisinopril, avoid drinking green tea or taking green tea
+  extract at the same time as your dose. Keep your routine consistent and
+  discuss timing with your pharmacist or doctor. Keep checking your blood
+  pressure.
+details: In a small crossover study of 10 healthy adults, lisinopril was taken
+  with water or with green tea extract containing about 300 mg of EGCG. With the
+  extract, peak blood levels fell to about 29% of the control value and total
+  exposure to about 34%. The time to peak and kidney clearance did not change.
+  This points to less drug being absorbed from the gut rather than faster
+  elimination. Catechins in green tea may interfere with the uptake of
+  water-soluble drugs like lisinopril. Reduced exposure could lower the drug's
+  effectiveness. The study used a concentrated extract in single doses, so the
+  effect of ordinary tea drinking is less certain.
+citations:
+  - type: "review"
+    title: "Green Tea Catechins as Perpetrators of Drug Pharmacokinetic Interactions."
+    url: "https://pubmed.ncbi.nlm.nih.gov/39748104/"
+    pmid: "39748104"
+  - type: study
+    title: Impact of Green Tea Catechin Ingestion on the Pharmacokinetics of
+      Lisinopril in Healthy Volunteers.
+    url: https://pubmed.ncbi.nlm.nih.gov/33048477/
+    pmid: "33048477"
+status: approved
+source: ddid
+reviewed_at: 2026-10-15
