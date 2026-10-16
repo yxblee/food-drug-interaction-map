@@ -22,9 +22,14 @@ details: "In a study of 16 healthy volunteers, digoxin was given alone and then
   likely involves reduced absorption in the gut. Lower digoxin levels could
   weaken its control of heart rhythm or heart failure."
 citations:
+  - type: "review"
+    title: "Green Tea Catechins as Perpetrators of Drug Pharmacokinetic Interactions."
+    url: "https://pubmed.ncbi.nlm.nih.gov/39748104/"
+    pmid: "39748104"
   - type: study
     title: Effect of green tea catechins on the pharmacokinetics of digoxin in humans.
     url: https://pubmed.ncbi.nlm.nih.gov/30022812/
     pmid: "30022812"
-status: pending
+status: approved
 source: ddid
+reviewed_at: 2026-10-15

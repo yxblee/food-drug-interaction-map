@@ -17,9 +17,14 @@ details: Grapefruit juice inhibits CYP3A4, an enzyme that metabolizes verapamil.
   unexpectedly strong effect. This is a single case report, so it cannot prove
   the cause, but the mechanism is well established.
 citations:
+  - type: "label"
+    title: "VERAPAMIL HYDROCHLORIDE [BRYANT RANCH PREPACK]"
+    url: "https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=006cf920-04ae-0b53-cb91-85481972abc2"
+    setid: "006cf920-04ae-0b53-cb91-85481972abc2"
   - type: study
     title: "Grapefruit juice and verapamil: a toxic cocktail."
     url: https://pubmed.ncbi.nlm.nih.gov/19204629/
     pmid: "19204629"
-status: pending
+status: approved
 source: ddid
+reviewed_at: 2026-10-15

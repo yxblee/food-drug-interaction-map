@@ -19,10 +19,15 @@ details: In 12 healthy volunteers, a single 40 mg atorvastatin dose was given
   transporters. The higher dose did not produce a bigger effect. Monitoring
   atorvastatin levels was suggested when the two are combined.
 citations:
+  - type: "review"
+    title: "Green Tea Catechins as Perpetrators of Drug Pharmacokinetic Interactions."
+    url: "https://pubmed.ncbi.nlm.nih.gov/39748104/"
+    pmid: "39748104"
   - type: study
     title: Effects of Green Tea Extract on Atorvastatin Pharmacokinetics in Healthy
       Volunteers.
     url: https://pubmed.ncbi.nlm.nih.gov/31997084/
     pmid: "31997084"
-status: pending
+status: approved
 source: ddid
+reviewed_at: 2026-10-15

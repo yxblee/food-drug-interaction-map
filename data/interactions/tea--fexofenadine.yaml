@@ -18,10 +18,15 @@ details: In a crossover study of 10 healthy volunteers, taking fexofenadine with
   time was not affected. Reduced fexofenadine levels could weaken allergy
   symptom control.
 citations:
+  - type: "review"
+    title: "Green Tea Catechins as Perpetrators of Drug Pharmacokinetic Interactions."
+    url: "https://pubmed.ncbi.nlm.nih.gov/39748104/"
+    pmid: "39748104"
   - type: study
     title: Exposure of Fexofenadine, but Not Pseudoephedrine, Is Markedly Decreased
       by Green Tea Extract in Healthy Volunteers.
     url: https://pubmed.ncbi.nlm.nih.gov/35678032/
     pmid: "35678032"
-status: pending
+status: approved
 source: ddid
+reviewed_at: 2026-10-15

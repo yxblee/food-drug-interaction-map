@@ -17,9 +17,14 @@ details: In 24 healthy volunteers, one glass of grapefruit juice cut talinolol's
   the juice probably blocks an intestinal uptake transporter that helps absorb
   talinolol, rather than blocking P-glycoprotein, so less drug enters the blood.
 citations:
+  - type: "review"
+    title: "Fruit juice inhibition of uptake transport: a new type of food-drug interaction."
+    url: "https://pubmed.ncbi.nlm.nih.gov/21039758/"
+    pmid: "21039758"
   - type: study
     title: Grapefruit juice ingestion significantly reduces talinolol bioavailability.
     url: https://pubmed.ncbi.nlm.nih.gov/15903127/
     pmid: "15903127"
-status: pending
+status: approved
 source: ddid
+reviewed_at: 2026-10-15

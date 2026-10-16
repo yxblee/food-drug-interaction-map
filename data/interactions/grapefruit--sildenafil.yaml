@@ -3,7 +3,7 @@ food: grapefruit
 drug: sildenafil
 mechanisms:
   - cyp3a4-inhibition
-severity: monitor
+severity: caution
 effect: increases
 summary: Grapefruit juice raised sildenafil's peak blood level by about 42% in
   one patient, though total exposure stayed about the same.
@@ -18,11 +18,16 @@ details: In a single elderly man, drinking grapefruit juice increased the
   its rise in the blood. Because it is a single case, the authors say a larger
   study is needed to establish how big the effect really is.
 citations:
+  - type: "review"
+    title: "Interactions between grapefruit juice and cardiovascular drugs."
+    url: "https://pubmed.ncbi.nlm.nih.gov/15449971/"
+    pmid: "15449971"
   - type: study
     title: Determination of sildenafil citrate in plasma by high-performance liquid
       chromatography and a case for the potential interaction of grapefruit
       juice with sildenafil citrate.
     url: https://pubmed.ncbi.nlm.nih.gov/11206038/
     pmid: "11206038"
-status: pending
+status: approved
 source: ddid
+reviewed_at: 2026-10-15

@@ -21,10 +21,15 @@ details: In a small crossover study of 10 healthy adults, lisinopril was taken
   effectiveness. The study used a concentrated extract in single doses, so the
   effect of ordinary tea drinking is less certain.
 citations:
+  - type: "review"
+    title: "Green Tea Catechins as Perpetrators of Drug Pharmacokinetic Interactions."
+    url: "https://pubmed.ncbi.nlm.nih.gov/39748104/"
+    pmid: "39748104"
   - type: study
     title: Impact of Green Tea Catechin Ingestion on the Pharmacokinetics of
       Lisinopril in Healthy Volunteers.
     url: https://pubmed.ncbi.nlm.nih.gov/33048477/
     pmid: "33048477"
-status: pending
+status: approved
 source: ddid
+reviewed_at: 2026-10-15

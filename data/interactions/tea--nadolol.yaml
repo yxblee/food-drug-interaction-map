@@ -20,6 +20,10 @@ details: In healthy volunteers, taking nadolol with green tea cut its peak blood
   transporter OATP1A2, and green tea blocked this uptake, which probably
   explains much of the effect.
 citations:
+  - type: "review"
+    title: "Green Tea Catechins as Perpetrators of Drug Pharmacokinetic Interactions."
+    url: "https://pubmed.ncbi.nlm.nih.gov/39748104/"
+    pmid: "39748104"
   - type: study
     title: Green tea ingestion greatly reduces plasma concentrations of nadolol in
       healthy subjects.
@@ -30,5 +34,6 @@ citations:
       healthy volunteers.
     url: https://pubmed.ncbi.nlm.nih.gov/32320490/
     pmid: "32320490"
-status: pending
+status: approved
 source: ddid
+reviewed_at: 2026-10-15

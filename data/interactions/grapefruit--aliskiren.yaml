@@ -16,10 +16,15 @@ details: In healthy volunteers who drank grapefruit juice several times a day, a
   help aliskiren get absorbed, so less drug enters the bloodstream. Lower levels
   may reduce blood pressure control.
 citations:
+  - type: "review"
+    title: "Pharmacokinetic interactions of fruit juices with antihypertensive drugs in humans: A systematic review and meta-analysis."
+    url: "https://pubmed.ncbi.nlm.nih.gov/40122403/"
+    pmid: "40122403"
   - type: study
     title: Grapefruit juice greatly reduces the plasma concentrations of the OATP2B1
       and CYP3A4 substrate aliskiren.
     url: https://pubmed.ncbi.nlm.nih.gov/20664534/
     pmid: "20664534"
-status: pending
+status: approved
 source: ddid
+reviewed_at: 2026-10-15

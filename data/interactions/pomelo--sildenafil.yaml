@@ -18,10 +18,15 @@ details: In six healthy men given 50 mg sildenafil with either pummelo juice or
   chemical interaction between juice components and the drug that limits
   absorption. The study was small, so the exact mechanism is unconfirmed.
 citations:
+  - type: "review"
+    title: "Food-drug interactions precipitated by fruit juices other than grapefruit juice: An update review."
+    url: "https://pubmed.ncbi.nlm.nih.gov/29703387/"
+    pmid: "29703387"
   - type: study
     title: The effects of pummelo juice on pharmacokinetics of sildenafil in healthy
       adult male Jordanian volunteers.
     url: https://pubmed.ncbi.nlm.nih.gov/19830413/
     pmid: "19830413"
-status: pending
+status: approved
 source: ddid
+reviewed_at: 2026-10-15

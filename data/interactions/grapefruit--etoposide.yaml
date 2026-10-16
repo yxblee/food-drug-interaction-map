@@ -17,9 +17,14 @@ details: In a small pilot crossover study of six patients, drinking grapefruit
   did not occur. Lower exposure could mean less effective treatment. The study
   was very small, and it did not establish the mechanism.
 citations:
+  - type: "review"
+    title: "Fruit juice inhibition of uptake transport: a new type of food-drug interaction."
+    url: "https://pubmed.ncbi.nlm.nih.gov/21039758/"
+    pmid: "21039758"
   - type: study
     title: Effect of grapefruit juice intake on etoposide bioavailability.
     url: https://pubmed.ncbi.nlm.nih.gov/12389073/
     pmid: "12389073"
-status: pending
+status: approved
 source: ddid
+reviewed_at: 2026-10-15

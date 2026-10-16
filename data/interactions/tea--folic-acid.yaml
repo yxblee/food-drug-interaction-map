@@ -18,11 +18,16 @@ details: In healthy volunteers, folic acid taken with green or black tea gave
   which fits these findings. Even weak tea extracts reduced folic acid
   availability.
 citations:
+  - type: "review"
+    title: "Green Tea Catechins as Perpetrators of Drug Pharmacokinetic Interactions."
+    url: "https://pubmed.ncbi.nlm.nih.gov/39748104/"
+    pmid: "39748104"
   - type: study
     title: "Influence of green and black tea on folic acid pharmacokinetics in
       healthy volunteers: potential risk of diminished folic acid
       bioavailability."
     url: https://pubmed.ncbi.nlm.nih.gov/18551467/
     pmid: "18551467"
-status: pending
+status: approved
 source: ddid
+reviewed_at: 2026-10-15

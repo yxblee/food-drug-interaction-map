@@ -18,6 +18,10 @@ details: Fexofenadine is taken up in the intestine by OATP transporters, mainly
   30–40%. The effect does not appear to involve CYP3A4. No meaningful ECG
   changes were seen. The size of the effect varies between people.
 citations:
+  - type: "review"
+    title: "Fruit juice inhibition of uptake transport: a new type of food-drug interaction."
+    url: "https://pubmed.ncbi.nlm.nih.gov/21039758/"
+    pmid: "21039758"
   - type: study
     title: Naringin is a major and selective clinical inhibitor of organic
       anion-transporting polypeptide 1A2 (OATP1A2) in grapefruit juice.
@@ -33,5 +37,6 @@ citations:
       desloratadine.
     url: https://pubmed.ncbi.nlm.nih.gov/11978146/
     pmid: "11978146"
-status: pending
+status: approved
 source: ddid
+reviewed_at: 2026-10-15
