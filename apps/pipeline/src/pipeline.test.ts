@@ -342,6 +342,9 @@ describe('runPipeline (openfda)', () => {
         ['cyp3a-inhibition-gut'],
       )
       expect(r.report).toMatch(/Proposed new Mechanisms \(1\)[^]*cyp3a-inhibition-gut/)
+      // later drafts in the run may reuse it instead of proposing a near-duplicate
+      expect(t.drafted.length).toBeGreaterThan(1)
+      expect(t.drafted.at(-1)!.mechanisms.map((x) => x.id)).toContain('cyp3a-inhibition-gut')
     })
 
     it('drops an invalid or duplicate Mechanism proposal', async () => {

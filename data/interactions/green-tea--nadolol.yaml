@@ -1,0 +1,39 @@
+id: green-tea--nadolol
+food: green-tea
+drug: nadolol
+mechanisms:
+  - oatp-inhibition
+severity: caution
+effect: decreases
+summary: Green tea can sharply reduce how much nadolol your body absorbs,
+  weakening its effect on blood pressure.
+advice: Avoid taking nadolol with green tea. The effect can last at least an
+  hour after drinking a cup, so keep tea well apart from your dose, and talk to
+  your doctor or pharmacist if you drink it regularly.
+details: In healthy volunteers, taking nadolol with green tea cut its peak blood
+  level and total exposure by about 85% after two weeks of regular tea drinking.
+  In another study, a single cup taken with the drug lowered exposure by roughly
+  63%, and a cup taken one hour before still lowered it by about 46%. Kidney
+  clearance and the time to peak level were unchanged, which points to reduced
+  absorption. Nadolol's blood-pressure-lowering effect was also significantly
+  reduced. Lab experiments showed nadolol is taken up by the intestinal
+  transporter OATP1A2, and green tea blocked this uptake, which probably
+  explains much of the effect.
+citations:
+  - type: "review"
+    title: "Green Tea Catechins as Perpetrators of Drug Pharmacokinetic Interactions."
+    url: "https://pubmed.ncbi.nlm.nih.gov/39748104/"
+    pmid: "39748104"
+  - type: study
+    title: Green tea ingestion greatly reduces plasma concentrations of nadolol in
+      healthy subjects.
+    url: https://pubmed.ncbi.nlm.nih.gov/24419562/
+    pmid: "24419562"
+  - type: study
+    title: Effects of single green tea ingestion on pharmacokinetics of nadolol in
+      healthy volunteers.
+    url: https://pubmed.ncbi.nlm.nih.gov/32320490/
+    pmid: "32320490"
+status: approved
+source: ddid
+reviewed_at: 2026-10-15

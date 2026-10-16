@@ -386,7 +386,7 @@ export async function runPipeline(
       food: p.food,
       drug: p.drug,
       text,
-      mechanisms: ds.mechanisms,
+      mechanisms: [...ds.mechanisms, ...newMechanisms.values()],
       classes: isNew && !newDrugs.has(p.drug.id) ? classes : [],
       kind: source === 'openfda' ? 'label' : 'abstract',
     })

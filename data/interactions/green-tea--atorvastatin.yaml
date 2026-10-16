@@ -1,0 +1,33 @@
+id: green-tea--atorvastatin
+food: green-tea
+drug: atorvastatin
+mechanisms:
+  - oatp-inhibition
+severity: monitor
+effect: decreases
+summary: Green tea extract taken with atorvastatin lowered blood levels of the
+  drug by roughly a quarter in a small human study.
+advice: If you take atorvastatin, avoid taking green tea extract supplements at
+  the same time. Tell your prescriber if you use them regularly, as your
+  cholesterol response or drug levels may need checking.
+details: In 12 healthy volunteers, a single 40 mg atorvastatin dose was given
+  alone or with 300 mg or 600 mg of green tea extract. The extract reduced peak
+  plasma concentration by about 25% and total exposure by about 22-24%, and
+  raised apparent oral clearance by around 30%. Half-life and time to peak were
+  unchanged, suggesting less drug was absorbed rather than faster elimination.
+  The authors attributed this to green tea catechins inhibiting OATP uptake
+  transporters. The higher dose did not produce a bigger effect. Monitoring
+  atorvastatin levels was suggested when the two are combined.
+citations:
+  - type: "review"
+    title: "Green Tea Catechins as Perpetrators of Drug Pharmacokinetic Interactions."
+    url: "https://pubmed.ncbi.nlm.nih.gov/39748104/"
+    pmid: "39748104"
+  - type: study
+    title: Effects of Green Tea Extract on Atorvastatin Pharmacokinetics in Healthy
+      Volunteers.
+    url: https://pubmed.ncbi.nlm.nih.gov/31997084/
+    pmid: "31997084"
+status: approved
+source: ddid
+reviewed_at: 2026-10-15
