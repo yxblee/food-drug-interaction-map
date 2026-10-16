@@ -1,0 +1,17 @@
+id: "tea--caffeine"
+food: "tea"
+drug: "caffeine"
+mechanisms: ["additive-stimulant"]
+severity: "monitor"
+effect: "increases"
+summary: "Tea contains caffeine, which adds to the caffeine in this medicine and raises the chance of jitters, sleeplessness and a fast heartbeat."
+advice: "Limit tea and other caffeinated foods, drinks or medicines while using this product. If you get nervousness, trouble sleeping or a racing heartbeat, cut back and ask a doctor or pharmacist."
+details: "The caffeine label advises limiting caffeine-containing foods and beverages while taking the product, because too much caffeine may cause nervousness, irritability, sleeplessness and occasionally a rapid heartbeat. Both green and black tea contain caffeine."
+citations:
+  - type: "label"
+    title: "CAFFEINE [United Natural Foods, Inc. dba UNFI]"
+    url: "https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=15e4d040-ed21-46e7-98c6-56267f388f57"
+    setid: "15e4d040-ed21-46e7-98c6-56267f388f57"
+status: "approved"
+reviewed_at: "2026-10-15"
+source: "foodrugs"
