@@ -1,44 +1,21 @@
-id: coffee--acetaminophen
-food: coffee
-drug: acetaminophen
-mechanisms:
-  - adenosine-receptor-antagonism
-severity: monitor
-effect: increases
-summary: Caffeine speeds up acetaminophen absorption and boosts its pain relief,
-  but at high doses it may worsen acetaminophen liver toxicity.
-advice: Usual caffeine amounts from coffee or combination pain products are
-  generally fine for adults. Avoid combining high-dose caffeine with large
-  acetaminophen doses, and be especially careful in premature infants receiving
-  caffeine for apnea, where clinicians should watch acetaminophen dosing.
-details: In a human crossover study, 130 mg caffeine taken with 1000 mg
-  acetaminophen led to faster early absorption of acetaminophen and stronger,
-  longer-lasting pain relief than acetaminophen alone. Caffeine alone gave no
-  meaningful analgesia. On the safety side, lab work with fetal-like liver cells
-  and organoids showed high-dose caffeine made acetaminophen more damaging by
-  dampening the cell's DNA-damage repair signalling (ATM), adding oxidative
-  stress and mitochondrial injury; N-acetylcysteine reduced this. In rats,
-  caffeine combined with theophylline and a large acetaminophen dose depleted
-  liver glutathione and raised lipid peroxidation. These toxicity findings come
-  from cell and animal models at high doses, so their relevance to ordinary
-  coffee intake in adults is uncertain.
+id: "coffee--acetaminophen"
+food: "coffee"
+drug: "acetaminophen"
+mechanisms: ["adenosine-receptor-antagonism"]
+severity: "minimal"
+effect: "increases"
+summary: "Caffeine, as in a cup of coffee, can slightly improve the pain relief from acetaminophen."
+advice: "No need to avoid coffee with acetaminophen. Count coffee toward your total caffeine if you also take combination pain products that contain caffeine."
+details: "A risk-benefit review pooled trials of acetaminophen 1,000 mg with caffeine 130 mg against acetaminophen alone. The combination gave a modestly higher chance of good pain relief (relative benefit 1.12) across headache, dental, period and post-partum pain. The review found no compelling evidence that caffeine meaningfully increases acetaminophen liver toxicity."
 citations:
-  - type: study
-    title: Caffeine disrupts ataxia telangiectasia mutated gene-related pathways and
-      exacerbates acetaminophen toxicity in human fetal immortalized
-      hepatocytes.
-    url: https://pubmed.ncbi.nlm.nih.gov/33971260/
-    pmid: "33971260"
-  - type: study
-    title: Hepatic glutathione and lipid peroxidation in rats treated with
-      theophylline. Effect of dose and combination with caffeine and
-      acetaminophen.
-    url: https://pubmed.ncbi.nlm.nih.gov/8117310/
-    pmid: "8117310"
-  - type: study
-    title: Caffeine accelerates absorption and enhances the analgesic effect of
-      acetaminophen.
-    url: https://pubmed.ncbi.nlm.nih.gov/17442681/
-    pmid: "17442681"
-status: pending
-source: foodrugs
+  - type: "review"
+    title: "A risk-benefit assessment of paracetamol (acetaminophen) combined with caffeine"
+    url: "https://pubmed.ncbi.nlm.nih.gov/20624245/"
+    pmid: "20624245"
+  - type: "review"
+    title: "Caffeine as an analgesic adjuvant for acute pain in adults"
+    url: "https://pubmed.ncbi.nlm.nih.gov/25502052/"
+    pmid: "25502052"
+status: "approved"
+reviewed_at: "2026-10-15"
+source: "foodrugs"

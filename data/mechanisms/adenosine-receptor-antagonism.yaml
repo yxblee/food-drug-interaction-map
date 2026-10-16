@@ -1,6 +1,4 @@
-id: adenosine-receptor-antagonism
-name: Adenosine receptor blockade
-kind: pharmacodynamic
-explanation: Some substances occupy adenosine receptors without activating them,
-  so adenosine or adenosine-like drugs cannot bind and have a weaker effect on
-  blood vessels and the heart.
+id: "adenosine-receptor-antagonism"
+name: "Adenosine receptor blockade"
+kind: "pharmacodynamic"
+explanation: "Caffeine occupies adenosine receptors without activating them. This blunts the effects of adenosine itself, such as drowsiness, and of drugs that act on these receptors."

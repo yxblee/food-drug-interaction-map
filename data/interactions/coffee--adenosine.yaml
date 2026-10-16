@@ -1,36 +1,21 @@
-id: coffee--adenosine
-food: coffee
-drug: adenosine
-mechanisms:
-  - adenosine-receptor-antagonism
-severity: caution
-effect: decreases
-summary: Caffeine from coffee blocks adenosine receptors, so it can weaken or
-  even reverse adenosine's effect during stress testing.
-advice: Avoid coffee and other caffeine sources before an adenosine stress test,
-  following your imaging centre's instructions (often 12-24 hours). Tell the
-  staff if you had caffeine recently.
-details: Adenosine used for cardiac stress imaging works by activating adenosine
-  receptors to widen blood vessels. Caffeine blocks these same receptors. In a
-  study of 105 patients having adenosine stress cardiac MRI, those who drank
-  coffee within 4 hours showed an inverted myocardial T1 response instead of the
-  normal one, and those who drank it the day before still showed a reduced
-  response compared with non-drinkers. This means the stress may be inadequate
-  and the test could give false negative results.
+id: "coffee--adenosine"
+food: "coffee"
+drug: "adenosine"
+mechanisms: ["adenosine-receptor-antagonism"]
+severity: "caution"
+effect: "decreases"
+summary: "Caffeine from coffee blocks the receptors adenosine acts on, so adenosine may work less well or not at all."
+advice: "Avoid coffee and other caffeine before a test or treatment that uses adenosine, following your care team's instructions. Tell staff if you had caffeine recently."
+details: "The adenosine label states that methylxanthines such as caffeine antagonize adenosine, so larger doses may be needed or adenosine may not be effective. A study of stress perfusion imaging found that recent caffeine intake could invert adenosine's effect on myocardial blood flow."
 citations:
-  - type: study
-    title: Caffeine intake inverts the effect of adenosine on myocardial perfusion
-      during stress as measured by T1 mapping.
-    url: https://pubmed.ncbi.nlm.nih.gov/27473274/
+  - type: "label"
+    title: "ADENOSINE [REMEDYREPACK INC.]"
+    url: "https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=9508caf5-0e3a-4d32-909d-bff7ea40ec30"
+    setid: "9508caf5-0e3a-4d32-909d-bff7ea40ec30"
+  - type: "study"
+    title: "Caffeine intake inverts the effect of adenosine on myocardial perfusion during stress as measured by T1 mapping"
+    url: "https://pubmed.ncbi.nlm.nih.gov/27473274/"
     pmid: "27473274"
-  - type: study
-    title: Caffeine Suppresses the Activation of Hepatic Stellate Cells
-      cAMP-Independently by Antagonizing Adenosine Receptors.
-    url: https://pubmed.ncbi.nlm.nih.gov/28458351/
-    pmid: "28458351"
-  - type: study
-    title: Dietary caffeine consumption modulates fMRI measures.
-    url: https://pubmed.ncbi.nlm.nih.gov/12377150/
-    pmid: "12377150"
-status: pending
-source: foodrugs
+status: "approved"
+reviewed_at: "2026-10-15"
+source: "foodrugs"
