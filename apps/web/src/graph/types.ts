@@ -18,6 +18,10 @@ export interface GraphRenderer {
   setInset(inset: Inset): void
   /** Frame the focused (or all) nodes in the space the inset leaves. */
   fit(): void
+  /** 2D only: zoom about the centre by a factor (animated when motion is allowed). */
+  zoomBy?(factor: number): void
+  /** 2D only: back to the full-map framing, ignoring the selection. */
+  reset?(): void
   /** Nodes in focus (or all) with their screen positions, in browse order, for keyboard moves. */
   points(): NavPoint[]
   /** The keyboard-active node, shown with a ring (2D) or highlight (3D); null clears it. */

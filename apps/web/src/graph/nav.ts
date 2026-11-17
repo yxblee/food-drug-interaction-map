@@ -6,6 +6,24 @@ export interface NavPoint {
 }
 export type NavDir = 'left' | 'right' | 'up' | 'down'
 
+/** The key of the point nearest `at`, if within `radius`: overlapping hit areas go to the closest. */
+export function nearestWithin(
+  pts: { key: string; x: number; y: number }[],
+  at: { x: number; y: number },
+  radius: number,
+): string | null {
+  let best: string | null = null
+  let bestD = radius
+  for (const p of pts) {
+    const d = Math.hypot(p.x - at.x, p.y - at.y)
+    if (d <= bestD) {
+      best = p.key
+      bestD = d
+    }
+  }
+  return best
+}
+
 /** Nearest point in a screen direction, within a 90 degree cone; sideways drift costs double. */
 export function nearestInDirection(from: NavPoint, pts: NavPoint[], dir: NavDir): NavPoint | null {
   const horizontal = dir === 'left' || dir === 'right'
