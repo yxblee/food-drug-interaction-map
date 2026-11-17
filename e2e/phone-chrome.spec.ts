@@ -41,7 +41,8 @@ for (const [w, h] of [
         .locator('.warning__lead')
         .first()
         .boundingBox())!
-      expect(lead.y + lead.height).toBeLessThanOrEqual(footerTop)
+      // 12px of slack for the font metrics CI uses
+      expect(lead.y + lead.height).toBeLessThanOrEqual(footerTop - 12)
     }
   })
 }

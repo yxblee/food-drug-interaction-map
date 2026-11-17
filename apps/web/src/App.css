@@ -139,7 +139,7 @@
   .app__bar {
     flex-wrap: nowrap;
     gap: 6px;
-    padding: 8px 16px;
+    padding: 4px 16px;
   }
   .app__footer {
     padding-block: 0;

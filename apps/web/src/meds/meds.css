@@ -160,7 +160,7 @@
     grid-template-columns: 1fr;
     grid-template-rows: none;
     gap: 8px;
-    padding-top: 8px;
+    padding-top: 4px;
   }
   /* The tab above already says "My meds"; keep the heading for screen readers only. */
   #meds-title {
@@ -179,6 +179,7 @@
   }
   .meds__results h2 {
     margin-bottom: 0;
+    font-size: 22px;
   }
   .meds__sev h3 {
     margin-top: 12px;
