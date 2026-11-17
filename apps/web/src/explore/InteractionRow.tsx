@@ -21,6 +21,8 @@ interface Props {
   groupSeverity?: Severity
   /** My meds puts the pharmacist sentence before the advice; Explore keeps it after. */
   cautionFirst?: boolean
+  /** The Explore panel with many rows: show one line (name, Severity) and open to the rest. */
+  collapsible?: boolean
 }
 
 const paragraphs = (text: string) => text.split(/\n\s*\n/).map((p, i) => <p key={i}>{p.trim()}</p>)
@@ -34,6 +36,7 @@ export function InteractionRow({
   grouped,
   groupSeverity,
   cautionFirst,
+  collapsible,
 }: Props) {
   const i = row.interaction
   // The Drug class or Food group this row is inherited from, on the viewed side.
@@ -59,19 +62,21 @@ export function InteractionRow({
     </p>
   )
 
-  return (
-    <li className="irow">
-      <div className="irow__head">
-        {!grouped && groupSeverity !== i.severity && <SeverityBadge severity={i.severity} />}
-        <span className="irow__name">
-          {counterpart.map((n, k) => (
-            <span key={k}>
-              {k > 0 && ' → '}
-              {link(n)}
-            </span>
-          ))}
-        </span>
-      </div>
+  const names = counterpart.map((n, k) => (
+    <span key={k}>
+      {k > 0 && ' → '}
+      {collapsible ? n?.name : link(n)}
+    </span>
+  ))
+  const head = (
+    <>
+      {!grouped && groupSeverity !== i.severity && <SeverityBadge severity={i.severity} />}
+      <span className="irow__name">{names}</span>
+    </>
+  )
+
+  const body = (
+    <>
       {inheritedFrom && !grouped?.inherited && (
         <p className="mono-label">Applies to {inheritedFrom.name}</p>
       )}
@@ -119,6 +124,30 @@ export function InteractionRow({
           ))}
         </ul>
         <p className="mono-label">Reviewed {i.reviewed_at}</p>
+      </details>
+    </>
+  )
+
+  if (!collapsible)
+    return (
+      <li className="irow">
+        <div className="irow__head">{head}</div>
+        {body}
+      </li>
+    )
+  return (
+    <li className="irow irow--collapsible">
+      <details>
+        <summary className="irow__head">{head}</summary>
+        <p>
+          {counterpart.map((n, k) => (
+            <span key={k}>
+              {k > 0 && ' → '}
+              {link(n)}
+            </span>
+          ))}
+        </p>
+        {body}
       </details>
     </li>
   )

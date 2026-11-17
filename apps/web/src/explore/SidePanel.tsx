@@ -1,10 +1,11 @@
 import { PillLabel } from '../PillLabel.tsx'
 import { useEffect, useRef, useState } from 'react'
-import { SEVERITIES, type Drug, type Food, type Mechanism, type NodeDetail } from '@fdi/schema'
+import { type Drug, type Food, type Mechanism, type NodeDetail } from '@fdi/schema'
 import { groupTerm, nodeKey as keyOf, splitKey } from '@fdi/schema/domain'
 import { fetchNode } from '../api.ts'
 import { SeverityGroupHeading } from './SeverityBadge.tsx'
 import { InteractionRow } from './InteractionRow.tsx'
+import { panelGroups } from './panelGroups.ts'
 
 interface Props {
   nodeKey: string
@@ -61,6 +62,7 @@ export function SidePanel({ nodeKey, onSelect, onPrev, onNext, onClose, onNotFou
 
   const d = load.key === nodeKey ? load.detail : undefined
   const entity = d?.entity
+  const { collapsed, groups } = panelGroups(d?.interactions ?? [])
   const header = d
     ? [kind, d.parent?.name ?? (d.node.group ? groupTerm(kind) : null)].filter(Boolean).join(' · ')
     : kind
@@ -69,9 +71,17 @@ export function SidePanel({ nodeKey, onSelect, onPrev, onNext, onClose, onNotFou
     <aside ref={panel} tabIndex={-1} className="panel" aria-labelledby="panel-title">
       <div className="panel__top">
         <span className="mono-label">{header}</span>
-        <button className="pill-button" onClick={onClose} aria-label="Close panel">
-          ✕
-        </button>
+        <div className="panel__actions">
+          <button className="pill-button" onClick={onPrev} aria-label={`Previous ${kind}`}>
+            <PillLabel>←</PillLabel>
+          </button>
+          <button className="pill-button" onClick={onNext} aria-label={`Next ${kind}`}>
+            <PillLabel>→</PillLabel>
+          </button>
+          <button className="pill-button" onClick={onClose} aria-label="Close panel">
+            ✕
+          </button>
+        </div>
       </div>
       <h2 id="panel-title" className="panel__title">
         {d?.node.name ?? '…'}
@@ -122,15 +132,11 @@ export function SidePanel({ nodeKey, onSelect, onPrev, onNext, onClose, onNotFou
               combination is safe.
             </p>
           ) : (
-            SEVERITIES.map((sev) => {
-              const rows = d.interactions.filter((r) => r.interaction.severity === sev)
-              if (!rows.length) return null
-              const from = rows[0].inheritedFrom
-              const inherited = !!from && rows.every((r) => r.inheritedFrom === from)
-              const owner = inherited ? d.nodes[keyOf(kind, from)] : undefined
+            groups.map(({ severity: sev, rows, inheritedFrom: from }) => {
+              const owner = from ? d.nodes[keyOf(kind, from)] : undefined
               return (
                 <section key={sev} aria-labelledby={`sev-${sev}`} className="panel__sev">
-                  <SeverityGroupHeading severity={sev} />
+                  <SeverityGroupHeading severity={sev} count={rows.length} />
                   {owner && <p className="mono-label">Applies to {owner.name}</p>}
                   {sev === 'avoid' && (
                     <p className="irow__caution">
@@ -146,7 +152,9 @@ export function SidePanel({ nodeKey, onSelect, onPrev, onNext, onClose, onNotFou
                         mechanisms={d.mechanisms}
                         perspective={kind}
                         onSelect={onSelect}
-                        grouped={{ inherited }}
+                        grouped={{ inherited: !!from }}
+                        groupSeverity={sev}
+                        collapsible={collapsed}
                       />
                     ))}
                   </ul>
@@ -156,15 +164,6 @@ export function SidePanel({ nodeKey, onSelect, onPrev, onNext, onClose, onNotFou
           )}
         </div>
       )}
-
-      <nav className="panel__nav" aria-label="Browse">
-        <button className="pill-button" onClick={onPrev}>
-          <PillLabel>{`← Previous ${kind}`}</PillLabel>
-        </button>
-        <button className="pill-button" onClick={onNext}>
-          <PillLabel>{`Next ${kind} →`}</PillLabel>
-        </button>
-      </nav>
     </aside>
   )
 }

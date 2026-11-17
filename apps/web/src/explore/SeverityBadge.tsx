@@ -30,11 +30,12 @@ export function SeverityBadge({
 }
 
 /** Group heading shared by My meds and the Explore panel: badge, word, then the plain subtitle once. */
-export function SeverityGroupHeading({ severity }: { severity: Severity }) {
+export function SeverityGroupHeading({ severity, count }: { severity: Severity; count?: number }) {
   return (
     <>
       <h3 id={`sev-${severity}`}>
         <SeverityBadge severity={severity} decorative /> {SEVERITY_LABEL[severity]}
+        {count !== undefined && <span className="sev-count"> ({count})</span>}
       </h3>
       <p className="sev-meaning">{SEVERITY_LEGEND[severity]}</p>
     </>
