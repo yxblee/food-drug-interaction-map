@@ -131,7 +131,7 @@ test('Escape closes the list first, clears on the second press; leaving closes i
     await expect(input).toHaveValue('')
     await input.fill(q)
     await expect(list).toBeVisible()
-    await page.getByRole('heading', { name: 'My meds' }).click()
+    await page.getByRole('heading', { name: 'Foods to watch' }).click()
     await expect(list).toBeHidden()
     await input.fill('')
   }

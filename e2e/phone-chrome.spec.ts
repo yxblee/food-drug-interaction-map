@@ -26,14 +26,23 @@ for (const [w, h] of [
     expect(await page.evaluate(() => document.documentElement.scrollWidth)).toBeLessThanOrEqual(w)
   })
 
-  // Blocked on the My meds layout (apps/web/src/meds): the picker block, privacy line and
-  // "Can I have…?" sit above the results, so the heading stays below the fold.
-  test.fixme(`${w}x${h}: Foods to watch heading is on the first screen`, async ({ page }) => {
+  test(`${w}x${h}: Foods to watch heading and first Avoid lead are on the first screen`, async ({
+    page,
+  }) => {
     await page.setViewportSize({ width: w, height: h })
     await addMeds(page)
     const footerTop = (await page.getByRole('contentinfo').boundingBox())!.y
     const heading = (await page.getByRole('heading', { name: 'Foods to watch' }).boundingBox())!
+    expect(heading.y).toBeGreaterThanOrEqual(0)
     expect(heading.y + heading.height).toBeLessThanOrEqual(footerTop)
+    if (w === 360) {
+      const lead = (await page
+        .locator('section.meds__sev', { has: page.locator('#sev-avoid') })
+        .locator('.warning__lead')
+        .first()
+        .boundingBox())!
+      expect(lead.y + lead.height).toBeLessThanOrEqual(footerTop)
+    }
   })
 }
 

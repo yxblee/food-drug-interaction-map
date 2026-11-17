@@ -159,7 +159,35 @@
   .meds {
     grid-template-columns: 1fr;
     grid-template-rows: none;
-    gap: 16px;
+    gap: 8px;
+    padding-top: 8px;
+  }
+  /* The tab above already says "My meds"; keep the heading for screen readers only. */
+  #meds-title {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip-path: inset(50%);
+    white-space: nowrap;
+  }
+  .meds__privacy {
+    margin-bottom: 8px;
+  }
+  .meds__chips {
+    margin: 8px 0 0;
+  }
+  .meds__results h2 {
+    margin-bottom: 0;
+  }
+  .meds__sev h3 {
+    margin-top: 12px;
+  }
+  .meds__status {
+    margin-top: 4px;
+  }
+  .warning__lead {
+    margin-top: 6px;
   }
   .foodcheck {
     margin-top: 0;
@@ -173,5 +201,9 @@
   /* Actions come before the results in the DOM (focus order); phones still show them last. */
   .meds__actions {
     order: 1;
+  }
+  /* The results are the answer; the one-food check follows them. */
+  .foodcheck {
+    order: 2;
   }
 }
