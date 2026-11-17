@@ -107,14 +107,17 @@ export function ExploreTab({
             <PillLabel>Showing your meds ✕</PillLabel>
           </button>
         )}
-        {canToggle && (
-          <button
-            className="pill-button"
-            onClick={() => update({ view: view === '3d' ? '2d' : '3d' })}
-          >
-            <PillLabel>{view === '3d' ? '2D' : '3D'}</PillLabel>
-          </button>
-        )}
+        {canToggle &&
+          (['2d', '3d'] as const).map((v) => (
+            <button
+              key={v}
+              className="pill-button"
+              aria-pressed={view === v}
+              onClick={() => update({ view: v })}
+            >
+              <PillLabel>{v === '2d' ? '2D' : '3D'}</PillLabel>
+            </button>
+          ))}
         <button
           className="pill-button"
           aria-pressed={state.mech}

@@ -122,6 +122,7 @@ export function GraphView(props: Props) {
     if (!p) return
     active.current = p.key
     renderer.current?.setActive(p.key)
+    host.current?.setAttribute('data-active', '')
     // 2D exposes the node through aria-activedescendant; 3D has no DOM nodes to point at.
     if (props.view === '3d') setAnnounce(p.label)
   }
@@ -134,7 +135,10 @@ export function GraphView(props: Props) {
       pts[0]
     activate(start ?? null)
   }
-  const onBlur = () => renderer.current?.setActive(null)
+  const onBlur = () => {
+    renderer.current?.setActive(null)
+    host.current?.removeAttribute('data-active')
+  }
   const onKeyDown = (e: KeyboardEvent) => {
     const r = renderer.current
     if (!r || e.altKey || e.ctrlKey || e.metaKey) return

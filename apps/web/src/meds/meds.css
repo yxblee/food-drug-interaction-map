@@ -45,18 +45,6 @@
   list-style: none;
   padding: 4px;
   margin: 6px 0;
-  background: var(--surface);
-  border-radius: 12px;
-}
-.meds__option {
-  /* 44px touch target at the 15px body size. */
-  padding: 11px 10px;
-  cursor: pointer;
-  border-radius: 8px;
-}
-.meds__option:hover,
-.meds__option[aria-selected='true'] {
-  background: var(--paper);
 }
 .meds__nomatch {
   padding: 4px 10px 0;
@@ -76,7 +64,10 @@
   display: inline-flex;
   gap: 6px;
   align-items: center;
-  padding: 4px 6px 4px 12px;
+  /* 44px rows, so the remove buttons' 44px hit areas of neighbouring rows cannot overlap. */
+  min-height: 44px;
+  box-sizing: border-box;
+  padding: 0 6px 0 12px;
   border-radius: 999px;
   background: var(--ink);
   color: var(--paper);
@@ -85,10 +76,10 @@
   color: var(--chip-muted);
 }
 .chip button {
-  /* 44px hit area without growing the chip */
+  /* 44px hit area: the full chip height, reaching into the chip's right padding */
   min-width: 44px;
   min-height: 44px;
-  margin: -12px -6px -12px -10px;
+  margin: 0 -6px 0 -10px;
   border: 0;
   background: none;
   color: inherit;
@@ -178,5 +169,9 @@
   .foodcheck {
     grid-column: 1;
     grid-row: auto;
+  }
+  /* Actions come before the results in the DOM (focus order); phones still show them last. */
+  .meds__actions {
+    order: 1;
   }
 }

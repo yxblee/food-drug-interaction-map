@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vite-plus/test'
-import { isSlashFocus, matchCountLabel } from './searchUi.ts'
+import { isSlashFocus, matchCountLabel, searchPlaceholder } from './searchUi.ts'
 
 describe('matchCountLabel', () => {
   it('announces the count with correct plurals', () => {
@@ -18,5 +18,12 @@ describe('isSlashFocus', () => {
     expect(isSlashFocus(key('/', 'TEXTAREA'))).toBe(false)
     expect(isSlashFocus(key('a'))).toBe(false)
     expect(isSlashFocus(key('/', 'DIV', { ctrlKey: true }))).toBe(false)
+  })
+})
+
+describe('searchPlaceholder', () => {
+  it('shows the "/" hint only when a keyboard is likely', () => {
+    expect(searchPlaceholder(true)).toContain('( / )')
+    expect(searchPlaceholder(false)).not.toContain('/')
   })
 })
