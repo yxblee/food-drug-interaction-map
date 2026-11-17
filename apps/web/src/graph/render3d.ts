@@ -2,12 +2,15 @@ import ForceGraph3D from '3d-force-graph'
 import SpriteText from 'three-spritetext'
 import {
   BoxGeometry,
+  CanvasTexture,
   Fog,
   Group,
   Mesh,
   MeshLambertMaterial,
   OctahedronGeometry,
   SphereGeometry,
+  Sprite,
+  SpriteMaterial,
   TorusGeometry,
   Vector3,
   type PerspectiveCamera,
@@ -22,6 +25,7 @@ import {
   type RenderLink,
   type RenderNode,
 } from './renderGraph.ts'
+import { MIN_LABEL_PX, labelHeight, labelShown } from './labels3d.ts'
 import type { Focus, GraphRenderer, RendererOptions } from './types.ts'
 
 type FGNode = RenderNode & { x?: number; y?: number; z?: number }
@@ -48,6 +52,21 @@ function originPull(k: number) {
   return force
 }
 
+// Keyboard-focus halo: a camera-facing ring, tinted to the ink colour so it clears 3:1 on paper.
+let ringTexture: CanvasTexture | null = null
+function ringMap() {
+  if (ringTexture) return ringTexture
+  const c = document.createElement('canvas')
+  c.width = c.height = 128
+  const ctx = c.getContext('2d')!
+  ctx.strokeStyle = '#fff'
+  ctx.lineWidth = 9
+  ctx.beginPath()
+  ctx.arc(64, 64, 56, 0, Math.PI * 2)
+  ctx.stroke()
+  return (ringTexture = new CanvasTexture(c))
+}
+
 export function create3d(opts: RendererOptions): GraphRenderer {
   let fg: InstanceType<typeof ForceGraph3D> | null = null
   let host: HTMLElement | null = null
@@ -60,6 +79,8 @@ export function create3d(opts: RendererOptions): GraphRenderer {
   const groups = new Map<string, Group>()
   const materials = new Map<string, MeshLambertMaterial>()
   const labels = new Map<string, SpriteText>()
+  const rings = new Map<string, Sprite>()
+  const groupKeys = new Set<string>()
 
   const inFocus = (key: string) => !focus.focus || focus.focus.has(key)
   const linkInFocus = (l: FGLink) =>
@@ -76,8 +97,14 @@ export function create3d(opts: RendererOptions): GraphRenderer {
     }
     const s = labels.get(key)
     if (s) {
+      s.visible = labelShown(key, groupKeys.has(key), focus, hovered, active)
       s.color = inFocus(key) || hot ? palette.ink : palette.muted
       s.material.opacity = inFocus(key) || hot ? 1 : 0.15
+    }
+    const ring = rings.get(key)
+    if (ring) {
+      ring.visible = key === active
+      ring.material.color.set(palette.ink)
     }
   }
 
@@ -159,12 +186,36 @@ export function create3d(opts: RendererOptions): GraphRenderer {
     groups.set(n.key, group)
     group.add(new Mesh(geometry, material))
     if (n.group) group.add(new Mesh(new TorusGeometry(r * 1.45, 0.35, 8, 40), material))
+    if (n.group) groupKeys.add(n.key)
     const label = new SpriteText(n.name.toUpperCase(), 3)
     label.fontFace = 'ui-monospace, Menlo, monospace'
     label.material.transparent = true
-    label.position.y = r + 6
+    label.center.set(0.5, 0) // sits on top of the node
+    label.position.y = r + 2
+    // Keep the text a fixed on-screen height (>= 11px) at any camera distance.
+    const here = new Vector3()
+    label.onBeforeRender = (_r, _s, camera) => {
+      if (!host) return
+      const aspect = label.scale.x / label.scale.y
+      const dist = camera.position.distanceTo(label.getWorldPosition(here))
+      const h = labelHeight(
+        MIN_LABEL_PX,
+        dist,
+        (camera as PerspectiveCamera).fov,
+        host.clientHeight,
+      )
+      const k = group.scale.x
+      label.scale.set((h * aspect) / k, h / k, 1)
+    }
     labels.set(n.key, label)
     group.add(label)
+    const ring = new Sprite(
+      new SpriteMaterial({ map: ringMap(), transparent: true, depthTest: false }),
+    )
+    ring.scale.setScalar(r * 3.2)
+    ring.renderOrder = 10
+    rings.set(n.key, ring)
+    group.add(ring)
     styleNode(n.key)
     return group
   }
@@ -231,7 +282,10 @@ export function create3d(opts: RendererOptions): GraphRenderer {
       controls.autoRotate = opts.motion
       controls.autoRotateSpeed = 0.6
       el.querySelector('canvas')?.setAttribute('aria-hidden', 'true')
-      observer = new ResizeObserver(() => fg?.width(el.clientWidth).height(el.clientHeight))
+      // Size to the host now (the library defaults to the window) and on every resize.
+      const resize = () => fg?.width(el.clientWidth).height(el.clientHeight)
+      resize()
+      observer = new ResizeObserver(resize)
       observer.observe(el)
       paint()
     },
@@ -241,7 +295,9 @@ export function create3d(opts: RendererOptions): GraphRenderer {
       hovered = null
       materials.clear()
       labels.clear()
+      rings.clear()
       groups.clear()
+      groupKeys.clear()
       fg.graphData({
         nodes: g.nodes.map((n) => ({ ...n })),
         links: g.links.map((l) => ({ ...l })),
