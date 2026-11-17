@@ -67,7 +67,8 @@ const CUIS: Record<string, string> = {
   zocor: '36567',
   verapamil: '11170',
   atorvastatin: '83367',
-  ranolazine: '35829', // real CUI, but not in the catalogue
+  ranolazine: '35829', // real CUIs, but not in the catalogue
+  glucose: '4850',
 }
 const abstract = (text: string) => ({ title: `Study: ${text.slice(0, 20)}`, abstract: text })
 const SIMVA = 'Avoid grapefruit juice when taking simvastatin.'
@@ -141,7 +142,6 @@ describe('runPipeline (foodrugs)', () => {
     // document never become pairs; grapefruit--verapamil survives through its PubMed document 5
     expect(pairs).toEqual([
       'grapefruit--atorvastatin',
-      'grapefruit--ranolazine',
       'grapefruit--simvastatin',
       'grapefruit--verapamil',
     ])
@@ -164,30 +164,30 @@ describe('runPipeline (foodrugs)', () => {
     expect(r.report).toMatch(/Drug names that did not resolve[^]*- 6'-acetyl-mystery, x: 1/)
   })
 
-  it('proposes a Drug whose ingredient CUI is not in the catalogue, with its CUI and suggested class', async () => {
-    const raw = dataset()
-    raw.drugs.push(entity('drugs', 'antianginals', { group: true }))
-    const t = setup(
-      {
-        'grapefruit--ranolazine': keep('Grapefruit raised ranolazine exposure.', {
-          parent: 'antianginals',
-        }),
-      },
-      raw,
-    )
+  it('skips records whose Drug is not in the catalogue instead of proposing a new Drug', async () => {
+    const t = setup({ 'grapefruit--ranolazine': keep('Grapefruit raised ranolazine exposure.') })
     const r = await t.run()
-    expect(parse(t.written['data/drugs/ranolazine.yaml'])).toEqual({
-      id: 'ranolazine',
-      name: 'Ranolazine',
-      rxnorm: '35829',
-      parent: 'antianginals',
-    })
-    expect(t.drafted.find((d) => d.drug.id === 'ranolazine')?.classes.map((c) => c.id)).toEqual([
-      'statins',
-      'antianginals',
-    ])
-    expect(t.rxnavCalls.filter((n) => n === 'ranolazine')).toHaveLength(1)
-    expect(r.report).toMatch(/Proposed new Drugs \(1\)[^]*- ranolazine: Ranolazine; rxnorm 35829/)
+    expect(t.drafted.map((d) => d.drug.id)).not.toContain('ranolazine')
+    expect(Object.keys(t.written).filter((f) => f.startsWith('data/drugs/'))).toEqual([])
+    expect(t.written['data/interactions/grapefruit--ranolazine.yaml']).toBeUndefined()
+    expect(r.report).toContain('Proposed new Drugs (0)')
+  })
+
+  it('reports how many records were skipped as uncatalogued Drugs, most frequent names first', async () => {
+    const r = await setup({}).run()
+    expect(r.report).toContain('Records for Drugs not in the catalogue: 3')
+    expect(r.report).toMatch(
+      /Drug names not in the catalogue \(by frequency\)\n.*\n- ranolazine: 2\n- glucose: 1\n/,
+    )
+  })
+
+  it('still drafts a record whose Drug name resolves to the RxNorm CUI of a catalogued Drug', async () => {
+    // "Zocor" is no Alias here: it matches simvastatin only through its ingredient CUI
+    const t = setup({ 'grapefruit--simvastatin': keep(SIMVA) })
+    await t.run()
+    expect(parse(t.written[SIM]).citations).toContainEqual(
+      expect.objectContaining({ pmid: '1000002' }),
+    )
   })
 
   it('cites up to 3 PMIDs per pair as study Citations, most-mentioning first', async () => {
@@ -240,7 +240,7 @@ describe('runPipeline (foodrugs)', () => {
     const t = setup({})
     const r = await t.run(1)
     expect(t.drafted.map((d) => d.drug.id)).toEqual(['simvastatin'])
-    expect(r.report).toContain('Pairs beyond the limit: 3')
+    expect(r.report).toContain('Pairs beyond the limit: 2')
   })
 
   it('skips a pair covered by a Food × Drug class Interaction', async () => {
@@ -248,7 +248,7 @@ describe('runPipeline (foodrugs)', () => {
     raw.interactions.push(approved('grapefruit--statins'))
     const t = setup({}, raw)
     const r = await t.run()
-    expect(t.drafted.map((d) => d.drug.id)).toEqual(['ranolazine', 'verapamil'])
+    expect(t.drafted.map((d) => d.drug.id)).toEqual(['verapamil'])
     expect(r.report).toContain('Inherited interaction: 2')
   })
 
