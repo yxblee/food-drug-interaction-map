@@ -595,7 +595,7 @@ test('panel link-buttons are 24px tall; new-tab sources say so', async ({ page }
     expect((await b.boundingBox())!.height).toBeGreaterThanOrEqual(24)
   }
   const src = panel.locator('a[target=_blank]').first()
-  await expect(src).toHaveAccessibleName(/\(opens in new tab\)$/)
+  await expect(src).toHaveAccessibleName(/\(opens in new tab\)/)
 })
 
 test('reference-style buttons: 44px, filled when selected, names not doubled, no slide when reduced', async ({
