@@ -102,7 +102,7 @@
   stroke-width: 3;
 }
 .graph2d .label {
-  font: 9px var(--font-mono);
+  font: calc(11px / var(--k, 1)) var(--font-mono);
   letter-spacing: 0.1em;
   fill: var(--muted);
   pointer-events: none;
@@ -119,5 +119,62 @@
   .graph2d .link,
   .graph2d .node {
     transition: none;
+  }
+}
+
+/* Zoom buttons: 44px, frosted at rest like the other controls over the map (DESIGN.md). */
+.graph-zoom {
+  position: absolute;
+  right: calc(var(--inset-right, 0px) + 16px);
+  bottom: calc(var(--inset-bottom, 0px) + 16px);
+  z-index: 3;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.graph-zoom button {
+  display: grid;
+  place-items: center;
+  width: 44px;
+  height: 44px;
+  padding: 0;
+  border: 1px solid var(--btn-border);
+  border-radius: 999px;
+  color: var(--btn-label);
+  background: color-mix(in srgb, var(--paper) 55%, transparent);
+  -webkit-backdrop-filter: blur(8px);
+  backdrop-filter: blur(8px);
+  cursor: pointer;
+  touch-action: manipulation;
+  transition:
+    transform 160ms ease-out,
+    background-color 200ms,
+    border-color 200ms,
+    color 200ms;
+}
+.graph-zoom button:is(:focus-visible, :active) {
+  background: var(--surface);
+}
+.graph-zoom button:active {
+  transform: scale(0.95);
+}
+@media (hover: hover) {
+  .graph-zoom button:hover {
+    background: var(--surface);
+    border-color: var(--btn-border-hover);
+    color: var(--ink);
+  }
+}
+@supports not ((backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))) {
+  .graph-zoom button {
+    background: var(--surface);
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .graph-zoom button {
+    transition: none;
+  }
+  .graph-zoom button:active {
+    transform: none;
   }
 }

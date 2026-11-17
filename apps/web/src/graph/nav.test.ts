@@ -1,5 +1,17 @@
 import { describe, expect, it } from 'vite-plus/test'
-import { nearestInDirection, stepInOrder, type NavPoint } from './nav.ts'
+import { nearestInDirection, nearestWithin, stepInOrder, type NavPoint } from './nav.ts'
+
+describe('nearestWithin', () => {
+  const at = (key: string, x: number, y: number) => ({ key, x, y })
+  const nodes = [at('a', 0, 0), at('b', 30, 0), at('far', 500, 500)]
+  it('lets the nearest node win when hit areas overlap', () => {
+    expect(nearestWithin(nodes, { x: 20, y: 0 }, 22)).toBe('b')
+    expect(nearestWithin(nodes, { x: 10, y: 0 }, 22)).toBe('a')
+  })
+  it('returns null outside every hit radius', () => {
+    expect(nearestWithin(nodes, { x: 200, y: 200 }, 22)).toBeNull()
+  })
+})
 
 const p = (key: string, x: number, y: number): NavPoint => ({ key, label: key, x, y })
 const a = p('a', 0, 0)

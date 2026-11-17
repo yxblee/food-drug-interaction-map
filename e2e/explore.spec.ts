@@ -646,3 +646,53 @@ test('controls over the graph are frosted at rest and solid on focus', async ({ 
   await search.focus()
   await expect.poll(() => alpha(search)).toBe(1)
 })
+
+test.describe('2D map on touch', () => {
+  type Pg = import('@playwright/test').Page
+  async function to2d(page: Pg, info: { project: { name: string } }) {
+    await page.goto('./')
+    if (info.project.name !== 'mobile') await page.getByRole('button', { name: '2D' }).click()
+    await expect(page.locator('svg.graph2d')).toBeVisible()
+    await page.waitForTimeout(700)
+  }
+  const scale = (page: Pg) =>
+    page.evaluate(
+      () => (document.querySelector('svg.graph2d > g') as SVGGElement).getScreenCTM()!.a,
+    )
+
+  test('zoom in, zoom out and reset are 44px buttons that move the map', async ({ page }, info) => {
+    await to2d(page, info)
+    const before = await scale(page)
+    for (const name of ['Zoom in', 'Zoom out', 'Reset map view']) {
+      const box = await page.getByRole('button', { name }).boundingBox()
+      expect(box!.width).toBeGreaterThanOrEqual(44)
+      expect(box!.height).toBeGreaterThanOrEqual(44)
+    }
+    await page.getByRole('button', { name: 'Zoom in' }).click()
+    await expect.poll(() => scale(page)).toBeGreaterThan(before * 1.5)
+    await page.getByRole('button', { name: 'Zoom out' }).click()
+    await page.getByRole('button', { name: 'Zoom out' }).click()
+    await expect.poll(() => scale(page)).toBeLessThan(before * 0.9)
+    await page.getByRole('button', { name: 'Reset map view' }).click()
+    await expect.poll(async () => Math.abs((await scale(page)) - before) < 0.01).toBe(true)
+  })
+
+  test('labels are at least 11px on screen', async ({ page }, info) => {
+    await to2d(page, info)
+    const px = await page.evaluate(() => {
+      const t = document.querySelector('svg.graph2d g.node--group .label') as SVGTextElement
+      return parseFloat(getComputedStyle(t).fontSize) * t.getScreenCTM()!.a
+    })
+    expect(px).toBeGreaterThanOrEqual(10.9)
+  })
+
+  test('a tap near a node, off its drawn shape, selects it', async ({ page }, info) => {
+    await to2d(page, info)
+    const c = await page.evaluate(() => {
+      const r = document.querySelector('svg.graph2d g.node--food .shape')!.getBoundingClientRect()
+      return { x: r.x + r.width / 2, y: r.y + r.height / 2 }
+    })
+    await page.mouse.click(c.x + 8, c.y + 8)
+    await expect(page.getByRole('complementary')).toBeVisible()
+  })
+})

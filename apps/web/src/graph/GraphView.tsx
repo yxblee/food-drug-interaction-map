@@ -27,12 +27,30 @@ function insetOf(host: HTMLElement): Inset {
     : { right: Math.max(0, h.right - p.left), bottom: 0 }
 }
 
+// Zoom controls sit in the corner of the space the panel leaves.
+function placeControls(el: HTMLElement | null, inset: Inset) {
+  el?.style.setProperty('--inset-right', `${inset.right}px`)
+  el?.style.setProperty('--inset-bottom', `${inset.bottom}px`)
+}
+
+const ICON = {
+  fill: 'none',
+  stroke: 'currentColor',
+  strokeWidth: 2,
+  strokeLinecap: 'round',
+  'aria-hidden': true,
+  width: 20,
+  height: 20,
+  viewBox: '0 0 24 24',
+} as const
+
 export function GraphView(props: Props) {
   const host = useRef<HTMLDivElement>(null)
   const renderer = useRef<GraphRenderer | null>(null)
   const applied = useRef<RenderGraph | null>(null)
   const latest = useRef(props)
   const inset = useRef<Inset>(NO_INSET)
+  const controls = useRef<HTMLDivElement>(null)
   useEffect(() => {
     latest.current = props
   })
@@ -78,16 +96,19 @@ export function GraphView(props: Props) {
     const el = host.current!
     const panel = props.panelOpen ? el.parentElement?.querySelector('.panel') : null
     if (!panel) return
+    const zoomEl = controls.current
     const ro = new ResizeObserver(() => {
       inset.current = insetOf(el)
       renderer.current?.setInset(inset.current)
       renderer.current?.fit()
+      placeControls(zoomEl, inset.current)
     })
     ro.observe(panel)
     return () => {
       ro.disconnect()
       inset.current = NO_INSET
       renderer.current?.setInset(NO_INSET)
+      placeControls(zoomEl, NO_INSET)
     }
   }, [props.panelOpen])
 
@@ -152,6 +173,33 @@ export function GraphView(props: Props) {
         onBlur={onBlur}
         onKeyDown={onKeyDown}
       />
+      {props.view === '2d' && (
+        <div ref={controls} className="graph-zoom" role="group" aria-label="Map zoom">
+          <button type="button" aria-label="Zoom in" onClick={() => renderer.current?.zoomBy?.(2)}>
+            <svg {...ICON}>
+              <path d="M12 5v14M5 12h14" />
+            </svg>
+          </button>
+          <button
+            type="button"
+            aria-label="Zoom out"
+            onClick={() => renderer.current?.zoomBy?.(0.5)}
+          >
+            <svg {...ICON}>
+              <path d="M5 12h14" />
+            </svg>
+          </button>
+          <button
+            type="button"
+            aria-label="Reset map view"
+            onClick={() => renderer.current?.reset?.()}
+          >
+            <svg {...ICON}>
+              <path d="M4 9V4h5M20 9V4h-5M4 15v5h5M20 15v5h-5" />
+            </svg>
+          </button>
+        </div>
+      )}
       <p id="graph-help" className="sr-only">
         Use the arrow keys to move between items, Enter to open one, Escape to leave the map.
       </p>

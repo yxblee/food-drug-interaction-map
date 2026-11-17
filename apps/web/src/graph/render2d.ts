@@ -6,9 +6,11 @@ import {
   forceSimulation,
   forceX,
   forceY,
+  pointer,
   select,
   zoom,
   zoomIdentity,
+  zoomTransform,
 } from 'd3'
 import type { Selection, Simulation, ZoomBehavior } from 'd3'
 import {
@@ -19,6 +21,7 @@ import {
   type RenderLink,
   type RenderNode,
 } from './renderGraph.ts'
+import { nearestWithin } from './nav.ts'
 import type { Focus, GraphRenderer, RendererOptions } from './types.ts'
 
 type SimNode = RenderNode & { x?: number; y?: number }
@@ -29,6 +32,8 @@ type SimLink = Omit<RenderLink, 'source' | 'target'> & {
 
 const endKey = (e: string | SimNode) => (typeof e === 'string' ? e : e.key)
 const nodeDomId = (key: string) => `g2d-${key.replace(/[^\w-]/g, '_')}`
+/** Tap target radius in screen px (44px across); the nearest node wins where they overlap. */
+const HIT_RADIUS = 22
 const KIND_LABEL = { drug: 'Drug', food: 'Food', mechanism: 'Mechanism' } as const
 
 // Shapes: Drug = circle, Food = square, Mechanism = diamond.
@@ -89,11 +94,11 @@ export function create2d(opts: RendererOptions): GraphRenderer {
   // selection and the panel opening animate as one move.
   function requestFit() {
     clearTimeout(fitTimer)
-    fitTimer = setTimeout(doFit, 50)
+    fitTimer = setTimeout(() => doFit(), 50)
   }
-  function doFit() {
+  function doFit(all = false) {
     if (!host || !svg || !zoomer) return
-    const f = focus.selected ? focus.focus : null
+    const f = !all && focus.selected ? focus.focus : null
     const pts = nodes.filter((n) => (!f || f.has(n.key)) && n.x != null && n.y != null) as {
       x: number
       y: number
@@ -103,6 +108,18 @@ export function create2d(opts: RendererOptions): GraphRenderer {
     const to = zoomIdentity.translate(t.x, t.y).scale(t.k)
     if (opts.motion) zoomer.transform(svg.transition().duration(500), to)
     else zoomer.transform(svg, to)
+  }
+
+  // The node under a pointer event, by distance to its centre rather than its drawn shape.
+  function hit(e: MouseEvent): string | null {
+    if (!svg || !root) return null
+    const [x, y] = pointer(e, root.node())
+    const k = zoomTransform(svg.node()!).k
+    return nearestWithin(
+      nodes.map((n) => ({ key: n.key, x: n.x ?? 0, y: n.y ?? 0 })),
+      { x, y },
+      HIT_RADIUS / k,
+    )
   }
 
   function positions() {
@@ -151,10 +168,19 @@ export function create2d(opts: RendererOptions): GraphRenderer {
       root = svg.append('g')
       zoomer = zoom<SVGSVGElement, unknown>()
         .scaleExtent([0.2, 4])
-        .on('zoom', (e) => root?.attr('transform', e.transform.toString()))
+        .on('zoom', (e) => {
+          root?.attr('transform', e.transform.toString())
+          // Labels stay one size on screen: CSS divides their font size by the zoom.
+          svg?.style('--k', e.transform.k)
+        })
       svg.call(zoomer)
-      svg.on('click', (e: MouseEvent) => {
-        if (e.target === svg?.node()) onSelect(null)
+      svg.on('click', (e: MouseEvent) => onSelect(hit(e)))
+      // Mouse only, so touch never leaves a stuck hover.
+      svg.on('pointermove', (e: PointerEvent) => {
+        if (e.pointerType === 'mouse') paintHover(hit(e))
+      })
+      svg.on('pointerleave', (e: PointerEvent) => {
+        if (e.pointerType === 'mouse') paintHover(null)
       })
       observer = new ResizeObserver(resize)
       observer.observe(el)
@@ -187,17 +213,6 @@ export function create2d(opts: RendererOptions): GraphRenderer {
         .attr('id', (n) => nodeDomId(n.key))
         .attr('role', 'button')
         .attr('aria-label', (n) => `${KIND_LABEL[n.kind]}${n.group ? ' group' : ''}: ${n.name}`)
-        .on('click', (e: MouseEvent, n) => {
-          e.stopPropagation()
-          onSelect(n.key)
-        })
-        // Mouse only, so touch never leaves a stuck hover.
-        .on('pointerenter', (e: PointerEvent, n) => {
-          if (e.pointerType === 'mouse') paintHover(n.key)
-        })
-        .on('pointerleave', (e: PointerEvent) => {
-          if (e.pointerType === 'mouse') paintHover(null)
-        })
       node
         .filter((n) => n.group)
         .append('path')
@@ -255,6 +270,17 @@ export function create2d(opts: RendererOptions): GraphRenderer {
     },
 
     fit: requestFit,
+
+    zoomBy(factor) {
+      if (!svg || !zoomer) return
+      if (opts.motion) zoomer.scaleBy(svg.transition().duration(200), factor)
+      else zoomer.scaleBy(svg, factor)
+    },
+
+    reset() {
+      clearTimeout(fitTimer)
+      doFit(true)
+    },
 
     setTheme() {
       // 2D colors come from CSS custom properties set by useTheme
