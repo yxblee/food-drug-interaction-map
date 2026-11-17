@@ -480,7 +480,9 @@ test('Can I have…? answers one food against the medication list, on device', a
   await expect(food).toHaveAttribute('aria-expanded', 'true')
   await expect(food).toHaveAttribute('aria-activedescendant', 'food-option-0')
   await expect(page.locator('#food-option-0')).toHaveText('Alcohol (wine)')
-  await food.press('Escape')
+  await food.press('Escape') // closes the list
+  await expect(food).toHaveValue('wine')
+  await food.press('Escape') // then clears
   await expect(food).toHaveValue('')
   await food.fill('wi')
   await food.press('ArrowDown')

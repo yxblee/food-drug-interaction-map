@@ -128,8 +128,20 @@
   width: 100%;
   padding: 0;
 }
-.search__results {
-  background: var(--surface);
+.explore__bar .search {
+  position: relative;
+}
+/* Overlay the map: results and the no-match note must not push the pills below. */
+.explore__bar .search__results,
+.explore__bar .search__empty {
+  position: absolute;
+  z-index: 3;
+  left: 0;
+  right: 0;
+}
+.explore__bar .search__results {
+  padding: 4px;
+  box-shadow: 0 6px 24px rgb(0 0 0 / 0.12);
 }
 .search__empty {
   margin: 4px 0 0;
