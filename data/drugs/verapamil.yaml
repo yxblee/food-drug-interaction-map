@@ -1,3 +1,7 @@
 id: verapamil
 name: Verapamil
 rxnorm: "11170"
+aliases:
+  - Isoptin
+  - Calan
+  - Verelan

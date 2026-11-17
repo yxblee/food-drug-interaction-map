@@ -1,6 +1,6 @@
 id: "simvastatin"
 name: "Simvastatin"
 rxnorm: "36567"
-aliases: ["Zocor"]
+aliases: ["Zocor", "Flolipid"]
 parent: "statins"
 drug_class: "HMG-CoA reductase inhibitor"

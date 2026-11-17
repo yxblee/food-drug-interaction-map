@@ -1,3 +1,5 @@
 id: calcitriol
 name: Calcitriol
 rxnorm: "1894"
+aliases:
+  - Rocaltrol

@@ -1,5 +1,5 @@
 id: "acetaminophen"
 name: "Acetaminophen"
 rxnorm: "161"
-aliases: ["Tylenol", "paracetamol"]
+aliases: ["Tylenol", "paracetamol", "Little Fevers", "Bactimicina", "CounterAct Pain", "Nortemp", "Ringl", "Pharbetol", "Cetafen", "Panadol", "Anacin AF", "Feverall", "Mapap", "Redutemp", "Tempra Quicklets", "Tycolene", "Acephen", "Comtrex Sore Throat Relief", "Tactinal"]
 drug_class: "Analgesic"

@@ -1,6 +1,6 @@
 id: "lorazepam"
 name: "Lorazepam"
 rxnorm: "6470"
-aliases: ["Ativan"]
+aliases: ["Ativan", "Loreev"]
 parent: "benzodiazepines"
 drug_class: "Benzodiazepine"
