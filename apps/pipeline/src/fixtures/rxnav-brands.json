@@ -1,0 +1,123 @@
+{
+  "rxcui/36567/related.json?tty=BN": {
+    "relatedGroup": {
+      "rxcui": null,
+      "conceptGroup": [
+        {
+          "tty": "BN",
+          "conceptProperties": [
+            {
+              "rxcui": "1944257",
+              "name": "Flolipid",
+              "synonym": "",
+              "tty": "BN",
+              "language": "ENG",
+              "suppress": "N",
+              "umlscui": ""
+            },
+            {
+              "rxcui": "196503",
+              "name": "Zocor",
+              "synonym": "",
+              "tty": "BN",
+              "language": "ENG",
+              "suppress": "N",
+              "umlscui": ""
+            },
+            {
+              "rxcui": "495215",
+              "name": "Vytorin",
+              "synonym": "",
+              "tty": "BN",
+              "language": "ENG",
+              "suppress": "N",
+              "umlscui": ""
+            }
+          ]
+        }
+      ]
+    }
+  },
+  "rxcui/196503/related.json?tty=IN": {
+    "relatedGroup": {
+      "rxcui": null,
+      "conceptGroup": [
+        {
+          "tty": "IN",
+          "conceptProperties": [
+            {
+              "rxcui": "36567",
+              "name": "simvastatin",
+              "synonym": "",
+              "tty": "IN",
+              "language": "ENG",
+              "suppress": "N",
+              "umlscui": ""
+            }
+          ]
+        }
+      ]
+    }
+  },
+  "rxcui/495215/related.json?tty=IN": {
+    "relatedGroup": {
+      "rxcui": null,
+      "conceptGroup": [
+        {
+          "tty": "IN",
+          "conceptProperties": [
+            {
+              "rxcui": "341248",
+              "name": "ezetimibe",
+              "synonym": "",
+              "tty": "IN",
+              "language": "ENG",
+              "suppress": "N",
+              "umlscui": ""
+            },
+            {
+              "rxcui": "36567",
+              "name": "simvastatin",
+              "synonym": "",
+              "tty": "IN",
+              "language": "ENG",
+              "suppress": "N",
+              "umlscui": ""
+            }
+          ]
+        }
+      ]
+    }
+  },
+  "rxcui/1944257/related.json?tty=IN": {
+    "relatedGroup": {
+      "rxcui": null,
+      "conceptGroup": [
+        {
+          "tty": "IN",
+          "conceptProperties": [
+            {
+              "rxcui": "36567",
+              "name": "simvastatin",
+              "synonym": "",
+              "tty": "IN",
+              "language": "ENG",
+              "suppress": "N",
+              "umlscui": ""
+            }
+          ]
+        }
+      ]
+    }
+  },
+  "rxcui.json?name=Verapamil&search=2": {
+    "idGroup": {
+      "rxnormId": [
+        "11170"
+      ]
+    }
+  },
+  "rxcui.json?name=Combined+oral+contraceptives&search=2": {
+    "idGroup": {}
+  }
+}
