@@ -1,4 +1,5 @@
 import { useState, type ReactNode, type Ref } from 'react'
+import { ClearButton } from '../ClearButton.tsx'
 
 export interface ComboRow {
   key: string
@@ -8,7 +9,8 @@ export interface ComboRow {
 
 /**
  * A labelled text input over a listbox. ArrowUp/Down move the active row, Enter picks it
- * (the first by default), Escape clears the query, which closes the list.
+ * (the first by default). Escape closes the list; a second Escape clears the query.
+ * Leaving the field closes it; typing reopens it.
  */
 export function Combobox({
   id,
@@ -33,59 +35,77 @@ export function Combobox({
   children?: ReactNode
 }) {
   const [activeIdx, setActiveIdx] = useState(0)
-  const active = Math.min(activeIdx, Math.max(rows.length - 1, 0))
+  const [open, setOpen] = useState(true)
+  const shown = open ? rows : []
+  const active = Math.min(activeIdx, Math.max(shown.length - 1, 0))
   return (
     <>
       <label htmlFor={`${id}-input`} className="mono-label">
         {label}
       </label>
-      <input
-        id={`${id}-input`}
-        ref={inputRef}
-        type="search"
-        autoComplete="off"
-        placeholder={placeholder}
-        value={query}
-        role="combobox"
-        aria-expanded={rows.length > 0}
-        aria-controls={`${id}-options`}
-        aria-autocomplete="list"
-        aria-activedescendant={rows.length > 0 ? `${id}-option-${active}` : undefined}
-        onChange={(e) => {
-          onQuery(e.target.value)
-          setActiveIdx(0)
-        }}
-        onKeyDown={(e) => {
-          if (e.key === 'Enter') {
-            rows[active]?.pick()
-          } else if (e.key === 'Escape' && query) {
-            // Closes the list; typing again reopens it.
-            e.preventDefault()
-            onQuery('')
-          } else if ((e.key === 'ArrowDown' || e.key === 'ArrowUp') && rows.length) {
-            e.preventDefault()
-            setActiveIdx((active + (e.key === 'ArrowDown' ? 1 : rows.length - 1)) % rows.length)
-          }
-        }}
-      />
+      <div className="combo">
+        <input
+          id={`${id}-input`}
+          ref={inputRef}
+          type="search"
+          autoComplete="off"
+          placeholder={placeholder}
+          value={query}
+          role="combobox"
+          aria-expanded={shown.length > 0}
+          aria-controls={`${id}-options`}
+          aria-autocomplete="list"
+          aria-activedescendant={shown.length > 0 ? `${id}-option-${active}` : undefined}
+          onChange={(e) => {
+            onQuery(e.target.value)
+            setActiveIdx(0)
+            setOpen(true)
+          }}
+          onBlur={() => setOpen(false)}
+          onKeyDown={(e) => {
+            if (e.key === 'Enter') {
+              shown[active]?.pick()
+            } else if (e.key === 'Escape' && (shown.length || query)) {
+              e.preventDefault()
+              if (shown.length) setOpen(false)
+              else onQuery('')
+            } else if ((e.key === 'ArrowDown' || e.key === 'ArrowUp') && rows.length) {
+              e.preventDefault()
+              if (!open) setOpen(true)
+              else
+                setActiveIdx((active + (e.key === 'ArrowDown' ? 1 : rows.length - 1)) % rows.length)
+            }
+          }}
+        />
+        {query && (
+          <ClearButton
+            onClear={() => {
+              onQuery('')
+              document.getElementById(`${id}-input`)?.focus()
+            }}
+          />
+        )}
+      </div>
       {children}
       <ul
         id={`${id}-options`}
         role="listbox"
         aria-label={listLabel}
-        className="meds__options"
-        hidden={rows.length === 0}
+        className="meds__options combo__list"
+        hidden={shown.length === 0}
+        // Keep focus in the input when an option is pressed, so the blur above does not eat the click.
+        onMouseDown={(e) => e.preventDefault()}
       >
-        {rows.map((r, i) => (
+        {shown.map((r, i) => (
           <li
             key={r.key}
             id={`${id}-option-${i}`}
             role="option"
             aria-selected={active === i}
-            className="meds__option"
+            className="combo__option"
             onClick={r.pick}
           >
-            {r.label}
+            <span>{r.label}</span>
           </li>
         ))}
       </ul>

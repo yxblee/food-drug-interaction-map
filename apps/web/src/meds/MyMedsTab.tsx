@@ -2,6 +2,7 @@ import { useEffect, useMemo, useRef, useState } from 'react'
 import type { GraphPayload } from '@fdi/schema'
 import { SEVERITIES } from '@fdi/schema'
 import { buildIndex, nodeKey, searchNodes } from '@fdi/schema/domain'
+import { PillLabel } from '../PillLabel.tsx'
 import { SeverityGroupHeading } from '../explore/SeverityBadge.tsx'
 import { checkMeds, type FoodWarning } from './checkMeds.ts'
 import { Combobox, NoMatch } from './Combobox.tsx'
@@ -184,6 +185,20 @@ export function MyMedsTab({
         </ul>
       </section>
 
+      {/* Right after the chips in the DOM, so Tab goes from the list to the buttons that act on it. */}
+      {(meds.length > 0 || notChecked.length > 0) && (
+        <div className="meds__actions">
+          <button className="pill-button" onClick={clearAll}>
+            <PillLabel>Clear all</PillLabel>
+          </button>
+          {meds.length > 0 && (
+            <button className="pill-button" onClick={onSeeOnMap}>
+              <PillLabel>See on map</PillLabel>
+            </button>
+          )}
+        </div>
+      )}
+
       <FoodCheck graph={graph} ix={ix} meds={meds} notChecked={notChecked} />
 
       <section className="meds__results" aria-labelledby="results-title">
@@ -225,20 +240,6 @@ export function MyMedsTab({
           })
         )}
       </section>
-
-      {/* After the results in reading order, so the first Avoid row sits high on phones. */}
-      {(meds.length > 0 || notChecked.length > 0) && (
-        <div className="meds__actions">
-          <button className="pill-button" onClick={clearAll}>
-            Clear all
-          </button>
-          {meds.length > 0 && (
-            <button className="pill-button" onClick={onSeeOnMap}>
-              See on map
-            </button>
-          )}
-        </div>
-      )}
     </div>
   )
 }
