@@ -112,9 +112,7 @@
   },
   "rxcui.json?name=Verapamil&search=2": {
     "idGroup": {
-      "rxnormId": [
-        "11170"
-      ]
+      "rxnormId": ["11170"]
     }
   },
   "rxcui.json?name=Combined+oral+contraceptives&search=2": {

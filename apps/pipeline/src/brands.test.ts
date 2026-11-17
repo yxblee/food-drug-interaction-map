@@ -148,7 +148,10 @@ describe('addBrands', () => {
   })
 
   it('looks up a missing rxnorm id by name and reports it without writing the file', async () => {
-    const verapamil = { file: 'data/drugs/verapamil.yaml', text: 'id: verapamil\nname: Verapamil\n' }
+    const verapamil = {
+      file: 'data/drugs/verapamil.yaml',
+      text: 'id: verapamil\nname: Verapamil\n',
+    }
     const combined = {
       file: 'data/drugs/combined-oral-contraceptives.yaml',
       text: 'id: "combined-oral-contraceptives"\nname: "Combined oral contraceptives"\n',
@@ -157,7 +160,11 @@ describe('addBrands', () => {
     expect(r.changed).toEqual([])
     expect(r.lookedUp).toEqual([
       { id: 'verapamil', name: 'Verapamil', rxnorm: '11170' },
-      { id: 'combined-oral-contraceptives', name: 'Combined oral contraceptives', rxnorm: undefined },
+      {
+        id: 'combined-oral-contraceptives',
+        name: 'Combined oral contraceptives',
+        rxnorm: undefined,
+      },
     ])
   })
 })
