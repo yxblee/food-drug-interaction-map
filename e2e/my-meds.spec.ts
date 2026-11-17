@@ -446,3 +446,69 @@ test('Foods to watch comes before Clear all, so the first Avoid row sits high on
   await expect(page.getByRole('button', { name: 'Undo' })).toBeVisible()
   await expect(page.getByLabel('Add a medication')).toBeFocused()
 })
+
+test('Can I have…? answers one food against the medication list, on device', async ({ page }) => {
+  const apiCalls: string[] = []
+  page.on('request', (r) => {
+    if (r.url().includes('/api/')) apiCalls.push(r.url())
+  })
+  await page.goto('./')
+  await page.getByRole('tab', { name: 'My meds' }).click()
+  const food = page.getByLabel('Can I have…?')
+  const check = page.getByRole('region', { name: 'Check a food' })
+  const answer = check.getByRole('status')
+
+  // Empty Medication list: a prompt, not an answer.
+  await food.fill('grapefruit')
+  await food.press('Enter')
+  await expect(answer).toContainText('Add your medications first')
+
+  const med = page.getByLabel('Add a medication')
+  await med.fill('simvastatin')
+  await med.press('Enter')
+  await expect(answer).toHaveText(
+    'Grapefruit interacts with Simvastatin on your list. Severity: Avoid.',
+  )
+  const row = check.locator('.warning')
+  await expect(row.locator('.warning__lead .badge--avoid')).toHaveText('Avoid')
+  await expect(row).toContainText('Grapefruit and relatives')
+  await expect(row).toContainText('What to do')
+  await expect(row.getByText('Details and sources')).toBeVisible()
+
+  // An Alias, picked with the keyboard: same combobox pattern as the medication input.
+  await food.fill('wine')
+  await expect(food).toHaveAttribute('aria-expanded', 'true')
+  await expect(food).toHaveAttribute('aria-activedescendant', 'food-option-0')
+  await expect(page.locator('#food-option-0')).toHaveText('Alcohol (wine)')
+  await food.press('Escape')
+  await expect(food).toHaveValue('')
+  await food.fill('wi')
+  await food.press('ArrowDown')
+  await food.press('ArrowUp')
+  await food.press('Enter')
+  await expect(answer).toHaveText(
+    "Our dataset has no interaction between Alcohol (wine) and the 1 medication on your list. That doesn't mean the combination is safe: our dataset is not exhaustive. Ask your pharmacist if you're unsure.",
+  )
+  await expect(row).toHaveCount(0)
+
+  expect(apiCalls.some((u) => /simvastatin|alcohol|wine/i.test(u))).toBe(false)
+})
+
+test('Can I have…? holds at 360px with 44px touch targets', async ({ page }) => {
+  await page.setViewportSize({ width: 360, height: 740 })
+  await page.goto('./')
+  await page.getByRole('tab', { name: 'My meds' }).click()
+  const med = page.getByLabel('Add a medication')
+  await med.fill('simvastatin')
+  await med.press('Enter')
+  const food = page.getByLabel('Can I have…?')
+  await food.fill('gra')
+  expect((await food.boundingBox())!.height).toBeGreaterThanOrEqual(44)
+  const option = page.locator('#food-option-0')
+  expect((await option.boundingBox())!.height).toBeGreaterThanOrEqual(44)
+  await option.click()
+  await expect(page.getByRole('region', { name: 'Check a food' }).locator('.warning')).toHaveCount(
+    1,
+  )
+  expect(await page.evaluate(() => document.documentElement.scrollWidth)).toBeLessThanOrEqual(360)
+})
