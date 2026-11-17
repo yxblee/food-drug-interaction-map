@@ -1,3 +1,6 @@
 id: folic-acid
 name: Folic acid
 rxnorm: "4511"
+aliases:
+  - Folacin
+  - Quiofic

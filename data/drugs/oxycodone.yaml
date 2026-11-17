@@ -1,6 +1,6 @@
 id: "oxycodone"
 name: "Oxycodone"
 rxnorm: "7804"
-aliases: ["OxyContin", "Roxicodone"]
+aliases: ["OxyContin", "Roxicodone", "Oxaydo", "Xtampza", "Roxybond"]
 parent: "opioids"
 drug_class: "Opioid analgesic"

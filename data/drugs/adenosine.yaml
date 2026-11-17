@@ -1,3 +1,6 @@
 id: adenosine
 name: Adenosine
 rxnorm: "296"
+aliases:
+  - Adenoscan
+  - Adenocard

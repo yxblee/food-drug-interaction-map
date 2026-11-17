@@ -1,6 +1,6 @@
 id: "morphine"
 name: "Morphine"
 rxnorm: "7052"
-aliases: ["MS Contin"]
+aliases: ["MS Contin", "Kadian", "Duramorph", "Infumorph", "Mitigo"]
 parent: "opioids"
 drug_class: "Opioid analgesic"

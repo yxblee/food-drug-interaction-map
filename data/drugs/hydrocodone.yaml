@@ -1,6 +1,6 @@
 id: "hydrocodone"
 name: "Hydrocodone"
 rxnorm: "5489"
-aliases: ["Hysingla"]
+aliases: ["Hysingla", "Zohydro"]
 parent: "opioids"
 drug_class: "Opioid analgesic"

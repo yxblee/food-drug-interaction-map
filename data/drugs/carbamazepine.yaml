@@ -1,5 +1,5 @@
 id: "carbamazepine"
 name: "Carbamazepine"
 rxnorm: "2002"
-aliases: ["Tegretol", "Carbatrol"]
+aliases: ["Tegretol", "Carbatrol", "Epitol", "Equetro"]
 drug_class: "Anticonvulsant"

@@ -1,5 +1,5 @@
 id: "metformin"
 name: "Metformin"
 rxnorm: "6809"
-aliases: ["Glucophage"]
+aliases: ["Glucophage", "Riomet", "Glumetza"]
 drug_class: "Biguanide"

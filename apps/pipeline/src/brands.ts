@@ -70,6 +70,20 @@ export function withAliases(text: string, aliases: string[]): string {
   return lines.join('\n')
 }
 
+// RxNorm Brand names dropped on review (issue #59): not a name a person reads on the box of a
+// medicine they swallow or are given. Lowercase.
+export const EXCLUDED = new Set([
+  // veterinary products
+  ...['amodip', 'atopica', 'cyclavance', 'modulis', 'optimmune', 'reconcile', 'sporimune'],
+  ...['thyro-tabs', 'thyrokare', 'thyrocryn'],
+  // sold only for the skin, eye, ear or gum pocket, where food does not change the Drug's action
+  ...['amzeeq', 'arestin', 'cequa', 'cetraxal', 'ciloxan', 'metrocream', 'metrogel', 'metrolotion'],
+  ...['noritate', 'nydamax', 'restasis', 'rosadan', 'vectical', 'verkazia', 'vevye', 'viabecline'],
+  ...['vitastem', 'zilxi'],
+  // a pack variant of Tylenol, not a separate Brand name
+  'tylenol gelcap extra strength',
+])
+
 export interface DrugFile {
   file: string
   text: string
@@ -87,7 +101,7 @@ async function cuiByName(name: string, getJson: GetJson): Promise<string | undef
 // Merges RxNorm Brand names into the Aliases of every Drug that has an rxnorm id. Returns only
 // the files that change. A Drug without an id is looked up by name and reported, not written: a
 // person confirms the id first.
-export async function addBrands(files: DrugFile[], getJson: GetJson) {
+export async function addBrands(files: DrugFile[], getJson: GetJson, excluded = EXCLUDED) {
   const drugs = files.map((f) => ({ ...f, drug: Drug.parse(parse(f.text)) }))
   const owner = new Map<string, string>()
   for (const { drug } of drugs)
@@ -104,6 +118,7 @@ export async function addBrands(files: DrugFile[], getJson: GetJson) {
     }
     const brands: string[] = []
     for (const brand of await brandNames(drug.rxnorm, getJson)) {
+      if (excluded.has(brand.toLowerCase())) continue
       const usedBy = owner.get(brand.toLowerCase())
       if (usedBy && usedBy !== drug.id) collisions.push({ id: drug.id, brand, usedBy })
       else {

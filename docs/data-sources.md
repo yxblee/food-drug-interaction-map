@@ -29,3 +29,15 @@ The curation pipeline proposes Pending interactions from two of these databases.
 - **FARFOOD**: not used. Its paper is CC BY-NC-ND and it has no downloadable data.
 
 Downloaded files stay in a local cache and are never committed. Some database records cite a study about a different food, so every draft is checked against its study's abstract.
+
+## Brand names from RxNorm
+
+Brand-name Aliases in `data/drugs/` come from [RxNorm](https://www.nlm.nih.gov/research/umls/rxnorm/), read through the NLM [RxNav REST API](https://lhncbc.nlm.nih.gov/RxNav/APIs/RxNormAPIs.html). The API is free, needs no key or licence, and allows 20 requests per second ([terms of service](https://lhncbc.nlm.nih.gov/RxNav/TermsofService.html)).
+
+> This product uses publicly available data from the U.S. National Library of Medicine (NLM), National Institutes of Health, Department of Health and Human Services; NLM is not responsible for the product and does not endorse or recommend this or any other product.
+
+- Run it with `node --run pipeline -- brands`. It needs no API key and no downloads, and rewrites only the `aliases` of Drug files.
+- For each Drug with an `rxnorm` id (never a Drug class), it reads the Brand names (`/rxcui/{id}/related.json?tty=BN`) and keeps those whose only ingredient (`tty=IN`) is that Drug. A combination product's brand, such as Vytorin (ezetimibe and simvastatin), is not an Alias of either ingredient.
+- New Brand names are added after the existing Aliases, which are never removed or reordered. A name another Drug already answers to is skipped and printed.
+- A Drug without an `rxnorm` id is looked up by name (`/rxcui.json?name=…&search=2`) and printed for a person to confirm. Nothing is written for it.
+- RxNorm also lists veterinary products and brands sold only for the skin, eye or ear. Those were dropped on review and are listed in `EXCLUDED` in `apps/pipeline/src/brands.ts`, so a rerun does not bring them back. Review the diff of every run the same way.

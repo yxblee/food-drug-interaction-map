@@ -131,6 +131,10 @@ describe('addBrands', () => {
     expect((await addBrands([statins, complete], getJson)).changed).toEqual([])
   })
 
+  it('leaves out Brand names on the reviewed exclusion list, ignoring case', async () => {
+    expect((await addBrands([simvastatin], getJson, new Set(['flolipid']))).changed).toEqual([])
+  })
+
   it('does not add a Brand name that another Drug already answers to, and reports it', async () => {
     const other = {
       file: 'data/drugs/other.yaml',
