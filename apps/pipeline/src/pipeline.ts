@@ -184,6 +184,7 @@ export async function runPipeline(
   const fd = {
     unmatched: new Map<string, number>(), // food names with no catalogue match
     unresolved: new Map<string, number>(), // drug names RxNav could not resolve
+    uncatalogued: new Map<string, number>(), // foodrugs: drug names whose ingredient is no catalogued Drug
     noAbstract: new Set<string>(), // pairs none of whose cited PMIDs has an abstract
     noPmid: 0, // ddid rows without a usable PMID
   }
@@ -218,6 +219,11 @@ export async function runPipeline(
         return
       }
       let drug = [...drugs, ...proposed.values()].find((d) => d.rxnorm === cui)
+      if (!drug && source === 'foodrugs') {
+        // FooDrugs is text-mined: most uncatalogued names are not medications (#57), so none is proposed.
+        fd.uncatalogued.set(name, (fd.uncatalogued.get(name) ?? 0) + 1)
+        return
+      }
       if (!drug) {
         // Not in the catalogue: propose it, one Drug per ingredient CUI.
         // ponytail: named as the database spells it (may be a brand); the reviewer checks the name.
@@ -475,7 +481,11 @@ export async function runPipeline(
           `- Labels without ingredient data: ${skip.noIngredient.size}`,
         ]
       : [
-          ...(source === 'ddid' ? [`- Rows without a usable PMID: ${fd.noPmid}`] : []),
+          ...(source === 'ddid'
+            ? [`- Rows without a usable PMID: ${fd.noPmid}`]
+            : [
+                `- Records for Drugs not in the catalogue: ${[...fd.uncatalogued.values()].reduce((a, b) => a + b, 0)}`,
+              ]),
           `- Pairs whose PMIDs have no abstract: ${fd.noAbstract.size}`,
         ]
   const report = [
@@ -529,6 +539,16 @@ export async function runPipeline(
           '## Drug names that did not resolve to an RxNorm CUI (by frequency)',
           ...(fd.unresolved.size ? ranked(fd.unresolved).slice(0, REPORT_NAMES) : ['- none']),
           '',
+          ...(source === 'foodrugs'
+            ? [
+                '## Drug names not in the catalogue (by frequency)',
+                'Skipped, not proposed. Add the Drug to the catalogue by hand to pick its records up.',
+                ...(fd.uncatalogued.size
+                  ? ranked(fd.uncatalogued).slice(0, REPORT_NAMES)
+                  : ['- none']),
+                '',
+              ]
+            : []),
         ]
       : []),
     '## Validation',

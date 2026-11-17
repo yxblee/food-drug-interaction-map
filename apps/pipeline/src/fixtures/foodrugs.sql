@@ -31,7 +31,7 @@ CREATE TABLE `TM_interactions` (
 LOCK TABLES `TM_interactions` WRITE;
 /*!40000 ALTER TABLE `TM_interactions` DISABLE KEYS */;
 INSERT INTO `TM_interactions` VALUES (0,0,0,116,'Grapefruit','simvastatin'),(1,0,1943,2220,'grapefruit','simvastatin'),(2,0,2289,2392,'grapefruit','simvastatin'),(3,1,10,90,'Grapefruit Juice','Zocor'),(4,2,0,50,'grapefruit','simvastatin'),(5,3,0,50,'GRAPEFRUIT','simvastatin'),(6,7,5,60,'grapefruit juice','simvastatin'),(7,5,0,40,'grapefruit','verapamil'),(8,4,0,40,'grapefruit','verapamil');
-INSERT INTO `TM_interactions` VALUES (9,10,0,40,'alcohol','verapamil'),(10,6,0,30,'pomelo','atorvastatin'),(11,6,0,30,'Pomelo','simvastatin'),(12,11,0,30,'Seville orange','simvastatin'),(13,8,0,30,'grapefruit','6\'-acetyl-mystery, X'),(14,9,0,30,'grapefruit','ranolazine'),(15,12,0,30,'grapefruit','atorvastatin'),(16,14,0,30,'grapefruit','simvastatin'),(17,13,0,30,NULL,'simvastatin');
+INSERT INTO `TM_interactions` VALUES (9,10,0,40,'alcohol','verapamil'),(10,6,0,30,'pomelo','atorvastatin'),(11,6,0,30,'Pomelo','simvastatin'),(12,11,0,30,'Seville orange','simvastatin'),(13,8,0,30,'grapefruit','6\'-acetyl-mystery, X'),(14,9,0,30,'grapefruit','ranolazine'),(15,12,0,30,'grapefruit','atorvastatin'),(16,14,0,30,'grapefruit','simvastatin'),(17,13,0,30,NULL,'simvastatin'),(18,9,40,60,'grapefruit','Ranolazine'),(19,9,0,30,'grapefruit','glucose');
 /*!40000 ALTER TABLE `TM_interactions` ENABLE KEYS */;
 UNLOCK TABLES;
 
