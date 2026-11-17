@@ -33,6 +33,15 @@ async function activeContrast(page: Page, option: Locator, list: Locator) {
   }
 }
 
+/** Polled: colours transition after a theme switch, so a single sample can land mid-fade. */
+const expectContrast = (page: Page, option: Locator, list: Locator) =>
+  expect
+    .poll(async () => {
+      const c = await activeContrast(page, option, list)
+      return c.indicator >= 3 && c.text >= 4.5
+    })
+    .toBe(true)
+
 const SETUPS: [string, (p: Page) => Promise<void>][] = [
   ['light', (p) => p.emulateMedia({ colorScheme: 'light' })],
   ['dark', (p) => p.emulateMedia({ colorScheme: 'dark' })],
@@ -55,9 +64,7 @@ for (const [name, setup] of SETUPS) {
     await setup(page)
     await exploreBox(page).fill('gra')
     const list = page.getByRole('listbox', { name: 'Matching drugs, foods and mechanisms' })
-    let c = await activeContrast(page, list.getByRole('option').first(), list)
-    expect(c.indicator).toBeGreaterThanOrEqual(3)
-    expect(c.text).toBeGreaterThanOrEqual(4.5)
+    await expectContrast(page, list.getByRole('option').first(), list)
 
     await page.getByRole('tab', { name: 'My meds' }).click()
     for (const [label, q, listName] of [
@@ -66,9 +73,7 @@ for (const [name, setup] of SETUPS) {
     ]) {
       await page.getByLabel(label).fill(q)
       const l = page.getByRole('listbox', { name: listName })
-      c = await activeContrast(page, l.getByRole('option').first(), l)
-      expect(c.indicator, label).toBeGreaterThanOrEqual(3)
-      expect(c.text, label).toBeGreaterThanOrEqual(4.5)
+      await expectContrast(page, l.getByRole('option').first(), l)
     }
   })
 }
