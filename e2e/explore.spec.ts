@@ -584,15 +584,16 @@ test('the side panel is a landmark named after the selected item', async ({ page
 test('panel link-buttons are 24px tall; new-tab sources say so', async ({ page }) => {
   await page.goto('./?node=food:grapefruit')
   const panel = page.getByRole('complementary')
+  // Many rows are collapsed; open them all so every link-button is measurable.
+  await expect(panel.locator('details').first()).toBeAttached()
+  await panel
+    .locator('details')
+    .evaluateAll((ds) => ds.forEach((d) => ((d as HTMLDetailsElement).open = true)))
   const links = panel.locator('button.link-button')
   await expect(links.first()).toBeVisible()
   for (const b of await links.all()) {
     expect((await b.boundingBox())!.height).toBeGreaterThanOrEqual(24)
   }
-  await panel
-    .locator('details')
-    .first()
-    .evaluate((d) => ((d as HTMLDetailsElement).open = true))
   const src = panel.locator('a[target=_blank]').first()
   await expect(src).toHaveAccessibleName(/\(opens in new tab\)$/)
 })
