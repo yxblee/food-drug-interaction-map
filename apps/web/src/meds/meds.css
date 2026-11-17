@@ -91,9 +91,7 @@
   border: 1px dashed var(--ink);
 }
 .foodcheck {
-  /* Desktop: under the picker and its actions. Phones: between the picker and the results. */
-  grid-column: 1;
-  grid-row: 3;
+  /* Under the results, in the results column. */
   margin-top: 16px;
   padding-top: 16px;
   border-top: 1px solid var(--line);
@@ -125,7 +123,7 @@
   align-self: start;
   margin-top: 8px;
 }
-.meds__results {
+.meds__main {
   grid-column: 2;
   grid-row: 1 / span 3;
 }
@@ -191,20 +189,15 @@
     margin-top: 6px;
   }
   .foodcheck {
-    margin-top: 0;
+    margin-top: 16px;
   }
-  .meds__results,
-  .meds__actions,
-  .foodcheck {
+  .meds__main,
+  .meds__actions {
     grid-column: 1;
     grid-row: auto;
   }
   /* Actions come before the results in the DOM (focus order); phones still show them last. */
   .meds__actions {
     order: 1;
-  }
-  /* The results are the answer; the one-food check follows them. */
-  .foodcheck {
-    order: 2;
   }
 }

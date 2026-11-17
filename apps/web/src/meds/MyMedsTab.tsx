@@ -199,47 +199,50 @@ export function MyMedsTab({
         </div>
       )}
 
-      <FoodCheck graph={graph} ix={ix} meds={meds} notChecked={notChecked} />
+      <div className="meds__main">
+        <section className="meds__results" aria-labelledby="results-title">
+          <h2 id="results-title">Foods to watch</h2>
+          <p role="status" className="meds__status">
+            {(meds.length > 0 || notChecked.length > 0) &&
+              resultsSummary(meds.length > 0 ? warnings : null, notChecked.length)}
+          </p>
+          {notChecked.length > 0 && (
+            <p className="meds__unchecked">
+              Not checked: {notChecked.join(', ')}. Being missing here doesn't mean it's safe; ask
+              your pharmacist.
+            </p>
+          )}
+          {meds.length === 0 ? (
+            <p>
+              Add the medications you take, such as warfarin, simvastatin or levothyroxine, to see
+              which foods to watch.
+            </p>
+          ) : warnings.length === 0 ? (
+            <p>
+              No food interactions in our dataset for these drugs. Our dataset is not exhaustive.
+              Ask your pharmacist if you're unsure.
+            </p>
+          ) : (
+            SEVERITIES.map((sev) => {
+              const group = warnings.filter((w) => w.severity === sev)
+              if (!group.length) return null
+              return (
+                <section key={sev} aria-labelledby={`sev-${sev}`} className="meds__sev">
+                  <SeverityGroupHeading severity={sev} />
+                  <ul className="meds__list">
+                    {group.map((w) => (
+                      <WarningRow key={w.food.id} warning={w} />
+                    ))}
+                  </ul>
+                </section>
+              )
+            })
+          )}
+        </section>
 
-      <section className="meds__results" aria-labelledby="results-title">
-        <h2 id="results-title">Foods to watch</h2>
-        <p role="status" className="meds__status">
-          {(meds.length > 0 || notChecked.length > 0) &&
-            resultsSummary(meds.length > 0 ? warnings : null, notChecked.length)}
-        </p>
-        {notChecked.length > 0 && (
-          <p className="meds__unchecked">
-            Not checked: {notChecked.join(', ')}. Being missing here doesn't mean it's safe; ask
-            your pharmacist.
-          </p>
-        )}
-        {meds.length === 0 ? (
-          <p>
-            Add the medications you take, such as warfarin, simvastatin or levothyroxine, to see
-            which foods to watch.
-          </p>
-        ) : warnings.length === 0 ? (
-          <p>
-            No food interactions in our dataset for these drugs. Our dataset is not exhaustive. Ask
-            your pharmacist if you're unsure.
-          </p>
-        ) : (
-          SEVERITIES.map((sev) => {
-            const group = warnings.filter((w) => w.severity === sev)
-            if (!group.length) return null
-            return (
-              <section key={sev} aria-labelledby={`sev-${sev}`} className="meds__sev">
-                <SeverityGroupHeading severity={sev} />
-                <ul className="meds__list">
-                  {group.map((w) => (
-                    <WarningRow key={w.food.id} warning={w} />
-                  ))}
-                </ul>
-              </section>
-            )
-          })
-        )}
-      </section>
+        {/* After the results in the DOM and on screen at every width, so Tab follows what is seen. */}
+        <FoodCheck graph={graph} ix={ix} meds={meds} notChecked={notChecked} />
+      </div>
     </div>
   )
 }

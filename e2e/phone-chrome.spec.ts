@@ -59,3 +59,19 @@ test('disclaimer is a one-line summary with the full text one tap away', async (
   await expect(full).toBeVisible()
   await expect(footer).toBeInViewport({ ratio: 1 })
 })
+
+test('Can I have…? follows the results both in Tab order and on screen', async ({ page }) => {
+  await addMeds(page)
+  const r = await page.evaluate(() => {
+    const results = document.querySelector('.meds__results')!
+    const food =
+      document.getElementById('food-input') ?? document.querySelector('.foodcheck input')!
+    return {
+      domAfter: !!(results.compareDocumentPosition(food) & Node.DOCUMENT_POSITION_FOLLOWING),
+      resultsBottom: results.getBoundingClientRect().bottom + scrollY,
+      foodTop: food.getBoundingClientRect().top + scrollY,
+    }
+  })
+  expect(r.domAfter).toBe(true)
+  expect(r.foodTop).toBeGreaterThanOrEqual(r.resultsBottom - 1)
+})
