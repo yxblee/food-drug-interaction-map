@@ -220,7 +220,7 @@ A full-height column: top bar (title left, view pills right), the view in a flex
 
 - **My meds** is a two-column grid, input column `minmax(260px, 360px)` beside results, 32px gap, centred at max 1100px. It collapses to one column (16px gap) at 768px and below.
 - **Explore** is full-bleed: the graph fills the main area; search and controls float top-left over it; the detail panel docks bottom-right at `min(26rem, 100%)` and up to 80vh, scrolling internally.
-- The app title hides at 768px and below to keep the view pills on one line.
+- At 768px and below the app title is visually hidden (still the page's h1) and the top bar is one row: view pills and the Color toggle. The footer disclaimer collapses to one 44px line, "Not medical advice. Read more", that opens to the full sentence; wide screens show the full sentence.
 - Spacing steps are 4, 6, 8, 12, 16, 24, 32px; 16px is the standard edge gutter.
 
 ## Elevation & Depth

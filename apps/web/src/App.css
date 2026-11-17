@@ -68,6 +68,24 @@
   color: var(--muted);
   border-top: 1px solid var(--line);
 }
+.app__footer summary {
+  list-style: none;
+}
+.app__footer summary::-webkit-details-marker {
+  display: none;
+}
+.app__footer-full {
+  margin: 0;
+}
+.app__footer-more {
+  text-decoration: underline;
+}
+/* Wide screens show the whole sentence, so the lead-in is not repeated. */
+@media (min-width: 769px) {
+  .app__footer summary {
+    display: none;
+  }
+}
 .search {
   padding: 0 16px;
   max-width: 420px;
@@ -111,11 +129,37 @@
 @media (max-width: 768px) {
   /* Product name on its own line above the tabs. */
   .app__title {
-    flex: 1 0 100%;
-    margin: 0;
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip-path: inset(50%);
+    white-space: nowrap;
   }
   .app__bar {
-    row-gap: 4px;
+    flex-wrap: nowrap;
+    gap: 6px;
+    padding: 8px 16px;
+  }
+  .app__footer {
+    padding-block: 0;
+  }
+  .app__footer details[open] {
     padding-bottom: 8px;
+  }
+  .app__footer summary {
+    display: flex;
+    align-items: center;
+    min-height: 44px;
+    cursor: pointer;
+  }
+  .app__footer-lead {
+    color: inherit;
+  }
+  .app__footer details[open] .app__footer-full {
+    margin: 0;
+  }
+  .app__footer-more {
+    display: none;
   }
 }
