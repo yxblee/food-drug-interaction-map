@@ -94,6 +94,11 @@
 .graph2d .node.is-dim {
   opacity: 0.15;
 }
+/* The active node carries its own ring; the host outlines only when no node is active. */
+.graph-host:focus-visible:not([data-active]) {
+  outline: 2px solid var(--ink);
+  outline-offset: -2px;
+}
 .graph-host:focus-visible {
   outline: none;
 }
