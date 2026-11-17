@@ -227,11 +227,18 @@ h3 {
     background: var(--surface);
   }
 }
+/* Selection swaps fill and label together; fading either crosses a ~1:1 frame, so those snap. */
+.pill-button:is([aria-pressed], [aria-selected]) {
+  transition:
+    border-color 200ms,
+    box-shadow 200ms;
+}
 @media (prefers-reduced-motion: reduce) {
   .search__input,
   .explore__bar .pill-button,
   .explore__hint,
   .pill-button,
+  .pill-button:is([aria-pressed], [aria-selected]),
   .app__palette,
   .legend {
     transition: none;
