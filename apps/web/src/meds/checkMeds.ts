@@ -34,9 +34,7 @@ export function checkMeds(ix: Index, drugIds: string[]): FoodWarning[] {
         a.drug.name.localeCompare(b.drug.name),
     )
   }
-  return out.sort(
-    (a, b) => rank(a.severity) - rank(b.severity) || a.food.name.localeCompare(b.food.name),
-  )
+  return out.sort(bySeverityThenFood)
 }
 
 export function mapKeysFor(ix: Index, warnings: FoodWarning[], drugIds: string[]): Set<string> {
@@ -53,4 +51,31 @@ export function mapKeysFor(ix: Index, warnings: FoodWarning[], drugIds: string[]
     }
   }
   return keys
+}
+
+const bySeverityThenFood = (a: FoodWarning, b: FoodWarning) =>
+  rank(a.severity) - rank(b.severity) || a.food.name.localeCompare(b.food.name)
+
+/**
+ * "Can I have this Food?" against a Medication list: the Food warnings for the Food itself,
+ * for its Food group, and (when it is a Food group) for its members. A Direct interaction
+ * takes the place of the Food group's one for the same Drug.
+ */
+export function checkFood(ix: Index, foodId: string, drugIds: string[]): FoodWarning[] {
+  const food = ix.nodes.get(nodeKey('food', foodId))
+  if (!food) return []
+  const all = checkMeds(ix, drugIds)
+  const direct = new Set(
+    all.find((w) => w.food.id === foodId)?.affected.map((h) => h.drug.id) ?? [],
+  )
+  const out: FoodWarning[] = []
+  for (const w of all) {
+    if (w.food.id === foodId || w.food.parent === foodId) out.push(w)
+    else if (w.food.id === food.parent) {
+      const affected = w.affected.filter((h) => !direct.has(h.drug.id))
+      // affected is sorted worst first, so the first one carries the warning's Severity.
+      if (affected.length) out.push({ ...w, affected, severity: affected[0].interaction.severity })
+    }
+  }
+  return out.sort(bySeverityThenFood)
 }
