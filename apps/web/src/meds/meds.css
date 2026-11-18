@@ -123,6 +123,20 @@
   align-self: start;
   margin-top: 8px;
 }
+/* Press feedback: a quick squeeze, so a tap on Copy feels received. */
+.meds__actions .pill-button {
+  transition:
+    color 200ms,
+    border-color 200ms,
+    transform 120ms ease-out;
+}
+.meds__actions .pill-button:active:not(:disabled) {
+  transform: scale(0.97);
+}
+.meds__actions .pill-button:disabled {
+  opacity: 0.5;
+  cursor: default;
+}
 .meds__main {
   grid-column: 2;
   grid-row: 1 / span 3;

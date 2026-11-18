@@ -514,3 +514,37 @@ test('Can I have…? holds at 360px with 44px touch targets', async ({ page }) =
   )
   expect(await page.evaluate(() => document.documentElement.scrollWidth)).toBeLessThanOrEqual(360)
 })
+
+test.describe('Copy', () => {
+  test.use({ permissions: ['clipboard-read', 'clipboard-write'] })
+
+  test('puts the Foods to watch on the clipboard and says so in the status region', async ({
+    page,
+  }) => {
+    await page.goto('./?tab=meds')
+    const copy = page.getByRole('button', { name: 'Copy' })
+    const input = page.getByLabel('Add a medication')
+    for (const med of ['warfarin', 'simvastatin']) {
+      await input.fill(med)
+      await input.press('Enter')
+    }
+    await expect(copy).toBeEnabled()
+    expect((await copy.boundingBox())!.height).toBeGreaterThanOrEqual(44)
+    await copy.click()
+    await expect(page.getByRole('status').filter({ hasText: 'Copied to clipboard' })).toBeVisible()
+    const text = await page.evaluate(() => navigator.clipboard.readText())
+    expect(text).toContain('Grapefruit')
+    expect(text).toContain('Informational only, not medical advice')
+  })
+
+  test('is not shown when the clipboard is unavailable', async ({ page }) => {
+    await page.addInitScript(() =>
+      Object.defineProperty(navigator, 'clipboard', { value: undefined }),
+    )
+    await page.goto('./?tab=meds')
+    await page.getByLabel('Add a medication').fill('warfarin')
+    await page.getByLabel('Add a medication').press('Enter')
+    await expect(page.getByRole('button', { name: 'Print' })).toBeVisible()
+    await expect(page.getByRole('button', { name: 'Copy' })).toHaveCount(0)
+  })
+})
