@@ -1,6 +1,6 @@
-id: st-johns-wort--ivabradine-hydrochloride
+id: st-johns-wort--ivabradine
 food: st-johns-wort
-drug: ivabradine-hydrochloride
+drug: ivabradine
 mechanisms:
   - cyp3a4-induction
 severity: avoid

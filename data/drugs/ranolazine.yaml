@@ -2,7 +2,6 @@ id: ranolazine
 name: Ranolazine
 rxnorm: "35829"
 aliases:
-  - ASPRUZYO SPRINKLE
-  - Aspruzyo
   - Ranexa
+  - Aspruzyo
 drug_class: "Antianginal"

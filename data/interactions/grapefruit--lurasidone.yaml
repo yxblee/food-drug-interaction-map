@@ -1,6 +1,6 @@
-id: grapefruit--lurasidone-hydrochloride
+id: grapefruit--lurasidone
 food: grapefruit
-drug: lurasidone-hydrochloride
+drug: lurasidone
 mechanisms:
   - cyp3a4-inhibition
 severity: caution

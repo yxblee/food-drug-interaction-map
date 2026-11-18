@@ -1,6 +1,6 @@
-id: grapefruit--ivabradine-hydrochloride
+id: grapefruit--ivabradine
 food: grapefruit
-drug: ivabradine-hydrochloride
+drug: ivabradine
 mechanisms:
   - cyp3a4-inhibition
 severity: avoid

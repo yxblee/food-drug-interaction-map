@@ -1,6 +1,6 @@
-id: st-johns-wort--lurasidone-hydrochloride
+id: st-johns-wort--lurasidone
 food: st-johns-wort
-drug: lurasidone-hydrochloride
+drug: lurasidone
 mechanisms:
   - cyp3a4-induction
 severity: avoid

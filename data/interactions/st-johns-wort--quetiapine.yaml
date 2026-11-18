@@ -1,6 +1,6 @@
-id: st-johns-wort--quetiapine-fumarate
+id: st-johns-wort--quetiapine
 food: st-johns-wort
-drug: quetiapine-fumarate
+drug: quetiapine
 mechanisms:
   - cyp3a4-induction
 severity: caution

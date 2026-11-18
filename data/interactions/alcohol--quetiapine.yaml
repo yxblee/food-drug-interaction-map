@@ -1,6 +1,6 @@
-id: alcohol--quetiapine-fumarate
+id: alcohol--quetiapine
 food: alcohol
-drug: quetiapine-fumarate
+drug: quetiapine
 mechanisms:
   - cns-depression
 severity: caution

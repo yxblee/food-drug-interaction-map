@@ -1,7 +1,7 @@
-id: ivabradine-hydrochloride
-name: Ivabradine hydrochloride
+id: ivabradine
+name: Ivabradine
 rxnorm: "1649480"
 aliases:
-  - IVABRADINE
+  - Ivabradine hydrochloride
   - Corlanor
 drug_class: "Heart rate-lowering agent"
