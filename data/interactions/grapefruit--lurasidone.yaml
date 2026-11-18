@@ -3,7 +3,7 @@ food: grapefruit
 drug: lurasidone
 mechanisms:
   - cyp3a4-inhibition
-severity: caution
+severity: avoid
 effect: increases
 summary: Grapefruit and grapefruit juice can inhibit CYP3A4, the main enzyme
   that breaks down lurasidone, and may raise its blood levels.
@@ -22,5 +22,6 @@ citations:
     title: LURASIDONE HYDROCHLORIDE [Aurobindo Pharma Limited]
     url: https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=b3e9cc86-0c5c-444f-ab57-f4d1a6865035
     setid: b3e9cc86-0c5c-444f-ab57-f4d1a6865035
-status: pending
+status: approved
 source: openfda
+reviewed_at: 2026-11-18
