@@ -108,7 +108,10 @@ function setup(
   const cuis: string[] = []
   const store = new Map(Object.entries(prior))
   const ports: Ports = {
-    searchLabels: async (term) => (searched.push(term), fixtures[term.toLowerCase()] ?? []),
+    searchLabels: async (term, drug) => (
+      searched.push(drug ? `${term}|${drug}` : term),
+      fixtures[term.toLowerCase()] ?? []
+    ),
     ingredientCui: async (name) => (cuis.push(name), { ranolazine: '35829' }[name.toLowerCase()]),
     draft: async (input) => {
       drafted.push(input)
@@ -118,14 +121,22 @@ function setup(
     writeFile: (path, content) => void (written[path] = content),
     cache: { get: async (k) => store.get(k), set: async (k, v) => void store.set(k, v) },
   }
-  const run = (limit?: number) =>
-    runPipeline('openfda', { limit, dataDir: 'data', reportPath: 'report.md' }, ports)
+  const run = (limit?: number, drugs?: string[]) =>
+    runPipeline('openfda', { limit, drugs, dataDir: 'data', reportPath: 'report.md' }, ports)
   return { run, written, searched, drafted, store, cuis }
 }
 
 const SIMVA = 'Avoid grapefruit juice when taking simvastatin.'
 
 describe('runPipeline (openfda)', () => {
+  it('with a target list, searches each Food term per Drug and drafts only those Drugs', async () => {
+    const t = setup({})
+    await t.run(undefined, ['Simvastatin'])
+    expect(t.searched).toContain('Grapefruit|Simvastatin')
+    expect(t.searched).not.toContain('Grapefruit')
+    expect(t.drafted.map((d) => d.drug.id)).toEqual(['simvastatin'])
+  })
+
   it('searches every Food name and Alias, and matches label text on an Alias alone', async () => {
     const t = setup({
       'alcohol--tadalafil': keep('Avoid red wine in large amounts while taking tadalafil.'),

@@ -1,5 +1,6 @@
 // Thin CLI wrapper: builds the real ports and calls runPipeline. Not unit tested (see pipeline.test.ts).
 //   node apps/pipeline/src/cli.ts --source openfda --limit 25
+//   node apps/pipeline/src/cli.ts --source openfda --drugs ranolazine,ticagrelor   (only these generic names)
 //   node apps/pipeline/src/cli.ts --source foodrugs --limit 25   (needs .cache/pipeline/FinalFooDrugs_v4.sql)
 //   node apps/pipeline/src/cli.ts --source ddid --limit 25        (needs .cache/pipeline/DDID-Interaction.csv)
 //   node apps/pipeline/src/cli.ts brands                         (Brand names from RxNorm into data/drugs)
@@ -47,8 +48,9 @@ async function politeFetch(url: string) {
   }
 }
 
-async function searchLabels(term: string): Promise<Label[]> {
-  const q = SECTIONS.map((s) => `${s}:"${term.replaceAll('"', '')}"`).join(' OR ')
+async function searchLabels(term: string, drug?: string): Promise<Label[]> {
+  const sections = SECTIONS.map((s) => `${s}:"${term.replaceAll('"', '')}"`).join(' OR ')
+  const q = drug ? `(${sections}) AND openfda.generic_name:"${drug.replaceAll('"', '')}"` : sections
   const labels: Label[] = []
   for (let page = 0; page < MAX_PAGES; page++) {
     const params = new URLSearchParams({
@@ -245,7 +247,12 @@ if (process.argv[2] === 'medlineplus') {
   process.exit(0)
 }
 const { values } = parseArgs({
-  options: { source: { type: 'string' }, limit: { type: 'string' }, drafter: { type: 'string' } },
+  options: {
+    source: { type: 'string' },
+    limit: { type: 'string' },
+    drugs: { type: 'string' },
+    drafter: { type: 'string' },
+  },
 })
 const source = values.source
 if (source !== 'openfda' && source !== 'foodrugs' && source !== 'ddid') {
@@ -262,7 +269,12 @@ try {
   const reportPath = join(CACHE_DIR, `pr-body-${source}.md`)
   const r = await runPipeline(
     source,
-    { limit: values.limit ? Number(values.limit) : 25, dataDir: 'data', reportPath },
+    {
+      limit: values.limit ? Number(values.limit) : 25,
+      drugs: values.drugs?.split(',').map((d) => d.trim()),
+      dataDir: 'data',
+      reportPath,
+    },
     ports,
   )
   console.log(
