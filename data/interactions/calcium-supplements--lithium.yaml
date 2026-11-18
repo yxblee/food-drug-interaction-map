@@ -5,7 +5,7 @@ mechanisms: [additive-calcium-hypercalcemia]
 severity: caution
 effect: increases
 summary: "Long-term lithium can raise blood calcium, and calcium supplements could add to that risk."
-advice: "Tell your prescriber about any calcium supplement before or while taking lithium, so blood calcium can be checked if needed."
+advice: "Tell your prescriber about any calcium supplement you take with lithium."
 details: "The NIH fact sheet notes that long-term lithium use can lead to hypercalcemia and that taking calcium supplements as well could increase this risk. The sheet cites one source for this and gives no spacing advice."
 citations:
   - type: "guideline"
