@@ -371,7 +371,7 @@ describe('runPipeline (openfda)', () => {
       expect(Object.keys(t.written).filter((f) => f.includes('mechanisms/'))).toEqual([])
     })
 
-    it('fails validation until an Interaction referencing the new files is Approved, then passes', async () => {
+    it('passes validation once a Pending or Approved Interaction references the new files', async () => {
       const raw: RawDataset = {
         drugs: [drug('antianginals', { group: true })],
         foods: [food('grapefruit', { aliases: ['grapefruit juice'], category: 'fruit' })],
@@ -404,13 +404,7 @@ describe('runPipeline (openfda)', () => {
           data: { ...i.data, status, ...(status === 'approved' && { reviewed_at: '2026-10-14' }) },
         })),
       })
-      const pending = validateDataset(withInteraction('pending'))
-      expect('errors' in pending && pending.errors).toEqual(
-        expect.arrayContaining([
-          expect.stringMatching(/drugs\/ranolazine\.yaml.*no approved interaction/),
-          expect.stringMatching(/mechanisms\/gut-cyp3a\.yaml.*no approved interaction/),
-        ]),
-      )
+      expect('errors' in validateDataset(withInteraction('pending'))).toBe(false)
       expect('errors' in validateDataset(withInteraction('approved'))).toBe(false)
     })
   })

@@ -3,7 +3,13 @@ import { mkdirSync, readFileSync, readdirSync, rmSync } from 'node:fs'
 import { dirname, join } from 'node:path'
 import { DatabaseSync } from 'node:sqlite'
 import { parse } from 'yaml'
-import { validateDataset, type Dataset, type RawDataset, type RawFile } from '@fdi/schema'
+import {
+  publishable,
+  validateDataset,
+  type Dataset,
+  type RawDataset,
+  type RawFile,
+} from '@fdi/schema'
 
 const KIND_DIRS = ['drugs', 'foods', 'mechanisms', 'interactions', 'pairings'] as const
 
@@ -41,7 +47,8 @@ export function readDataDir(dir: string): Required<RawDataset> {
   return out
 }
 
-export function writeDb(ds: Dataset, outPath: string): string {
+export function writeDb(full: Dataset, outPath: string): string {
+  const ds = publishable(full)
   const version = createHash('sha256').update(JSON.stringify(ds)).digest('hex').slice(0, 12)
   mkdirSync(dirname(outPath), { recursive: true })
   rmSync(outPath, { force: true })
