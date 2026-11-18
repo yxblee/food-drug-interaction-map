@@ -36,17 +36,18 @@ export function WarningRow({
       </span>
     </Fragment>
   )
-  // Avoid and Caution show their advice up front; Monitor and Minimal stay collapsed.
+  // Avoid and Caution show their advice up front; Monitor and Minimal stay collapsed on screen.
   const upFront = w.severity === 'avoid' || w.severity === 'caution'
   const load = () => {
     if (detail) return
     setFailed(false)
     fetchNode('food', w.food.id).then(setDetail, () => setFailed(true))
   }
+  // Every row loads its advice at once, so a printout has Monitor and Minimal rows open and filled.
   useEffect(() => {
-    if (upFront) load()
+    load()
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [upFront, w.food.id])
+  }, [w.food.id])
   const lead = (
     <>
       {showSeverity && (
@@ -98,11 +99,7 @@ export function WarningRow({
           {body}
         </>
       ) : (
-        <details
-          onToggle={(e) => {
-            if ((e.target as HTMLDetailsElement).open) load()
-          }}
-        >
+        <details>
           <summary>{lead}</summary>
           {body}
         </details>

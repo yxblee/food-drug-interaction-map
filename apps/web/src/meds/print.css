@@ -1,0 +1,174 @@
+/* Print only: one flowing document, black ink on white, from either colour scheme. */
+.meds__printhead {
+  display: none;
+}
+@media print {
+  @page {
+    margin: 16mm;
+  }
+  /* Win over the inline theme variables and the dark scheme. */
+  :root {
+    --paper: #fff !important;
+    --ink: #000 !important;
+    --muted: #000 !important;
+    --line: #000 !important;
+    --surface: #fff !important;
+    --badge-bg: #fff !important;
+    --sev-avoid: #000 !important;
+    --sev-caution: #000 !important;
+    --sev-monitor: #000 !important;
+    --sev-minimal: #000 !important;
+    color-scheme: light;
+  }
+  /* App.css and meds.css load around this file; the extra specificity beats their order. */
+  html,
+  html body,
+  html #root,
+  html .app,
+  html .app__main,
+  html .app__panel,
+  html .meds {
+    display: block;
+    position: static;
+    height: auto;
+    overflow: visible;
+    background: #fff;
+    color: #000;
+  }
+  html body {
+    font-size: 11pt;
+    transition: none;
+  }
+  /* Controls, the grain, and the parts of a row that need a pointer or a screen. */
+  body::before,
+  .app__bar,
+  .app__banner,
+  .meds__notice,
+  .meds__actions,
+  .meds__picker > :not(h2):not(.meds__chips),
+  .chip button,
+  .foodcheck,
+  .meds__results > .meds__status,
+  .app__footer summary,
+  .irow__more > summary,
+  .irow__details,
+  .irow__mechs,
+  .irow__details + .mono-label,
+  .chat,
+  .meds__sev h3 .badge,
+  .irow__ext,
+  .sr-only {
+    display: none !important;
+  }
+  .meds__printhead {
+    display: block;
+    margin-bottom: 12pt;
+    padding-bottom: 8pt;
+    border-bottom: 1.5pt solid #000;
+  }
+  .meds__printhead p {
+    margin: 0;
+  }
+  .meds__printname {
+    font: 700 16pt/1.3 var(--font-head);
+  }
+  .meds h2 {
+    font-size: 15pt;
+    margin: 12pt 0 4pt;
+  }
+  .meds__chips {
+    display: block;
+    margin: 4pt 0;
+  }
+  .chip,
+  .chip--unchecked {
+    display: list-item;
+    list-style: disc inside;
+    min-height: 0;
+    padding: 0;
+    border: 0;
+    border-radius: 0;
+    background: none;
+    color: #000;
+  }
+  .chip .chip__brand {
+    color: #000;
+  }
+  .chip--unchecked .mono-label::before {
+    content: ' – ';
+  }
+  /* Where supported, closed rows print open even if beforeprint never ran. */
+  .meds details::details-content,
+  .app__footer details::details-content {
+    content-visibility: visible;
+    display: block;
+  }
+  .meds__unchecked {
+    border: 1pt solid #000;
+    border-radius: 0;
+    break-inside: avoid;
+  }
+  /* The word is the Severity; colour is gone, so the badge is a plain boxed word. */
+  .badge {
+    border: 1pt solid #000;
+    border-radius: 0;
+    color: #000;
+    background: #fff;
+    font-size: 8pt;
+  }
+  .meds__sev h3 {
+    break-after: avoid;
+    margin: 14pt 0 2pt;
+    font-size: 13pt;
+  }
+  .sev-meaning {
+    break-after: avoid;
+    color: #000;
+  }
+  .warning {
+    break-inside: avoid;
+    border-top: 0.5pt solid #000;
+    padding: 4pt 0;
+  }
+  .warning summary {
+    min-height: 0;
+    padding: 2pt 0;
+    list-style: none;
+  }
+  .warning summary::-webkit-details-marker {
+    display: none;
+  }
+  .warning__drugs {
+    color: #000;
+  }
+  .irow__cites {
+    list-style: none;
+    padding: 0;
+    margin: 0 0 2pt;
+  }
+  .irow__cites li {
+    min-height: 0;
+  }
+  .irow__cites a {
+    display: block;
+    min-height: 0;
+    padding: 0;
+    text-decoration: none;
+    word-break: break-word;
+  }
+  .irow__cites .mono-label {
+    margin-left: 6pt;
+  }
+  .irow__cites a::after {
+    content: attr(href);
+    display: block;
+    font: 9pt/1.3 var(--font-mono);
+  }
+  .app__footer {
+    margin-top: 14pt;
+    padding: 6pt 0 0;
+    border-top: 1pt solid #000;
+    color: #000;
+    font-size: 10pt;
+  }
+}

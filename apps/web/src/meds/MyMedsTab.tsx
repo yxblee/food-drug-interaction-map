@@ -9,6 +9,7 @@ import { Combobox, NoMatch } from './Combobox.tsx'
 import { FoodCheck } from './FoodCheck.tsx'
 import { WarningRow } from './WarningRow.tsx'
 import './meds.css'
+import './print.css'
 
 export interface MyMedsTabProps {
   graph: GraphPayload
@@ -42,6 +43,7 @@ export function MyMedsTab({
   } | null>(null)
   const undoTimer = useRef<number>(undefined)
   const input = useRef<HTMLInputElement>(null)
+  const printed = usePrintDate()
   useEffect(() => () => window.clearTimeout(undoTimer.current), [])
   const dropUndo = () => {
     window.clearTimeout(undoTimer.current)
@@ -111,6 +113,11 @@ export function MyMedsTab({
 
   return (
     <div className="meds">
+      {/* Print only: what the page header and tabs say on screen, plus the date. */}
+      <div className="meds__printhead">
+        <p className="meds__printname">Food–Drug Interaction Map</p>
+        <p>Foods to watch for the medications below. Printed {printed}.</p>
+      </div>
       <section className="meds__picker" aria-labelledby="meds-title">
         <h2 id="meds-title">My meds</h2>
         <p className="meds__privacy">
@@ -196,6 +203,11 @@ export function MyMedsTab({
               <PillLabel>See on map</PillLabel>
             </button>
           )}
+          {meds.length > 0 && (
+            <button className="pill-button" onClick={() => window.print()}>
+              <PillLabel>Print</PillLabel>
+            </button>
+          )}
         </div>
       )}
 
@@ -261,4 +273,35 @@ function resultsSummary(warnings: FoodWarning[] | null, notChecked: number): str
   return [avoid ? `${watch}, including ${avoid} to avoid` : watch, unchecked]
     .filter(Boolean)
     .join(', ')
+}
+
+/** Today's date, refreshed at each print so a tab left open overnight still prints today. */
+function usePrintDate() {
+  const fmt = () => new Date().toLocaleDateString(undefined, { dateStyle: 'long' })
+  const [date, setDate] = useState(fmt)
+  useEffect(() => {
+    // Ctrl+P and the Print pill both land here. Closed rows do not print, so open them for the
+    // page and put each back as it was afterwards.
+    let opened: HTMLDetailsElement[] = []
+    const before = () => {
+      setDate(fmt())
+      opened = [
+        ...document.querySelectorAll<HTMLDetailsElement>(
+          '.meds details:not([open]), .app__footer details:not([open])',
+        ),
+      ]
+      for (const d of opened) d.open = true
+    }
+    const after = () => {
+      for (const d of opened) d.open = false
+      opened = []
+    }
+    window.addEventListener('beforeprint', before)
+    window.addEventListener('afterprint', after)
+    return () => {
+      window.removeEventListener('beforeprint', before)
+      window.removeEventListener('afterprint', after)
+    }
+  }, [])
+  return date
 }
