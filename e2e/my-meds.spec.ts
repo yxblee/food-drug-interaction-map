@@ -191,7 +191,7 @@ test('an unknown medicine is kept as "not checked", announced, and never sent to
   await input.fill('Eliquis')
   await input.press('Enter')
 
-  await expect(page.getByRole('status').first()).toHaveText(
+  await expect(page.locator('.meds__status').first()).toHaveText(
     'No match in our dataset. Eliquis added as not checked',
   )
   const chip = page
@@ -235,7 +235,7 @@ test('Clear all announces, returns focus to the input, and Undo restores both li
   await input.press('Enter')
 
   await page.getByRole('button', { name: 'Clear all' }).click()
-  await expect(page.getByRole('status').first()).toHaveText('List cleared · Undo')
+  await expect(page.locator('.meds__status').first()).toHaveText('List cleared · Undo')
   await expect(input).toBeFocused()
   await expect(page.getByRole('list', { name: 'Your medications' })).not.toContainText('Warfarin')
 
@@ -245,6 +245,29 @@ test('Clear all announces, returns focus to the input, and Undo restores both li
   await expect(chips).toContainText('Warfarin (Coumadin)')
   await expect(chips).toContainText('Eliquis')
   await expect(page.getByRole('button', { name: 'Undo' })).toHaveCount(0)
+})
+
+test('removing a medication moves focus to the next chip, else previous, else the input, and announces it', async ({
+  page,
+}) => {
+  await page.goto('./')
+  await page.getByRole('tab', { name: 'My meds' }).click()
+  const input = page.getByLabel('Add a medication')
+  for (const med of ['warfarin', 'simvastatin', 'amlodipine']) {
+    await input.fill(med)
+    await input.press('Enter')
+  }
+  const chip = (n: string) => page.locator(`#med-chip-${n.toLowerCase()}`)
+
+  await page.getByRole('button', { name: 'Remove Simvastatin' }).click()
+  await expect(chip('Amlodipine')).toBeFocused()
+  await expect(page.getByRole('status').filter({ hasText: 'Simvastatin removed' })).toBeVisible()
+
+  await page.getByRole('button', { name: 'Remove Amlodipine' }).click()
+  await expect(chip('Warfarin')).toBeFocused()
+
+  await page.getByRole('button', { name: 'Remove Warfarin' }).click()
+  await expect(input).toBeFocused()
 })
 
 test('Severity headings announce the word once', async ({ page }) => {

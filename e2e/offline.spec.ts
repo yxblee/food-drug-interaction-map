@@ -17,6 +17,13 @@ test('after one visit, My meds still checks warfarin offline, and says the data 
   await page.goto('./')
   await expect(page.getByRole('tab', { name: 'My meds' })).toBeVisible()
   await expect(page.getByRole('status').filter({ hasText: 'Showing saved data' })).toHaveCount(0)
+  // The live region is always in the DOM, empty and without height, so setting its text is announced.
+  const saved = page.locator('.app__saved')
+  await expect(saved).toHaveCount(1)
+  await expect(saved).toBeEmpty()
+  // display:none regions are not reliably announced when text appears; clip instead.
+  expect(await saved.evaluate((el) => getComputedStyle(el).display)).not.toBe('none')
+  expect((await saved.boundingBox())!.height).toBeLessThanOrEqual(1)
   // The worker is in control and has saved the page, a script, the Dataset and every node file.
   await page.evaluate(() => navigator.serviceWorker.ready)
   const { nodes } = await (await page.request.get('api/graph.json')).json()
@@ -36,6 +43,7 @@ test('after one visit, My meds still checks warfarin offline, and says the data 
   await context.setOffline(true)
   await page.reload()
 
+  await expect(page.locator('.app__saved')).toHaveText('Showing saved data')
   await expect(page.getByRole('status').filter({ hasText: 'Showing saved data' })).toBeVisible()
   await page.getByRole('tab', { name: 'My meds' }).click()
   const input = page.getByLabel('Add a medication')
