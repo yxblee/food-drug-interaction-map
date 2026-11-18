@@ -1,0 +1,12 @@
+id: "a-meal--carbamazepine"
+food: "a-meal"
+drug: "carbamazepine"
+summary: "The carbamazepine label lists taking it with meals as part of how it is given."
+advice: "The Tegretol label says the medication should be taken with meals, and its patient information says to take it with food. Ask your pharmacist how this applies to your own dose."
+citations:
+  - type: "label"
+    title: "Tegretol"
+    url: "https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=8d409411-aa9f-4f3a-a52c-fbcb0c3ec053"
+    setid: "8d409411-aa9f-4f3a-a52c-fbcb0c3ec053"
+status: "pending"
+source: "curated"

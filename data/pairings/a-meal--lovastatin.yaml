@@ -1,0 +1,12 @@
+id: "a-meal--lovastatin"
+food: "a-meal"
+drug: "lovastatin"
+summary: "Lovastatin works better after a meal: less of the active drug reaches the blood when it is taken fasting."
+advice: "The lovastatin label says the tablets are given with meals, and reports that blood levels of the active inhibitors were about two-thirds as high when it was taken fasting as after a standard meal. Ask your pharmacist how this applies to your own dose."
+citations:
+  - type: "label"
+    title: "LOVASTATIN TABLETS USP"
+    url: "https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=df7ddf4f-d569-431e-81f1-9129d7043150"
+    setid: "df7ddf4f-d569-431e-81f1-9129d7043150"
+status: "pending"
+source: "curated"
