@@ -42,6 +42,8 @@ export const Drug = z.strictObject({
   rxnorm: z.string().regex(/^\d+$/).optional(),
   /** MedlinePlus drug page, resolved from `rxnorm` by `pipeline medlineplus`. Never guessed. */
   medlineplus: z.url({ protocol: /^https$/ }).optional(),
+  /** DailyMed label setid, resolved from `rxnorm` by `pipeline dailymed`. Never guessed. */
+  dailymed: z.uuid().optional(),
 })
 export type Drug = z.infer<typeof Drug>
 

@@ -3,7 +3,7 @@ import type { GraphPayload } from '@fdi/schema'
 import { SEVERITIES } from '@fdi/schema'
 import { buildIndex, nodeKey, searchNodes, type Index } from '@fdi/schema/domain'
 import { PillLabel } from '../PillLabel.tsx'
-import { MedlinePlusLink } from '../MedlinePlusLink.tsx'
+import { dailymedUrl, MedlinePlusLink, NlmSource } from '../MedlinePlusLink.tsx'
 import { plural } from '../plural.ts'
 import { SeverityGroupHeading, SeverityWords } from '../explore/SeverityBadge.tsx'
 import { PAIRING_MEANING, PairingRow } from '../explore/PairingRow.tsx'
@@ -64,6 +64,8 @@ export function MyMedsTab({
   const helps = useMemo(() => pairingsFor(ix, meds), [ix, meds])
   const name = (id: string) => ix.nodes.get(nodeKey('drug', id))?.name ?? id
   const link = (id: string) => ix.nodes.get(nodeKey('drug', id))?.medlineplus
+  const label = (id: string) => ix.nodes.get(nodeKey('drug', id))?.dailymed
+  const hasAbout = (id: string) => !!(link(id) || label(id))
   const add = (id: string, matched: string) => {
     setQuery('')
     dropUndo()
@@ -304,21 +306,31 @@ export function MyMedsTab({
               </ul>
             </section>
           )}
-          {meds.some(link) && (
+          {meds.some(hasAbout) && (
             <section aria-labelledby="about-title" className="meds__about">
               <p id="about-title" className="mono-label">
                 About your medications
               </p>
               <ul>
-                {meds.filter(link).map((id) => (
+                {meds.filter(hasAbout).map((id) => (
                   <li key={id}>
-                    <MedlinePlusLink label={`About ${name(id)} (MedlinePlus)`} url={link(id)!} />
+                    {link(id) && (
+                      <MedlinePlusLink label={`About ${name(id)} (MedlinePlus)`} url={link(id)!} />
+                    )}
+                    {label(id) && (
+                      <MedlinePlusLink
+                        label={`Read the label for ${name(id)} (DailyMed)`}
+                        url={dailymedUrl(label(id)!)}
+                      />
+                    )}
                   </li>
                 ))}
               </ul>
-              <p className="mono-label">
-                Source: MedlinePlus, National Library of Medicine. NLM is not responsible for and
-                does not endorse this site.
+              <p>
+                <NlmSource
+                  medlineplus={meds.some((id) => !!link(id))}
+                  dailymed={meds.some((id) => !!label(id))}
+                />
               </p>
             </section>
           )}

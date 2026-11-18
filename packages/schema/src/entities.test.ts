@@ -32,6 +32,14 @@ describe('Drug', () => {
   it('rejects unknown fields', () => {
     expect(Drug.safeParse({ id: 'warfarin', name: 'W', colour: 'red' }).success).toBe(false)
   })
+  it('takes an optional DailyMed setid that must be a UUID', () => {
+    const base = { id: 'warfarin', name: 'Warfarin' }
+    const setid = '1b4121ee-a733-4456-a917-be2603477839'
+    expect(Drug.parse({ ...base, dailymed: setid }).dailymed).toBe(setid)
+    expect(Drug.safeParse({ ...base, dailymed: 'not-a-setid' }).success).toBe(false)
+    expect(Drug.safeParse({ ...base, dailymed: setid.slice(1) }).success).toBe(false)
+    expect(Drug.safeParse({ ...base, dailymed: `https://x.test/${setid}` }).success).toBe(false)
+  })
   it('takes an optional https MedlinePlus URL', () => {
     const base = { id: 'warfarin', name: 'Warfarin' }
     const link = 'https://medlineplus.gov/druginfo/meds/a682277.html'

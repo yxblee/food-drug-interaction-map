@@ -1,0 +1,37 @@
+{
+  "1545063": {
+    "data": [
+      {
+        "spl_version": 15,
+        "published_date": "May 13, 2026",
+        "title": "VYNDAQEL (TAFAMIDIS MEGLUMINE) CAPSULE, LIQUID FILLED VYNDAMAX (TAFAMIDIS) CAPSULE, LIQUID FILLED [PFIZER LABORATORIES DIV PFIZER INC]",
+        "setid": "1b4121ee-a733-4456-a917-be2603477839"
+      }
+    ],
+    "metadata": { "total_elements": 1 }
+  },
+  "233698": {
+    "data": [
+      {
+        "spl_version": 13,
+        "published_date": "Feb 02, 2026",
+        "title": "MULTAQ (DRONEDARONE) TABLET, FILM COATED [CARDINAL HEALTH 107, LLC]",
+        "setid": "3bd4006a-8bad-4909-ac6d-b6d84390155c"
+      },
+      {
+        "spl_version": 37,
+        "published_date": "Jun 13, 2025",
+        "title": "MULTAQ (DRONEDARONE) TABLET, FILM COATED [SANOFI-AVENTIS U.S. LLC]",
+        "setid": "7fa41601-7fb5-4155-8e50-2ae903f0d2d6"
+      },
+      {
+        "spl_version": 2,
+        "published_date": "Dec 30, 2011",
+        "title": "MULTAQ (DRONEDARONE) TABLET, FILM COATED [PHYSICIANS TOTAL CARE, INC.]",
+        "setid": "236d4549-f44b-4677-b857-acedd10b9920"
+      }
+    ],
+    "metadata": { "total_elements": 3 }
+  },
+  "37546": { "data": [], "metadata": { "total_elements": 0 } }
+}

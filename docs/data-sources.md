@@ -52,3 +52,15 @@ The "About this medication (MedlinePlus)" link on a Drug comes from the NLM [Med
 - For each Drug with an `rxnorm` id and no link yet (never a Drug class), it asks `https://connect.medlineplus.gov/service?mainSearchCriteria.v.cs=2.16.840.1.113883.6.88&mainSearchCriteria.v.c={rxcui}&knowledgeResponseType=application/json`. The first entry whose link is an https `medlineplus.gov/druginfo/meds/` page is kept, without its tracking query. Connect also returns health-topic pages such as "Statins"; those are ignored.
 - A Drug with no such page gets no link and is printed. Nothing is guessed from the name. Drugs without an `rxnorm` id are skipped.
 - The link opens in a new tab, and its accessible name says so. It appears in the Explore side panel for a Drug and beside each medication in My meds.
+
+## Labels from DailyMed
+
+The "Read the label (DailyMed)" link on a Drug opens its official US label on [DailyMed](https://dailymed.nlm.nih.gov/dailymed/), the NLM provider of FDA label information. Its [web services v2](https://dailymed.nlm.nih.gov/dailymed/services/v2/) are free and need no key. NLM's web policy lets works of the US government be reproduced in the US and asks for "Source: National Library of Medicine". The services page states no separate licence, so the NLM policy and its disclaimer (NLM does not endorse or warrant) apply. Label text is written by manufacturers and may be copyrighted: only the setid (a UUID) is stored, never label text.
+
+> Source: DailyMed, National Library of Medicine. NLM is not responsible for and does not endorse this site.
+
+When a Drug shows both the MedlinePlus and DailyMed links, one line names both ("MedlinePlus and DailyMed").
+
+- Run it with `node --run pipeline -- dailymed`. It writes only a `dailymed` line after the `medlineplus` line (else after `rxnorm`) of Drug files.
+- Verified query (curl, 2026-11-18): `https://dailymed.nlm.nih.gov/dailymed/services/v2/spls.json?rxcui={rxcui}&pagesize=100` returns `data[]` of `{setid, title, spl_version, published_date}` plus `metadata.total_elements`. `/spls.json?rxcui=` is the RxNorm-to-setid lookup; `/rxcuis.json` only lists the rxcuis DailyMed knows and does not return setids. The page link is `https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid={setid}`.
+- An ingredient rxcui matches every label containing it, repackagers and combination products included (simvastatin: 183). The command therefore writes a setid only when exactly one label matches. With several, it prints each setid and title and writes nothing, for a person to choose by hand (add the line, confirming it is the manufacturer's label for this Drug alone). With none, the Drug is printed and gets no link. Nothing is guessed from the name.
