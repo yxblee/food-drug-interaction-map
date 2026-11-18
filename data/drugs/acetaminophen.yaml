@@ -2,5 +2,6 @@ id: "acetaminophen"
 name: "Acetaminophen"
 rxnorm: "161"
 medlineplus: "https://medlineplus.gov/druginfo/meds/a681004.html"
+dailymed: "103d109d-f520-409c-8da2-eb6b0fbec891"
 aliases: ["Tylenol", "paracetamol", "Little Fevers", "Bactimicina", "CounterAct Pain", "Nortemp", "Ringl", "Pharbetol", "Cetafen", "Panadol", "Anacin AF", "Feverall", "Mapap", "Redutemp", "Tempra Quicklets", "Tycolene", "Acephen", "Comtrex Sore Throat Relief", "Tactinal"]
 drug_class: "Analgesic"

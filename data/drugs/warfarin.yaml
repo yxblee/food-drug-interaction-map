@@ -2,5 +2,6 @@ id: "warfarin"
 name: "Warfarin"
 rxnorm: "11289"
 medlineplus: "https://medlineplus.gov/druginfo/meds/a682277.html"
+dailymed: "19a69a72-ac5d-45d5-a94d-a5aaecbe4730"
 aliases: ["Coumadin", "Jantoven"]
 drug_class: "Vitamin K antagonist anticoagulant"

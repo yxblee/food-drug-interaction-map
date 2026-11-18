@@ -2,6 +2,7 @@ id: venlafaxine
 name: Venlafaxine
 rxnorm: "39786"
 medlineplus: "https://medlineplus.gov/druginfo/meds/a694020.html"
+dailymed: "1ce5786e-22e6-4afa-8052-6eababc6aa4e"
 aliases:
   - Effexor
   - Effexor XR

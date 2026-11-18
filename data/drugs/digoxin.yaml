@@ -2,5 +2,6 @@ id: "digoxin"
 name: "Digoxin"
 rxnorm: "3407"
 medlineplus: "https://medlineplus.gov/druginfo/meds/a682301.html"
+dailymed: "dfac7f13-28be-423d-9389-9089da29da17"
 aliases: ["Lanoxin", "Digox"]
 drug_class: "Cardiac glycoside"

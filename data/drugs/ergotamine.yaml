@@ -1,6 +1,7 @@
 id: ergotamine
 name: Ergotamine
 rxnorm: "4025"
+dailymed: "a9582fdb-7ddd-4f69-aa7a-66247cdb8c92"
 aliases:
   - Ergotamine tartrate
   - Ergomar

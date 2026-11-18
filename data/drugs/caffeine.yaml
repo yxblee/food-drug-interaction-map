@@ -1,6 +1,7 @@
 id: caffeine
 name: Caffeine
 rxnorm: "1886"
+dailymed: "15e4d040-ed21-46e7-98c6-56267f388f57"
 aliases:
   - Stay Awake
   - caffeine tablets

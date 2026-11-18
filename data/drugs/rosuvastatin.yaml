@@ -2,6 +2,7 @@ id: "rosuvastatin"
 name: "Rosuvastatin"
 rxnorm: "301542"
 medlineplus: "https://medlineplus.gov/druginfo/meds/a603033.html"
+dailymed: "325a5d0e-9a72-4015-9fcd-1655fb504cee"
 aliases: ["Crestor", "Ezallor"]
 parent: "statins"
 drug_class: "HMG-CoA reductase inhibitor"
