@@ -1,14 +1,15 @@
 import { DatabaseSync } from 'node:sqlite'
-import type {
-  Drug,
-  Food,
-  GraphNode,
-  GraphPayload,
-  Interaction,
-  Kind,
-  Mechanism,
-  NodeDetail,
-  SearchResult,
+import {
+  Citation,
+  type Drug,
+  type Food,
+  type GraphNode,
+  type GraphPayload,
+  type Interaction,
+  type Kind,
+  type Mechanism,
+  type NodeDetail,
+  type SearchResult,
 } from '@fdi/schema'
 import {
   buildIndex,
@@ -18,6 +19,8 @@ import {
   nodeKey,
   searchNodes,
 } from '@fdi/schema/domain'
+
+const CITATION_TYPES = Citation.shape.type.options
 
 export interface Store {
   version: string
@@ -70,6 +73,15 @@ export function loadStore(dbPath: string): Store {
   const ix = buildIndex(nodes, interactions)
   const graph: GraphPayload = {
     version,
+    stats: {
+      reviewedAt: interactions.reduce<string | null>(
+        (max, i) => (i.reviewed_at && (!max || i.reviewed_at > max) ? i.reviewed_at : max),
+        null,
+      ),
+      citationTypes: CITATION_TYPES.filter((t) =>
+        interactions.some((i) => i.citations.some((c) => c.type === t)),
+      ),
+    },
     nodes,
     interactions: interactions.map(
       ({ id, food, drug, mechanisms, severity, effect, summary, advice }) => ({

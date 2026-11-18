@@ -1,6 +1,7 @@
 import { useEffect, useMemo, useRef, useState } from 'react'
 import type { GraphPayload, Kind } from '@fdi/schema'
 import { buildIndex, splitKey } from '@fdi/schema/domain'
+import { AboutData } from './about/AboutData.tsx'
 import { PillLabel } from './PillLabel.tsx'
 import { fetchGraph } from './api.ts'
 import { ExploreTab } from './explore/ExploreTab.tsx'
@@ -28,6 +29,7 @@ export function App() {
     [state.meds, ix, meds],
   )
 
+  const [aboutOpen, setAboutOpen] = useState(false)
   const [attempt, setAttempt] = useState(0)
   const [disclaimerOpen, setDisclaimerOpen] = useState(
     () => !window.matchMedia('(max-width: 768px)').matches,
@@ -186,7 +188,11 @@ export function App() {
             changing your diet or medications.
           </p>
         </details>
+        <button className="app__about" disabled={!graph} onClick={() => setAboutOpen(true)}>
+          About the data
+        </button>
       </footer>
+      {aboutOpen && graph && <AboutData graph={graph} onClose={() => setAboutOpen(false)} />}
     </div>
   )
 }

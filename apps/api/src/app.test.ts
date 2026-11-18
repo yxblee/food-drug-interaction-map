@@ -54,6 +54,10 @@ describe('GET /api/search', () => {
 })
 
 describe('GET /api/graph', () => {
+  it('carries Dataset stats derived from approved interactions', async () => {
+    const body = (await (await get('/api/graph')).json()) as GraphPayload
+    expect(body.stats).toEqual({ reviewedAt: '2026-10-08', citationTypes: ['label'] })
+  })
   it('returns all nodes and approved interactions without heavy fields', async () => {
     const body = (await (await get('/api/graph')).json()) as GraphPayload
     expect(body.version).toBe(store.version)
