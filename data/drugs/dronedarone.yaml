@@ -1,0 +1,6 @@
+id: dronedarone
+name: Dronedarone
+rxnorm: "233698"
+aliases:
+  - Multaq
+drug_class: "Antiarrhythmic"

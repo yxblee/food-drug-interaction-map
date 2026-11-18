@@ -1,0 +1,26 @@
+id: grapefruit--nimodipine
+food: grapefruit
+drug: nimodipine
+mechanisms:
+  - cyp3a4-inhibition
+severity: avoid
+effect: increases
+summary: Grapefruit and grapefruit juice can raise nimodipine levels and
+  strengthen its blood pressure lowering effect.
+advice: Avoid grapefruit and grapefruit juice while taking nimodipine. The
+  effect can linger for days after the last intake, so don't switch to it
+  between doses. Tell your care team if you have dizziness or lightheadedness,
+  which may be signs of low blood pressure.
+details: Nimodipine is broken down by the CYP3A4 enzyme in the gut wall and
+  liver. This first-pass breakdown means only about 13% of an oral dose reaches
+  the blood. Grapefruit juice inhibits this enzyme, so more nimodipine is
+  absorbed and its blood pressure lowering effect is stronger. The label says
+  this effect may last at least 4 days after the last grapefruit juice. It
+  advises against grapefruit and grapefruit juice during treatment.
+citations:
+  - type: label
+    title: NIMODIPINE [BIONPHARMA INC.]
+    url: https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=e65d5108-22a2-4d87-a78d-15606f3cc9e2
+    setid: e65d5108-22a2-4d87-a78d-15606f3cc9e2
+status: pending
+source: openfda

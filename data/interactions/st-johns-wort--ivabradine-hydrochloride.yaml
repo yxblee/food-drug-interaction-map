@@ -1,0 +1,25 @@
+id: st-johns-wort--ivabradine-hydrochloride
+food: st-johns-wort
+drug: ivabradine-hydrochloride
+mechanisms:
+  - cyp3a4-induction
+severity: avoid
+effect: decreases
+summary: St. John's wort can lower ivabradine levels by speeding up its
+  breakdown, so it should be avoided.
+advice: Don't take St. John's wort while on ivabradine. If you already use it,
+  talk to your prescriber or pharmacist before stopping or changing anything,
+  since stopping an inducer can also change drug levels.
+details: Ivabradine is mostly broken down by the CYP3A4 enzyme in the liver and
+  gut. St. John's wort induces CYP3A4, which makes the body clear ivabradine
+  faster and lowers its blood levels. That may make the drug less effective at
+  controlling heart rate. The label lists St. John's wort as an example of a
+  CYP3A4 inducer to avoid. It also tells patients to avoid it in the counseling
+  section.
+citations:
+  - type: label
+    title: IVABRADINE [Novadoz Pharmaceuticals LLC]
+    url: https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=676907d3-b374-4baa-8422-c04706409540
+    setid: 676907d3-b374-4baa-8422-c04706409540
+status: pending
+source: openfda

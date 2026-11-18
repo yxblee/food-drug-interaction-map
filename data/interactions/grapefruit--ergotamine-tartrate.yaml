@@ -1,0 +1,27 @@
+id: grapefruit--ergotamine-tartrate
+food: grapefruit
+drug: ergotamine-tartrate
+mechanisms:
+  - cyp3a4-inhibition
+severity: caution
+effect: increases
+summary: Grapefruit juice may raise ergotamine levels by blocking CYP3A4,
+  increasing the risk of serious toxicity such as vasospasm.
+advice: Avoid grapefruit and grapefruit juice while taking ergotamine unless
+  your prescriber says otherwise. Report numbness, tingling, coldness or pain in
+  the fingers, toes or limbs, and chest pain, right away.
+details: Ergotamine is broken down by the CYP3A4 enzyme. Strong CYP3A4
+  inhibitors, such as macrolide antibiotics and protease inhibitors, are
+  contraindicated with it because they have caused serious adverse events. The
+  label lists grapefruit juice among the less potent CYP3A4 inhibitors. Serious
+  reactions have not been reported with these, but there is still a potential
+  risk of serious toxicity, including vasospasm (narrowing of blood vessels) and
+  ergotism, which can cause poor circulation and, if untreated, gangrene. The
+  label does not give a specific amount of grapefruit that is safe.
+citations:
+  - type: label
+    title: ERGOTAMINE TARTRATE [Pangea Pharmaceuticals LLC]
+    url: https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=a9582fdb-7ddd-4f69-aa7a-66247cdb8c92
+    setid: a9582fdb-7ddd-4f69-aa7a-66247cdb8c92
+status: pending
+source: openfda

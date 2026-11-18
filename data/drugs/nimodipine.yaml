@@ -1,0 +1,7 @@
+id: nimodipine
+name: Nimodipine
+rxnorm: "7426"
+aliases:
+  - Nymalize
+  - Nimotop
+drug_class: "Calcium channel blocker"
