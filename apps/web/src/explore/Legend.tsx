@@ -1,6 +1,5 @@
 import { PillLabel } from '../PillLabel.tsx'
-import { SEVERITIES } from '@fdi/schema'
-import { SEVERITY_LABEL } from './SeverityBadge.tsx'
+import { SeverityWords } from './SeverityBadge.tsx'
 
 // Matches the 2D renderer: Drug = circle, Food = square, Mechanism = diamond (unfilled).
 const SHAPES = [
@@ -36,24 +35,21 @@ export function Legend() {
           Outlined: a group or class
         </li>
       </ul>
-      <ul className="legend__list">
-        {SEVERITIES.map((sev) => (
-          <li key={sev}>
-            <svg width="24" height="14" aria-hidden="true">
-              <line
-                x1="1"
-                y1="7"
-                x2="23"
-                y2="7"
-                stroke={`var(--sev-${sev})`}
-                strokeWidth={WIDTH[sev]}
-                strokeDasharray={sev === 'minimal' ? '4 3' : undefined}
-              />
-            </svg>
-            {SEVERITY_LABEL[sev]}
-          </li>
-        ))}
-      </ul>
+      <SeverityWords
+        lead={(sev) => (
+          <svg width="24" height="14" aria-hidden="true">
+            <line
+              x1="1"
+              y1="7"
+              x2="23"
+              y2="7"
+              stroke={`var(--sev-${sev})`}
+              strokeWidth={WIDTH[sev]}
+              strokeDasharray={sev === 'minimal' ? '4 3' : undefined}
+            />
+          </svg>
+        )}
+      />
       <p>Thicker, darker lines are more serious. Select anything to see why.</p>
       <p>Color tints the page by what you've selected: drug, food or mechanism.</p>
     </details>

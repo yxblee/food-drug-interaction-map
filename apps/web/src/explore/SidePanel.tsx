@@ -104,28 +104,26 @@ export function SidePanel({ nodeKey, onSelect, onPrev, onNext, onClose, onNotFou
                 label="About this medication (MedlinePlus)"
                 url={(entity as Drug).medlineplus!}
               />
-              <span className="mono-label">
-                Source: MedlinePlus, National Library of Medicine. NLM is not responsible for and
-                does not endorse this site.
-              </span>
             </p>
           )}
           {kind === 'food' && <p className="mono-label">{(entity as Food).category}</p>}
           {kind === 'mechanism' && <p>{(entity as Mechanism).explanation}</p>}
-          {d.node.aliases.length > 0 && (
-            <p className="panel__aliases">Also known as {d.node.aliases.join(', ')}</p>
-          )}
-          {d.parent && (
-            <p className="panel__aliases">
-              Part of{' '}
-              <button
-                className="link-button"
-                onClick={() => onSelect(keyOf(d.parent!.kind, d.parent!.id))}
-              >
-                {d.parent.name}
-              </button>
-            </p>
-          )}
+          <div className="panel__meta">
+            {d.node.aliases.length > 0 && (
+              <p className="panel__aliases">Also known as {d.node.aliases.join(', ')}</p>
+            )}
+            {d.parent && (
+              <p className="panel__aliases">
+                Part of{' '}
+                <button
+                  className="link-button"
+                  onClick={() => onSelect(keyOf(d.parent!.kind, d.parent!.id))}
+                >
+                  {d.parent.name}
+                </button>
+              </p>
+            )}
+          </div>
           {d.children.length > 0 && (
             <p className="panel__aliases">
               Includes{' '}
@@ -196,6 +194,13 @@ export function SidePanel({ nodeKey, onSelect, onPrev, onNext, onClose, onNotFou
                 ))}
               </ul>
             </section>
+          )}
+
+          {kind === 'drug' && (entity as Drug).medlineplus && (
+            <p className="panel__attribution">
+              Source: MedlinePlus, National Library of Medicine. NLM is not responsible for and does
+              not endorse this site.
+            </p>
           )}
         </div>
       )}

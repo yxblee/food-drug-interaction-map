@@ -60,6 +60,45 @@ test('disclaimer is a one-line summary with the full text one tap away', async (
   await expect(footer).toBeInViewport({ ratio: 1 })
 })
 
+test('360x740: Drug panel shows the first Severity badge above the fold', async ({ page }) => {
+  await page.setViewportSize({ width: 360, height: 740 })
+  await page.goto('./?node=drug:simvastatin')
+  const badge = page.locator('.panel .panel__sev .badge').first()
+  await expect(badge).toBeVisible()
+  const box = (await badge.boundingBox())!
+  // ~40px margin: CI fonts render about 20px taller than local ones.
+  const panel = (await page.locator('.panel').boundingBox())!
+  expect(box.y + box.height).toBeLessThanOrEqual(740 - 40)
+  expect(box.y + box.height).toBeLessThanOrEqual(panel.y + panel.height - 40)
+  // The advice itself starts on the first screen, not just its heading.
+  const row = (await page.locator('.panel .irow').first().boundingBox())!
+  expect(row.y).toBeLessThanOrEqual(panel.y + panel.height - 60)
+})
+
+test('Drug panel attribution is sentence-case body text after the Interactions list', async ({
+  page,
+}) => {
+  await page.goto('./?node=drug:simvastatin')
+  const note = page.locator('.panel .panel__attribution')
+  await expect(note).toHaveText(
+    'Source: MedlinePlus, National Library of Medicine. NLM is not responsible for and does not endorse this site.',
+  )
+  expect(await note.evaluate((e) => getComputedStyle(e).textTransform)).toBe('none')
+  const lastGroup = (await page.locator('.panel .panel__sev').last().boundingBox())!
+  expect((await note.boundingBox())!.y).toBeGreaterThan(lastGroup.y)
+})
+
+test('the Explore key says what each Severity word means, as My meds does', async ({ page }) => {
+  await page.goto('./?tab=meds')
+  const medsKey = page.locator('.severity-key')
+  await medsKey.locator('summary').click()
+  const expected = await medsKey.locator('.severity-words li').allInnerTexts()
+  expect(expected).toHaveLength(4)
+  await page.goto('./')
+  await page.getByText('How to read the map').click()
+  expect(await page.locator('.legend .severity-words li').allInnerTexts()).toEqual(expected)
+})
+
 test('Can I have…? follows the results both in Tab order and on screen', async ({ page }) => {
   await addMeds(page)
   const r = await page.evaluate(() => {
