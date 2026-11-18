@@ -81,6 +81,13 @@ export function MyMedsTab({
     if (matched !== name(id)) setBrands((b) => ({ ...b, [id]: matched }))
   }
   const removeMed = (id: string) => {
+    // Next chip, else previous, else the input, so keyboard users keep their place.
+    const i = meds.indexOf(id)
+    const keep = meds[i + 1] ?? meds[i - 1]
+    if (keep) document.getElementById(chipId(keep))?.focus()
+    else input.current?.focus()
+    dropUndo()
+    setNotice(`${name(id)} removed`)
     setMeds((m) => m.filter((x) => x !== id))
     setBrands(({ [id]: _gone, ...rest }) => rest)
   }

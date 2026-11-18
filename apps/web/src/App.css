@@ -172,14 +172,21 @@
   }
 }
 
-/* Quiet; collapses when empty so nothing shifts. Opacity only, 200ms ease-out. */
+/* Quiet. Empty it is visually hidden (sr-only pattern), not display:none, so a screen reader
+   announces the text when it is set; it takes no height, so nothing shifts. Opacity only, 200ms. */
 .app__saved {
   margin: 0;
   padding: 4px 16px;
   animation: saved-in 200ms cubic-bezier(0.23, 1, 0.32, 1);
 }
 .app__saved:empty {
-  display: none;
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
 }
 @keyframes saved-in {
   from {
