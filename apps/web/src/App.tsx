@@ -29,6 +29,9 @@ export function App() {
   )
 
   const [attempt, setAttempt] = useState(0)
+  const [disclaimerOpen, setDisclaimerOpen] = useState(
+    () => !window.matchMedia('(max-width: 768px)').matches,
+  )
 
   useEffect(() => {
     let live = true
@@ -172,8 +175,17 @@ export function App() {
       </p>
 
       <footer className="app__footer">
-        Informational only — not medical advice. Talk to your pharmacist or doctor before changing
-        your diet or medications.
+        {/* Phones: one line always on screen, the rest one tap away. Wide screens: open. */}
+        <details open={disclaimerOpen} onToggle={(e) => setDisclaimerOpen(e.currentTarget.open)}>
+          <summary>
+            <span className="app__footer-lead">Not medical advice.</span>{' '}
+            <span className="app__footer-more">Read more</span>
+          </summary>
+          <p className="app__footer-full">
+            Informational only — not medical advice. Talk to your pharmacist or doctor before
+            changing your diet or medications.
+          </p>
+        </details>
       </footer>
     </div>
   )
