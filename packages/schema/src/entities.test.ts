@@ -36,6 +36,9 @@ describe('Drug', () => {
     const base = { id: 'warfarin', name: 'Warfarin' }
     const setid = '1b4121ee-a733-4456-a917-be2603477839'
     expect(Drug.parse({ ...base, dailymed: setid }).dailymed).toBe(setid)
+    // Real DailyMed setids are not always RFC-variant UUIDs (e.g. verapamil's cited label).
+    const odd = '006cf920-04ae-0b53-cb91-85481972abc2'
+    expect(Drug.parse({ ...base, dailymed: odd }).dailymed).toBe(odd)
     expect(Drug.safeParse({ ...base, dailymed: 'not-a-setid' }).success).toBe(false)
     expect(Drug.safeParse({ ...base, dailymed: setid.slice(1) }).success).toBe(false)
     expect(Drug.safeParse({ ...base, dailymed: `https://x.test/${setid}` }).success).toBe(false)
