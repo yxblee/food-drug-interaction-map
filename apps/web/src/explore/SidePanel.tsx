@@ -1,5 +1,5 @@
 import { PillLabel } from '../PillLabel.tsx'
-import { MedlinePlusLink } from '../MedlinePlusLink.tsx'
+import { dailymedUrl, MedlinePlusLink, NlmSource } from '../MedlinePlusLink.tsx'
 import { useEffect, useRef, useState } from 'react'
 import { type Drug, type Food, type Mechanism, type NodeDetail } from '@fdi/schema'
 import { groupTerm, nodeKey as keyOf, splitKey } from '@fdi/schema/domain'
@@ -98,16 +98,24 @@ export function SidePanel({ nodeKey, onSelect, onPrev, onNext, onClose, onNotFou
           {kind === 'drug' && (entity as Drug).drug_class && (
             <p className="mono-label">{(entity as Drug).drug_class}</p>
           )}
-          {kind === 'drug' && (entity as Drug).medlineplus && (
+          {kind === 'drug' && ((entity as Drug).medlineplus || (entity as Drug).dailymed) && (
             <p className="panel__about">
-              <MedlinePlusLink
-                label="About this medication (MedlinePlus)"
-                url={(entity as Drug).medlineplus!}
+              {(entity as Drug).medlineplus && (
+                <MedlinePlusLink
+                  label="About this medication (MedlinePlus)"
+                  url={(entity as Drug).medlineplus!}
+                />
+              )}
+              {(entity as Drug).dailymed && (
+                <MedlinePlusLink
+                  label="Read the label (DailyMed)"
+                  url={dailymedUrl((entity as Drug).dailymed!)}
+                />
+              )}
+              <NlmSource
+                medlineplus={!!(entity as Drug).medlineplus}
+                dailymed={!!(entity as Drug).dailymed}
               />
-              <span className="mono-label">
-                Source: MedlinePlus, National Library of Medicine. NLM is not responsible for and
-                does not endorse this site.
-              </span>
             </p>
           )}
           {kind === 'food' && <p className="mono-label">{(entity as Food).category}</p>}

@@ -11,6 +11,8 @@ export interface GraphNode {
   parent?: string
   /** A Drug's MedlinePlus page, when one is recorded. */
   medlineplus?: string
+  /** A Drug's DailyMed label setid, when one is recorded. */
+  dailymed?: string
 }
 
 export type GraphInteraction = Pick<

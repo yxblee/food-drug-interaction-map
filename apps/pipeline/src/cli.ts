@@ -16,6 +16,7 @@ import { parseArgs } from 'node:util'
 import { z } from 'zod'
 import { readDataDir } from '../../api/src/db/build.ts'
 import { runBrands } from './brands.ts'
+import { runDailymed } from './dailymed.ts'
 import { runMedlineplus } from './medlineplus.ts'
 import { dumpLines } from './foodrugs.ts'
 import {
@@ -240,6 +241,10 @@ try {
 }
 if (process.argv[2] === 'brands') {
   await runBrands('data/drugs', politeFetch)
+  process.exit(0)
+}
+if (process.argv[2] === 'dailymed') {
+  await runDailymed('data/drugs', politeFetch)
   process.exit(0)
 }
 if (process.argv[2] === 'medlineplus') {

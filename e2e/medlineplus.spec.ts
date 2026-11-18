@@ -10,7 +10,9 @@ test('the side panel for a Drug links to its MedlinePlus page', async ({ page })
   await expect(link).toHaveAttribute('rel', /noopener/)
   await expect(link).toHaveAccessibleName(/opens in a new tab/i)
   expect((await link.boundingBox())!.height).toBeGreaterThanOrEqual(44)
-  await expect(page.locator('.panel')).toContainText('MedlinePlus, National Library of Medicine')
+  await expect(page.locator('.panel')).toContainText(
+    /Source: MedlinePlus.*National Library of Medicine/,
+  )
   await link.focus()
   await expect(link).toBeFocused()
 })

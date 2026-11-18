@@ -18,3 +18,17 @@ export function MedlinePlusLink({ url, label }: Props) {
     </a>
   )
 }
+
+export const dailymedUrl = (setid: string) =>
+  `https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=${setid}`
+
+// The one NLM attribution line, naming whichever of the two NLM sources are linked.
+export function NlmSource({ medlineplus, dailymed }: { medlineplus: boolean; dailymed: boolean }) {
+  const names = [medlineplus && 'MedlinePlus', dailymed && 'DailyMed'].filter(Boolean).join(' and ')
+  return (
+    <span className="mono-label">
+      Source: {names}, National Library of Medicine. NLM is not responsible for and does not endorse
+      this site.
+    </span>
+  )
+}
