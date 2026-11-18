@@ -9,6 +9,7 @@ import { SeverityGroupHeading, SeverityWords } from '../explore/SeverityBadge.ts
 import { PAIRING_MEANING, PairingRow } from '../explore/PairingRow.tsx'
 import { checkMeds, pairingsFor, type FoodWarning } from './checkMeds.ts'
 import { Combobox, NoMatch } from './Combobox.tsx'
+import { foodWarningsToText } from './foodWarningsToText.ts'
 import { FoodCheck } from './FoodCheck.tsx'
 import { WarningRow } from './WarningRow.tsx'
 import './meds.css'
@@ -105,6 +106,13 @@ export function MyMedsTab({
       setNotice((n) => (n === 'List cleared' ? '' : n))
     }, UNDO_MS)
     input.current?.focus()
+  }
+  const copyWarnings = () => {
+    const date = new Date().toLocaleDateString(undefined, { dateStyle: 'long' })
+    navigator.clipboard.writeText(foodWarningsToText(warnings, date)).then(
+      () => setNotice('Copied to clipboard'),
+      () => setNotice("Couldn't copy. Try Print instead"),
+    )
   }
   const undoClear = () => {
     if (!undo) return
@@ -215,6 +223,11 @@ export function MyMedsTab({
           {meds.length > 0 && (
             <button className="pill-button" onClick={() => window.print()}>
               <PillLabel>Print</PillLabel>
+            </button>
+          )}
+          {navigator.clipboard && (
+            <button className="pill-button" disabled={warnings.length === 0} onClick={copyWarnings}>
+              <PillLabel>Copy</PillLabel>
             </button>
           )}
         </div>

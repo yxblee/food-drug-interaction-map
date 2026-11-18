@@ -228,5 +228,7 @@ test('My meds: Tab from the last chip lands on Clear all; remove buttons never o
   await expect(page.getByRole('button', { name: 'See on map' })).toBeFocused()
   await page.keyboard.press('Tab')
   await expect(page.getByRole('button', { name: 'Print' })).toBeFocused()
-  await expect(page.locator('.meds__actions .pill-label')).toHaveCount(3)
+  await page.keyboard.press('Tab')
+  await expect(page.getByRole('button', { name: 'Copy' })).toBeFocused()
+  await expect(page.locator('.meds__actions .pill-label')).toHaveCount(4)
 })
