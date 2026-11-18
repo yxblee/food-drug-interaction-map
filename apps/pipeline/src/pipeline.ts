@@ -85,7 +85,7 @@ export interface DdidPorts {
 }
 
 export interface Ports {
-  searchLabels(term: string): Promise<Label[]>
+  searchLabels(term: string, drug?: string): Promise<Label[]>
   draft(input: DraftInput): Promise<Draft>
   // RxNav: ingredient-level RxNorm CUI for a drug or brand name (openFDA's rxcui values are
   // product-level); undefined for unknown names and combination products.
@@ -100,6 +100,7 @@ export interface Ports {
 
 export interface Options {
   limit?: number
+  drugs?: string[] // openfda: only these Drugs (generic names)
   dataDir: string
   reportPath: string
 }
@@ -160,11 +161,11 @@ export async function runPipeline(
   }
 
   // Food names and Aliases -> labels (cached) that actually mention them.
-  const cached = async (term: string) => {
-    const key = `openfda:${term.toLowerCase()}`
+  const cached = async (term: string, drug?: string) => {
+    const key = `openfda:${term.toLowerCase()}${drug ? `|${drug.toLowerCase()}` : ''}`
     const hit = await ports.cache.get(key)
     if (hit) return JSON.parse(hit) as Label[]
-    const labels = await ports.searchLabels(term)
+    const labels = await ports.searchLabels(term, drug)
     await ports.cache.set(key, JSON.stringify(labels))
     return labels
   }
@@ -257,7 +258,9 @@ export async function runPipeline(
       const terms = [food.name, ...food.aliases]
       const hits = new Map<string, Label>()
       for (const term of terms) {
-        for (const l of await cached(term)) if (mentions(labelText(l), terms)) hits.set(l.set_id, l)
+        for (const drug of options.drugs?.length ? options.drugs : [undefined])
+          for (const l of await cached(term, drug))
+            if (mentions(labelText(l), terms)) hits.set(l.set_id, l)
       }
       for (const l of hits.values()) {
         const ingredients = l.openfda?.substance_name ?? l.openfda?.generic_name ?? []
@@ -265,6 +268,8 @@ export async function runPipeline(
           skip.noIngredient.add(l.set_id)
           continue
         }
+        if (options.drugs?.length && !options.drugs.some((n) => sameIngredient(ingredients[0], n)))
+          continue
         if (ingredients.length > 1) {
           skip.combination.add(l.set_id)
           continue
