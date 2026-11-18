@@ -1,5 +1,6 @@
 id: "tetracycline"
 name: "Tetracycline"
 rxnorm: "10395"
+medlineplus: "https://medlineplus.gov/druginfo/meds/a682098.html"
 parent: "tetracyclines"
 drug_class: "Tetracycline antibiotic"

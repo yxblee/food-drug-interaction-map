@@ -1,6 +1,7 @@
 id: "oxycodone"
 name: "Oxycodone"
 rxnorm: "7804"
+medlineplus: "https://medlineplus.gov/druginfo/meds/a682132.html"
 aliases: ["OxyContin", "Roxicodone", "Oxaydo", "Xtampza", "Roxybond"]
 parent: "opioids"
 drug_class: "Opioid analgesic"

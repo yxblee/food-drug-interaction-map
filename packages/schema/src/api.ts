@@ -9,6 +9,8 @@ export interface GraphNode {
   aliases: string[]
   group: boolean
   parent?: string
+  /** A Drug's MedlinePlus page, when one is recorded. */
+  medlineplus?: string
 }
 
 export type GraphInteraction = Pick<

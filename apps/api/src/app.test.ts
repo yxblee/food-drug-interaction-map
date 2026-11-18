@@ -71,6 +71,13 @@ describe('GET /api/graph', () => {
     expect(body.interactions[0]).not.toHaveProperty('details')
     expect(body.interactions[0]).not.toHaveProperty('citations')
   })
+  it("carries a Drug's MedlinePlus link, and only where it has one", async () => {
+    const { nodes } = (await (await get('/api/graph')).json()) as GraphPayload
+    const link = (id: string) => nodes.find((n) => n.id === id)?.medlineplus
+    expect(link('simvastatin')).toBe('https://medlineplus.gov/druginfo/meds/a692030.html')
+    expect(link('warfarin')).toBeUndefined()
+    expect(link('statins')).toBeUndefined()
+  })
   it('sets cache headers and honours If-None-Match', async () => {
     const res = await get('/api/graph')
     expect(res.headers.get('cache-control')).toBe('public, max-age=300')

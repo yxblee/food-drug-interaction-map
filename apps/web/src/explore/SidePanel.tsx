@@ -1,4 +1,5 @@
 import { PillLabel } from '../PillLabel.tsx'
+import { MedlinePlusLink } from '../MedlinePlusLink.tsx'
 import { useEffect, useRef, useState } from 'react'
 import { type Drug, type Food, type Mechanism, type NodeDetail } from '@fdi/schema'
 import { groupTerm, nodeKey as keyOf, splitKey } from '@fdi/schema/domain'
@@ -96,6 +97,15 @@ export function SidePanel({ nodeKey, onSelect, onPrev, onNext, onClose, onNotFou
         <div className="panel__body">
           {kind === 'drug' && (entity as Drug).drug_class && (
             <p className="mono-label">{(entity as Drug).drug_class}</p>
+          )}
+          {kind === 'drug' && (entity as Drug).medlineplus && (
+            <p className="panel__about">
+              <MedlinePlusLink name={d.node.name} url={(entity as Drug).medlineplus!} />
+              <span className="mono-label">
+                Source: MedlinePlus, National Library of Medicine. NLM is not responsible for and
+                does not endorse this site.
+              </span>
+            </p>
           )}
           {kind === 'food' && <p className="mono-label">{(entity as Food).category}</p>}
           {kind === 'mechanism' && <p>{(entity as Mechanism).explanation}</p>}

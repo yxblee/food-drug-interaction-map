@@ -1,5 +1,6 @@
 id: "linezolid"
 name: "Linezolid"
 rxnorm: "190376"
+medlineplus: "https://medlineplus.gov/druginfo/meds/a602004.html"
 aliases: ["Zyvox"]
 drug_class: "Oxazolidinone antibiotic"

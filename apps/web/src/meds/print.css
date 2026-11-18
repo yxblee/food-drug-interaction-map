@@ -47,6 +47,7 @@
   .meds__actions,
   .meds__picker > :not(h2):not(.meds__chips),
   .chip button,
+  .chip .extlink,
   .foodcheck,
   .meds__results > .meds__status,
   .app__footer summary,

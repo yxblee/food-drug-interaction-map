@@ -1,5 +1,6 @@
 id: "lithium"
 name: "Lithium"
 rxnorm: "6448"
+medlineplus: "https://medlineplus.gov/druginfo/meds/a681039.html"
 aliases: ["Lithobid"]
 drug_class: "Mood stabilizer"

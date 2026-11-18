@@ -1,5 +1,6 @@
 id: "buspirone"
 name: "Buspirone"
 rxnorm: "1827"
+medlineplus: "https://medlineplus.gov/druginfo/meds/a688005.html"
 aliases: ["Buspar", "Bucapsol"]
 drug_class: "Anxiolytic"

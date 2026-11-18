@@ -1,6 +1,7 @@
 id: colchicine
 name: Colchicine
 rxnorm: "2683"
+medlineplus: "https://medlineplus.gov/druginfo/meds/a682711.html"
 aliases:
   - Mitigare
   - Gloperba

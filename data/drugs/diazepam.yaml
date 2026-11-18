@@ -1,6 +1,7 @@
 id: "diazepam"
 name: "Diazepam"
 rxnorm: "3322"
+medlineplus: "https://medlineplus.gov/druginfo/meds/a682047.html"
 aliases: ["Valium", "Diastat", "Valtoco", "Libervant"]
 parent: "benzodiazepines"
 drug_class: "Benzodiazepine"

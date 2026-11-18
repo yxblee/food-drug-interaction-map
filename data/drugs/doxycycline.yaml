@@ -1,6 +1,7 @@
 id: "doxycycline"
 name: "Doxycycline"
 rxnorm: "3640"
+medlineplus: "https://medlineplus.gov/druginfo/meds/a682063.html"
 aliases: ["Vibramycin", "Doryx", "Morgidox", "Acticlate", "Mondoxyne", "Targadox", "Okebo", "Monodox", "Periostat", "Adoxa", "Doxy", "Oracea", "Alodox", "Avidoxy"]
 parent: "tetracyclines"
 drug_class: "Tetracycline antibiotic"

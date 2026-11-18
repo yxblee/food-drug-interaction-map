@@ -1,4 +1,6 @@
 id: simvastatin
 name: Simvastatin
+rxnorm: '36567'
+medlineplus: https://medlineplus.gov/druginfo/meds/a692030.html
 aliases: [Zocor]
 parent: statins

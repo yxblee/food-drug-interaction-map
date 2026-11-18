@@ -3,6 +3,7 @@ import type { GraphPayload } from '@fdi/schema'
 import { SEVERITIES } from '@fdi/schema'
 import { buildIndex, nodeKey, searchNodes, type Index } from '@fdi/schema/domain'
 import { PillLabel } from '../PillLabel.tsx'
+import { MedlinePlusLink } from '../MedlinePlusLink.tsx'
 import { SeverityGroupHeading } from '../explore/SeverityBadge.tsx'
 import { PAIRING_MEANING, PairingRow } from '../explore/PairingRow.tsx'
 import { checkMeds, pairingsFor, type FoodWarning } from './checkMeds.ts'
@@ -60,6 +61,7 @@ export function MyMedsTab({
   const warnings = useMemo(() => checkMeds(ix, meds), [ix, meds])
   const helps = useMemo(() => pairingsFor(ix, meds), [ix, meds])
   const name = (id: string) => ix.nodes.get(nodeKey('drug', id))?.name ?? id
+  const link = (id: string) => ix.nodes.get(nodeKey('drug', id))?.medlineplus
   const add = (id: string, matched: string) => {
     setQuery('')
     dropUndo()
@@ -174,6 +176,7 @@ export function MyMedsTab({
             <li key={id} id={chipId(id)} tabIndex={-1} className="chip">
               {name(id)}
               {brands[id] && <span className="chip__brand mono-label"> ({brands[id]})</span>}
+              {link(id) && <MedlinePlusLink compact name={name(id)} url={link(id)!} />}
               <button aria-label={`Remove ${name(id)}`} onClick={() => removeMed(id)}>
                 ✕
               </button>

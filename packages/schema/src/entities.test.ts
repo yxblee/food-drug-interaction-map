@@ -32,6 +32,15 @@ describe('Drug', () => {
   it('rejects unknown fields', () => {
     expect(Drug.safeParse({ id: 'warfarin', name: 'W', colour: 'red' }).success).toBe(false)
   })
+  it('takes an optional https MedlinePlus URL', () => {
+    const base = { id: 'warfarin', name: 'Warfarin' }
+    const link = 'https://medlineplus.gov/druginfo/meds/a682277.html'
+    expect(Drug.parse({ ...base, medlineplus: link }).medlineplus).toBe(link)
+    expect(Drug.safeParse({ ...base, medlineplus: link.replace('https', 'http') }).success).toBe(
+      false,
+    )
+    expect(Drug.safeParse({ ...base, medlineplus: 'not a url' }).success).toBe(false)
+  })
 })
 
 describe('Food', () => {
