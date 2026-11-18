@@ -15,6 +15,10 @@ export interface FoodWarning {
 
 const rank = (s: Severity) => SEVERITY_RANK[s]
 
+/** True when the warning's lead sentence names a single Drug, so its rows need not name it again. */
+export const namesOnlyDrug = (w: FoodWarning) =>
+  new Set(w.affected.map((h) => h.drug.id)).size === 1
+
 export function checkMeds(ix: Index, drugIds: string[]): FoodWarning[] {
   const byFood = new Map<string, FoodWarning>()
   for (const drugId of drugIds) {

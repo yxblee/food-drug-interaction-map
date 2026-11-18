@@ -134,6 +134,32 @@
   margin: 24px 0 4px;
   font-size: 18px;
 }
+/* The heading and its Severity key share a row; an open key wraps below, full width. */
+.meds__resulthead {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  column-gap: 16px;
+}
+.severity-key[open] {
+  flex-basis: 100%;
+  margin-bottom: 8px;
+}
+.severity-key summary {
+  display: flex;
+  align-items: center;
+  min-height: 44px;
+  cursor: pointer;
+  color: var(--ink);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  list-style: none;
+  /* Keeps the 44px target but takes 24px of row height, so the first Avoid lead stays on screen. */
+  margin-block: -10px;
+}
+.severity-key summary::-webkit-details-marker {
+  display: none;
+}
 .meds__list {
   list-style: none;
   padding: 0;
@@ -185,6 +211,19 @@
   .meds__results h2 {
     margin-bottom: 0;
     font-size: 22px;
+  }
+  /* The key shares the heading's row: its label wraps to two lines (29px) rather than taking a row. */
+  .meds__resulthead {
+    column-gap: 8px;
+    align-items: center;
+  }
+  .severity-key:not([open]) {
+    flex: 1 1 9rem;
+  }
+  .severity-key summary {
+    letter-spacing: 0.06em;
+    line-height: 1.2;
+    margin-block: -8px;
   }
   .meds__sev h3 {
     margin-top: 12px;

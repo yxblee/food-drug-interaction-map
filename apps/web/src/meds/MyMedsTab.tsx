@@ -4,7 +4,8 @@ import { SEVERITIES } from '@fdi/schema'
 import { buildIndex, nodeKey, searchNodes, type Index } from '@fdi/schema/domain'
 import { PillLabel } from '../PillLabel.tsx'
 import { MedlinePlusLink } from '../MedlinePlusLink.tsx'
-import { SeverityGroupHeading } from '../explore/SeverityBadge.tsx'
+import { plural } from '../plural.ts'
+import { SeverityGroupHeading, SeverityWords } from '../explore/SeverityBadge.tsx'
 import { PAIRING_MEANING, PairingRow } from '../explore/PairingRow.tsx'
 import { checkMeds, pairingsFor, type FoodWarning } from './checkMeds.ts'
 import { Combobox, NoMatch } from './Combobox.tsx'
@@ -152,7 +153,9 @@ export function MyMedsTab({
                   label: (
                     <>
                       {o.name}
-                      {o.matched !== o.name && <span className="mono-label"> ({o.matched})</span>}
+                      {o.matched !== o.name && (
+                        <span className="mono-label mono-label--case"> ({o.matched})</span>
+                      )}
                       {meds.includes(o.id) && <span className="mono-label"> · on your list</span>}
                     </>
                   ),
@@ -175,7 +178,9 @@ export function MyMedsTab({
           {meds.map((id) => (
             <li key={id} id={chipId(id)} tabIndex={-1} className="chip">
               {name(id)}
-              {brands[id] && <span className="chip__brand mono-label"> ({brands[id]})</span>}
+              {brands[id] && (
+                <span className="chip__brand mono-label mono-label--case"> ({brands[id]})</span>
+              )}
               <button aria-label={`Remove ${name(id)}`} onClick={() => removeMed(id)}>
                 ✕
               </button>
@@ -217,7 +222,13 @@ export function MyMedsTab({
 
       <div className="meds__main">
         <section className="meds__results" aria-labelledby="results-title">
-          <h2 id="results-title">Foods to watch</h2>
+          <div className="meds__resulthead">
+            <h2 id="results-title">Foods to watch</h2>
+            <details className="severity-key">
+              <summary className="mono-label">What the Severity words mean</summary>
+              <SeverityWords />
+            </details>
+          </div>
           <p role="status" className="meds__status">
             {(meds.length > 0 || notChecked.length > 0) &&
               resultsSummary(meds.length > 0 ? warnings : null, notChecked.length)}
@@ -313,8 +324,6 @@ const nodesOf = (ix: Index, food: string, drug: string) => ({
 })
 
 const chipId = (id: string) => `med-chip-${id}`
-
-const plural = (n: number, one: string, many: string) => `${n} ${n === 1 ? one : many}`
 
 const UNDO_MS = 10_000
 

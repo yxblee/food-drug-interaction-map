@@ -46,7 +46,9 @@ export function FoodCheck({
           label: (
             <>
               {o.name}
-              {o.matched !== o.name && <span className="mono-label"> ({o.matched})</span>}
+              {o.matched !== o.name && (
+                <span className="mono-label mono-label--case"> ({o.matched})</span>
+              )}
               {o.group && <span className="mono-label"> · {groupTerm('food')}</span>}
             </>
           ),

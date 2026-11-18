@@ -4,7 +4,7 @@ import { groupTerm } from '@fdi/schema/domain'
 import { fetchNode } from '../api.ts'
 import { InteractionRow } from '../explore/InteractionRow.tsx'
 import { SeverityBadge } from '../explore/SeverityBadge.tsx'
-import { helpedBy, type DrugPairings, type FoodWarning } from './checkMeds.ts'
+import { helpedBy, namesOnlyDrug, type DrugPairings, type FoodWarning } from './checkMeds.ts'
 
 /** One Food warning. `showSeverity` prints its badge where no Severity group heading sits above it. */
 export function WarningRow({
@@ -90,6 +90,7 @@ export function WarningRow({
                 perspective="food"
                 groupSeverity={w.severity}
                 cautionFirst
+                hideName={namesOnlyDrug(w)}
               />
             ))}
         </ul>

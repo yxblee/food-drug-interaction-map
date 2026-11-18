@@ -135,7 +135,7 @@
   color: var(--muted);
 }
 @media (max-width: 768px) {
-  /* Product name on its own line above the tabs. */
+  /* Product name hidden visually (still the h1) so the bar is one row. */
   .app__title {
     position: absolute;
     width: 1px;

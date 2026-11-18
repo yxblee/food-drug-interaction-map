@@ -72,10 +72,33 @@ h3 {
 }
 
 .mono-label {
-  font: 11px/1.2 var(--font-mono);
+  font: 12px/1.2 var(--font-mono);
   text-transform: uppercase;
   letter-spacing: 0.12em;
   color: var(--muted);
+}
+/* A Brand name keeps its own case (Synthroid, not SYNTHROID); the data is already title-case. */
+.mono-label--case {
+  text-transform: none;
+  letter-spacing: 0.02em;
+}
+.severity-words {
+  list-style: none;
+  margin: 8px 0 0;
+  padding: 0;
+  font-size: 14px;
+  line-height: 1.5;
+}
+.severity-words li {
+  display: flex;
+  gap: 8px;
+  align-items: baseline;
+  margin: 6px 0;
+}
+.severity-words .badge {
+  flex: none;
+  min-width: 4.5rem;
+  text-align: center;
 }
 
 .sev-meaning {

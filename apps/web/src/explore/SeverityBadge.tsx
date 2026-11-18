@@ -1,4 +1,4 @@
-import type { Severity } from '@fdi/schema'
+import { SEVERITIES, type Severity } from '@fdi/schema'
 
 export const SEVERITY_LABEL: Record<Severity, string> = {
   avoid: 'Avoid',
@@ -12,6 +12,19 @@ export const SEVERITY_LEGEND: Record<Severity, string> = {
   caution: 'Limit or keep intake consistent. Talk to your pharmacist.',
   monitor: 'Usually fine. Watch for symptoms or have levels checked.',
   minimal: 'Documented but rarely clinically important.',
+}
+
+/** Each Severity word with what it means: the explanation behind the Explore legend and My meds' link. */
+export function SeverityWords() {
+  return (
+    <ul className="severity-words">
+      {SEVERITIES.map((s) => (
+        <li key={s}>
+          <SeverityBadge severity={s} /> {SEVERITY_LEGEND[s]}
+        </li>
+      ))}
+    </ul>
+  )
 }
 
 /** Named by the Severity word alone; `decorative` hides it where the word is already in a heading. */

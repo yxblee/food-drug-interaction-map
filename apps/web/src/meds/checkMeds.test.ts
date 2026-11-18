@@ -1,7 +1,14 @@
 import { describe, expect, it } from 'vite-plus/test'
 import type { GraphInteraction, GraphNode, Pairing } from '@fdi/schema'
 import { buildIndex } from '@fdi/schema/domain'
-import { checkFood, checkMeds, helpedBy, mapKeysFor, pairingsFor } from './checkMeds.ts'
+import {
+  checkFood,
+  checkMeds,
+  helpedBy,
+  mapKeysFor,
+  namesOnlyDrug,
+  pairingsFor,
+} from './checkMeds.ts'
 
 const node = (kind: GraphNode['kind'], id: string, extra: Partial<GraphNode> = {}): GraphNode => ({
   kind,
@@ -238,5 +245,18 @@ describe('helpedBy', () => {
     expect(helpedBy(helps, food('meal'), new Set(['metformin'])).map((d) => d.id)).toEqual([
       'atorvastatin',
     ])
+  })
+})
+
+describe('namesOnlyDrug', () => {
+  it('is true when the lead sentence names one Drug, so its rows need not repeat it', () => {
+    const [w] = checkMeds(ix, ['simvastatin']).filter((w) => w.food.id === 'grapefruit')
+    expect(namesOnlyDrug(w)).toBe(true)
+  })
+
+  it('is false when the lead names several Drugs', () => {
+    const [grapefruit, alcohol] = checkMeds(ix, ['warfarin', 'simvastatin', 'atorvastatin'])
+    expect(namesOnlyDrug(grapefruit)).toBe(false)
+    expect(namesOnlyDrug(alcohol)).toBe(false)
   })
 })

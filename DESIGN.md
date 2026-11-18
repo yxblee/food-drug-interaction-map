@@ -205,7 +205,7 @@ Each tint is a full six-role palette (paper, ink, muted, line, badge background,
 - **Headline** (700, 28px, -0.01em): view titles such as "My meds" and "Foods to watch".
 - **Title** (700, 18px, -0.01em): severity group headings; the detail panel's entry name uses the browser-default h2 size.
 - **Body** (400, 15px, 1.5): summaries, advice, list entries. Plain-language sentences, kept within the panel's 26rem or the results column.
-- **Label** (400, 11px, uppercase, 0.12em): the app title, section tags ("ADD A MEDICATION"), panel breadcrumbs ("FOOD · GRAPEFRUIT AND RELATIVES").
+- **Label** (400, 12px, uppercase, 0.12em): the app title, section tags ("ADD A MEDICATION"), panel breadcrumbs ("FOOD · GRAPEFRUIT AND RELATIVES"). A Brand name echoed in a label ("(Synthroid)") keeps its own case.
 - **Badge** (600, 11px, uppercase, 0.08em): severity badges only.
 - **Graph label** (9px mono, 0.1em): node names in the 2D graph.
 - **Severity meaning** (400, 15px, sentence case, line-height 1.5, Weathered Grey): the one sentence under each severity group heading in My meds and the Explore panel. Body text, not a label; `.mono-label` stays for true metadata.
@@ -246,7 +246,7 @@ Quiet and tactile; they look like paper until pressed.
 - **Shape:** full pill (999px).
 - **Default:** transparent fill, 1px outline at 26% ink, label at 72% ink (the reference's 64% falls under 4.5:1 on the tinted papers; `tokens.test.ts` guards 72% on paper and surface in every tint and mode), 6px 12px padding, 44px minimum height (the panel's close button is a 44×44 square). The same treatment covers Color, the legend's "How to read the map" summary and the panel close. Shared `--btn-border`, `--btn-border-hover` and `--btn-label` tokens live in `styles.css`.
 - **Hover** (only where `hover: hover`): outline to 60% ink, label to full ink, both over 200ms. Text pills (`PillLabel`) also slide the label up to reveal a copy beneath it; the copy is CSS content with empty alt text so the name is read once. Reduced motion drops the slide. Selected pills ignore the colour change so paper-on-ink stays legible.
-- **Pressed / Selected** (`aria-pressed="true"`; the view tabs use `aria-selected`): fills with Field Ink, text turns paper. Used for the active view (Explore / My meds, a tablist with arrow keys and one tab stop) and the 2D and Mechanisms toggles. Color is a setting, not a view: it sits apart from the view tabs behind a hairline rule, drawn as a text button with a square check mark (filled when on) rather than a pill. On phones the product name shows as the 11px mono label on its own line above the tabs; at rest with an empty Medication list, the Explore hint adds "Taking medicines? Check them in My meds" beside "Try grapefruit".
+- **Pressed / Selected** (`aria-pressed="true"`; the view tabs use `aria-selected`): fills with Field Ink, text turns paper. Used for the active view (Explore / My meds, a tablist with arrow keys and one tab stop) and the 2D and Mechanisms toggles. Color is a setting, not a view: it sits apart from the view tabs behind a hairline rule, drawn as a text button with a square check mark (filled when on) rather than a pill. On phones (768px and below) the product name is visually hidden, still the page h1; at rest with an empty Medication list, the Explore hint adds "Taking medicines? Check them in My meds" beside "Try grapefruit".
 - **Focus:** 2px ink outline, 2px offset (global `:focus-visible`).
 - **Link button:** unstyled underlined text for in-panel navigation.
 
