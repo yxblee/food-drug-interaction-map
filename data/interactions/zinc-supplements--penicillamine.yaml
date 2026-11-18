@@ -1,0 +1,16 @@
+id: zinc-supplements--penicillamine
+food: zinc-supplements
+drug: penicillamine
+mechanisms: [chelation]
+severity: caution
+effect: decreases
+summary: "Zinc can reduce how well penicillamine is absorbed and how well it works."
+advice: "Take zinc supplements and penicillamine at least 1 hour apart."
+details: "The NIH fact sheet says zinc can reduce the absorption and action of penicillamine, which is used for rheumatoid arthritis and Wilson disease, and advises taking them at least 1 hour apart. The sheet cites one source and names no mechanism; chelation is listed because penicillamine is a chelating agent, not because the sheet says so."
+citations:
+  - type: "guideline"
+    title: "NIH Office of Dietary Supplements: Zinc fact sheet for health professionals (Interactions with Medications)"
+    url: "https://ods.od.nih.gov/factsheets/Zinc-HealthProfessional/"
+status: approved
+source: ods
+reviewed_at: 2026-11-18

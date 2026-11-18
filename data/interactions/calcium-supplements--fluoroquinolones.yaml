@@ -1,0 +1,16 @@
+id: calcium-supplements--fluoroquinolones
+food: calcium-supplements
+drug: fluoroquinolones
+mechanisms: [chelation]
+severity: caution
+effect: decreases
+summary: "Calcium supplements can bind quinolone antibiotics in the gut so less is absorbed."
+advice: "Take the antibiotic 2 hours before or 2 hours after a calcium supplement, unless your pharmacist gives different timing."
+details: "The NIH fact sheet says taking calcium supplements at the same time as quinolones such as ciprofloxacin, gemifloxacin and moxifloxacin can reduce how much of the antibiotic is absorbed, and that separating them by 2 hours before or after prevents this."
+citations:
+  - type: "guideline"
+    title: "NIH Office of Dietary Supplements: Calcium fact sheet for health professionals (Interactions with Medications)"
+    url: "https://ods.od.nih.gov/factsheets/Calcium-HealthProfessional/"
+status: approved
+source: ods
+reviewed_at: 2026-11-18

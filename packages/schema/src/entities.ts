@@ -85,7 +85,7 @@ export const Pairing = z
     advice: Text,
     citations: z.array(Citation).min(1),
     status: z.enum(['approved', 'pending', 'rejected']),
-    source: z.enum(['curated', 'openfda', 'foodrugs', 'ddid']),
+    source: z.enum(['curated', 'openfda', 'foodrugs', 'ddid', 'ods']),
     reviewed_at: z.iso.date().optional(),
   })
   .check((ctx) => {
@@ -121,7 +121,7 @@ export const Interaction = z
     example: z.strictObject({ patient: Text, pharmacist: Text }).optional(),
     citations: z.array(Citation).min(1),
     status: z.enum(['approved', 'pending', 'rejected']),
-    source: z.enum(['curated', 'openfda', 'foodrugs', 'ddid']),
+    source: z.enum(['curated', 'openfda', 'foodrugs', 'ddid', 'ods']),
     reviewed_at: z.iso.date().optional(),
   })
   .check((ctx) => {

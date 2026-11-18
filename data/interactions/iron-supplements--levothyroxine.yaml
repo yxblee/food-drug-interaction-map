@@ -1,0 +1,16 @@
+id: iron-supplements--levothyroxine
+food: iron-supplements
+drug: levothyroxine
+mechanisms: [chelation]
+severity: caution
+effect: decreases
+summary: "Iron supplements can reduce how much levothyroxine is absorbed, enough to matter in some people."
+advice: "Keep levothyroxine at least 4 hours away from iron supplements."
+details: "The NIH fact sheet says taking iron and levothyroxine together can cut levothyroxine effectiveness in some patients, and that labels for some levothyroxine products advise against taking it within 4 hours of iron."
+citations:
+  - type: "guideline"
+    title: "NIH Office of Dietary Supplements: Iron fact sheet for health professionals (Interactions with Medications)"
+    url: "https://ods.od.nih.gov/factsheets/Iron-HealthProfessional/"
+status: approved
+source: ods
+reviewed_at: 2026-11-18
