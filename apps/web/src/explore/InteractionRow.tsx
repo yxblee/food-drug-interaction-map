@@ -116,10 +116,20 @@ export function InteractionRow({
           {i.citations.map((c, k) => (
             <li key={k}>
               <a href={c.url} target="_blank" rel="noreferrer">
-                {c.title}
-                <span className="sr-only"> (opens in new tab)</span>
-              </a>{' '}
-              <span className="mono-label">{c.type}</span>
+                <span className="irow__cite-title">
+                  {c.title}
+                  <span className="sr-only"> (opens in new tab)</span>
+                </span>
+                <span className="mono-label">{c.type}</span>
+                <svg className="irow__ext" viewBox="0 0 16 16" aria-hidden="true">
+                  <path
+                    d="M9 2h5v5M14 2 7.5 8.5M12 9.5V13a1 1 0 0 1-1 1H3a1 1 0 0 1-1-1V5a1 1 0 0 1 1-1h3.5"
+                    fill="none"
+                    stroke="currentColor"
+                    strokeWidth="1.5"
+                  />
+                </svg>
+              </a>
             </li>
           ))}
         </ul>
