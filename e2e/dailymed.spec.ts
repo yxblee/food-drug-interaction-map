@@ -1,6 +1,6 @@
 import { expect, test, type Page } from '@playwright/test'
 
-// No Drug in data/ carries a setid until the data PR, so the payloads are given one here.
+// Simvastatin's payload gets a fixed setid so the href is stable whatever data/ holds.
 const SETID = '1b4121ee-a733-4456-a917-be2603477839'
 const URL = `https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=${SETID}`
 type Body = { nodes: { id: string; dailymed?: string }[] }
@@ -31,7 +31,7 @@ test('the side panel for a Drug links to its DailyMed label', async ({ page }) =
 })
 
 test('a Drug class and a Drug with no label get no DailyMed link', async ({ page }) => {
-  for (const key of ['drug:statins', 'drug:adenosine']) {
+  for (const key of ['drug:statins', 'drug:ivabradine']) {
     await page.goto(`./?node=${key}`)
     await expect(page.locator('.panel__title')).not.toHaveText('…')
     await expect(page.getByRole('link', { name: /DailyMed/ })).toHaveCount(0)
@@ -53,7 +53,7 @@ test('My meds links each listed medication to its label', async ({ page }) => {
   await expect(link).toHaveAttribute('target', '_blank')
   expect((await link.boundingBox())!.height).toBeGreaterThanOrEqual(44)
 
-  await input.fill('adenosine')
+  await input.fill('ivabradine')
   await input.press('Enter')
   await expect(about.getByRole('link', { name: /DailyMed/ })).toHaveCount(1)
 })
