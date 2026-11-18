@@ -22,7 +22,10 @@ test('360px: the Severity key sits beside Foods to watch and opens the four mean
   const keyBox = (await key.boundingBox())!
   expect(keyBox.height).toBeGreaterThanOrEqual(44)
   expect(keyBox.y + keyBox.height).toBeLessThanOrEqual(footerTop)
-  expect(Math.abs(keyBox.y + keyBox.height / 2 - (heading.y + heading.height / 2))).toBeLessThan(40)
+  // Same row as the heading: it adds no line of its own, so the first Avoid lead keeps its headroom.
+  expect(Math.abs(keyBox.y + keyBox.height / 2 - (heading.y + heading.height / 2))).toBeLessThan(16)
+  const row = (await page.locator('.meds__resulthead').boundingBox())!
+  expect(row.height).toBeLessThanOrEqual(heading.height + 2)
   await key.click()
   for (const w of ['Avoid', 'Caution', 'Monitor', 'Minimal'])
     await expect(page.locator('.severity-words .badge', { hasText: w })).toBeVisible()

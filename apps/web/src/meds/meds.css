@@ -212,6 +212,19 @@
     margin-bottom: 0;
     font-size: 22px;
   }
+  /* The key shares the heading's row: its label wraps to two lines (29px) rather than taking a row. */
+  .meds__resulthead {
+    column-gap: 8px;
+    align-items: center;
+  }
+  .severity-key:not([open]) {
+    flex: 1 1 9rem;
+  }
+  .severity-key summary {
+    letter-spacing: 0.06em;
+    line-height: 1.2;
+    margin-block: -8px;
+  }
   .meds__sev h3 {
     margin-top: 12px;
   }
