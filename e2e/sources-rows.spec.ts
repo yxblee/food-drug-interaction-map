@@ -42,7 +42,7 @@ test('Explore: each Source is a 44px row link; link buttons get a 44px hit area'
   const panel = page.getByRole('complementary')
   await expect(panel.locator('li.irow').first()).toBeVisible()
   await expectTargets(page, panel.locator('li.irow').first())
-  const lb = panel.locator('.link-button').first()
+  const lb = panel.locator('.irow .link-button').first()
   const hit = await lb.evaluate((e) => {
     const s = getComputedStyle(e, '::after')
     const r = e.getBoundingClientRect()

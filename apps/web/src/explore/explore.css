@@ -131,7 +131,7 @@
   cursor: pointer;
   font: inherit;
 }
-.link-button::after {
+.irow .link-button::after {
   content: '';
   position: absolute;
   left: 0;
