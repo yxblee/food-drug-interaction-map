@@ -2,5 +2,6 @@ id: "clozapine"
 name: "Clozapine"
 rxnorm: "2626"
 medlineplus: "https://medlineplus.gov/druginfo/meds/a691001.html"
+dailymed: "61fe53d5-ed5c-4e45-9189-709d08d386cb"
 aliases: ["Clozaril", "Versacloz"]
 drug_class: "Atypical antipsychotic"

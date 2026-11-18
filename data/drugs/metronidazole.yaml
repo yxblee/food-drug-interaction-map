@@ -2,5 +2,6 @@ id: "metronidazole"
 name: "Metronidazole"
 rxnorm: "6922"
 medlineplus: "https://medlineplus.gov/druginfo/meds/a689011.html"
+dailymed: "cc004be0-da13-4b6b-83d5-d45b23fd37c9"
 aliases: ["Flagyl", "Nuvessa", "Likmez", "Vandazole"]
 drug_class: "Nitroimidazole antibiotic"

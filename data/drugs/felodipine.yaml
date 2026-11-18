@@ -2,5 +2,6 @@ id: "felodipine"
 name: "Felodipine"
 rxnorm: "4316"
 medlineplus: "https://medlineplus.gov/druginfo/meds/a692016.html"
+dailymed: "55637724-8757-11de-8a39-0800200c9a66"
 aliases: ["Plendil"]
 drug_class: "Calcium channel blocker"

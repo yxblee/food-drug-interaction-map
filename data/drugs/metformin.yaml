@@ -2,5 +2,6 @@ id: "metformin"
 name: "Metformin"
 rxnorm: "6809"
 medlineplus: "https://medlineplus.gov/druginfo/meds/a696005.html"
+dailymed: "8cd5555c-f6b2-28d8-e053-2a95a90a5f1e"
 aliases: ["Glucophage", "Riomet", "Glumetza"]
 drug_class: "Biguanide"

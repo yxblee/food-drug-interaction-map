@@ -2,5 +2,6 @@ id: "carbamazepine"
 name: "Carbamazepine"
 rxnorm: "2002"
 medlineplus: "https://medlineplus.gov/druginfo/meds/a682237.html"
+dailymed: "8d409411-aa9f-4f3a-a52c-fbcb0c3ec053"
 aliases: ["Tegretol", "Carbatrol", "Epitol", "Equetro"]
 drug_class: "Anticonvulsant"

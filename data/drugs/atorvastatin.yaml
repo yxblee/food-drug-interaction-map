@@ -2,6 +2,7 @@ id: "atorvastatin"
 name: "Atorvastatin"
 rxnorm: "83367"
 medlineplus: "https://medlineplus.gov/druginfo/meds/a600045.html"
+dailymed: "a60cc18b-0631-4cf0-b021-9f52224ece65"
 aliases: ["Lipitor", "Atorvaliq"]
 parent: "statins"
 drug_class: "HMG-CoA reductase inhibitor"

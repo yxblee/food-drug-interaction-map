@@ -2,6 +2,7 @@ id: verapamil
 name: Verapamil
 rxnorm: "11170"
 medlineplus: "https://medlineplus.gov/druginfo/meds/a684030.html"
+dailymed: "006cf920-04ae-0b53-cb91-85481972abc2"
 aliases:
   - Isoptin
   - Calan

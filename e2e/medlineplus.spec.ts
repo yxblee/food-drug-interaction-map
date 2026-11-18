@@ -41,5 +41,5 @@ test('My meds links each listed medication to MedlinePlus', async ({ page }) => 
   await input.fill('adenosine')
   await input.press('Enter')
   await expect(chips).toContainText('Adenosine')
-  await expect(about.getByRole('link')).toHaveCount(1)
+  await expect(about.getByRole('link', { name: /MedlinePlus/ })).toHaveCount(1)
 })
