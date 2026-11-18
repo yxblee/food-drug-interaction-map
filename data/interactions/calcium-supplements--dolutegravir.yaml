@@ -1,0 +1,15 @@
+id: calcium-supplements--dolutegravir
+food: calcium-supplements
+drug: dolutegravir
+mechanisms: [chelation]
+severity: caution
+effect: decreases
+summary: "Calcium supplements can lower dolutegravir levels a lot, apparently by binding it in the gut."
+advice: "Ask your pharmacist how far apart to space dolutegravir and calcium supplements. The NIH sheet says the labels advise taking dolutegravir 2 hours before or 6 hours after calcium."
+details: "The NIH fact sheet says taking calcium supplements with dolutegravir can substantially reduce dolutegravir blood levels, apparently through chelation, and that the dolutegravir labels give the spacing above. Lower levels could weaken HIV treatment, so timing matters."
+citations:
+  - type: "guideline"
+    title: "NIH Office of Dietary Supplements: Calcium fact sheet for health professionals (Interactions with Medications)"
+    url: "https://ods.od.nih.gov/factsheets/Calcium-HealthProfessional/"
+status: pending
+source: ods

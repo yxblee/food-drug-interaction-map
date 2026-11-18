@@ -1,0 +1,15 @@
+id: zinc-supplements--fluoroquinolones
+food: zinc-supplements
+drug: fluoroquinolones
+mechanisms: [chelation]
+severity: caution
+effect: decreases
+summary: "Zinc taken with quinolone antibiotics can reduce absorption of both the zinc and the antibiotic."
+advice: "Take the antibiotic at least 2 hours before or 4 to 6 hours after a zinc supplement."
+details: "The NIH fact sheet says quinolones such as ciprofloxacin might interact with zinc in the gut, which could inhibit absorption of both if taken together, and that the spacing above minimizes this."
+citations:
+  - type: "guideline"
+    title: "NIH Office of Dietary Supplements: Zinc fact sheet for health professionals (Interactions with Medications)"
+    url: "https://ods.od.nih.gov/factsheets/Zinc-HealthProfessional/"
+status: pending
+source: ods

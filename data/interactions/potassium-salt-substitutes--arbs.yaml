@@ -1,0 +1,15 @@
+id: potassium-salt-substitutes--arbs
+food: potassium-salt-substitutes
+drug: arbs
+mechanisms: [additive-hyperkalemia]
+severity: caution
+effect: increases
+summary: "Angiotensin receptor blockers reduce potassium loss in urine, so extra potassium can build up."
+advice: "Ask your doctor before using potassium salt substitutes with an ARB, and have potassium checked if you do, especially with kidney problems."
+details: "The NIH potassium fact sheet says ACE inhibitors and angiotensin receptor blockers such as losartan reduce urinary potassium excretion, which can lead to high blood potassium, and that experts recommend monitoring potassium status, especially with impaired kidney function. The sheet is about potassium in general, not salt substitutes specifically."
+citations:
+  - type: "guideline"
+    title: "NIH Office of Dietary Supplements: Potassium fact sheet for health professionals (Interactions with Medications)"
+    url: "https://ods.od.nih.gov/factsheets/Potassium-HealthProfessional/"
+status: pending
+source: ods
