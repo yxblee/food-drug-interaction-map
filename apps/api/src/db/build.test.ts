@@ -1,4 +1,5 @@
-import { mkdtempSync, mkdirSync, writeFileSync } from 'node:fs'
+import { cpSync, mkdtempSync, mkdirSync, writeFileSync } from 'node:fs'
+import { readFileSync } from 'node:fs'
 import { tmpdir } from 'node:os'
 import { join } from 'node:path'
 import { DatabaseSync } from 'node:sqlite'
@@ -47,6 +48,28 @@ describe('buildDb', () => {
     buildDb(FIXTURES, out)
     const db = new DatabaseSync(out, { readOnly: true })
     expect(db.prepare('SELECT id FROM pairings').all()).toEqual([{ id: 'kale--statins' }])
+    db.close()
+  })
+  it('leaves out Drugs and Mechanisms that only a Pending Interaction references', () => {
+    const dir = tmp()
+    cpSync(FIXTURES, dir, { recursive: true })
+    writeFileSync(join(dir, 'drugs/newdrug.yaml'), 'id: newdrug\nname: Newdrug\n')
+    writeFileSync(
+      join(dir, 'mechanisms/newmech.yaml'),
+      'id: newmech\nname: Newmech\nkind: other\nexplanation: x\n',
+    )
+    const pending = readFileSync(join(FIXTURES, 'interactions/orange--simvastatin.yaml'), 'utf8')
+      .replace(/^id: .*$/m, 'id: orange--newdrug')
+      .replace(/^drug: .*$/m, 'drug: newdrug')
+      .replace(/^status: .*$/m, 'status: pending')
+      .replace(/^reviewed_at: .*\n/m, '')
+      .replace(/cyp3a4-inhibition/g, 'newmech')
+    writeFileSync(join(dir, 'interactions/orange--newdrug.yaml'), pending)
+    const out = join(tmp(), 'data.db')
+    expect('version' in buildDb(dir, out)).toBe(true)
+    const db = new DatabaseSync(out, { readOnly: true })
+    expect(db.prepare("SELECT id FROM drugs WHERE id = 'newdrug'").all()).toEqual([])
+    expect(db.prepare("SELECT id FROM mechanisms WHERE id = 'newmech'").all()).toEqual([])
     db.close()
   })
   it('is deterministic', () => {

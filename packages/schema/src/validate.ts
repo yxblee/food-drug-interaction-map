@@ -116,11 +116,13 @@ export function validateDataset(raw: RawDataset): ValidationResult {
     }
   }
 
-  const approved = interactions.filter((i) => i.status === 'approved')
-  const usedDrugs = new Set(approved.map((i) => i.drug))
+  // Pending proposals count as references so a data PR can add Drugs before review (#101);
+  // writeDb leaves such Drugs and Mechanisms out of the published Dataset.
+  const live = interactions.filter((i) => i.status !== 'rejected')
+  const usedDrugs = new Set(live.map((i) => i.drug))
   const usedMechanisms = new Set([
-    ...approved.flatMap((i) => i.mechanisms),
-    ...pairings.filter((p) => p.status === 'approved').flatMap((p) => p.mechanisms),
+    ...live.flatMap((i) => i.mechanisms),
+    ...pairings.filter((p) => p.status !== 'rejected').flatMap((p) => p.mechanisms),
   ])
   for (const d of drugs) {
     // a member drug is covered when an approved interaction targets it or its class
@@ -135,4 +137,19 @@ export function validateDataset(raw: RawDataset): ValidationResult {
   return errors.length
     ? { errors }
     : { dataset: { drugs, foods, mechanisms, interactions, pairings } }
+}
+
+/** Drops Drugs and Mechanisms that only Pending entries reference: they are not published (#101). */
+export function publishable(ds: Dataset): Dataset {
+  const approved = ds.interactions.filter((i) => i.status === 'approved')
+  const drugs = new Set(approved.map((i) => i.drug))
+  const mechanisms = new Set([
+    ...approved.flatMap((i) => i.mechanisms),
+    ...ds.pairings.filter((p) => p.status === 'approved').flatMap((p) => p.mechanisms),
+  ])
+  return {
+    ...ds,
+    drugs: ds.drugs.filter((d) => d.group || drugs.has(d.id) || (d.parent && drugs.has(d.parent))),
+    mechanisms: ds.mechanisms.filter((m) => mechanisms.has(m.id)),
+  }
 }

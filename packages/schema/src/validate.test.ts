@@ -211,7 +211,7 @@ describe('validateDataset', () => {
     )
   })
 
-  it('fails a non-class drug or a mechanism no approved interaction references', () => {
+  it('fails a non-class drug or a mechanism no interaction references', () => {
     const raw = base()
     raw.drugs.push({ file: 'drugs/orphan.yaml', data: { id: 'orphan', name: 'Orphan' } })
     raw.mechanisms.push({
@@ -219,7 +219,6 @@ describe('validateDataset', () => {
       data: { id: 'unused', name: 'Unused', kind: 'other', explanation: 'x' },
     })
     raw.interactions.push(
-      interaction('grapefruit', 'orphan', { status: 'pending', reviewed_at: undefined }),
       interaction('sample-fruits', 'orphan', { status: 'rejected', mechanisms: ['unused'] }),
     )
     const errors = errorsOf(raw)
@@ -227,6 +226,23 @@ describe('validateDataset', () => {
     expect(errors).toContainEqual(
       'mechanisms/unused.yaml: no approved interaction references this mechanism',
     )
+  })
+
+  it('accepts a drug and mechanism that only a pending interaction references', () => {
+    const raw = base()
+    raw.drugs.push({ file: 'drugs/newdrug.yaml', data: { id: 'newdrug', name: 'Newdrug' } })
+    raw.mechanisms.push({
+      file: 'mechanisms/newmech.yaml',
+      data: { id: 'newmech', name: 'Newmech', kind: 'other', explanation: 'x' },
+    })
+    raw.interactions.push(
+      interaction('grapefruit', 'newdrug', {
+        status: 'pending',
+        reviewed_at: undefined,
+        mechanisms: ['newmech'],
+      }),
+    )
+    expect(errorsOf(raw)).toEqual([])
   })
 
   it('counts a drug as referenced when an approved interaction targets its class', () => {

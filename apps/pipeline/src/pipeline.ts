@@ -130,7 +130,7 @@ const sameIngredient = (ingredient: string, name: string) => {
   const b = name.toLowerCase()
   return a === b || a.startsWith(`${b} `)
 }
-// The no-approved-reference errors are expected until the reviewer Approves an Interaction (#39).
+// Only Drugs or Mechanisms that no Interaction references fail now; Pending ones pass (#101).
 const EXPECTED = /: no approved interaction references this (drug|mechanism)$/
 
 interface Pair {
