@@ -1,5 +1,11 @@
-import type { GraphInteraction, GraphNode, Severity } from '@fdi/schema'
-import { SEVERITY_RANK, interactionsForDrug, nodeKey, type Index } from '@fdi/schema/domain'
+import type { GraphInteraction, GraphNode, Pairing, Severity } from '@fdi/schema'
+import {
+  SEVERITY_RANK,
+  interactionsForDrug,
+  nodeKey,
+  pairingsForDrug,
+  type Index,
+} from '@fdi/schema/domain'
 
 export interface FoodWarning {
   food: GraphNode
@@ -78,4 +84,38 @@ export function checkFood(ix: Index, foodId: string, drugIds: string[]): FoodWar
     }
   }
   return out.sort(bySeverityThenFood)
+}
+
+export interface DrugPairings {
+  drug: GraphNode
+  pairings: { food: GraphNode; pairing: Pairing; inheritedFrom?: string }[]
+}
+
+/**
+ * "Helps to take with" for a Medication list: per listed Drug that has any, the Foods (or Food
+ * groups) a Helpful pairing names, with Drug class pairings inherited by their members.
+ */
+export function pairingsFor(ix: Index, drugIds: string[]): DrugPairings[] {
+  const out: DrugPairings[] = []
+  for (const id of drugIds) {
+    const drug = ix.nodes.get(nodeKey('drug', id))
+    if (!drug) continue
+    const pairings = pairingsForDrug(ix, id).flatMap(({ pairing, inheritedFrom }) => {
+      const food = ix.nodes.get(nodeKey('food', pairing.food))
+      return food ? [{ food, pairing, inheritedFrom }] : []
+    })
+    if (pairings.length) out.push({ drug, pairings })
+  }
+  return out
+}
+
+/** The listed Drugs a Food helps (itself or through its Food group), minus `except` Drug ids. */
+export function helpedBy(helps: DrugPairings[], food: GraphNode, except: Set<string>): GraphNode[] {
+  return helps
+    .filter(
+      (h) =>
+        !except.has(h.drug.id) &&
+        h.pairings.some((p) => p.food.id === food.id || p.food.id === food.parent),
+    )
+    .map((h) => h.drug)
 }

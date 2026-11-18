@@ -12,6 +12,7 @@ import {
 
 const g: GraphPayload = {
   version: 'v',
+  pairings: [],
   stats: { reviewedAt: null, citationTypes: [] },
   nodes: [
     { kind: 'drug', id: 'statins', name: 'Statins', aliases: [], group: true },

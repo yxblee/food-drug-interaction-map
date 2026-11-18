@@ -9,6 +9,7 @@ import {
   type Kind,
   type Mechanism,
   type NodeDetail,
+  type Pairing,
   type SearchResult,
 } from '@fdi/schema'
 import {
@@ -17,6 +18,8 @@ import {
   interactionsForFood,
   interactionsForMechanism,
   nodeKey,
+  pairingsForDrug,
+  pairingsForFood,
   searchNodes,
 } from '@fdi/schema/domain'
 
@@ -48,6 +51,7 @@ export function loadStore(dbPath: string): Store {
   const interactions = rows<Interaction>(
     "SELECT json FROM interactions WHERE status = 'approved' ORDER BY id",
   )
+  const pairings = rows<Pairing>('SELECT json FROM pairings ORDER BY id')
   const { value: version } = db.prepare("SELECT value FROM meta WHERE key = 'version'").get() as {
     value: string
   }
@@ -70,7 +74,7 @@ export function loadStore(dbPath: string): Store {
       group: false,
     })),
   ]
-  const ix = buildIndex(nodes, interactions)
+  const ix = buildIndex(nodes, interactions, pairings)
   const graph: GraphPayload = {
     version,
     stats: {
@@ -83,6 +87,7 @@ export function loadStore(dbPath: string): Store {
       ),
     },
     nodes,
+    pairings,
     interactions: interactions.map(
       ({ id, food, drug, mechanisms, severity, effect, summary, advice }) => ({
         id,
@@ -106,6 +111,8 @@ export function loadStore(dbPath: string): Store {
         : kind === 'food'
           ? interactionsForFood(ix, id)
           : interactionsForMechanism(ix, id)
+    const resolvedPairings =
+      kind === 'drug' ? pairingsForDrug(ix, id) : kind === 'food' ? pairingsForFood(ix, id) : []
     const refNodes: Record<string, GraphNode> = {}
     const refMechanisms: Record<string, Mechanism> = {}
     for (const { interaction: i } of resolved) {
@@ -114,12 +121,19 @@ export function loadStore(dbPath: string): Store {
       }
       for (const m of i.mechanisms) refMechanisms[m] = mechanismById.get(m)!
     }
+    for (const { pairing: p } of resolvedPairings) {
+      for (const key of [nodeKey('food', p.food), nodeKey('drug', p.drug)]) {
+        refNodes[key] = ix.nodes.get(key)!
+      }
+      for (const m of p.mechanisms) refMechanisms[m] = mechanismById.get(m)!
+    }
     return {
       node,
       entity: entities.get(nodeKey(kind, id))!,
       parent: node.parent ? (ix.nodes.get(nodeKey(kind, node.parent)) ?? null) : null,
       children: node.group ? nodes.filter((n) => n.kind === kind && n.parent === id) : [],
       interactions: resolved,
+      pairings: resolvedPairings,
       mechanisms: refMechanisms,
       nodes: refNodes,
     }

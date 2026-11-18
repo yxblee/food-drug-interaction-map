@@ -1,0 +1,12 @@
+id: kale--statins
+food: kale
+drug: statins
+summary: 'Fixture: a Helpful pairing filed under a Drug class.'
+advice: 'Fixture advice: the label says it can be taken with this food.'
+citations:
+  - type: 'label'
+    title: 'Fixture label'
+    url: 'https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=fixture'
+status: approved
+source: curated
+reviewed_at: 2026-11-17

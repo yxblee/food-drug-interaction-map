@@ -1,7 +1,7 @@
 import { describe, expect, it } from 'vite-plus/test'
-import type { GraphInteraction, GraphNode } from '@fdi/schema'
+import type { GraphInteraction, GraphNode, Pairing } from '@fdi/schema'
 import { buildIndex } from '@fdi/schema/domain'
-import { checkFood, checkMeds, mapKeysFor } from './checkMeds.ts'
+import { checkFood, checkMeds, helpedBy, mapKeysFor, pairingsFor } from './checkMeds.ts'
 
 const node = (kind: GraphNode['kind'], id: string, extra: Partial<GraphNode> = {}): GraphNode => ({
   kind,
@@ -163,5 +163,80 @@ describe('checkFood', () => {
     expect(checkFood(fx, 'nope', ['warfarin'])).toEqual([])
     expect(checkFood(fx, 'alcohol', [])).toEqual([])
     expect(checkFood(fx, 'rice', ['warfarin', 'simvastatin'])).toEqual([])
+  })
+})
+
+const pr = (food: string, drug: string): Pairing => ({
+  id: `${food}--${drug}`,
+  food,
+  drug,
+  mechanisms: [],
+  summary: '',
+  advice: '',
+  citations: [{ type: 'label', title: 't', url: 'https://example.org' }],
+  status: 'approved',
+  source: 'curated',
+  reviewed_at: '2026-11-17',
+})
+const pix = buildIndex(
+  [
+    node('drug', 'statins', { group: true }),
+    node('drug', 'simvastatin', { parent: 'statins' }),
+    node('drug', 'atorvastatin', { parent: 'statins' }),
+    node('drug', 'warfarin'),
+    node('drug', 'metformin'),
+    node('food', 'meal'),
+    node('food', 'greens', { group: true }),
+    node('food', 'kale', { parent: 'greens' }),
+  ],
+  [ia('kale', 'warfarin', 'caution')],
+  [
+    pr('meal', 'metformin'),
+    pr('meal', 'statins'),
+    pr('meal', 'simvastatin'),
+    pr('greens', 'atorvastatin'),
+  ],
+)
+
+describe('pairingsFor', () => {
+  it('returns [] with no meds, unknown ids or no pairings', () => {
+    expect(pairingsFor(pix, [])).toEqual([])
+    expect(pairingsFor(pix, ['nope'])).toEqual([])
+    expect(pairingsFor(pix, ['warfarin'])).toEqual([])
+  })
+  it('gives one entry per listed Drug that has pairings, in list order', () => {
+    const out = pairingsFor(pix, ['warfarin', 'metformin', 'simvastatin'])
+    expect(out.map((d) => d.drug.id)).toEqual(['metformin', 'simvastatin'])
+    expect(out[0].pairings.map((p) => p.food.id)).toEqual(['meal'])
+  })
+  it('covers a Drug class: members inherit it, and their own pairing replaces it', () => {
+    const [d] = pairingsFor(pix, ['atorvastatin'])
+    expect(d.pairings.map((p) => [p.food.id, p.inheritedFrom])).toEqual([
+      ['greens', undefined],
+      ['meal', 'statins'],
+    ])
+    const [s] = pairingsFor(pix, ['simvastatin'])
+    expect(s.pairings.map((p) => [p.food.id, p.inheritedFrom])).toEqual([['meal', undefined]])
+  })
+  it('names a Food group pairing by its group', () => {
+    const [d] = pairingsFor(pix, ['atorvastatin'])
+    expect(d.pairings[0].food).toMatchObject({ id: 'greens', group: true })
+  })
+})
+
+describe('helpedBy', () => {
+  const helps = pairingsFor(pix, ['atorvastatin', 'metformin', 'warfarin'])
+  const food = (id: string) => pix.nodes.get(`food:${id}`)!
+  it('names the listed Drugs a Food helps, directly or through its Food group', () => {
+    expect(helpedBy(helps, food('meal'), new Set()).map((d) => d.id)).toEqual([
+      'atorvastatin',
+      'metformin',
+    ])
+    expect(helpedBy(helps, food('kale'), new Set()).map((d) => d.id)).toEqual(['atorvastatin'])
+  })
+  it('leaves out Drugs the same warning already covers', () => {
+    expect(helpedBy(helps, food('meal'), new Set(['metformin'])).map((d) => d.id)).toEqual([
+      'atorvastatin',
+    ])
   })
 })

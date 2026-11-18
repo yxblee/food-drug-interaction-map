@@ -4,14 +4,17 @@ import { groupTerm } from '@fdi/schema/domain'
 import { fetchNode } from '../api.ts'
 import { InteractionRow } from '../explore/InteractionRow.tsx'
 import { SeverityBadge } from '../explore/SeverityBadge.tsx'
-import type { FoodWarning } from './checkMeds.ts'
+import { helpedBy, type DrugPairings, type FoodWarning } from './checkMeds.ts'
 
 /** One Food warning. `showSeverity` prints its badge where no Severity group heading sits above it. */
 export function WarningRow({
   warning: w,
+  helps = [],
   showSeverity,
 }: {
   warning: FoodWarning
+  /** Helpful pairings for the Medication list, to say when this Food helps another listed Drug. */
+  helps?: DrugPairings[]
   showSeverity?: boolean
 }) {
   const [detail, setDetail] = useState<NodeDetail | null>(null)
@@ -48,6 +51,8 @@ export function WarningRow({
     load()
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [w.food.id])
+  // The warning stands as written; the note only says this Food helps a different listed Drug.
+  const helped = helpedBy(helps, w.food, new Set(w.affected.map((h) => h.drug.id)))
   const lead = (
     <>
       {showSeverity && (
@@ -88,6 +93,12 @@ export function WarningRow({
               />
             ))}
         </ul>
+      )}
+      {helped.length > 0 && (
+        <p className="warning__note">
+          This does not change the warning above. {w.food.name} is also listed under “Helps to take
+          with” for {helped.map((d) => d.name).join(', ')}.
+        </p>
       )}
     </>
   )

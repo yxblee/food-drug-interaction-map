@@ -70,6 +70,39 @@ export const Citation = z.strictObject({
 })
 export type Citation = z.infer<typeof Citation>
 
+/** A documented case where taking a Drug with a Food improves how it works or how well it is tolerated. */
+export const Pairing = z
+  .strictObject({
+    id: InteractionId,
+    food: Slug,
+    drug: Slug,
+    mechanisms: z.array(Slug).default([]),
+    summary: Text,
+    advice: Text,
+    citations: z.array(Citation).min(1),
+    status: z.enum(['approved', 'pending', 'rejected']),
+    source: z.enum(['curated', 'openfda', 'foodrugs', 'ddid']),
+    reviewed_at: z.iso.date().optional(),
+  })
+  .check((ctx) => {
+    const p = ctx.value
+    if (p.status !== 'pending' && !p.reviewed_at)
+      ctx.issues.push({
+        code: 'custom',
+        input: p,
+        path: ['reviewed_at'],
+        message: `required once a pairing is ${p.status}`,
+      })
+    if (p.status === 'approved' && !p.citations.some((c) => c.type !== 'study'))
+      ctx.issues.push({
+        code: 'custom',
+        input: p,
+        path: ['citations'],
+        message: 'approved pairing needs a label, review or guideline citation',
+      })
+  })
+export type Pairing = z.infer<typeof Pairing>
+
 export const Interaction = z
   .strictObject({
     id: InteractionId,

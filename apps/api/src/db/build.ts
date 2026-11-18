@@ -5,7 +5,7 @@ import { DatabaseSync } from 'node:sqlite'
 import { parse } from 'yaml'
 import { validateDataset, type Dataset, type RawDataset, type RawFile } from '@fdi/schema'
 
-const KIND_DIRS = ['drugs', 'foods', 'mechanisms', 'interactions'] as const
+const KIND_DIRS = ['drugs', 'foods', 'mechanisms', 'interactions', 'pairings'] as const
 
 function listYaml(dir: string): string[] {
   try {
@@ -18,8 +18,14 @@ function listYaml(dir: string): string[] {
   }
 }
 
-export function readDataDir(dir: string): RawDataset {
-  const out: RawDataset = { drugs: [], foods: [], mechanisms: [], interactions: [] }
+export function readDataDir(dir: string): Required<RawDataset> {
+  const out: Required<RawDataset> = {
+    drugs: [],
+    foods: [],
+    mechanisms: [],
+    interactions: [],
+    pairings: [],
+  }
   for (const kind of KIND_DIRS) {
     for (const name of listYaml(join(dir, kind))) {
       const file = `${kind}/${name}`
@@ -49,6 +55,9 @@ export function writeDb(ds: Dataset, outPath: string): string {
       id TEXT PRIMARY KEY, food TEXT NOT NULL, drug TEXT NOT NULL,
       severity TEXT NOT NULL, status TEXT NOT NULL, json TEXT NOT NULL
     );
+    CREATE TABLE pairings (
+      id TEXT PRIMARY KEY, food TEXT NOT NULL, drug TEXT NOT NULL, json TEXT NOT NULL
+    );
   `)
   db.exec('BEGIN')
   db.prepare('INSERT INTO meta VALUES (?, ?)').run('version', version)
@@ -59,6 +68,11 @@ export function writeDb(ds: Dataset, outPath: string): string {
   const insert = db.prepare('INSERT INTO interactions VALUES (?, ?, ?, ?, ?, ?)')
   for (const i of ds.interactions) {
     insert.run(i.id, i.food, i.drug, i.severity, i.status, JSON.stringify(i))
+  }
+  // Helpful pairings are published whole or not at all: only Approved ones reach the database.
+  const insertPairing = db.prepare('INSERT INTO pairings VALUES (?, ?, ?, ?)')
+  for (const p of ds.pairings) {
+    if (p.status === 'approved') insertPairing.run(p.id, p.food, p.drug, JSON.stringify(p))
   }
   db.exec('COMMIT')
   db.close()

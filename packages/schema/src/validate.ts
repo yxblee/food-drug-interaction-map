@@ -1,5 +1,5 @@
 import type { z } from 'zod'
-import { Drug, Food, Interaction, Mechanism } from './entities.ts'
+import { Drug, Food, Interaction, Mechanism, Pairing } from './entities.ts'
 
 export interface RawFile {
   file: string
@@ -10,12 +10,14 @@ export interface RawDataset {
   foods: RawFile[]
   mechanisms: RawFile[]
   interactions: RawFile[]
+  pairings?: RawFile[]
 }
 export interface Dataset {
   drugs: Drug[]
   foods: Food[]
   mechanisms: Mechanism[]
   interactions: Interaction[]
+  pairings: Pairing[]
 }
 export type ValidationResult = { dataset: Dataset } | { errors: string[] }
 
@@ -82,6 +84,7 @@ export function validateDataset(raw: RawDataset): ValidationResult {
   const foods = parseAll(raw.foods, Food)
   const mechanisms = parseAll(raw.mechanisms, Mechanism)
   const interactions = parseAll(raw.interactions, Interaction)
+  const pairings = parseAll(raw.pairings ?? [], Pairing)
 
   checkHierarchy(drugs)
   checkHierarchy(foods)
@@ -102,9 +105,23 @@ export function validateDataset(raw: RawDataset): ValidationResult {
     }
   }
 
+  for (const p of pairings) {
+    const file = fileOf.get(p)
+    const expected = `${p.food}--${p.drug}`
+    if (p.id !== expected) errors.push(`${file}: id: must be "${expected}"`)
+    if (!foodIds.has(p.food)) errors.push(`${file}: food: unknown food "${p.food}"`)
+    if (!drugIds.has(p.drug)) errors.push(`${file}: drug: unknown drug "${p.drug}"`)
+    for (const m of p.mechanisms) {
+      if (!mechanismIds.has(m)) errors.push(`${file}: mechanisms: unknown mechanism "${m}"`)
+    }
+  }
+
   const approved = interactions.filter((i) => i.status === 'approved')
   const usedDrugs = new Set(approved.map((i) => i.drug))
-  const usedMechanisms = new Set(approved.flatMap((i) => i.mechanisms))
+  const usedMechanisms = new Set([
+    ...approved.flatMap((i) => i.mechanisms),
+    ...pairings.filter((p) => p.status === 'approved').flatMap((p) => p.mechanisms),
+  ])
   for (const d of drugs) {
     // a member drug is covered when an approved interaction targets it or its class
     if (!d.group && !usedDrugs.has(d.id) && !(d.parent && usedDrugs.has(d.parent)))
@@ -115,5 +132,7 @@ export function validateDataset(raw: RawDataset): ValidationResult {
       errors.push(`${fileOf.get(m)}: no approved interaction references this mechanism`)
   }
 
-  return errors.length ? { errors } : { dataset: { drugs, foods, mechanisms, interactions } }
+  return errors.length
+    ? { errors }
+    : { dataset: { drugs, foods, mechanisms, interactions, pairings } }
 }

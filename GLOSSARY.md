@@ -35,12 +35,16 @@ _Avoid_: Food group, food type
 ## Interactions
 
 **Dataset**:
-Every Approved Interaction plus the Drugs, Foods and Mechanisms they refer to. Absence from the Dataset does not mean a combination is safe.
+Every Approved Interaction and Helpful pairing plus the Drugs, Foods and Mechanisms they refer to. Absence from the Dataset does not mean a combination is safe.
 _Avoid_: Database (as a domain term)
 
 **Interaction**:
 A documented change in a Drug's action caused by a Food that is worth warning about, with a Severity, Effect, Mechanisms and citations. When and how much to eat belongs in its advice, not in separate terms.
 _Avoid_: Contraindication, conflict, warning (as a data term)
+
+**Helpful pairing**:
+A documented case where taking a Drug with a Food, or with a meal, improves how the Drug works or how well it is tolerated. It is not an Interaction and has no Severity, so every Severity keeps meaning "a warning". Shown under "Helps to take with" and reports what its Sources say; it never tells a person to start, stop or change a medication.
+_Avoid_: Positive interaction, benefit, recommendation
 
 **Severity**:
 How strongly we advise against combining the Food and Drug: avoid, caution, monitor or minimal. It is advice, not a clinical grade, and it always comes from the primary Citation.
@@ -55,7 +59,7 @@ The biological reason a Food changes a Drug's action, naming the responsible com
 _Avoid_: Pathway, cause
 
 **Citation**:
-A link to published evidence for an Interaction. Shown to people under the label "Sources".
+A link to published evidence for an Interaction or Helpful pairing. Shown to people under the label "Sources".
 _Avoid_: Reference, evidence (as nouns)
 
 **Direct interaction**:

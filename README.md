@@ -58,7 +58,7 @@ I take medications and manage them for a family member; "can I eat this with it?
 
 ### Data
 
-`data/` holds 59 drugs (including classes such as statins and MAOIs), 39 foods, 22 mechanisms and 53 interactions as YAML. Sources are DailyMed labels, NIH ODS/NCCIH fact sheets and PubMed reviews, linked but not copied (permission and terms in [docs/data-sources.md](docs/data-sources.md)). Brand names come from RxNorm through the NLM RxNav API (`node --run pipeline -- brands`). Each interaction file carries severity, a plain-language summary and advice, and its citations, so every result on screen traces to a file in `data/` and a source link.
+`data/` holds 75 drugs (including classes such as statins and MAOIs), 42 foods, 25 mechanisms and 83 approved interactions as YAML, plus Helpful pairings (a Food that helps a Drug, such as taking it with a meal) in `data/pairings/` once they are checked against a label; none are published yet. Sources are DailyMed labels, NIH ODS/NCCIH fact sheets and PubMed reviews, linked but not copied (permission and terms in [docs/data-sources.md](docs/data-sources.md)). Brand names come from RxNorm through the NLM RxNav API (`node --run pipeline -- brands`). Each interaction file carries severity, a plain-language summary and advice, and its citations, so every result on screen traces to a file in `data/` and a source link.
 
 ### Run locally
 

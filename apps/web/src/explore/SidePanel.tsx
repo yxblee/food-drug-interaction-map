@@ -5,6 +5,7 @@ import { groupTerm, nodeKey as keyOf, splitKey } from '@fdi/schema/domain'
 import { fetchNode } from '../api.ts'
 import { SeverityGroupHeading } from './SeverityBadge.tsx'
 import { InteractionRow } from './InteractionRow.tsx'
+import { PAIRING_MEANING, PairingRow } from './PairingRow.tsx'
 import { panelGroups } from './panelGroups.ts'
 
 interface Props {
@@ -161,6 +162,27 @@ export function SidePanel({ nodeKey, onSelect, onPrev, onNext, onClose, onNotFou
                 </section>
               )
             })
+          )}
+
+          {d.pairings.length > 0 && kind !== 'mechanism' && (
+            <section aria-labelledby="pairs-title" className="panel__pairs">
+              <h3 id="pairs-title">
+                Helpful pairings <span className="sev-count">({d.pairings.length})</span>
+              </h3>
+              <p className="sev-meaning">{PAIRING_MEANING}</p>
+              <ul className="panel__rows">
+                {d.pairings.map((r) => (
+                  <PairingRow
+                    key={r.pairing.id}
+                    pairing={r.pairing}
+                    nodes={d.nodes}
+                    perspective={kind}
+                    inheritedFrom={r.inheritedFrom}
+                    onSelect={onSelect}
+                  />
+                ))}
+              </ul>
+            </section>
           )}
         </div>
       )}

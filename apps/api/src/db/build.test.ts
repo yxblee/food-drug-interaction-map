@@ -42,6 +42,13 @@ describe('buildDb', () => {
     })
     db.close()
   })
+  it('writes Approved pairings only', () => {
+    const out = join(tmp(), 'data.db')
+    buildDb(FIXTURES, out)
+    const db = new DatabaseSync(out, { readOnly: true })
+    expect(db.prepare('SELECT id FROM pairings').all()).toEqual([{ id: 'kale--statins' }])
+    db.close()
+  })
   it('is deterministic', () => {
     const a = buildDb(FIXTURES, join(tmp(), 'a.db'))
     const b = buildDb(FIXTURES, join(tmp(), 'b.db'))

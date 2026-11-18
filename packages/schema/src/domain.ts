@@ -1,5 +1,12 @@
-import type { GraphInteraction, GraphNode, Kind, ResolvedInteraction, SearchResult } from './api.ts'
-import type { Severity } from './entities.ts'
+import type {
+  GraphInteraction,
+  GraphNode,
+  Kind,
+  ResolvedInteraction,
+  ResolvedPairing,
+  SearchResult,
+} from './api.ts'
+import type { Pairing, Severity } from './entities.ts'
 
 export const KINDS: readonly Kind[] = ['drug', 'food', 'mechanism']
 export const SEVERITY_RANK: Record<Severity, number> = {
@@ -22,14 +29,36 @@ export function splitKey(key: string): [Kind, string] {
 export interface Index<I extends GraphInteraction = GraphInteraction> {
   nodes: Map<string, GraphNode>
   interactions: I[]
+  pairings: Pairing[]
 }
 
 export function buildIndex<I extends GraphInteraction>(
   nodes: GraphNode[],
   interactions: I[],
+  pairings: Pairing[] = [],
 ): Index<I> {
-  return { nodes: new Map(nodes.map((n) => [nodeKey(n.kind, n.id), n])), interactions }
+  return { nodes: new Map(nodes.map((n) => [nodeKey(n.kind, n.id), n])), interactions, pairings }
 }
+
+// Helpful pairings resolve like Interactions: one row per counterpart, the exact node's own
+// pairing replacing one inherited from its parent class/group. Sorted by id; there is no Severity.
+function resolvePairings(ix: Index, side: 'drug' | 'food', id: string): ResolvedPairing[] {
+  const self = ix.nodes.get(nodeKey(side, id))
+  if (!self) return []
+  const other = side === 'drug' ? 'food' : 'drug'
+  const rows = new Map<string, ResolvedPairing>()
+  for (const pairing of ix.pairings) if (pairing[side] === id) rows.set(pairing[other], { pairing })
+  if (self.parent) {
+    for (const pairing of ix.pairings) {
+      if (pairing[side] === self.parent && !rows.has(pairing[other]))
+        rows.set(pairing[other], { pairing, inheritedFrom: self.parent })
+    }
+  }
+  return [...rows.values()].sort((a, b) => a.pairing.id.localeCompare(b.pairing.id))
+}
+
+export const pairingsForDrug = (ix: Index, drugId: string) => resolvePairings(ix, 'drug', drugId)
+export const pairingsForFood = (ix: Index, foodId: string) => resolvePairings(ix, 'food', foodId)
 
 function sortRows<I extends GraphInteraction>(rows: ResolvedInteraction<I>[]) {
   return rows.sort(
