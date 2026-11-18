@@ -132,7 +132,8 @@
   cursor: pointer;
   font: inherit;
 }
-.irow .link-button::after {
+.irow .link-button::after,
+.panel__meta .link-button::after {
   content: '';
   position: absolute;
   left: 0;
@@ -155,6 +156,28 @@
   display: flex;
   flex-direction: column;
   align-items: flex-start;
+}
+.panel__body > .mono-label {
+  margin: 0.25rem 0;
+}
+.panel__about {
+  margin-block: 0;
+}
+/* Aliases and Part of share a line when they fit, so a phone sheet reaches the first Interaction sooner. */
+.panel__meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0 1rem;
+}
+.panel__meta > p {
+  margin: 0.125rem 0;
+}
+/* Small body text, not the mono label: it says who the text comes from, in plain sentences. */
+.panel__attribution {
+  margin: 1rem 0 0;
+  font-size: 13px;
+  line-height: 1.5;
+  color: var(--muted);
 }
 .meds__about ul {
   list-style: none;
@@ -229,7 +252,8 @@
   left: 16px;
   bottom: 16px;
   z-index: 2;
-  max-width: min(18rem, calc(100% - 32px));
+  /* Wide enough for each Severity meaning to sit on one line, so the open key stays short. */
+  max-width: min(34rem, calc(100% - 32px));
   padding: 0 12px 4px;
 }
 .legend summary {
@@ -267,6 +291,12 @@
   display: flex;
   align-items: center;
   gap: 6px;
+}
+.legend .severity-words {
+  margin-top: 4px;
+}
+.legend .severity-words li {
+  margin: 3px 0;
 }
 .legend p {
   margin: 8px 0 0;

@@ -1,3 +1,4 @@
+import type { ReactNode } from 'react'
 import { SEVERITIES, type Severity } from '@fdi/schema'
 
 export const SEVERITY_LABEL: Record<Severity, string> = {
@@ -14,12 +15,13 @@ export const SEVERITY_LEGEND: Record<Severity, string> = {
   minimal: 'Documented but rarely clinically important.',
 }
 
-/** Each Severity word with what it means: the explanation behind the Explore legend and My meds' link. */
-export function SeverityWords() {
+/** Each Severity word with what it means: the one source for the Explore key and the My meds key; `lead` adds a marker before the badge. */
+export function SeverityWords({ lead }: { lead?: (s: Severity) => ReactNode }) {
   return (
     <ul className="severity-words">
       {SEVERITIES.map((s) => (
         <li key={s}>
+          {lead?.(s)}
           <SeverityBadge severity={s} /> {SEVERITY_LEGEND[s]}
         </li>
       ))}
