@@ -47,3 +47,19 @@ test('after one visit, My meds still checks warfarin offline, and says the data 
   // Entering a medication adds nothing to the cache: the Medication list never leaves storage.
   expect(await cachedUrls(page)).toEqual(before)
 })
+
+test('a new worker removes old fdi- caches and leaves other sites caches alone', async ({
+  page,
+}) => {
+  await page.goto('./')
+  await page.evaluate(() => navigator.serviceWorker.ready)
+  await page.evaluate(async () => {
+    await caches.open('fdi-old-build')
+    await caches.open('other-site-cache')
+    await (await navigator.serviceWorker.getRegistration())!.unregister()
+    await navigator.serviceWorker.register('sw.js?v=next-build')
+    await navigator.serviceWorker.ready
+  })
+  await expect.poll(() => page.evaluate(() => caches.keys())).not.toContain('fdi-old-build')
+  expect(await page.evaluate(() => caches.keys())).toContain('other-site-cache')
+})
