@@ -4,6 +4,7 @@ import { buildIndex, splitKey } from '@fdi/schema/domain'
 import { AboutData } from './about/AboutData.tsx'
 import { PillLabel } from './PillLabel.tsx'
 import { fetchGraph } from './api.ts'
+import { saveForOffline } from './offline.ts'
 import { ExploreTab } from './explore/ExploreTab.tsx'
 import { checkMeds, mapKeysFor } from './meds/checkMeds.ts'
 import { MyMedsTab } from './meds/MyMedsTab.tsx'
@@ -19,6 +20,7 @@ export function App() {
   const [state, update] = useUrlState()
   const [graph, setGraph] = useState<GraphPayload | null>(null)
   const [error, setError] = useState<string | null>(null)
+  const [showingSaved, setShowingSaved] = useState(false)
   const [mapNote, setMapNote] = useState('')
   const focusMap = useRef(false)
   const focusMeds = useRef(false)
@@ -39,7 +41,12 @@ export function App() {
   useEffect(() => {
     let live = true
     fetchGraph().then(
-      (g) => live && setGraph(g),
+      ({ graph: g, saved }) => {
+        if (!live) return
+        setGraph(g)
+        setShowingSaved(saved)
+        void saveForOffline(g)
+      },
       (e: Error) => live && setError(e.message),
     )
     return () => {
@@ -122,6 +129,10 @@ export function App() {
           </button>
         </div>
       )}
+
+      <p role="status" className="app__saved mono-label">
+        {showingSaved && 'Showing saved data'}
+      </p>
 
       {dropped > 0 && (
         <p role="status" className="meds__notice">

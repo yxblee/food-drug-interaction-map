@@ -1,6 +1,7 @@
 id: fexofenadine
 name: Fexofenadine
 rxnorm: "87636"
+medlineplus: "https://medlineplus.gov/druginfo/meds/a697035.html"
 aliases:
   - Wal-Fex
   - Allegra

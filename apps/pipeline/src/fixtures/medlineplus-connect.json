@@ -1,0 +1,143 @@
+{
+  "36567": {
+    "feed": {
+      "base": "https://medlineplus.gov/",
+      "lang": "en",
+      "xsi": "http://www.w3.org/2001/XMLSchema-instance",
+      "title": {
+        "type": "text",
+        "_value": "MedlinePlus Connect"
+      },
+      "updated": {
+        "_value": "2026-11-18T04:36:53Z"
+      },
+      "id": {
+        "_value": ""
+      },
+      "author": {
+        "name": {
+          "_value": "U.S. National Library of Medicine"
+        },
+        "uri": {
+          "_value": "https://www.nlm.nih.gov"
+        }
+      },
+      "subtitle": {
+        "type": "text",
+        "_value": "MedlinePlus Connect results for RXCUI 36567"
+      },
+      "category": [
+        {
+          "scheme": "mainSearchCriteria.v.c",
+          "term": "36567"
+        },
+        {
+          "scheme": "mainSearchCriteria.v.cs",
+          "term": "RXNORM"
+        },
+        {
+          "scheme": "mainSearchCriteria.v.dn",
+          "term": ""
+        },
+        {
+          "scheme": "informationRecipient",
+          "term": "PAT"
+        }
+      ],
+      "entry": [
+        {
+          "title": {
+            "_value": "Simvastatin",
+            "type": "text"
+          },
+          "link": [
+            {
+              "href": "https://medlineplus.gov/druginfo/meds/a692030.html?utm_source=mplusconnect&utm_medium=service",
+              "rel": "alternate"
+            }
+          ],
+          "id": {
+            "_value": "tag: medlineplus.gov, 2026-18-11:/druginfo/meds/a692030.html?utm_source=mplusconnect&utm_medium=application"
+          },
+          "summary": {
+            "type": "html",
+            "_value": "Simvastatin is used to    reduce the risk of heart attack and stroke in patients at high risk of these developing  decrease the amount of cholesterol (a fat-like substance)  Simvastatin is in a class "
+          },
+          "updated": {
+            "_value": "2026-11-18T04:36:53Z"
+          }
+        },
+        {
+          "title": {
+            "_value": "Statins",
+            "type": "text"
+          },
+          "link": [
+            {
+              "href": "https://medlineplus.gov/statins.html?utm_source=mplusconnect&utm_medium=service",
+              "rel": "alternate"
+            }
+          ],
+          "id": {
+            "_value": "tag: medlineplus.gov, 2026-18-11:/statins.html?utm_source=mplusconnect&utm_medium=application"
+          },
+          "summary": {
+            "type": "html",
+            "_value": "<h3>What is cholesterol?</h3>\n<p><a href=\"https://medlineplus.gov/cholesterol.html?utm_source=mplusconnect\">Cholesterol</a> is a waxy, fat-like substance that's found in all the cells in your body. Yo"
+          },
+          "updated": {
+            "_value": "2026-11-18T04:36:53Z"
+          }
+        }
+      ]
+    }
+  },
+  "1": {
+    "feed": {
+      "base": "https://medlineplus.gov/",
+      "lang": "en",
+      "xsi": "http://www.w3.org/2001/XMLSchema-instance",
+      "title": {
+        "type": "text",
+        "_value": "MedlinePlus Connect"
+      },
+      "updated": {
+        "_value": "2026-11-18T04:36:53Z"
+      },
+      "id": {
+        "_value": ""
+      },
+      "author": {
+        "name": {
+          "_value": "U.S. National Library of Medicine"
+        },
+        "uri": {
+          "_value": "https://www.nlm.nih.gov"
+        }
+      },
+      "subtitle": {
+        "type": "text",
+        "_value": "MedlinePlus Connect results for RXCUI 1"
+      },
+      "category": [
+        {
+          "scheme": "mainSearchCriteria.v.c",
+          "term": "1"
+        },
+        {
+          "scheme": "mainSearchCriteria.v.cs",
+          "term": "RXNORM"
+        },
+        {
+          "scheme": "mainSearchCriteria.v.dn",
+          "term": ""
+        },
+        {
+          "scheme": "informationRecipient",
+          "term": "PAT"
+        }
+      ],
+      "entry": []
+    }
+  }
+}

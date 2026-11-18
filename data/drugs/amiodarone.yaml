@@ -1,5 +1,6 @@
 id: "amiodarone"
 name: "Amiodarone"
 rxnorm: "703"
+medlineplus: "https://medlineplus.gov/druginfo/meds/a687009.html"
 aliases: ["Pacerone", "Nexterone"]
 drug_class: "Antiarrhythmic"

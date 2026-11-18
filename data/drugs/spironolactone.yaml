@@ -1,5 +1,6 @@
 id: "spironolactone"
 name: "Spironolactone"
 rxnorm: "9997"
+medlineplus: "https://medlineplus.gov/druginfo/meds/a682627.html"
 aliases: ["Aldactone", "Carospir"]
 drug_class: "Potassium-sparing diuretic"

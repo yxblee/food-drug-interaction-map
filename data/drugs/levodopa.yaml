@@ -1,5 +1,6 @@
 id: "levodopa"
 name: "Levodopa"
 rxnorm: "6375"
+medlineplus: "https://medlineplus.gov/druginfo/meds/a601068.html"
 aliases: ["Sinemet", "Rytary", "Inbrija"]
 drug_class: "Dopamine precursor"

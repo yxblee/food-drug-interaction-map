@@ -171,3 +171,18 @@
     display: none;
   }
 }
+
+/* Quiet; collapses when empty so nothing shifts. Opacity only, 200ms ease-out. */
+.app__saved {
+  margin: 0;
+  padding: 4px 16px;
+  animation: saved-in 200ms cubic-bezier(0.23, 1, 0.32, 1);
+}
+.app__saved:empty {
+  display: none;
+}
+@keyframes saved-in {
+  from {
+    opacity: 0;
+  }
+}

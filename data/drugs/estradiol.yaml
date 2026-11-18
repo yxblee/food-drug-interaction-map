@@ -1,6 +1,7 @@
 id: estradiol
 name: Estradiol
 rxnorm: "4083"
+medlineplus: "https://medlineplus.gov/druginfo/meds/a605041.html"
 aliases:
   - Estrace
   - Climara

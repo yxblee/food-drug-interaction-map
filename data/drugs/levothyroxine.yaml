@@ -1,5 +1,6 @@
 id: "levothyroxine"
 name: "Levothyroxine"
 rxnorm: "10582"
+medlineplus: "https://medlineplus.gov/druginfo/meds/a682461.html"
 aliases: ["Synthroid", "Levoxyl", "Euthyrox", "Unithroid", "Levo-T", "Thyquidity", "Ermeza", "Tirosint"]
 drug_class: "Thyroid hormone"

@@ -1,6 +1,7 @@
 id: folic-acid
 name: Folic acid
 rxnorm: "4511"
+medlineplus: "https://medlineplus.gov/druginfo/meds/a682591.html"
 aliases:
   - Folacin
   - Quiofic

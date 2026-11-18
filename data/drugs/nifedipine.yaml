@@ -1,5 +1,6 @@
 id: "nifedipine"
 name: "Nifedipine"
 rxnorm: "7417"
+medlineplus: "https://medlineplus.gov/druginfo/meds/a684028.html"
 aliases: ["Procardia", "Adalat CC", "Afeditab CR"]
 drug_class: "Calcium channel blocker"

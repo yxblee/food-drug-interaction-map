@@ -1,5 +1,6 @@
 id: nadolol
 name: Nadolol
 rxnorm: "7226"
+medlineplus: "https://medlineplus.gov/druginfo/meds/a682666.html"
 aliases:
   - Corgard

@@ -1,4 +1,5 @@
 id: "isoniazid"
 name: "Isoniazid"
 rxnorm: "6038"
+medlineplus: "https://medlineplus.gov/druginfo/meds/a682401.html"
 drug_class: "Antituberculosis agent"

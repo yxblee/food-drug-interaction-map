@@ -3,6 +3,7 @@ import type { GraphPayload } from '@fdi/schema'
 import { SEVERITIES } from '@fdi/schema'
 import { buildIndex, nodeKey, searchNodes, type Index } from '@fdi/schema/domain'
 import { PillLabel } from '../PillLabel.tsx'
+import { MedlinePlusLink } from '../MedlinePlusLink.tsx'
 import { plural } from '../plural.ts'
 import { SeverityGroupHeading, SeverityWords } from '../explore/SeverityBadge.tsx'
 import { PAIRING_MEANING, PairingRow } from '../explore/PairingRow.tsx'
@@ -61,6 +62,7 @@ export function MyMedsTab({
   const warnings = useMemo(() => checkMeds(ix, meds), [ix, meds])
   const helps = useMemo(() => pairingsFor(ix, meds), [ix, meds])
   const name = (id: string) => ix.nodes.get(nodeKey('drug', id))?.name ?? id
+  const link = (id: string) => ix.nodes.get(nodeKey('drug', id))?.medlineplus
   const add = (id: string, matched: string) => {
     setQuery('')
     dropUndo()
@@ -287,6 +289,24 @@ export function MyMedsTab({
                   </li>
                 ))}
               </ul>
+            </section>
+          )}
+          {meds.some(link) && (
+            <section aria-labelledby="about-title" className="meds__about">
+              <p id="about-title" className="mono-label">
+                About your medications
+              </p>
+              <ul>
+                {meds.filter(link).map((id) => (
+                  <li key={id}>
+                    <MedlinePlusLink label={`About ${name(id)} (MedlinePlus)`} url={link(id)!} />
+                  </li>
+                ))}
+              </ul>
+              <p className="mono-label">
+                Source: MedlinePlus, National Library of Medicine. NLM is not responsible for and
+                does not endorse this site.
+              </p>
             </section>
           )}
         </section>

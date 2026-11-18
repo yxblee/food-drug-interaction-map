@@ -1,5 +1,6 @@
 id: "amlodipine"
 name: "Amlodipine"
 rxnorm: "17767"
+medlineplus: "https://medlineplus.gov/druginfo/meds/a692044.html"
 aliases: ["Norvasc", "Katerzia", "Norliqva", "Sdamlo"]
 drug_class: "Calcium channel blocker"
