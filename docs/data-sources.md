@@ -16,6 +16,15 @@ Their grades, such as DDID's positive, negative, no effect, harmful or possible,
 
 The licences above apply to the papers. Check each database's own terms before any bulk download or reuse of its data.
 
+## Public fact sheets and brochures
+
+Two public-health documents are used to find and cross-check supplement and medication pairs. Neither is a database and neither grades anything, so neither maps onto Severity: a reviewer sets Severity from the primary Citation. We link and cite only, and write our own words in `data/`.
+
+- **NIH Office of Dietary Supplements (ODS) fact sheets** ([ods.od.nih.gov/factsheets](https://ods.od.nih.gov/factsheets/)): one per supplement or nutrient, in consumer and health-professional versions. Each health-professional sheet has an "Interactions with Medications" section. A sheet is a `type: fact-sheet`-style Citation by its URL, and where the sheet itself points to a label or review, that is cited too.
+  - Terms (confirmed by reading the ODS [Site Policies](https://ods.od.nih.gov/About/Site_Policies.aspx), "Public Use Policy", and [Disclaimer](https://ods.od.nih.gov/About/Disclaimer.aspx) pages): most content is public domain and may be freely reproduced if unchanged, without implying ODS endorses a product. The Disclaimer says the information is not an "authoritative statement" under FDA rules. Some sheets link to copyrighted articles. We still copy nothing.
+  - The ODS site returns HTTP 403 to `curl` and similar clients. Open the pages in a browser.
+- **"Avoid Food and Drug Interactions"**, FDA and National Consumers League brochure (about 34 pages, nine conditions, generic names only). It is a second public cross-check for common pairs. Reuse terms are unconfirmed (the FDA page URL has moved, and the National Consumers League's part may be copyrighted), so link and cite by title and year only, never copy.
+
 ## Use in the curation pipeline
 
 The curation pipeline proposes Pending interactions from two of these databases. It takes only the food–drug pair and the PubMed IDs of the studies behind it, and cites those studies, not the database.
