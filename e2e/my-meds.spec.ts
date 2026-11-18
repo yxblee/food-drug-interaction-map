@@ -108,7 +108,7 @@ test('Monitor rows stay collapsed', async ({ page }) => {
   const coffee = monitor.locator('.warning > details', { hasText: 'Coffee' })
   await expect(coffee).toHaveCount(1)
   await expect(coffee).not.toHaveAttribute('open', '')
-  await expect(coffee.locator('summary')).toHaveText(/^Coffee: watch for changes with Lithium$/)
+  await expect(coffee.locator('> summary')).toHaveText(/^Coffee: watch for changes with Lithium$/)
 })
 
 test('no-match in My meds gives a next step and says absence is not safety', async ({ page }) => {
