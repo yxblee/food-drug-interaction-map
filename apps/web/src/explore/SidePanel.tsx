@@ -100,7 +100,10 @@ export function SidePanel({ nodeKey, onSelect, onPrev, onNext, onClose, onNotFou
           )}
           {kind === 'drug' && (entity as Drug).medlineplus && (
             <p className="panel__about">
-              <MedlinePlusLink name={d.node.name} url={(entity as Drug).medlineplus!} />
+              <MedlinePlusLink
+                label="About this medication (MedlinePlus)"
+                url={(entity as Drug).medlineplus!}
+              />
               <span className="mono-label">
                 Source: MedlinePlus, National Library of Medicine. NLM is not responsible for and
                 does not endorse this site.

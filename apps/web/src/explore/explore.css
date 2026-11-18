@@ -156,13 +156,10 @@
   flex-direction: column;
   align-items: flex-start;
 }
-/* In a chip: the chip is ink, so the focus ring turns paper to stay visible. */
-.extlink--compact {
-  font-size: 0.8125rem;
-  padding: 0 4px;
-}
-.chip :focus-visible {
-  outline-color: var(--paper);
+.meds__about ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
 }
 .notice {
   padding: 0.5rem 0.75rem;

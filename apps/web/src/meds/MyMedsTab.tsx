@@ -176,7 +176,6 @@ export function MyMedsTab({
             <li key={id} id={chipId(id)} tabIndex={-1} className="chip">
               {name(id)}
               {brands[id] && <span className="chip__brand mono-label"> ({brands[id]})</span>}
-              {link(id) && <MedlinePlusLink compact name={name(id)} url={link(id)!} />}
               <button aria-label={`Remove ${name(id)}`} onClick={() => removeMed(id)}>
                 ✕
               </button>
@@ -279,6 +278,24 @@ export function MyMedsTab({
                   </li>
                 ))}
               </ul>
+            </section>
+          )}
+          {meds.some(link) && (
+            <section aria-labelledby="about-title" className="meds__about">
+              <p id="about-title" className="mono-label">
+                About your medications
+              </p>
+              <ul>
+                {meds.filter(link).map((id) => (
+                  <li key={id}>
+                    <MedlinePlusLink label={`About ${name(id)} (MedlinePlus)`} url={link(id)!} />
+                  </li>
+                ))}
+              </ul>
+              <p className="mono-label">
+                Source: MedlinePlus, National Library of Medicine. NLM is not responsible for and
+                does not endorse this site.
+              </p>
             </section>
           )}
         </section>
