@@ -1,11 +1,14 @@
 import { describe, expect, it } from 'vite-plus/test'
 import type { GraphInteraction, GraphNode } from './api.ts'
+import type { Pairing } from './entities.ts'
 import {
   buildIndex,
   interactionsForDrug,
   interactionsForFood,
   interactionsForMechanism,
   nodeKey,
+  pairingsForDrug,
+  pairingsForFood,
   searchNodes,
   splitKey,
 } from './domain.ts'
@@ -133,5 +136,52 @@ describe('searchNodes', () => {
   })
   it('respects the limit', () => {
     expect(searchNodes(nodes, 'a', 2)).toHaveLength(2)
+  })
+})
+
+describe('pairings', () => {
+  const pairing = (food: string, drug: string): Pairing => ({
+    id: `${food}--${drug}`,
+    food,
+    drug,
+    mechanisms: [],
+    summary: '',
+    advice: '',
+    citations: [{ type: 'label', title: 't', url: 'https://example.org' }],
+    status: 'approved',
+    source: 'curated',
+    reviewed_at: '2026-11-17',
+  })
+  const ix = buildIndex(
+    nodes,
+    [],
+    [
+      pairing('kale', 'statins'),
+      pairing('kale', 'simvastatin'),
+      pairing('leafy-greens', 'warfarin'),
+      pairing('orange', 'atorvastatin'),
+    ],
+  )
+  it('inherits Drug class pairings, an exact one replacing the class one for the same Food', () => {
+    expect(pairingsForDrug(ix, 'simvastatin').map((r) => [r.pairing.id, r.inheritedFrom])).toEqual([
+      ['kale--simvastatin', undefined],
+    ])
+    expect(pairingsForDrug(ix, 'atorvastatin').map((r) => [r.pairing.id, r.inheritedFrom])).toEqual(
+      [
+        ['kale--statins', 'statins'],
+        ['orange--atorvastatin', undefined],
+      ],
+    )
+  })
+  it('inherits Food group pairings for a member Food', () => {
+    expect(pairingsForFood(ix, 'kale').map((r) => [r.pairing.id, r.inheritedFrom])).toEqual([
+      ['kale--simvastatin', undefined],
+      ['kale--statins', undefined],
+      ['leafy-greens--warfarin', 'leafy-greens'],
+    ])
+  })
+  it('returns [] for unknown ids and for an index built without pairings', () => {
+    expect(pairingsForDrug(ix, 'nope')).toEqual([])
+    expect(pairingsForFood(buildIndex(nodes, []), 'kale')).toEqual([])
   })
 })

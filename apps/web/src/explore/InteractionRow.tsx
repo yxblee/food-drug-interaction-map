@@ -1,4 +1,5 @@
 import type {
+  Citation,
   GraphNode,
   Interaction,
   Kind,
@@ -23,6 +24,36 @@ interface Props {
   cautionFirst?: boolean
   /** The Explore panel with many rows: show one line (name, Severity) and open to the rest. */
   collapsible?: boolean
+}
+
+/** "Sources": a Citation list, one 44px link row each. Shared by Interactions and Helpful pairings. */
+export function Sources({ citations }: { citations: Citation[] }) {
+  return (
+    <>
+      <p className="mono-label">Sources</p>
+      <ul className="irow__cites">
+        {citations.map((c, k) => (
+          <li key={k}>
+            <a href={c.url} target="_blank" rel="noreferrer">
+              <span className="irow__cite-title">
+                {c.title}
+                <span className="sr-only"> (opens in new tab)</span>
+              </span>
+              <span className="mono-label">{c.type}</span>
+              <svg className="irow__ext" viewBox="0 0 16 16" aria-hidden="true">
+                <path
+                  d="M9 2h5v5M14 2 7.5 8.5M12 9.5V13a1 1 0 0 1-1 1H3a1 1 0 0 1-1-1V5a1 1 0 0 1 1-1h3.5"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="1.5"
+                />
+              </svg>
+            </a>
+          </li>
+        ))}
+      </ul>
+    </>
+  )
 }
 
 const paragraphs = (text: string) => text.split(/\n\s*\n/).map((p, i) => <p key={i}>{p.trim()}</p>)
@@ -111,28 +142,7 @@ export function InteractionRow({
             <p className="chat__bubble chat__bubble--pharmacist">{i.example.pharmacist}</p>
           </div>
         )}
-        <p className="mono-label">Sources</p>
-        <ul className="irow__cites">
-          {i.citations.map((c, k) => (
-            <li key={k}>
-              <a href={c.url} target="_blank" rel="noreferrer">
-                <span className="irow__cite-title">
-                  {c.title}
-                  <span className="sr-only"> (opens in new tab)</span>
-                </span>
-                <span className="mono-label">{c.type}</span>
-                <svg className="irow__ext" viewBox="0 0 16 16" aria-hidden="true">
-                  <path
-                    d="M9 2h5v5M14 2 7.5 8.5M12 9.5V13a1 1 0 0 1-1 1H3a1 1 0 0 1-1-1V5a1 1 0 0 1 1-1h3.5"
-                    fill="none"
-                    stroke="currentColor"
-                    strokeWidth="1.5"
-                  />
-                </svg>
-              </a>
-            </li>
-          ))}
-        </ul>
+        <Sources citations={i.citations} />
         <p className="mono-label">Reviewed {i.reviewed_at}</p>
       </details>
     </>

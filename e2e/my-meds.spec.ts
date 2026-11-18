@@ -484,7 +484,7 @@ test('Can I have…? answers one food against the medication list, on device', a
   await expect(food).toHaveValue('wine')
   await food.press('Escape') // then clears
   await expect(food).toHaveValue('')
-  await food.fill('wi')
+  await food.fill('win')
   await food.press('ArrowDown')
   await food.press('ArrowUp')
   await food.press('Enter')

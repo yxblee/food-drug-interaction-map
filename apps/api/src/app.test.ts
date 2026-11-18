@@ -128,3 +128,25 @@ describe('GET /api/node/:kind/:id', () => {
     }
   })
 })
+
+describe('Helpful pairings', () => {
+  it('the graph carries Approved pairings only, Sources included', async () => {
+    const graph = (await (await get('/api/graph')).json()) as GraphPayload
+    expect(graph.pairings.map((p) => p.id)).toEqual(['kale--statins'])
+    expect(graph.pairings[0].citations[0].type).toBe('label')
+  })
+  it('a Drug detail inherits its Drug class pairings and names the Food', async () => {
+    const d = (await (await get('/api/node/drug/simvastatin')).json()) as NodeDetail
+    expect(d.pairings.map((r) => [r.pairing.id, r.inheritedFrom])).toEqual([
+      ['kale--statins', 'statins'],
+    ])
+    expect(d.nodes['food:kale'].name).toBe('Kale')
+    expect(d.nodes['drug:statins'].name).toBe('Statins')
+  })
+  it('a Food detail lists its pairings; a Mechanism detail has none', async () => {
+    const f = (await (await get('/api/node/food/kale')).json()) as NodeDetail
+    expect(f.pairings.map((r) => r.pairing.id)).toEqual(['kale--statins'])
+    const m = (await (await get('/api/node/mechanism/cyp3a4-inhibition')).json()) as NodeDetail
+    expect(m.pairings).toEqual([])
+  })
+})

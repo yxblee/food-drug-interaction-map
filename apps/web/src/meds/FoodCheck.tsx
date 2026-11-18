@@ -2,7 +2,7 @@ import { useMemo, useState } from 'react'
 import type { GraphPayload } from '@fdi/schema'
 import { groupTerm, nodeKey, searchNodes, type Index } from '@fdi/schema/domain'
 import { SEVERITY_LABEL } from '../explore/SeverityBadge.tsx'
-import { checkFood } from './checkMeds.ts'
+import { checkFood, type DrugPairings } from './checkMeds.ts'
 import { Combobox, NoMatch } from './Combobox.tsx'
 import { WarningRow } from './WarningRow.tsx'
 
@@ -12,11 +12,13 @@ export function FoodCheck({
   ix,
   meds,
   notChecked,
+  helps,
 }: {
   graph: GraphPayload
   ix: Index
   meds: string[]
   notChecked: string[]
+  helps: DrugPairings[]
 }) {
   const [query, setQuery] = useState('')
   // The Food being answered, with the name the person typed (an Alias such as "wine").
@@ -95,7 +97,7 @@ export function FoodCheck({
       {warnings.length > 0 && (
         <ul className="meds__list">
           {warnings.map((w) => (
-            <WarningRow key={w.food.id} warning={w} showSeverity />
+            <WarningRow key={w.food.id} warning={w} helps={helps} showSeverity />
           ))}
         </ul>
       )}

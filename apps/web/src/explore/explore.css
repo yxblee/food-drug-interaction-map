@@ -50,7 +50,8 @@
   padding: 0;
   margin: 0.25rem 0 0.5rem;
 }
-.panel__sev h3 {
+.panel__sev h3,
+.panel__pairs h3 {
   margin: 0.75rem 0 0.25rem;
 }
 /* Many rows: one 44px line each; the summary, advice and sources open beneath it. */

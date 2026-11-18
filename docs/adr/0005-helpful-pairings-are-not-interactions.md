@@ -1,0 +1,7 @@
+# Helpful pairings are their own thing, not positive Interactions
+
+A Food can help a Drug as well as disturb it: metformin is better tolerated with a meal, griseofulvin is absorbed better with a fatty one. We record these as **Helpful pairings** in their own files (`data/pairings/<food>--<drug>.yaml`) with their own schema, not as Interactions with a "positive" Severity or Effect. Every Severity means "a warning", and a person scanning for the red items must never meet a reassuring one in the same list; an Interaction's Mechanisms, Effect and Severity also do not describe a pairing.
+
+A Helpful pairing has an id, food, drug, optional Mechanisms, summary, advice, Citations, status, source and `reviewed_at`, with the Interaction's Citation and status rules: Approved needs a label, guideline or review Citation, and a research database's "positive" grade only finds candidates. "Taking it with food" is the Food `a-meal` (Aliases "food", "with food"), so it needs no special case. The graph is unchanged; pairings appear in My meds under "Helps to take with" and in the Explore panel under Interactions, with no Severity colour or badge. When a Food helps one listed Drug and has an Interaction with another, the Interaction row says so and the warning is never hidden or softened.
+
+Copy reports what the Source says and keeps the disclaimer; it never tells a person to start, stop or change a medication. Medical review stays human: candidate pairings arrive as Pending files in their own pull request, each with its label opened and checked.

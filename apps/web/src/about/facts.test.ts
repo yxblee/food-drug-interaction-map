@@ -22,6 +22,7 @@ const graph: GraphPayload = {
     node('mechanism', 'cyp3a4'),
   ],
   interactions: [],
+  pairings: [],
 }
 
 describe('datasetFacts', () => {

@@ -150,6 +150,13 @@
 .warning__lead {
   margin: 10px 0 0;
 }
+.warning__note {
+  margin: 4px 0 10px;
+  color: var(--muted);
+}
+.meds__helps .warning {
+  padding-bottom: 6px;
+}
 .warning__drugs {
   color: var(--muted);
 }

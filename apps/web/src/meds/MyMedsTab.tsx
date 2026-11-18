@@ -1,10 +1,11 @@
 import { useEffect, useMemo, useRef, useState } from 'react'
 import type { GraphPayload } from '@fdi/schema'
 import { SEVERITIES } from '@fdi/schema'
-import { buildIndex, nodeKey, searchNodes } from '@fdi/schema/domain'
+import { buildIndex, nodeKey, searchNodes, type Index } from '@fdi/schema/domain'
 import { PillLabel } from '../PillLabel.tsx'
 import { SeverityGroupHeading } from '../explore/SeverityBadge.tsx'
-import { checkMeds, type FoodWarning } from './checkMeds.ts'
+import { PAIRING_MEANING, PairingRow } from '../explore/PairingRow.tsx'
+import { checkMeds, pairingsFor, type FoodWarning } from './checkMeds.ts'
 import { Combobox, NoMatch } from './Combobox.tsx'
 import { FoodCheck } from './FoodCheck.tsx'
 import { WarningRow } from './WarningRow.tsx'
@@ -32,7 +33,7 @@ export function MyMedsTab({
   setNotChecked,
   onSeeOnMap,
 }: MyMedsTabProps) {
-  const ix = useMemo(() => buildIndex(graph.nodes, graph.interactions), [graph])
+  const ix = useMemo(() => buildIndex(graph.nodes, graph.interactions, graph.pairings), [graph])
   const [query, setQuery] = useState('')
   const [notice, setNotice] = useState('')
   // The list before "Clear all", in memory only, for UNDO_MS.
@@ -57,6 +58,7 @@ export function MyMedsTab({
   const options = useMemo(() => searchNodes(candidates, query, 8), [candidates, query])
   const showNoMatch = options.length === 0 && !!query.trim()
   const warnings = useMemo(() => checkMeds(ix, meds), [ix, meds])
+  const helps = useMemo(() => pairingsFor(ix, meds), [ix, meds])
   const name = (id: string) => ix.nodes.get(nodeKey('drug', id))?.name ?? id
   const add = (id: string, matched: string) => {
     setQuery('')
@@ -243,21 +245,52 @@ export function MyMedsTab({
                   <SeverityGroupHeading severity={sev} />
                   <ul className="meds__list">
                     {group.map((w) => (
-                      <WarningRow key={w.food.id} warning={w} />
+                      <WarningRow key={w.food.id} warning={w} helps={helps} />
                     ))}
                   </ul>
                 </section>
               )
             })
           )}
+          {helps.length > 0 && (
+            <section aria-labelledby="helps-title" className="meds__sev meds__helps">
+              <h3 id="helps-title">Helps to take with</h3>
+              <p className="sev-meaning">{PAIRING_MEANING}</p>
+              <ul className="meds__list">
+                {helps.map(({ drug, pairings }) => (
+                  <li key={drug.id} className="warning">
+                    <p className="warning__lead">
+                      <strong>{drug.name}</strong>
+                    </p>
+                    <ul className="panel__rows">
+                      {pairings.map(({ pairing, inheritedFrom }) => (
+                        <PairingRow
+                          key={pairing.id}
+                          pairing={pairing}
+                          nodes={nodesOf(ix, pairing.food, pairing.drug)}
+                          perspective="drug"
+                          inheritedFrom={inheritedFrom}
+                        />
+                      ))}
+                    </ul>
+                  </li>
+                ))}
+              </ul>
+            </section>
+          )}
         </section>
 
         {/* After the results in the DOM and on screen at every width, so Tab follows what is seen. */}
-        <FoodCheck graph={graph} ix={ix} meds={meds} notChecked={notChecked} />
+        <FoodCheck graph={graph} ix={ix} meds={meds} notChecked={notChecked} helps={helps} />
       </div>
     </div>
   )
 }
+
+const nodesOf = (ix: Index, food: string, drug: string) => ({
+  [nodeKey('food', food)]: ix.nodes.get(nodeKey('food', food))!,
+  [nodeKey('drug', drug)]: ix.nodes.get(nodeKey('drug', drug))!,
+})
 
 const chipId = (id: string) => `med-chip-${id}`
 

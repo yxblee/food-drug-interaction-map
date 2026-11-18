@@ -1,4 +1,4 @@
-import type { Citation, Drug, Food, Interaction, Mechanism } from './entities.ts'
+import type { Citation, Drug, Food, Interaction, Mechanism, Pairing } from './entities.ts'
 
 export type Kind = 'drug' | 'food' | 'mechanism'
 
@@ -29,6 +29,8 @@ export interface GraphPayload {
   stats: DatasetStats
   nodes: GraphNode[]
   interactions: GraphInteraction[]
+  /** Approved Helpful pairings. Few, so they travel whole, Sources included. */
+  pairings: Pairing[]
 }
 
 export interface SearchResult {
@@ -44,12 +46,18 @@ export interface ResolvedInteraction<I extends GraphInteraction = GraphInteracti
   inheritedFrom?: string
 }
 
+export interface ResolvedPairing {
+  pairing: Pairing
+  inheritedFrom?: string
+}
+
 export interface NodeDetail {
   node: GraphNode
   entity: Drug | Food | Mechanism
   parent: GraphNode | null
   children: GraphNode[]
   interactions: ResolvedInteraction<Interaction>[]
+  pairings: ResolvedPairing[]
   mechanisms: Record<string, Mechanism>
   nodes: Record<string, GraphNode>
 }

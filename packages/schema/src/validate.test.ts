@@ -58,6 +58,22 @@ function base(): RawDataset {
   }
 }
 
+const pairing = (food: string, drug: string, extra: Record<string, unknown> = {}) => ({
+  file: `pairings/${food}--${drug}.yaml`,
+  data: {
+    id: `${food}--${drug}`,
+    food,
+    drug,
+    summary: 's',
+    advice: 'a',
+    citations: [{ type: 'label', title: 't', url: 'https://example.org' }],
+    status: 'approved',
+    source: 'curated',
+    reviewed_at: '2026-11-17',
+    ...extra,
+  },
+})
+
 const errorsOf = (raw: RawDataset) => {
   const r = validateDataset(raw)
   return 'errors' in r ? r.errors : []
@@ -233,5 +249,56 @@ describe('validateDataset', () => {
       data: { id: 'kale', name: 'Kale', category: 'vegetable' },
     })
     expect(errorsOf(raw)).toEqual([])
+  })
+
+  describe('pairings', () => {
+    it('are optional and parsed when present', () => {
+      const raw = base()
+      expect(validateDataset(raw)).toMatchObject({ dataset: { pairings: [] } })
+      raw.pairings = [pairing('grapefruit', 'simvastatin')]
+      expect(validateDataset(raw)).toMatchObject({
+        dataset: { pairings: [{ id: 'grapefruit--simvastatin' }] },
+      })
+    })
+    it('reports unknown food, drug and mechanism, and a wrong id', () => {
+      const raw = base()
+      raw.pairings = [
+        pairing('kale', 'warfarin', { mechanisms: ['nope'] }),
+        pairing('grapefruit', 'statins', { id: 'grapefruit--simvastatin' }),
+      ]
+      const errors = errorsOf(raw)
+      expect(errors).toContain('pairings/kale--warfarin.yaml: food: unknown food "kale"')
+      expect(errors).toContain('pairings/kale--warfarin.yaml: drug: unknown drug "warfarin"')
+      expect(errors).toContain('pairings/kale--warfarin.yaml: mechanisms: unknown mechanism "nope"')
+      expect(errors).toContain(
+        'pairings/grapefruit--statins.yaml: id: must be "grapefruit--statins"',
+      )
+    })
+    it('reports a missing citation and an approved pairing with only a study', () => {
+      const raw = base()
+      raw.pairings = [
+        pairing('grapefruit', 'simvastatin', { citations: [] }),
+        pairing('sample-fruits', 'statins', {
+          citations: [{ type: 'study', title: 't', url: 'https://example.org' }],
+        }),
+      ]
+      const errors = errorsOf(raw)
+      expect(errors).toContainEqual(
+        expect.stringMatching(/^pairings\/grapefruit--simvastatin\.yaml: citations: /),
+      )
+      expect(errors).toContainEqual(
+        expect.stringMatching(
+          /^pairings\/sample-fruits--statins\.yaml: citations: .*label, review or guideline/,
+        ),
+      )
+    })
+    it('count the mechanisms they use', () => {
+      const raw = base()
+      raw.interactions = []
+      raw.pairings = [pairing('grapefruit', 'simvastatin', { mechanisms: ['cyp3a4-inhibition'] })]
+      expect(errorsOf(raw)).not.toContainEqual(
+        expect.stringContaining('no approved interaction references this mechanism'),
+      )
+    })
   })
 })

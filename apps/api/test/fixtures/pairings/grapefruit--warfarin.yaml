@@ -1,0 +1,11 @@
+id: grapefruit--warfarin
+food: grapefruit
+drug: warfarin
+summary: 'Fixture: a pending pairing, never published.'
+advice: 'Fixture advice.'
+citations:
+  - type: 'label'
+    title: 'Fixture label'
+    url: 'https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=fixture'
+status: pending
+source: curated

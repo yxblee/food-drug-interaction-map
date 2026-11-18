@@ -54,6 +54,16 @@ describe('static export', () => {
     ])
   })
 
+  it('publishes only Approved pairings, in the graph and in node details', () => {
+    expect(read<GraphPayload>('api/graph.json').pairings.map((p) => p.id)).toEqual([
+      'kale--statins',
+    ])
+    expect(
+      read<NodeDetail>('api/node/drug/simvastatin.json').pairings.map((r) => r.pairing.id),
+    ).toEqual(['kale--statins'])
+    expect(read<NodeDetail>('api/node/food/grapefruit.json').pairings).toEqual([])
+  })
+
   it('serves the same payloads as the read API, including Inherited interactions', () => {
     expect(read('api/graph.json')).toEqual(store.graph)
     for (const { kind, id } of store.graph.nodes) {

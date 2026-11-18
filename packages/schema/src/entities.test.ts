@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vite-plus/test'
-import { Drug, Food, Interaction, Mechanism } from './entities.ts'
+import { Drug, Food, Interaction, Mechanism, Pairing } from './entities.ts'
 
 const interaction = {
   id: 'grapefruit--simvastatin',
@@ -72,5 +72,41 @@ describe('Interaction', () => {
     expect(Interaction.safeParse({ ...interaction, id: 'grapefruit-simvastatin' }).success).toBe(
       false,
     )
+  })
+})
+
+describe('Pairing', () => {
+  const pairing = {
+    id: 'a-meal--metformin',
+    food: 'a-meal',
+    drug: 'metformin',
+    summary: 'Taking metformin with a meal is better tolerated.',
+    advice: 'The label says to take it with meals.',
+    citations: [{ type: 'label', title: 'Metformin label', url: 'https://dailymed.nlm.nih.gov/x' }],
+    status: 'approved',
+    source: 'curated',
+    reviewed_at: '2026-11-17',
+  }
+  it('accepts a pairing, with mechanisms optional and defaulting to none', () => {
+    expect(Pairing.parse(pairing).mechanisms).toEqual([])
+  })
+  it('has no severity, effect or details', () => {
+    for (const extra of [{ severity: 'avoid' }, { effect: 'increases' }, { details: 'x' }])
+      expect(Pairing.safeParse({ ...pairing, ...extra }).success).toBe(false)
+  })
+  it('requires a citation', () => {
+    expect(Pairing.safeParse({ ...pairing, citations: [] }).success).toBe(false)
+  })
+  it('needs a label, review or guideline citation to be approved', () => {
+    const study = [{ type: 'study', title: 't', url: 'https://example.org' }]
+    expect(Pairing.safeParse({ ...pairing, citations: study }).success).toBe(false)
+    expect(Pairing.safeParse({ ...pairing, citations: study, status: 'pending' }).success).toBe(
+      true,
+    )
+  })
+  it('needs reviewed_at once it is not pending', () => {
+    const { reviewed_at: _, ...rest } = pairing
+    expect(Pairing.safeParse(rest).success).toBe(false)
+    expect(Pairing.safeParse({ ...rest, status: 'pending' }).success).toBe(true)
   })
 })
