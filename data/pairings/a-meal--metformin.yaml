@@ -1,0 +1,13 @@
+id: "a-meal--metformin"
+food: "a-meal"
+drug: "metformin"
+summary: "The metformin label gives its doses with meals, and says meals can lessen an upset stomach."
+advice: "The metformin label gives its doses with meals and says taking it with meals can lessen an upset stomach. Ask your pharmacist how this applies to your own dose."
+citations:
+  - type: "label"
+    title: "Metformin hydrochloride tablet"
+    url: "https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=8cd5555c-f6b2-28d8-e053-2a95a90a5f1e"
+    setid: "8cd5555c-f6b2-28d8-e053-2a95a90a5f1e"
+status: "approved"
+source: "curated"
+reviewed_at: 2026-11-18
