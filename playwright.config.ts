@@ -24,7 +24,8 @@ export default defineConfig({
   // Software-GL mobile tests time out under the default (CPU/2) workers on a laptop.
   workers: process.env.CI ? undefined : 2,
   retries: process.env.CI ? 1 : 0,
-  use: { baseURL: base, trace: 'retain-on-failure' },
+  // Blocked so `page.route` mocks see every request; e2e/offline.spec.ts allows the worker.
+  use: { baseURL: base, trace: 'retain-on-failure', serviceWorkers: 'block' },
   projects: [
     { name: 'desktop', use: { ...devices['Desktop Chrome'], ...swiftshader } },
     { name: 'mobile', use: { ...devices['Pixel 7'], ...swiftshader } },
