@@ -80,6 +80,8 @@ For live-reload development run `pnpm start` and `pnpm --filter @fdi/web dev` in
 
 The e2e tests in `e2e/` replay these paths (`vp exec playwright test`).
 
+Running e2e locally: each run builds and serves this worktree on a free port (never reusing another server), with 2 workers so software-GL mobile tests do not time out. Set `E2E_PORT` to pin the port. With `CI` set, the port is 4173 and Playwright picks the worker count.
+
 ### What works now / before Build Session 3
 
 - **Works:** schema validation, SQLite build, read API, Explore (3D/2D graph, search, side panel, URL state), My meds (brand-name lookup, severity-ordered check, on-device storage), unit and e2e tests, CI, Docker/Fly config.
