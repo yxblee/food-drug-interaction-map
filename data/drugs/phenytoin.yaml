@@ -1,6 +1,7 @@
 id: phenytoin
 name: Phenytoin
 rxnorm: "8183"
+medlineplus: "https://medlineplus.gov/druginfo/meds/a682022.html"
 aliases:
   - Phenytoin Infatabs
   - Phenytek

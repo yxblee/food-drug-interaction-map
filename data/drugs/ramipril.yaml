@@ -1,6 +1,7 @@
 id: "ramipril"
 name: "Ramipril"
 rxnorm: "35296"
+medlineplus: "https://medlineplus.gov/druginfo/meds/a692027.html"
 aliases: ["Altace", "Vostally"]
 parent: "ace-inhibitors"
 drug_class: "ACE inhibitor"

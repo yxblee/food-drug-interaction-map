@@ -40,6 +40,8 @@ export const Drug = z.strictObject({
   parent: Slug.optional(),
   drug_class: Text.optional(),
   rxnorm: z.string().regex(/^\d+$/).optional(),
+  /** MedlinePlus drug page, resolved from `rxnorm` by `pipeline medlineplus`. Never guessed. */
+  medlineplus: z.url({ protocol: /^https$/ }).optional(),
 })
 export type Drug = z.infer<typeof Drug>
 

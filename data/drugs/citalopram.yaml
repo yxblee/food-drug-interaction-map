@@ -1,6 +1,7 @@
 id: "citalopram"
 name: "Citalopram"
 rxnorm: "2556"
+medlineplus: "https://medlineplus.gov/druginfo/meds/a699001.html"
 aliases: ["Celexa"]
 parent: "ssris"
 drug_class: "Selective serotonin reuptake inhibitor"

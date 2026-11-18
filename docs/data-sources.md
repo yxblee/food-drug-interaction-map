@@ -41,3 +41,14 @@ Brand-name Aliases in `data/drugs/` come from [RxNorm](https://www.nlm.nih.gov/r
 - New Brand names are added after the existing Aliases, which are never removed or reordered. A name another Drug already answers to is skipped and printed.
 - A Drug without an `rxnorm` id is looked up by name (`/rxcui.json?name=…&search=2`) and printed for a person to confirm. Nothing is written for it.
 - RxNorm also lists veterinary products and brands sold only for the skin, eye or ear. Those were dropped on review and are listed in `EXCLUDED` in `apps/pipeline/src/brands.ts`, so a rerun does not bring them back. Review the diff of every run the same way.
+
+## Medication pages from MedlinePlus
+
+The "About this medication (MedlinePlus)" link on a Drug comes from the NLM [MedlinePlus Connect](https://medlineplus.gov/connect/service.html) web service, which maps an RxNorm id to a MedlinePlus drug page. MedlinePlus says you are welcome to link to and display the data its services provide. Content shown on this site is not copied from it: only the link is stored.
+
+> Source: MedlinePlus, National Library of Medicine. NLM is not responsible for and does not endorse this site.
+
+- Run it with `node --run pipeline -- medlineplus`. It needs no key and no downloads, and writes only a `medlineplus` line after the `rxnorm` line of Drug files.
+- For each Drug with an `rxnorm` id and no link yet (never a Drug class), it asks `https://connect.medlineplus.gov/service?mainSearchCriteria.v.cs=2.16.840.1.113883.6.88&mainSearchCriteria.v.c={rxcui}&knowledgeResponseType=application/json`. The first entry whose link is an https `medlineplus.gov/druginfo/meds/` page is kept, without its tracking query. Connect also returns health-topic pages such as "Statins"; those are ignored.
+- A Drug with no such page gets no link and is printed. Nothing is guessed from the name. Drugs without an `rxnorm` id are skipped.
+- The link opens in a new tab, and its accessible name says so. It appears in the Explore side panel for a Drug and beside each medication in My meds.

@@ -1,6 +1,7 @@
 id: "risedronate"
 name: "Risedronate"
 rxnorm: "73056"
+medlineplus: "https://medlineplus.gov/druginfo/meds/a601247.html"
 aliases: ["Actonel", "Atelvia"]
 parent: "bisphosphonates"
 drug_class: "Bisphosphonate"

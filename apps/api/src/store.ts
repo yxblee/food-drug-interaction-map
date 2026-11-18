@@ -35,6 +35,7 @@ export interface Store {
 function toNode(kind: 'drug' | 'food', e: Drug | Food): GraphNode {
   const node: GraphNode = { kind, id: e.id, name: e.name, aliases: e.aliases, group: e.group }
   if (e.parent) node.parent = e.parent
+  if ('medlineplus' in e && e.medlineplus) node.medlineplus = e.medlineplus
   return node
 }
 

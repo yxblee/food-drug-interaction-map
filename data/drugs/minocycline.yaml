@@ -1,6 +1,7 @@
 id: "minocycline"
 name: "Minocycline"
 rxnorm: "6980"
+medlineplus: "https://medlineplus.gov/druginfo/meds/a682101.html"
 aliases: ["Minocin", "Solodyn", "Ximino", "Minolira", "Emrosi", "Cleeravue-M"]
 parent: "tetracyclines"
 drug_class: "Tetracycline antibiotic"

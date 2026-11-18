@@ -1,6 +1,7 @@
 id: sildenafil
 name: Sildenafil
 rxnorm: "136411"
+medlineplus: "https://medlineplus.gov/druginfo/meds/a699015.html"
 aliases:
   - Viagra
   - Liqrev

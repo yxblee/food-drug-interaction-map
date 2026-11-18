@@ -1,6 +1,7 @@
 id: "enalapril"
 name: "Enalapril"
 rxnorm: "3827"
+medlineplus: "https://medlineplus.gov/druginfo/meds/a686022.html"
 aliases: ["Vasotec", "Epaned"]
 parent: "ace-inhibitors"
 drug_class: "ACE inhibitor"

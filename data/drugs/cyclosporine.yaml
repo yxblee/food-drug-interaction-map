@@ -1,5 +1,6 @@
 id: "cyclosporine"
 name: "Cyclosporine"
 rxnorm: "3008"
+medlineplus: "https://medlineplus.gov/druginfo/meds/a601207.html"
 aliases: ["Neoral", "Sandimmune", "Gengraf"]
 drug_class: "Calcineurin inhibitor"
