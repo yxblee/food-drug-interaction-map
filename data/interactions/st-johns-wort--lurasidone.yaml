@@ -1,0 +1,27 @@
+id: st-johns-wort--lurasidone
+food: st-johns-wort
+drug: lurasidone
+mechanisms:
+  - cyp3a4-induction
+severity: avoid
+effect: decreases
+summary: St. John's wort speeds up lurasidone breakdown, lowering its levels and
+  effect. The label says not to combine them.
+advice: Don't take St. John's wort with lurasidone. If you already use it, tell
+  your prescriber or pharmacist. Don't stop or start either one without their
+  advice.
+details: The label names St. John's wort as an example of a strong CYP3A4
+  inducer. Lurasidone is cleared mainly by the CYP3A4 enzyme. Strong inducers
+  raise the activity of this enzyme, so less lurasidone stays in the body. Lower
+  exposure could make the medicine work less well for schizophrenia or bipolar
+  depression. For this reason the label says strong CYP3A4 inducers should not
+  be used with lurasidone, and it lists this as a contraindication.
+citations:
+  - type: label
+    title: LURASIDONE HYDROCHLORIDE [Heritage Pharmaceuticals Inc. d/b/a Avet
+      Pharmaceuticals Inc.]
+    url: https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=083a1a52-5a13-4e28-8ef2-127ac4ce5b2d
+    setid: 083a1a52-5a13-4e28-8ef2-127ac4ce5b2d
+status: approved
+source: openfda
+reviewed_at: 2026-11-18

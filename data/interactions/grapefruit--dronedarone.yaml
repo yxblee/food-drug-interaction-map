@@ -1,0 +1,27 @@
+id: grapefruit--dronedarone
+food: grapefruit
+drug: dronedarone
+mechanisms:
+  - cyp3a4-inhibition
+severity: avoid
+effect: increases
+summary: Grapefruit juice markedly raises dronedarone (Multaq) levels in the
+  body, so it should be avoided.
+advice: Don't drink grapefruit juice while taking dronedarone. Take the tablets
+  with meals and a different drink, such as water. Tell your doctor or
+  pharmacist if you've been having grapefruit regularly.
+details: Dronedarone is broken down mainly by the CYP3A enzyme, which also
+  limits how much reaches the bloodstream. Grapefruit juice blocks CYP3A,
+  especially in the gut wall. More dronedarone is absorbed and levels in the
+  blood rise considerably. Higher levels raise the risk of dronedarone's effects
+  on the heart, such as QT prolongation and slow heart rate, and of its other
+  side effects. The label tells patients to avoid grapefruit juice beverages
+  entirely.
+citations:
+  - type: label
+    title: DRONEDARONE [Cardinal Health 107, LLC]
+    url: https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=3bd4006a-8bad-4909-ac6d-b6d84390155c
+    setid: 3bd4006a-8bad-4909-ac6d-b6d84390155c
+status: approved
+source: openfda
+reviewed_at: 2026-11-18

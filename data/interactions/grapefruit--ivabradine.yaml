@@ -1,0 +1,26 @@
+id: grapefruit--ivabradine
+food: grapefruit
+drug: ivabradine
+mechanisms:
+  - cyp3a4-inhibition
+severity: avoid
+effect: increases
+summary: Grapefruit juice can raise ivabradine levels and increase the risk of a
+  dangerously slow heart rate.
+advice: Avoid grapefruit juice while taking ivabradine (Corlanor). Report
+  dizziness, fatigue, a very slow pulse or low blood pressure to your healthcare
+  provider.
+details: Ivabradine is broken down mainly by the CYP3A4 enzyme in the gut and
+  liver. Grapefruit juice is a moderate CYP3A4 inhibitor. It can slow this
+  breakdown and raise ivabradine levels in the blood. Higher levels can worsen
+  bradycardia (slow heart rate) and conduction problems. The label advises
+  avoiding moderate CYP3A4 inhibitors, names grapefruit juice as an example, and
+  tells patients to avoid it.
+citations:
+  - type: label
+    title: IVABRADINE [Amgen Inc]
+    url: https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=92018a65-38f6-45f7-91d4-a34921b81d0d
+    setid: 92018a65-38f6-45f7-91d4-a34921b81d0d
+status: approved
+source: openfda
+reviewed_at: 2026-11-18

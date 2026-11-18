@@ -1,0 +1,27 @@
+id: grapefruit--lurasidone
+food: grapefruit
+drug: lurasidone
+mechanisms:
+  - cyp3a4-inhibition
+severity: avoid
+effect: increases
+summary: Grapefruit and grapefruit juice can inhibit CYP3A4, the main enzyme
+  that breaks down lurasidone, and may raise its blood levels.
+advice: Avoid grapefruit and grapefruit juice while taking lurasidone. Take the
+  tablets with a meal of at least 350 calories, as directed. Ask your prescriber
+  or pharmacist if you have questions about your diet.
+details: Lurasidone is metabolized mainly by CYP3A4. Drugs that inhibit this
+  enzyme raise lurasidone exposure. Strong inhibitors are contraindicated, and
+  moderate inhibitors require a dose cut of about half. Grapefruit juice also
+  inhibits CYP3A4, so the label says to avoid it because it may alter lurasidone
+  concentrations. The label gives no specific numbers for grapefruit. Higher
+  drug levels could mean more side effects such as sleepiness, low blood
+  pressure on standing, and movement problems.
+citations:
+  - type: label
+    title: LURASIDONE HYDROCHLORIDE [Aurobindo Pharma Limited]
+    url: https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=b3e9cc86-0c5c-444f-ab57-f4d1a6865035
+    setid: b3e9cc86-0c5c-444f-ab57-f4d1a6865035
+status: approved
+source: openfda
+reviewed_at: 2026-11-18

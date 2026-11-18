@@ -1,0 +1,8 @@
+id: quetiapine
+name: Quetiapine
+rxnorm: "51272"
+aliases:
+  - Quetiapine fumarate
+  - Seroquel
+  - Seroquel XR
+drug_class: "Atypical antipsychotic"

@@ -1,0 +1,25 @@
+id: st-johns-wort--nimodipine
+food: st-johns-wort
+drug: nimodipine
+mechanisms:
+  - cyp3a4-induction
+severity: avoid
+effect: decreases
+summary: St. John's wort can lower nimodipine levels and make it work less well.
+advice: Avoid taking St. John's wort with nimodipine. If you already use it,
+  talk to your prescriber before starting or stopping it, as your nimodipine
+  dose or monitoring may need to change.
+details: Nimodipine is broken down mainly by the liver enzyme CYP3A4. St. John's
+  wort speeds up this enzyme, so more nimodipine is cleared before it can act.
+  The label warns that blood levels and effectiveness may fall significantly.
+  This matters because nimodipine is used to improve outcomes after bleeding
+  around the brain (subarachnoid hemorrhage). The label says use with strong
+  CYP3A4 inducers, including St. John's wort, should generally be avoided.
+citations:
+  - type: label
+    title: NIMODIPINE [Azurity Pharmaceuticals, Inc.]
+    url: https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=e660fa26-b5c4-4d6d-8887-9e22b6666a10
+    setid: e660fa26-b5c4-4d6d-8887-9e22b6666a10
+status: approved
+source: openfda
+reviewed_at: 2026-11-18

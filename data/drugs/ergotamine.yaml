@@ -1,0 +1,7 @@
+id: ergotamine
+name: Ergotamine
+rxnorm: "4025"
+aliases:
+  - Ergotamine tartrate
+  - Ergomar
+drug_class: "Ergot alkaloid"

@@ -1,0 +1,26 @@
+id: st-johns-wort--ranolazine
+food: st-johns-wort
+drug: ranolazine
+mechanisms:
+  - cyp3a4-induction
+severity: avoid
+effect: decreases
+summary: St. John's wort can sharply lower ranolazine levels, and the label says
+  not to combine them.
+advice: Don't take St. John's wort with ranolazine. If you use it or any herbal
+  supplement, tell your doctor or pharmacist before starting ranolazine.
+details: Ranolazine is broken down mainly by the CYP3A enzyme in the gut and
+  liver. St. John's wort speeds up CYP3A and is listed among the inducers that
+  must not be used with ranolazine. The label cites rifampin, a strong inducer,
+  which cut ranolazine levels by about 95%. St. John's wort probably lowers
+  levels too, so ranolazine may stop controlling angina. The label lists St.
+  John's wort in its contraindications, drug interaction section and patient
+  counseling.
+citations:
+  - type: label
+    title: RANOLAZINE [Umedica Laboratories USA Inc.]
+    url: https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=a624dc7f-921d-4554-a813-f72dca0133c3
+    setid: a624dc7f-921d-4554-a813-f72dca0133c3
+status: approved
+source: openfda
+reviewed_at: 2026-11-18

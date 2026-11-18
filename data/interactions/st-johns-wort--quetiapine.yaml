@@ -1,0 +1,30 @@
+id: st-johns-wort--quetiapine
+food: st-johns-wort
+drug: quetiapine
+mechanisms:
+  - cyp3a4-induction
+severity: caution
+effect: decreases
+summary: St. John's wort speeds up the breakdown of quetiapine, so blood levels
+  fall and the drug may work less well.
+advice: Don't start or stop St. John's wort without talking to your prescriber.
+  If you take it long term (more than about 1-2 weeks) with quetiapine, your
+  doctor may need to raise your quetiapine dose. They will also need to lower it
+  again within 1-2 weeks of stopping the herb.
+details: The label lists St. John's wort among the strong CYP3A4 inducers.
+  Quetiapine is cleared mainly by the liver enzyme CYP3A4, so an inducer lowers
+  quetiapine levels. In the label's phenytoin study, a similar inducer raised
+  quetiapine clearance about 5-fold. The label says the dose may need to be
+  raised up to 5-fold with chronic inducer use (more than 7-14 days) to keep
+  symptoms controlled. The dose should be adjusted according to response and
+  tolerability. When the inducer is stopped, the dose should return to the
+  original level within 7-14 days. This prevents too much drug exposure after
+  the enzyme effect wears off.
+citations:
+  - type: label
+    title: QUETIAPINE FUMARATE [A-S Medication Solutions]
+    url: https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=936b4ea8-82bf-461d-bc73-4b3bf3f3e9a0
+    setid: 936b4ea8-82bf-461d-bc73-4b3bf3f3e9a0
+status: approved
+source: openfda
+reviewed_at: 2026-11-18

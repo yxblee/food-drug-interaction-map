@@ -1,0 +1,26 @@
+id: grapefruit--ranolazine
+food: grapefruit
+drug: ranolazine
+mechanisms:
+  - cyp3a4-inhibition
+severity: caution
+effect: increases
+summary: Grapefruit can raise ranolazine blood levels by blocking the CYP3A
+  enzyme that breaks it down.
+advice: Limit grapefruit juice and grapefruit-containing products while taking
+  ranolazine. If you do consume them, tell your doctor. The ranolazine dose
+  should not exceed 500 mg twice daily in that case.
+details: Ranolazine is broken down mainly by CYP3A in the gut and liver. The
+  label groups grapefruit juice and grapefruit products with moderate CYP3A
+  inhibitors such as diltiazem, verapamil and erythromycin. These can increase
+  ranolazine exposure. Higher levels raise the risk of side effects such as
+  dizziness and QT interval prolongation. The label caps the dose at 500 mg
+  twice daily for patients on moderate CYP3A inhibitors. The patient information tells people to inform their physician if they use moderate CYP3A inhibitors, including grapefruit products.
+citations:
+  - type: label
+    title: RANOLAZINE [Umedica Laboratories USA Inc.]
+    url: https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=a624dc7f-921d-4554-a813-f72dca0133c3
+    setid: a624dc7f-921d-4554-a813-f72dca0133c3
+status: approved
+source: openfda
+reviewed_at: 2026-11-18

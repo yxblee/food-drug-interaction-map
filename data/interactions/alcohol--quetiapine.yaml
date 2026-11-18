@@ -1,0 +1,30 @@
+id: alcohol--quetiapine
+food: alcohol
+drug: quetiapine
+mechanisms:
+  - cns-depression
+severity: caution
+effect: increases
+summary: Alcohol can make quetiapine's effects on thinking and coordination
+  stronger, so drinking should be limited.
+advice: Limit alcoholic drinks while taking quetiapine. Avoid driving or
+  operating machinery until you know how the combination affects you. Be extra
+  careful when starting the drug or raising the dose, because drowsiness and
+  dizziness are most common then. Ask your prescriber how much alcohol, if any,
+  is safe for you.
+details: Quetiapine acts on the central nervous system and often causes
+  drowsiness, dizziness and impaired judgment. In a clinical trial in people
+  with certain psychotic disorders, quetiapine increased alcohol's effects on
+  thinking and motor skills. Together they can cause more sedation, slower
+  reactions and a higher risk of falls. Quetiapine can also lower blood pressure
+  on standing, and alcohol may add to that. The label advises limiting alcoholic
+  beverages and being cautious when quetiapine is combined with other centrally
+  acting substances.
+citations:
+  - type: label
+    title: QUETIAPINE FUMARATE [A-S Medication Solutions]
+    url: https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=936b4ea8-82bf-461d-bc73-4b3bf3f3e9a0
+    setid: 936b4ea8-82bf-461d-bc73-4b3bf3f3e9a0
+status: approved
+source: openfda
+reviewed_at: 2026-11-18

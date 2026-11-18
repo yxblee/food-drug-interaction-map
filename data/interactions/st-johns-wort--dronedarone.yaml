@@ -1,0 +1,26 @@
+id: st-johns-wort--dronedarone
+food: st-johns-wort
+drug: dronedarone
+mechanisms:
+  - cyp3a4-induction
+severity: avoid
+effect: decreases
+summary: St. John's wort can markedly lower dronedarone levels, making the drug
+  less effective.
+advice: Avoid St. John's wort while taking dronedarone (Multaq). Tell your
+  doctor or pharmacist about any herbal products you use, especially St. John's
+  wort.
+details: Dronedarone is broken down mainly by the liver and gut enzyme CYP3A.
+  St. John's wort switches on (induces) this enzyme, so the body clears
+  dronedarone faster. The label says such inducers significantly reduce
+  dronedarone exposure and advises avoiding them. Lower drug levels may mean
+  less control of the heart rhythm. The label also asks patients to report
+  herbal products, particularly St. John's wort, to their doctor.
+citations:
+  - type: label
+    title: DRONEDARONE [Cardinal Health 107, LLC]
+    url: https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=3bd4006a-8bad-4909-ac6d-b6d84390155c
+    setid: 3bd4006a-8bad-4909-ac6d-b6d84390155c
+status: approved
+source: openfda
+reviewed_at: 2026-11-18
