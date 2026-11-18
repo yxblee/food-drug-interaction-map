@@ -64,4 +64,25 @@ describe('addDailymed', () => {
       '236d4549-f44b-4677-b857-acedd10b9920',
     ])
   })
+
+  it("prefers the one setid the Drug's Interactions cite; several are listed, none written; none cited falls back", async () => {
+    const calls: string[] = []
+    const spy = async (rxcui: string) => (calls.push(rxcui), spls[rxcui])
+    const r = await addDailymed(
+      [
+        file('dronedarone', 'rxnorm: "233698"'),
+        file('tafamidis', 'rxnorm: "1545063"'),
+        file('talinolol', 'rxnorm: "37546"'),
+      ],
+      spy,
+      { dronedarone: ['aaa'], tafamidis: ['a', 'b'] },
+    )
+    expect(r.changed.map((c) => c.file)).toEqual(['dronedarone.yaml'])
+    expect(r.changed[0].text).toContain('dailymed: "aaa"')
+    expect(r.ambiguous.map((a) => [a.id, a.labels.map((l) => l.setid)])).toEqual([
+      ['tafamidis', ['a', 'b']],
+    ])
+    expect(calls).toEqual(['37546'])
+    expect(r.unmatched).toEqual(['talinolol'])
+  })
 })
