@@ -198,6 +198,12 @@
   margin: 4px 0 0 -4px;
   padding: 4px;
 }
+.explore__hint .link-button {
+  /* A real 44px box, not just a hit area: these two links are the first thing a new person taps. */
+  display: inline-flex;
+  align-items: center;
+  min-height: 44px;
+}
 .legend {
   position: absolute;
   left: 16px;

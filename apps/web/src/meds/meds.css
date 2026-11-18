@@ -134,6 +134,32 @@
   margin: 24px 0 4px;
   font-size: 18px;
 }
+/* The heading and its Severity key share a row; an open key wraps below, full width. */
+.meds__resulthead {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  column-gap: 16px;
+}
+.severity-key[open] {
+  flex-basis: 100%;
+  margin-bottom: 8px;
+}
+.severity-key summary {
+  display: flex;
+  align-items: center;
+  min-height: 44px;
+  cursor: pointer;
+  color: var(--ink);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  list-style: none;
+  /* Keeps the 44px target but takes 24px of row height, so the first Avoid lead stays on screen. */
+  margin-block: -10px;
+}
+.severity-key summary::-webkit-details-marker {
+  display: none;
+}
 .meds__list {
   list-style: none;
   padding: 0;

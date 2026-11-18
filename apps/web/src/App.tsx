@@ -8,6 +8,7 @@ import { ExploreTab } from './explore/ExploreTab.tsx'
 import { checkMeds, mapKeysFor } from './meds/checkMeds.ts'
 import { MyMedsTab } from './meds/MyMedsTab.tsx'
 import { useMeds } from './meds/useMeds.ts'
+import { droppedNotice } from './plural.ts'
 import { useTheme } from './theme/useTheme.ts'
 import { useUrlState } from './useUrlState.ts'
 import './App.css'
@@ -124,7 +125,7 @@ export function App() {
 
       {dropped > 0 && (
         <p role="status" className="meds__notice">
-          Removed {dropped} medication(s) that are no longer in our dataset.
+          {droppedNotice(dropped)}
         </p>
       )}
 

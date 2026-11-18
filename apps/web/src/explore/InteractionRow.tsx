@@ -24,6 +24,8 @@ interface Props {
   cautionFirst?: boolean
   /** The Explore panel with many rows: show one line (name, Severity) and open to the rest. */
   collapsible?: boolean
+  /** A lead sentence above already names the only counterpart, so the row leaves the name out. */
+  hideName?: boolean
 }
 
 /** "Sources": a Citation list, one 44px link row each. Shared by Interactions and Helpful pairings. */
@@ -68,6 +70,7 @@ export function InteractionRow({
   groupSeverity,
   cautionFirst,
   collapsible,
+  hideName,
 }: Props) {
   const i = row.interaction
   // The Drug class or Food group this row is inherited from, on the viewed side.
@@ -99,10 +102,11 @@ export function InteractionRow({
       {collapsible ? n?.name : link(n)}
     </span>
   ))
+  const showBadge = !grouped && groupSeverity !== i.severity
   const head = (
     <>
-      {!grouped && groupSeverity !== i.severity && <SeverityBadge severity={i.severity} />}
-      <span className="irow__name">{names}</span>
+      {showBadge && <SeverityBadge severity={i.severity} />}
+      {!hideName && <span className="irow__name">{names}</span>}
     </>
   )
 
@@ -151,7 +155,7 @@ export function InteractionRow({
   if (!collapsible)
     return (
       <li className="irow">
-        <div className="irow__head">{head}</div>
+        {(showBadge || !hideName) && <div className="irow__head">{head}</div>}
         {body}
       </li>
     )
