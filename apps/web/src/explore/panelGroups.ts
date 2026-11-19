@@ -3,11 +3,18 @@ import { SEVERITIES, type Interaction, type ResolvedInteraction, type Severity }
 /** A panel with more rows than this shows each row as one collapsed line. */
 export const COLLAPSE_ABOVE = 5
 
+export interface PanelRun {
+  /** The Drug class or Food group these Inherited interactions come from, stated once. */
+  inheritedFrom?: string
+  rows: ResolvedInteraction<Interaction>[]
+}
+
 export interface PanelGroup {
   severity: Severity
+  /** Every row in the Severity group; its length is the count. */
   rows: ResolvedInteraction<Interaction>[]
-  /** The Drug class or Food group every row in this group is inherited from, stated once. */
-  inheritedFrom?: string
+  /** Direct rows first, then one run per Inherited source, in the rows' own order. */
+  runs: PanelRun[]
 }
 
 /** Rows grouped by Severity, most severe first; empty groups are skipped. */
@@ -15,9 +22,14 @@ export function panelGroups(rows: ResolvedInteraction<Interaction>[]) {
   const groups: PanelGroup[] = SEVERITIES.flatMap((severity) => {
     const mine = rows.filter((r) => r.interaction.severity === severity)
     if (!mine.length) return []
-    const from = mine[0].inheritedFrom
-    const shared = mine.every((r) => r.inheritedFrom === from)
-    return [{ severity, rows: mine, inheritedFrom: shared ? from : undefined }]
+    // Direct rows first, then each Inherited source in order of appearance.
+    const inherited = new Set(mine.map((r) => r.inheritedFrom).filter((f) => f !== undefined))
+    const sources = [...(mine.some((r) => !r.inheritedFrom) ? [undefined] : []), ...inherited]
+    const runs = sources.map((from) => ({
+      inheritedFrom: from,
+      rows: mine.filter((r) => r.inheritedFrom === from),
+    }))
+    return [{ severity, rows: mine, runs }]
   })
   return { collapsed: rows.length > COLLAPSE_ABOVE, groups }
 }

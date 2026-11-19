@@ -54,3 +54,16 @@ test('a panel with few rows is unchanged', async ({ page }) => {
   await expect(panel.locator('li.irow--collapsible')).toHaveCount(0)
   await expect(panel.getByText('What to do:').first()).toBeVisible()
 })
+
+test('a mixed Severity group states where the inherited rows start', async ({ page }) => {
+  await page.goto('./?node=food%3Agrapefruit')
+  const avoid = page.getByRole('complementary').locator('section.panel__sev').first()
+  const label = avoid.getByText('Applies to Grapefruit and relatives', { exact: true })
+  await expect(label).toHaveCount(1)
+  await expect(label).toBeVisible()
+  // Reading order: the label sits right before the first inherited row, Amiodarone.
+  const next = label.locator('xpath=following-sibling::ul[1]/li[1]')
+  await expect(next).toContainText('Amiodarone')
+  // Rows inside the subheaded run do not repeat it.
+  await expect(avoid.locator('li').getByText(/^Applies to /)).toHaveCount(0)
+})

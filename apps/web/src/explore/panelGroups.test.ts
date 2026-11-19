@@ -30,14 +30,43 @@ describe('panelGroups', () => {
     expect(panelGroups([])).toEqual({ collapsed: false, groups: [] })
   })
 
-  it('names the Drug class or Food group a whole Severity group is inherited from', () => {
+  it('names the Drug class or Food group each run is inherited from', () => {
     const { groups } = panelGroups([
       row('a', 'avoid', 'statins'),
       row('b', 'avoid', 'statins'),
       row('c', 'caution', 'statins'),
       row('d', 'caution'),
     ])
-    expect(groups.map((g) => g.inheritedFrom)).toEqual(['statins', undefined])
+    expect(groups.map((g) => g.runs.map((r) => r.inheritedFrom))).toEqual([
+      ['statins'],
+      [undefined, 'statins'],
+    ])
+  })
+
+  it('splits a mixed Severity group into direct rows first, then one run per inherited source', () => {
+    const { groups } = panelGroups([
+      row('a', 'avoid', 'citrus'),
+      row('b', 'avoid'),
+      row('c', 'avoid', 'relatives'),
+      row('d', 'avoid'),
+      row('e', 'avoid', 'citrus'),
+    ])
+    expect(
+      groups[0].runs.map((r) => [r.inheritedFrom, r.rows.map((x) => x.interaction.id)]),
+    ).toEqual([
+      [undefined, ['b', 'd']],
+      ['citrus', ['a', 'e']],
+      ['relatives', ['c']],
+    ])
+    expect(groups[0].rows).toHaveLength(5)
+  })
+
+  it('keeps all-direct and all-inherited groups as a single run', () => {
+    const { groups } = panelGroups([row('a', 'avoid'), row('b', 'caution', 'statins')])
+    expect(groups.map((g) => g.runs.map((r) => r.inheritedFrom))).toEqual([
+      [undefined],
+      ['statins'],
+    ])
   })
 })
 
