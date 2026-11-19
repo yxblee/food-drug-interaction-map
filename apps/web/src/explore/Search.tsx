@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useRef, useState } from 'react'
 import type { GraphInteraction, GraphNode } from '@fdi/schema'
-import { groupTerm, nodeKey, searchNodes } from '@fdi/schema/domain'
+import { groupTerm, nodeKey, searchNodes, suggestNodes } from '@fdi/schema/domain'
 import type { ViewState } from '../urlState.ts'
 import { ClearButton } from '../ClearButton.tsx'
 import { plural } from '../plural.ts'
@@ -25,7 +25,14 @@ export function Search({ nodes, interactions, state, update }: Props) {
   const browse = useMemo(() => browseGroups(nodes, interactions), [nodes, interactions])
   // An empty box lists every Drug then every Food A-Z; typing narrows to matches.
   const matches = useMemo(() => searchNodes(nodes, state.q), [nodes, state.q])
-  const results = searching ? matches : [...browse.drugs, ...browse.foods]
+  // Only when nothing matches by name: the nearest names, offered as "Did you mean".
+  const suggestions = useMemo(
+    () => (matches.length === 0 ? suggestNodes(nodes, state.q) : []),
+    [nodes, state.q, matches.length],
+  )
+  const suggesting = searching && suggestions.length > 0
+  const found = suggesting ? suggestions : matches
+  const results = searching ? found : [...browse.drugs, ...browse.foods]
   // Picking a result, Escape or leaving the field closes the list until the query changes.
   // Starts closed: the empty-box browse list opens only on focus, never over the map on load.
   const [closed, setClosed] = useState(true)
@@ -103,11 +110,13 @@ export function Search({ nodes, interactions, state, update }: Props) {
         )}
       </div>
       <p className="search__count mono-label" role="status" aria-live="polite">
-        {searching
-          ? matchCountLabel(results.length)
-          : open
-            ? browseLabel(browse.drugs.length, browse.foods.length)
-            : ''}
+        {suggesting
+          ? `No match. ${plural(suggestions.length, 'suggestion', 'suggestions')}`
+          : searching
+            ? matchCountLabel(results.length)
+            : open
+              ? browseLabel(browse.drugs.length, browse.foods.length)
+              : ''}
       </p>
       {searching && results.length === 0 && (
         <p className="search__empty">
@@ -118,14 +127,23 @@ export function Search({ nodes, interactions, state, update }: Props) {
       <ul
         id="search-options"
         role="listbox"
-        aria-label="Matching drugs, foods and mechanisms"
+        aria-label={
+          suggesting
+            ? 'Did you mean: suggested drugs, foods and mechanisms'
+            : 'Matching drugs, foods and mechanisms'
+        }
         className={`search__results combo__list${searching ? '' : ' combo__list--browse'}`}
         hidden={!open}
         // Keep focus in the input when an option is pressed, so the blur above does not eat the click.
         onMouseDown={(e) => e.preventDefault()}
       >
+        {suggesting && (
+          <li role="presentation" aria-hidden className="combo__heading mono-label">
+            Did you mean
+          </li>
+        )}
         {searching
-          ? matches.map((r, i) => (
+          ? found.map((r, i) => (
               <li
                 key={nodeKey(r.kind, r.id)}
                 id={`search-option-${i}`}

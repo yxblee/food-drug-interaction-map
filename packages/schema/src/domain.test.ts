@@ -11,6 +11,7 @@ import {
   pairingsForFood,
   searchNodes,
   splitKey,
+  suggestNodes,
 } from './domain.ts'
 
 const n = (
@@ -136,6 +137,32 @@ describe('searchNodes', () => {
   })
   it('respects the limit', () => {
     expect(searchNodes(nodes, 'a', 2)).toHaveLength(2)
+  })
+})
+
+describe('suggestNodes', () => {
+  const ids = (q: string) => suggestNodes(nodes, q).map((r) => r.id)
+  it('suggests the nearest name for a typo', () => {
+    expect(ids('atorvastain')).toEqual(['atorvastatin'])
+    expect(ids('grapefuit')).toEqual(['grapefruit'])
+  })
+  it('suggests the Drug behind a misspelled brand and reports it', () => {
+    expect(suggestNodes(nodes, 'Lipiter')).toEqual([
+      { kind: 'drug', id: 'atorvastatin', name: 'Atorvastatin', matched: 'Lipitor', group: false },
+    ])
+  })
+  it('suggests nothing when something matches exactly or partially', () => {
+    expect(ids('grape')).toEqual([])
+    expect(ids('atorvastatin')).toEqual([])
+  })
+  it('never guesses for queries under 4 characters', () => {
+    expect(ids('kal')).toEqual([])
+    expect(ids('kaly')).toEqual(['kale'])
+  })
+  it('returns nothing for far-off queries and caps at 3', () => {
+    expect(ids('zzzzzzzz')).toEqual([])
+    const many = ['aaaab', 'aaaac', 'aaaad', 'aaaae'].map((x) => n('drug', x, x))
+    expect(suggestNodes(many, 'aaaaf')).toHaveLength(3)
   })
 })
 

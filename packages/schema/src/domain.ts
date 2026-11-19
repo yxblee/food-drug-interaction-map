@@ -124,3 +124,49 @@ export function searchNodes(nodes: GraphNode[], q: string, limit = 20): SearchRe
     group: node.group,
   }))
 }
+
+// Damerau–Levenshtein (adjacent swap = 1 edit), so "atorvastain" is one edit from "atorvastatin".
+function editDistance(a: string, b: string): number {
+  const d: number[][] = Array.from({ length: a.length + 1 }, (_, i) => [
+    i,
+    ...Array<number>(b.length).fill(0),
+  ])
+  for (let j = 1; j <= b.length; j++) d[0]![j] = j
+  for (let i = 1; i <= a.length; i++) {
+    for (let j = 1; j <= b.length; j++) {
+      const cost = a[i - 1] === b[j - 1] ? 0 : 1
+      d[i]![j] = Math.min(d[i - 1]![j]! + 1, d[i]![j - 1]! + 1, d[i - 1]![j - 1]! + cost)
+      if (i > 1 && j > 1 && a[i - 1] === b[j - 2] && a[i - 2] === b[j - 1])
+        d[i]![j] = Math.min(d[i]![j]!, d[i - 2]![j - 2]! + 1)
+    }
+  }
+  return d[a.length]![b.length]!
+}
+
+/**
+ * "Did you mean" fallback: when nothing matches `q` by prefix or substring, the nearest names
+ * and Aliases by edit distance (about 1 edit per 4 characters, at most 2). Queries under 4
+ * characters never guess. Kept apart from searchNodes so graph filtering never sees guesses.
+ */
+export function suggestNodes(nodes: GraphNode[], q: string, limit = 3): SearchResult[] {
+  const needle = q.trim().toLowerCase()
+  if (needle.length < 4 || searchNodes(nodes, needle, 1).length) return []
+  const max = Math.min(2, Math.floor(needle.length / 4))
+  const found: { dist: number; matched: string; node: GraphNode }[] = []
+  for (const node of nodes) {
+    let best: { dist: number; matched: string } | undefined
+    for (const term of [node.name, ...node.aliases]) {
+      const dist = editDistance(needle, term.toLowerCase())
+      if (dist <= max && (!best || dist < best.dist)) best = { dist, matched: term }
+    }
+    if (best) found.push({ ...best, node })
+  }
+  found.sort((a, b) => a.dist - b.dist || a.node.name.localeCompare(b.node.name))
+  return found.slice(0, limit).map(({ node, matched }) => ({
+    kind: node.kind,
+    id: node.id,
+    name: node.name,
+    matched,
+    group: node.group,
+  }))
+}
