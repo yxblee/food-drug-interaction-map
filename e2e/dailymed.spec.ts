@@ -31,7 +31,7 @@ test('the side panel for a Drug links to its DailyMed label', async ({ page }) =
 })
 
 test('a Drug class and a Drug with no label get no DailyMed link', async ({ page }) => {
-  for (const key of ['drug:statins', 'drug:ivabradine']) {
+  for (const key of ['drug:statins', 'drug:nadolol']) {
     await page.goto(`./?node=${key}`)
     await expect(page.locator('.panel__title')).not.toHaveText('…')
     await expect(page.getByRole('link', { name: /DailyMed/ })).toHaveCount(0)
@@ -53,7 +53,7 @@ test('My meds links each listed medication to its label', async ({ page }) => {
   await expect(link).toHaveAttribute('target', '_blank')
   expect((await link.boundingBox())!.height).toBeGreaterThanOrEqual(44)
 
-  await input.fill('ivabradine')
+  await input.fill('nadolol')
   await input.press('Enter')
   await expect(about.getByRole('link', { name: /DailyMed/ })).toHaveCount(1)
 })
