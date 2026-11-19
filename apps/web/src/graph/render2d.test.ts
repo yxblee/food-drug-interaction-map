@@ -1,5 +1,6 @@
 import { describe, expect, it } from 'vite-plus/test'
-import { createSim } from './render2d.ts'
+import { chooseLabels, createSim } from './render2d.ts'
+import type { LabelBox } from './render2d.ts'
 import type { RenderLink, RenderNode } from './renderGraph.ts'
 
 // 15 disconnected clusters (a hub plus 7 leaves) plus loose singletons, like the real map.
@@ -35,3 +36,39 @@ describe('2D layout', () => {
 })
 
 const RADIUS = 700
+
+describe('label collisions', () => {
+  const box = (key: string, x: number, o: Partial<LabelBox> = {}): LabelBox => ({
+    key,
+    name: key,
+    weight: 1,
+    selected: false,
+    x,
+    y: 0,
+    w: 50,
+    h: 10,
+    ...o,
+  })
+
+  it('hides the lower-priority label of an overlapping pair', () => {
+    const shown = chooseLabels([box('a', 0, { weight: 1 }), box('b', 20, { weight: 5 })])
+    expect([...shown]).toEqual(['b'])
+  })
+
+  it('keeps every label that does not overlap', () => {
+    expect(chooseLabels([box('a', 0), box('b', 50), box('c', 200)]).size).toBe(3)
+  })
+
+  it('always keeps the selected label, then ranks by weight, then A-Z', () => {
+    const sel = chooseLabels([box('a', 0, { weight: 9 }), box('z', 20, { selected: true })])
+    expect([...sel]).toEqual(['z'])
+    const tie = chooseLabels([box('b', 0), box('a', 20)])
+    expect([...tie]).toEqual(['a'])
+  })
+
+  it('is stable regardless of input order', () => {
+    const boxes = [box('a', 0), box('b', 20), box('c', 40, { weight: 3 }), box('d', 300)]
+    const first = [...chooseLabels(boxes)].sort()
+    expect([...chooseLabels([...boxes].reverse())].sort()).toEqual(first)
+  })
+})

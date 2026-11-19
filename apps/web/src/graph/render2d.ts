@@ -36,6 +36,39 @@ const nodeDomId = (key: string) => `g2d-${key.replace(/[^\w-]/g, '_')}`
 const HIT_RADIUS = 22
 const KIND_LABEL = { drug: 'Drug', food: 'Food', mechanism: 'Mechanism' } as const
 
+export type LabelBox = {
+  key: string
+  name: string
+  weight: number
+  selected: boolean
+  x: number
+  y: number
+  w: number
+  h: number
+}
+
+/**
+ * Keys of the labels to show: greedy by priority (selected, more Interactions, A-Z),
+ * dropping any label whose box overlaps one already kept. Deterministic.
+ */
+export function chooseLabels(boxes: LabelBox[]): Set<string> {
+  const ranked = [...boxes].sort(
+    (a, b) =>
+      Number(b.selected) - Number(a.selected) ||
+      b.weight - a.weight ||
+      a.name.localeCompare(b.name) ||
+      a.key.localeCompare(b.key),
+  )
+  const kept: LabelBox[] = []
+  for (const b of ranked) {
+    const clash = kept.some(
+      (k) => b.x < k.x + k.w && k.x < b.x + b.w && b.y < k.y + k.h && k.y < b.y + b.h,
+    )
+    if (!clash) kept.push(b)
+  }
+  return new Set(kept.map((b) => b.key))
+}
+
 // Shapes: Drug = circle, Food = square, Mechanism = diamond.
 function shapePath(n: RenderNode, scale = 1): string {
   const r = nodeRadius(n) * scale
@@ -88,6 +121,7 @@ export function create2d(opts: RendererOptions): GraphRenderer {
     const w = host.clientWidth || 1
     const h = host.clientHeight || 1
     svg.attr('viewBox', `${-w / 2} ${-h / 2} ${w} ${h}`)
+    paintLabels()
   }
 
   // Frames the focused nodes (or all); coalesced so a
@@ -151,6 +185,35 @@ export function create2d(opts: RendererOptions): GraphRenderer {
         'is-focus',
         (l) => !!f && !!selected && f.has(endKey(l.source)) && f.has(endKey(l.target)),
       )
+    paintLabels()
+  }
+
+  // Hides (visibility, so layout and the a11y tree are untouched) resting labels that
+  // collide with a higher-priority one. Re-run whenever zoom, size or focus changes.
+  function paintLabels() {
+    if (!root) return
+    const els = root.selectAll<SVGGElement, SimNode>('g.node.is-labelled').filter(function () {
+      return !this.classList.contains('is-dim')
+    })
+    const boxes: LabelBox[] = []
+    els.each(function (n) {
+      const r = this.querySelector('text.label')?.getBoundingClientRect()
+      if (r)
+        boxes.push({
+          key: n.key,
+          name: n.name,
+          weight: n.weight,
+          selected: this.classList.contains('is-selected'),
+          x: r.x,
+          y: r.y,
+          w: r.width,
+          h: r.height,
+        })
+    })
+    const shown = chooseLabels(boxes)
+    root
+      .selectAll<SVGGElement, SimNode>('g.node')
+      .classed('is-label-hidden', (n) => boxes.some((b) => b.key === n.key) && !shown.has(n.key))
   }
 
   function paintHover(key: string | null) {
@@ -172,6 +235,7 @@ export function create2d(opts: RendererOptions): GraphRenderer {
           root?.attr('transform', e.transform.toString())
           // Labels stay one size on screen: CSS divides their font size by the zoom.
           svg?.style('--k', e.transform.k)
+          paintLabels()
         })
       svg.call(zoomer)
       svg.on('click', (e: MouseEvent) => onSelect(hit(e)))
