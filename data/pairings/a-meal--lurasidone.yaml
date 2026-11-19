@@ -1,0 +1,12 @@
+id: "a-meal--lurasidone"
+food: "a-meal"
+drug: "lurasidone"
+summary: "The lurasidone (Latuda) label says it should be taken with food, because food substantially increases how much is absorbed."
+advice: "The lurasidone (Latuda) label says it should be taken with food of at least 350 calories, and that taking it with food substantially increases its absorption. Ask your pharmacist how this applies to your own dose."
+citations:
+  - type: "label"
+    title: "Latuda (lurasidone hydrochloride) tablet, film coated"
+    url: "https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=afad3051-9df2-4c54-9684-e8262a133af8"
+    setid: "afad3051-9df2-4c54-9684-e8262a133af8"
+status: "pending"
+source: "curated"

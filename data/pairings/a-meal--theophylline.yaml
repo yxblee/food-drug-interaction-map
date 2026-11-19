@@ -1,0 +1,12 @@
+id: "a-meal--theophylline"
+food: "a-meal"
+drug: "theophylline"
+summary: "This theophylline extended-release label recommends taking the tablets with meals."
+advice: "This theophylline extended-release tablet label recommends taking the tablets with meals. Ask your pharmacist how this applies to your own dose."
+citations:
+  - type: "label"
+    title: "Theophylline (anhydrous) tablet, extended release"
+    url: "https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=882657ae-e15b-4c86-a571-b55460bd4726"
+    setid: "882657ae-e15b-4c86-a571-b55460bd4726"
+status: "pending"
+source: "curated"

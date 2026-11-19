@@ -1,0 +1,12 @@
+id: "a-meal--ivabradine"
+food: "a-meal"
+drug: "ivabradine"
+summary: "The ivabradine (Corlanor) label gives its doses with food."
+advice: "The ivabradine (Corlanor) label gives its starting doses as twice daily with food. Ask your pharmacist how this applies to your own dose."
+citations:
+  - type: "label"
+    title: "Corlanor (ivabradine) tablet, film coated; solution"
+    url: "https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=92018a65-38f6-45f7-91d4-a34921b81d0d"
+    setid: "92018a65-38f6-45f7-91d4-a34921b81d0d"
+status: "pending"
+source: "curated"
