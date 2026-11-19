@@ -41,6 +41,7 @@ export type LabelBox = {
   name: string
   weight: number
   selected: boolean
+  dimmed: boolean
   x: number
   y: number
   w: number
@@ -48,13 +49,14 @@ export type LabelBox = {
 }
 
 /**
- * Keys of the labels to show: greedy by priority (selected, more Interactions, A-Z),
+ * Keys of the labels to show: greedy by priority (selected, undimmed, more Interactions, A-Z),
  * dropping any label whose box overlaps one already kept. Deterministic.
  */
 export function chooseLabels(boxes: LabelBox[]): Set<string> {
   const ranked = [...boxes].sort(
     (a, b) =>
       Number(b.selected) - Number(a.selected) ||
+      Number(a.dimmed) - Number(b.dimmed) ||
       b.weight - a.weight ||
       a.name.localeCompare(b.name) ||
       a.key.localeCompare(b.key),
@@ -188,13 +190,11 @@ export function create2d(opts: RendererOptions): GraphRenderer {
     paintLabels()
   }
 
-  // Hides (visibility, so layout and the a11y tree are untouched) resting labels that
+  // Hides (visibility, so layout and the a11y tree are untouched) labels, dimmed ones included, that
   // collide with a higher-priority one. Re-run whenever zoom, size or focus changes.
   function paintLabels() {
     if (!root) return
-    const els = root.selectAll<SVGGElement, SimNode>('g.node.is-labelled').filter(function () {
-      return !this.classList.contains('is-dim')
-    })
+    const els = root.selectAll<SVGGElement, SimNode>('g.node.is-labelled')
     const boxes: LabelBox[] = []
     els.each(function (n) {
       const r = this.querySelector('text.label')?.getBoundingClientRect()
@@ -204,6 +204,7 @@ export function create2d(opts: RendererOptions): GraphRenderer {
           name: n.name,
           weight: n.weight,
           selected: this.classList.contains('is-selected'),
+          dimmed: this.classList.contains('is-dim'),
           x: r.x,
           y: r.y,
           w: r.width,

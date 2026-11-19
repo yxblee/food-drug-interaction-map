@@ -719,6 +719,36 @@ test.describe('2D map on touch', () => {
     expect(after.shown).toBeGreaterThanOrEqual(1)
   })
 
+  test('no visible labels overlap at 360px while a no-match search dims the map', async ({
+    page,
+  }) => {
+    await page.setViewportSize({ width: 360, height: 740 })
+    await page.goto('./')
+    await expect(page.locator('svg.graph2d')).toBeVisible()
+    await page.getByLabel('Search drugs, foods and mechanisms').fill('ibuprofen')
+    await expect(page.locator('svg.graph2d g.node.is-dim').first()).toBeAttached()
+    await page.waitForTimeout(700)
+    const { n, shown } = await page.evaluate(() => {
+      const rs = [...document.querySelectorAll('svg.graph2d g.node.is-labelled .label')]
+        .filter((e) => getComputedStyle(e).visibility !== 'hidden')
+        .map((e) => e.getBoundingClientRect())
+      const slack = 2
+      let n = 0
+      for (let i = 0; i < rs.length; i++)
+        for (let j = i + 1; j < rs.length; j++)
+          if (
+            rs[i].left + slack < rs[j].right &&
+            rs[j].left + slack < rs[i].right &&
+            rs[i].top + slack < rs[j].bottom &&
+            rs[j].top + slack < rs[i].bottom
+          )
+            n++
+      return { n, shown: rs.length }
+    })
+    expect(shown).toBeGreaterThan(0)
+    expect(n).toBe(0)
+  })
+
   test('a tap near a node, off its drawn shape, selects it', async ({ page }, info) => {
     await to2d(page, info)
     const c = await page.evaluate(() => {

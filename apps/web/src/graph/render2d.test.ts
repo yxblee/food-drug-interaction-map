@@ -43,6 +43,7 @@ describe('label collisions', () => {
     name: key,
     weight: 1,
     selected: false,
+    dimmed: false,
     x,
     y: 0,
     w: 50,
@@ -64,6 +65,22 @@ describe('label collisions', () => {
     expect([...sel]).toEqual(['z'])
     const tie = chooseLabels([box('b', 0), box('a', 20)])
     expect([...tie]).toEqual(['a'])
+  })
+
+  it('ranks a dimmed label below every undimmed one, whatever its weight', () => {
+    const shown = chooseLabels([
+      box('a', 0, { weight: 9, dimmed: true }),
+      box('b', 20, { weight: 1 }),
+    ])
+    expect([...shown]).toEqual(['b'])
+  })
+
+  it('shows only one of two overlapping dimmed labels, heavier first', () => {
+    const shown = chooseLabels([
+      box('a', 0, { weight: 1, dimmed: true }),
+      box('b', 20, { weight: 5, dimmed: true }),
+    ])
+    expect([...shown]).toEqual(['b'])
   })
 
   it('is stable regardless of input order', () => {
