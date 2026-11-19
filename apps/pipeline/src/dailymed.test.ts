@@ -1,6 +1,8 @@
-import { readFileSync } from 'node:fs'
+import { readdirSync, readFileSync } from 'node:fs'
+import { parse } from 'yaml'
+import { Drug } from '@fdi/schema'
 import { describe, expect, it } from 'vite-plus/test'
-import { addDailymed, withDailymed } from './dailymed.ts'
+import { addDailymed, brandLabels, withDailymed } from './dailymed.ts'
 
 // Responses recorded from https://dailymed.nlm.nih.gov/dailymed/services/v2/spls.json?rxcui=…
 // 1545063 (tafamidis): one label. 233698 (dronedarone): three. 37546 (talinolol): none.
@@ -84,5 +86,33 @@ describe('addDailymed', () => {
     ])
     expect(calls).toEqual(['37546'])
     expect(r.unmatched).toEqual(['talinolol'])
+  })
+})
+
+describe('brandLabels', () => {
+  const l = (title: string, n: number) => ({ setid: `s${n}`, title })
+  const labels = [
+    l('SERTRALINE HYDROCHLORIDE TABLET [ACME REPACK]', 1),
+    l('ZOLOFT (SERTRALINE HYDROCHLORIDE) TABLET, FILM COATED [ROERIG]', 2),
+    l('ZOLOFT (SERTRALINE HYDROCHLORIDE) TABLET [BOTTLE CO]', 3),
+    l('ZOLOFTY (SERTRALINE) TABLET [OTHER]', 4),
+  ]
+  it('suggests labels whose title starts with a brand alias, as whole words, and ignores the rest', () => {
+    expect(brandLabels(labels, ['zoloft', 'iron pills']).map((x) => x.setid)).toEqual(['s2', 's3'])
+  })
+  it('suggests nothing when no alias matches', () => {
+    expect(brandLabels(labels, ['Xanax'])).toEqual([])
+  })
+})
+
+describe('data/drugs dailymed setids', () => {
+  const dir = new URL('../../../data/drugs/', import.meta.url)
+  const drugs = readdirSync(dir)
+    .filter((f) => f.endsWith('.yaml'))
+    .map((f) => Drug.parse(parse(readFileSync(new URL(f, dir), 'utf8'))))
+  it('every dailymed value parses with the schema, and no two Drugs share a label', () => {
+    const ids = drugs.filter((d) => d.dailymed).map((d) => d.dailymed)
+    expect(ids.length).toBeGreaterThan(60)
+    expect(new Set(ids).size).toBe(ids.length)
   })
 })

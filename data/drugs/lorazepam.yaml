@@ -2,6 +2,7 @@ id: "lorazepam"
 name: "Lorazepam"
 rxnorm: "6470"
 medlineplus: "https://medlineplus.gov/druginfo/meds/a682053.html"
+dailymed: "89057c93-8155-4040-acec-64e877bd2b4c"
 aliases: ["Ativan", "Loreev"]
 parent: "benzodiazepines"
 drug_class: "Benzodiazepine"

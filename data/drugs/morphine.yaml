@@ -2,6 +2,7 @@ id: "morphine"
 name: "Morphine"
 rxnorm: "7052"
 medlineplus: "https://medlineplus.gov/druginfo/meds/a682133.html"
+dailymed: "c354b3bf-86c0-4bb8-8b1f-be2164942698"
 aliases: ["MS Contin", "Kadian", "Duramorph", "Infumorph", "Mitigo"]
 parent: "opioids"
 drug_class: "Opioid analgesic"

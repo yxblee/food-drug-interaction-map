@@ -2,6 +2,7 @@ id: "fluoxetine"
 name: "Fluoxetine"
 rxnorm: "4493"
 medlineplus: "https://medlineplus.gov/druginfo/meds/a689006.html"
+dailymed: "c88f33ed-6dfb-4c5e-bc01-d8e36dd97299"
 aliases: ["Prozac"]
 parent: "ssris"
 drug_class: "Selective serotonin reuptake inhibitor"

@@ -2,6 +2,7 @@ id: "alendronate"
 name: "Alendronate"
 rxnorm: "46041"
 medlineplus: "https://medlineplus.gov/druginfo/meds/a601011.html"
+dailymed: "14e931fd-2c5f-4d90-b7db-5980706f4a56"
 aliases: ["Fosamax", "Binosto"]
 parent: "bisphosphonates"
 drug_class: "Bisphosphonate"

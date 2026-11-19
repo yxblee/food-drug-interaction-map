@@ -2,6 +2,7 @@ id: "tranylcypromine"
 name: "Tranylcypromine"
 rxnorm: "10734"
 medlineplus: "https://medlineplus.gov/druginfo/meds/a682088.html"
+dailymed: "b72d8187-dfcc-4ea0-b5e9-c0be95b69a27"
 aliases: ["Parnate"]
 parent: "maois"
 drug_class: "Monoamine oxidase inhibitor"

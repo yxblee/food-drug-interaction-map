@@ -2,6 +2,7 @@ id: "alprazolam"
 name: "Alprazolam"
 rxnorm: "596"
 medlineplus: "https://medlineplus.gov/druginfo/meds/a684001.html"
+dailymed: "bb5cf72e-3a41-41a8-9a38-80f974eca33f"
 aliases: ["Xanax"]
 parent: "benzodiazepines"
 drug_class: "Benzodiazepine"
