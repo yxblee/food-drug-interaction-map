@@ -2,6 +2,7 @@ id: etoposide
 name: Etoposide
 rxnorm: "4179"
 medlineplus: "https://medlineplus.gov/druginfo/meds/a684055.html"
+dailymed: "7bc994df-ee84-4ed7-80fa-737f70918953"
 aliases:
   - Vepesid
   - Toposar

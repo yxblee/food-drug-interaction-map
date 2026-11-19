@@ -2,6 +2,7 @@ id: "lisinopril"
 name: "Lisinopril"
 rxnorm: "29046"
 medlineplus: "https://medlineplus.gov/druginfo/meds/a692051.html"
+dailymed: "838c2d78-d2d8-4981-9ec9-e50ef9e1a5d8"
 aliases: ["Zestril", "Prinivil", "Qbrelis"]
 parent: "ace-inhibitors"
 drug_class: "ACE inhibitor"

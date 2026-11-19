@@ -2,6 +2,7 @@ id: "phenelzine"
 name: "Phenelzine"
 rxnorm: "8123"
 medlineplus: "https://medlineplus.gov/druginfo/meds/a682089.html"
+dailymed: "513a41d0-37d4-4355-8a6d-a2c643bce6fa"
 aliases: ["Nardil"]
 parent: "maois"
 drug_class: "Monoamine oxidase inhibitor"
