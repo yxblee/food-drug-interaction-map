@@ -9,6 +9,10 @@ try {
     for (const e of r.errors) console.error(`  - ${e}`)
     process.exit(1)
   }
+  if (r.gaps.length)
+    console.warn(
+      `Warning: ${r.gaps.length} Approved avoid Interactions cite fewer than two Sources: ${r.gaps.join(', ')}`,
+    )
   console.log(`Built ${out} (data version ${r.version})`)
 } catch (e) {
   console.error((e as Error).message)
