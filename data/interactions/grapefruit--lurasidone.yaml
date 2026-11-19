@@ -22,6 +22,9 @@ citations:
     title: "LATUDA (LURASIDONE HYDROCHLORIDE) TABLET, FILM COATED [SUMITOMO PHARMA AMERICA, INC.]"
     url: "https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=afad3051-9df2-4c54-9684-e8262a133af8"
     setid: "afad3051-9df2-4c54-9684-e8262a133af8"
+  - type: "guideline"
+    title: "Lurasidone: MedlinePlus Drug Information"
+    url: "https://medlineplus.gov/druginfo/meds/a611016.html"
 status: approved
 source: openfda
 reviewed_at: 2026-11-18

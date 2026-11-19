@@ -21,6 +21,9 @@ citations:
     title: "CORLANOR (IVABRADINE) TABLET, FILM COATED CORLANOR (IVABRADINE) SOLUTION [AMGEN INC]"
     url: "https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=92018a65-38f6-45f7-91d4-a34921b81d0d"
     setid: "92018a65-38f6-45f7-91d4-a34921b81d0d"
+  - type: "guideline"
+    title: "Ivabradine: MedlinePlus Drug Information"
+    url: "https://medlineplus.gov/druginfo/meds/a615027.html"
 status: approved
 source: openfda
 reviewed_at: 2026-11-18

@@ -21,6 +21,9 @@ citations:
     title: RANOLAZINE [Umedica Laboratories USA Inc.]
     url: https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=a624dc7f-921d-4554-a813-f72dca0133c3
     setid: a624dc7f-921d-4554-a813-f72dca0133c3
+  - type: "guideline"
+    title: "Ranolazine: MedlinePlus Drug Information"
+    url: "https://medlineplus.gov/druginfo/meds/a606015.html"
 status: approved
 source: openfda
 reviewed_at: 2026-11-18

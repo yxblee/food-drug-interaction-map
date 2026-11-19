@@ -12,6 +12,9 @@ citations:
     title: "METRONIDAZOLE TABLET, FILM COATED [REMEDYREPACK INC.]"
     url: "https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=cc004be0-da13-4b6b-83d5-d45b23fd37c9"
     setid: "cc004be0-da13-4b6b-83d5-d45b23fd37c9"
+  - type: "guideline"
+    title: "Harmful Interactions: Mixing Alcohol with Medicines (NIAAA)"
+    url: "https://www.niaaa.nih.gov/publications/brochures-and-fact-sheets/harmful-interactions-mixing-alcohol-with-medicines"
 status: approved
 source: curated
 reviewed_at: 2026-10-09
