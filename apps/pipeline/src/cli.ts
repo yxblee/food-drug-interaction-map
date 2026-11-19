@@ -19,6 +19,7 @@ import { readDataDir } from '../../api/src/db/build.ts'
 import { runBrands } from './brands.ts'
 import { runDailymed } from './dailymed.ts'
 import { runCheckLinks } from './linkcheck.ts'
+import { runLabelCitations } from './labelCitations.ts'
 import { runMedlineplus } from './medlineplus.ts'
 import { dumpLines } from './foodrugs.ts'
 import {
@@ -247,6 +248,10 @@ if (process.argv[2] === 'brands') {
 }
 if (process.argv[2] === 'dailymed') {
   await runDailymed('data/drugs', politeFetch)
+  process.exit(0)
+}
+if (process.argv[2] === 'label-citations') {
+  await runLabelCitations('data', politeFetch)
   process.exit(0)
 }
 if (process.argv[2] === 'check-links') {

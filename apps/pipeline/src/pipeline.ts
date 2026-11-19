@@ -112,10 +112,10 @@ export interface Result {
 }
 
 const norm = (s: string) => s.replace(/\s+/g, ' ').trim()
-const labelText = (l: Label) =>
+export const labelText = (l: Label) =>
   norm(SECTIONS.flatMap((s) => (Array.isArray(l[s]) ? (l[s] as string[]) : [])).join(' '))
 const escapeRe = (s: string) => s.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')
-const mentions = (text: string, terms: string[]) =>
+export const mentions = (text: string, terms: string[]) =>
   new RegExp(`\\b(?:${terms.map(escapeRe).join('|')})\\b`, 'i').test(text)
 const slug = (s: string) =>
   s
