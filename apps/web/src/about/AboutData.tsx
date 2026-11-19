@@ -1,6 +1,8 @@
 import { useEffect, useRef } from 'react'
 import type { GraphPayload } from '@fdi/schema'
 import { RXNORM_ATTRIBUTION, SOURCE_KINDS, datasetFacts, formatReviewed } from './facts.ts'
+import { ReportLink } from '../explore/ReportLink.tsx'
+import { ABOUT_REPORT_URL } from '../explore/reportUrl.ts'
 import './AboutData.css'
 
 /** Modal dialog: the browser traps focus, closes on Escape and returns focus to the opener. */
@@ -10,7 +12,10 @@ export function AboutData({ graph, onClose }: { graph: GraphPayload; onClose: ()
 
   useEffect(() => {
     const d = ref.current
-    if (d && !d.open) d.showModal()
+    if (d && !d.open) {
+      d.showModal()
+      d.querySelector<HTMLElement>('.about__close')?.focus() // not the first link
+    }
   }, [])
 
   return (
@@ -70,6 +75,8 @@ export function AboutData({ graph, onClose }: { graph: GraphPayload; onClose: ()
 
         <h3 className="about__sub">Your medication list</h3>
         <p>It stays on this device. It is never sent anywhere.</p>
+
+        <ReportLink href={ABOUT_REPORT_URL} />
 
         <p className="about__disclaimer">
           Informational only — not medical advice. Talk to your pharmacist or doctor before changing

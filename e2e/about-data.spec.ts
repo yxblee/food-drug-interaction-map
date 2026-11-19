@@ -30,3 +30,16 @@ for (const tab of ['explore', 'meds'] as const) {
     await expect(link).toBeFocused()
   })
 }
+
+test('About the data: generic Report a mistake link', async ({ page }) => {
+  await page.goto('./')
+  await page.getByRole('button', { name: 'About the data' }).click()
+  const a = page.getByRole('dialog', { name: 'About the data' }).getByRole('link', {
+    name: /Report a mistake/,
+  })
+  await expect(a).toBeVisible()
+  await expect(a).toHaveAttribute('target', '_blank')
+  await expect(a).toHaveAttribute('rel', 'noopener noreferrer')
+  expect((await a.boundingBox())!.height).toBeGreaterThanOrEqual(44)
+  expect(new URL((await a.getAttribute('href'))!).search).toBe('?template=wrong-interaction.yml')
+})

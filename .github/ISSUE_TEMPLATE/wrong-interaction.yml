@@ -1,0 +1,36 @@
+name: Wrong Interaction
+description: An Interaction, its Severity, advice, mechanism or Source looks wrong, stale or has a dead link.
+labels: [needs-triage]
+body:
+  - type: input
+    id: interaction
+    attributes:
+      label: Interaction id
+      description: Filled in for you by the "Report a mistake" link. Leave as is.
+      placeholder: e.g. grapefruit--simvastatin
+    validations:
+      required: true
+  - type: dropdown
+    id: area
+    attributes:
+      label: What is wrong?
+      options:
+        - Severity
+        - Advice
+        - Source (wrong, dead link or outdated)
+        - Mechanism
+        - Something else
+    validations:
+      required: true
+  - type: textarea
+    id: what
+    attributes:
+      label: Details
+      description: What is wrong, and what should it say instead?
+    validations:
+      required: true
+  - type: input
+    id: source
+    attributes:
+      label: Suggested Source URL
+      description: Link to a drug label, NIH fact sheet or review, if you have one.

@@ -1,0 +1,10 @@
+.report-link {
+  display: flex;
+  align-items: center;
+  min-height: 44px;
+  box-sizing: border-box;
+  padding: 0.5rem 0;
+  color: inherit;
+  text-decoration: underline;
+  overflow-wrap: anywhere;
+}

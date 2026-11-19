@@ -65,3 +65,39 @@ test('My meds: Sources in a warning row are 44px row links', async ({ page }) =>
   await expect(row.locator('li.irow').first()).toBeVisible()
   await expectTargets(page, row.locator('li.irow').first())
 })
+
+async function expectReport(scope: Locator, name: RegExp) {
+  await scope.locator('details.irow__more > summary').first().click()
+  const a = scope.getByRole('link', { name })
+  await expect(a).toBeVisible()
+  await expect(a).toHaveAttribute('target', '_blank')
+  await expect(a).toHaveAttribute('rel', 'noopener noreferrer')
+  expect((await a.boundingBox())!.height).toBeGreaterThanOrEqual(44)
+  const u = new URL((await a.getAttribute('href'))!)
+  expect(u.searchParams.get('template')).toBe('wrong-interaction.yml')
+  expect(u.searchParams.get('interaction')).toMatch(/\S/)
+  expect([...u.searchParams.keys()].sort()).toEqual(['interaction', 'template', 'title'])
+}
+
+test('Explore: each Interaction has a 44px Report a mistake link', async ({ page }) => {
+  await page.goto('./?node=food%3Aaged-cheeses')
+  const row = page.getByRole('complementary').locator('li.irow').first()
+  await expect(row).toBeVisible()
+  await expectReport(row, /^Report a mistake: .+ and .+/)
+})
+
+test('My meds: warning rows have a Report a mistake link without the med list', async ({
+  page,
+}) => {
+  await page.goto('./')
+  await page.getByRole('tab', { name: 'My meds' }).click()
+  const med = page.getByLabel('Add a medication')
+  await med.fill('simvastatin')
+  await med.press('Enter')
+  const food = page.getByLabel('Can I have…?')
+  await food.fill('grapefruit')
+  await food.press('Enter')
+  const row = page.locator('.warning').first().locator('li.irow').first()
+  await expect(row).toBeVisible()
+  await expectReport(row, /^Report a mistake: .+ and .+/)
+})
