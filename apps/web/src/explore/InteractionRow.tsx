@@ -9,6 +9,8 @@ import type {
 } from '@fdi/schema'
 import { nodeKey } from '@fdi/schema/domain'
 import { SeverityBadge } from './SeverityBadge.tsx'
+import { ReportLink } from './ReportLink.tsx'
+import { reportUrl } from './reportUrl.ts'
 
 interface Props {
   row: ResolvedInteraction<Interaction>
@@ -148,6 +150,10 @@ export function InteractionRow({
         )}
         <Sources citations={i.citations} />
         <p className="mono-label">Reviewed {i.reviewed_at}</p>
+        <ReportLink
+          href={reportUrl({ id: i.id, food: food?.name ?? i.food, drug: drug?.name ?? i.drug })}
+          about={`${food?.name ?? i.food} and ${drug?.name ?? i.drug}`}
+        />
       </details>
     </>
   )
