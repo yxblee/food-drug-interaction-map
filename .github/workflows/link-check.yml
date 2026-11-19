@@ -1,0 +1,36 @@
+name: Link check
+on:
+  schedule:
+    - cron: '0 6 * * 1'
+  workflow_dispatch:
+permissions:
+  contents: read
+  issues: write
+jobs:
+  link-check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: voidzero-dev/setup-vp@3754dd7dbdb32bd8f6d28b6043de13ad3a75f21f # v1.21.1
+        with:
+          node-version: '24'
+          cache: true
+      - run: vp install
+      - id: check
+        run: |
+          set +e
+          node --run pipeline -- check-links | tee report.txt
+          echo "code=${PIPESTATUS[0]}" >> "$GITHUB_OUTPUT"
+      - name: Open or update the dead-links issue
+        if: steps.check.outputs.code != '0'
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          title='Data: dead citation links'
+          body="$(printf 'Weekly link check, run %s.\n\n```\n%s\n```\n' "$GITHUB_RUN_ID" "$(cat report.txt)")"
+          n=$(gh issue list --state open --label needs-triage --search "$title in:title" --json number --jq '.[0].number')
+          if [ -n "$n" ]; then gh issue edit "$n" --body "$body"
+          else gh issue create --title "$title" --label needs-triage --body "$body"; fi
+      - name: Fail on hard failures
+        if: steps.check.outputs.code != '0'
+        run: exit 1

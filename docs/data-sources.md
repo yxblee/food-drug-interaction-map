@@ -74,3 +74,10 @@ When a Drug shows both the MedlinePlus and DailyMed links, one line names both (
 - Verified query (curl, 2026-11-18): `https://dailymed.nlm.nih.gov/dailymed/services/v2/spls.json?rxcui={rxcui}&pagesize=100` returns `data[]` of `{setid, title, spl_version, published_date}` plus `metadata.total_elements`. `/spls.json?rxcui=` is the RxNorm-to-setid lookup; `/rxcuis.json` only lists the rxcuis DailyMed knows and does not return setids. The page link is `https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid={setid}`.
 - Order of preference: (1) the setid cited in the Sources (`citations[].setid`) of the Interactions that reference the Drug, which a person already chose in review; exactly one distinct setid is written, several are printed and nothing is written; (2) only when no Interaction cites a label, the DailyMed lookup below.
 - An ingredient rxcui matches every label containing it, repackagers and combination products included (simvastatin: 183). The command therefore writes a setid only when exactly one label matches. With several, it prints each setid and title and writes nothing, for a person to choose by hand (add the line, confirming it is the manufacturer's label for this Drug alone). With none, the Drug is printed and gets no link. Nothing is guessed from the name.
+
+## Link check
+
+- Run it with `node --run pipeline -- check-links`. It reads every citation URL in `data/` (Interaction and Pairing Sources, each Drug's `medlineplus` page and DailyMed label) and never writes to `data/`.
+- Each distinct URL is requested once, HEAD first and GET when HEAD is refused, 10 s timeout, 4 at a time. It prints a table of problems with the YAML file and entry id.
+- Exit code 1 only for hard failures: 404, 410 or a DNS error. Other non-2xx statuses (a bot-blocking 403 from ODS, say), redirects to another host and timeouts are warnings.
+- `.github/workflows/link-check.yml` runs it weekly and on manual dispatch (not on pull requests). On hard failures it opens or updates one issue labelled `needs-triage`. Fix dead links as separate Data issues.
