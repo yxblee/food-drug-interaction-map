@@ -1,0 +1,7 @@
+id: oats--statin
+food: oats
+drug: statin
+citations:
+  - type: 'guideline'
+    title: 'ODS'
+    url: 'https://example.org/review'

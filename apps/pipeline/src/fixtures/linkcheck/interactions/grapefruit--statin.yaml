@@ -1,0 +1,10 @@
+id: grapefruit--statin
+food: grapefruit
+drug: statin
+citations:
+  - type: 'label'
+    title: 'Label'
+    url: 'https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=11111111-2222-3333-4444-555555555555'
+  - type: 'review'
+    title: 'Review'
+    url: 'https://example.org/review'

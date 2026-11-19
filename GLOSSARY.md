@@ -90,7 +90,7 @@ Not yet Approved.
 Reviewed and turned down.
 
 **Source**:
-Where an Interaction was first proposed: hand curation, mining of drug labels, or a published interaction database. Says nothing about the evidence; that is the Citation's job.
+Where an Interaction was first proposed: hand curation, mining of drug labels, a published interaction database, or an NIH ODS fact sheet. Says nothing about the evidence; that is the Citation's job.
 _Avoid_: Origin, provenance, candidate (as a noun for a Pending interaction)
 
 ## Patients

@@ -5,6 +5,7 @@
 //   node apps/pipeline/src/cli.ts --source ddid --limit 25        (needs .cache/pipeline/DDID-Interaction.csv)
 //   node apps/pipeline/src/cli.ts brands                         (Brand names from RxNorm into data/drugs)
 //   node apps/pipeline/src/cli.ts medlineplus                    (MedlinePlus drug page links into data/drugs)
+//   node apps/pipeline/src/cli.ts check-links                    (dead citation links; exit 1 on 404/410/DNS)
 //   add --drafter claude-code to draft through a headless `claude -p` session instead of the API
 import Anthropic from '@anthropic-ai/sdk'
 import { zodOutputFormat } from '@anthropic-ai/sdk/helpers/zod'
@@ -17,6 +18,7 @@ import { z } from 'zod'
 import { readDataDir } from '../../api/src/db/build.ts'
 import { runBrands } from './brands.ts'
 import { runDailymed } from './dailymed.ts'
+import { runCheckLinks } from './linkcheck.ts'
 import { runMedlineplus } from './medlineplus.ts'
 import { dumpLines } from './foodrugs.ts'
 import {
@@ -246,6 +248,9 @@ if (process.argv[2] === 'brands') {
 if (process.argv[2] === 'dailymed') {
   await runDailymed('data/drugs', politeFetch)
   process.exit(0)
+}
+if (process.argv[2] === 'check-links') {
+  process.exit(await runCheckLinks('data'))
 }
 if (process.argv[2] === 'medlineplus') {
   await runMedlineplus('data/drugs', politeFetch)
