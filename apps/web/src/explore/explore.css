@@ -330,3 +330,28 @@
   min-width: 44px;
   padding: 0;
 }
+
+/* Jump-to-Severity row: sits above the first group so the split shows without scrolling. */
+.jump {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0 0.75rem;
+  margin: 0.5rem 0 0;
+}
+.jump a {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  min-height: 44px;
+  box-sizing: border-box;
+  color: var(--ink);
+  font: 600 13px/1.4 var(--font-mono);
+}
+.jump a:focus-visible {
+  outline: 2px solid currentColor;
+  outline-offset: 2px;
+}
+/* Headings land clear of the sticky Prev/Next bar. */
+.panel h3 {
+  scroll-margin-top: 3rem;
+}

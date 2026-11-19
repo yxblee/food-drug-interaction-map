@@ -21,3 +21,21 @@ export function panelGroups(rows: ResolvedInteraction<Interaction>[]) {
   })
   return { collapsed: rows.length > COLLAPSE_ABOVE, groups }
 }
+
+export interface JumpLink {
+  /** The id of the heading the link jumps to. */
+  id: string
+  severity?: Severity
+  count: number
+}
+
+/** Jump links for a panel: one per Severity group, then Helpful pairings. None unless two or more. */
+export function jumpLinks(groups: PanelGroup[], hasPairings: boolean): JumpLink[] {
+  const links: JumpLink[] = groups.map((g) => ({
+    id: `sev-${g.severity}`,
+    severity: g.severity,
+    count: g.rows.length,
+  }))
+  if (hasPairings) links.push({ id: 'pairs-title', count: 0 })
+  return groups.length >= 2 ? links : []
+}

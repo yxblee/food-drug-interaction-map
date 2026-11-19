@@ -4,10 +4,10 @@ import { useEffect, useRef, useState } from 'react'
 import { type Drug, type Food, type Mechanism, type NodeDetail } from '@fdi/schema'
 import { groupTerm, nodeKey as keyOf, splitKey } from '@fdi/schema/domain'
 import { fetchNode } from '../api.ts'
-import { SeverityGroupHeading } from './SeverityBadge.tsx'
+import { SEVERITY_LABEL, SeverityBadge, SeverityGroupHeading } from './SeverityBadge.tsx'
 import { InteractionRow } from './InteractionRow.tsx'
 import { PAIRING_MEANING, PairingRow } from './PairingRow.tsx'
-import { panelGroups } from './panelGroups.ts'
+import { jumpLinks, panelGroups } from './panelGroups.ts'
 
 interface Props {
   nodeKey: string
@@ -65,6 +65,15 @@ export function SidePanel({ nodeKey, onSelect, onPrev, onNext, onClose, onNotFou
   const d = load.key === nodeKey ? load.detail : undefined
   const entity = d?.entity
   const { collapsed, groups } = panelGroups(d?.interactions ?? [])
+  const links = jumpLinks(groups, !!d && d.pairings.length > 0 && kind !== 'mechanism')
+  const jump = (e: React.MouseEvent, id: string) => {
+    e.preventDefault()
+    const h = document.getElementById(id)
+    if (!h) return
+    h.focus({ preventScroll: true })
+    const calm = window.matchMedia('(prefers-reduced-motion: reduce)').matches
+    h.scrollIntoView({ block: 'start', behavior: calm ? 'auto' : 'smooth' })
+  }
   const header = d
     ? [kind, d.parent?.name ?? (d.node.group ? groupTerm(kind) : null)].filter(Boolean).join(' · ')
     : kind
@@ -158,40 +167,59 @@ export function SidePanel({ nodeKey, onSelect, onPrev, onNext, onClose, onNotFou
               combination is safe.
             </p>
           ) : (
-            groups.map(({ severity: sev, rows, inheritedFrom: from }) => {
-              const owner = from ? d.nodes[keyOf(kind, from)] : undefined
-              return (
-                <section key={sev} aria-labelledby={`sev-${sev}`} className="panel__sev">
-                  <SeverityGroupHeading severity={sev} count={rows.length} />
-                  {owner && <p className="mono-label">Applies to {owner.name}</p>}
-                  {sev === 'avoid' && (
-                    <p className="irow__caution">
-                      Serious interaction. Check with your pharmacist or doctor before combining.
-                    </p>
-                  )}
-                  <ul className="panel__rows">
-                    {rows.map((row) => (
-                      <InteractionRow
-                        key={row.interaction.id}
-                        row={row}
-                        nodes={d.nodes}
-                        mechanisms={d.mechanisms}
-                        perspective={kind}
-                        onSelect={onSelect}
-                        grouped={{ inherited: !!from }}
-                        groupSeverity={sev}
-                        collapsible={collapsed}
-                      />
-                    ))}
-                  </ul>
-                </section>
-              )
-            })
+            <>
+              {links.length > 0 && (
+                <nav className="jump" aria-label="Jump to severity">
+                  {links.map((l) => (
+                    <a key={l.id} href={`#${l.id}`} onClick={(e) => jump(e, l.id)}>
+                      {l.severity ? (
+                        <>
+                          <SeverityBadge severity={l.severity} decorative />
+                          <span className="sr-only">{SEVERITY_LABEL[l.severity]} </span>
+                          {l.count}
+                        </>
+                      ) : (
+                        'Helps to take with'
+                      )}
+                    </a>
+                  ))}
+                </nav>
+              )}
+              {groups.map(({ severity: sev, rows, inheritedFrom: from }) => {
+                const owner = from ? d.nodes[keyOf(kind, from)] : undefined
+                return (
+                  <section key={sev} aria-labelledby={`sev-${sev}`} className="panel__sev">
+                    <SeverityGroupHeading severity={sev} count={rows.length} />
+                    {owner && <p className="mono-label">Applies to {owner.name}</p>}
+                    {sev === 'avoid' && (
+                      <p className="irow__caution">
+                        Serious interaction. Check with your pharmacist or doctor before combining.
+                      </p>
+                    )}
+                    <ul className="panel__rows">
+                      {rows.map((row) => (
+                        <InteractionRow
+                          key={row.interaction.id}
+                          row={row}
+                          nodes={d.nodes}
+                          mechanisms={d.mechanisms}
+                          perspective={kind}
+                          onSelect={onSelect}
+                          grouped={{ inherited: !!from }}
+                          groupSeverity={sev}
+                          collapsible={collapsed}
+                        />
+                      ))}
+                    </ul>
+                  </section>
+                )
+              })}
+            </>
           )}
 
           {d.pairings.length > 0 && kind !== 'mechanism' && (
             <section aria-labelledby="pairs-title" className="panel__pairs">
-              <h3 id="pairs-title">
+              <h3 id="pairs-title" tabIndex={-1}>
                 Helpful pairings <span className="sev-count">({d.pairings.length})</span>
               </h3>
               <p className="sev-meaning">{PAIRING_MEANING}</p>

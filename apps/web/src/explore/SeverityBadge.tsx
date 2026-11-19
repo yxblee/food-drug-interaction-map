@@ -48,7 +48,7 @@ export function SeverityBadge({
 export function SeverityGroupHeading({ severity, count }: { severity: Severity; count?: number }) {
   return (
     <>
-      <h3 id={`sev-${severity}`}>
+      <h3 id={`sev-${severity}`} tabIndex={-1}>
         <SeverityBadge severity={severity} decorative /> {SEVERITY_LABEL[severity]}
         {count !== undefined && <span className="sev-count"> ({count})</span>}
       </h3>
