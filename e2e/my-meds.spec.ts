@@ -571,3 +571,17 @@ test.describe('Copy', () => {
     await expect(page.getByRole('button', { name: 'Copy' })).toHaveCount(0)
   })
 })
+
+test('a typo suggests the Drug and never adds it without a pick', async ({ page }) => {
+  await page.goto('./')
+  await page.getByRole('tab', { name: 'My meds' }).click()
+  const input = page.getByLabel('Add a medication')
+  const chips = page.getByRole('list', { name: 'Your medications' })
+  await input.fill('atorvastain')
+  await expect(page.getByText('Did you mean')).toBeVisible()
+  await input.press('Enter')
+  await expect(chips).not.toContainText('Atorvastatin')
+  await expect(page.getByRole('option', { name: 'Add “atorvastain” as not checked' })).toBeVisible()
+  await page.getByRole('option', { name: /^Atorvastatin/ }).click()
+  await expect(chips).toContainText('Atorvastatin')
+})

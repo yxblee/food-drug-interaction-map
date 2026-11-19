@@ -49,6 +49,9 @@
 .meds__nomatch {
   padding: 4px 10px 0;
 }
+.meds__didyoumean {
+  padding: 4px 10px 0;
+}
 .meds__hint {
   padding: 4px 10px 8px;
 }

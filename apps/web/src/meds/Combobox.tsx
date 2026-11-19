@@ -22,6 +22,7 @@ export function Combobox({
   rows,
   inputRef,
   children,
+  noDefault,
 }: {
   id: string
   label: string
@@ -33,11 +34,15 @@ export function Combobox({
   inputRef?: Ref<HTMLInputElement>
   /** Shown between the input and the list, e.g. a no-match note. */
   children?: ReactNode
+  /** No row is active until an arrow key moves onto one, so Enter never picks a guess. */
+  noDefault?: boolean
 }) {
-  const [activeIdx, setActiveIdx] = useState(0)
+  // null = untouched since the query changed.
+  const [moved, setMoved] = useState<number | null>(null)
   const [open, setOpen] = useState(true)
   const shown = open ? rows : []
-  const active = Math.min(activeIdx, Math.max(shown.length - 1, 0))
+  const active =
+    moved === null ? (noDefault ? -1 : 0) : Math.min(moved, Math.max(shown.length - 1, 0))
   return (
     <>
       <label htmlFor={`${id}-input`} className="mono-label">
@@ -55,16 +60,18 @@ export function Combobox({
           aria-expanded={shown.length > 0}
           aria-controls={`${id}-options`}
           aria-autocomplete="list"
-          aria-activedescendant={shown.length > 0 ? `${id}-option-${active}` : undefined}
+          aria-activedescendant={
+            shown.length > 0 && active >= 0 ? `${id}-option-${active}` : undefined
+          }
           onChange={(e) => {
             onQuery(e.target.value)
-            setActiveIdx(0)
+            setMoved(null)
             setOpen(true)
           }}
           onBlur={() => setOpen(false)}
           onKeyDown={(e) => {
             if (e.key === 'Enter') {
-              shown[active]?.pick()
+              shown[active]?.pick() // active is -1 while a guess is unconfirmed
             } else if (e.key === 'Escape' && (shown.length || query)) {
               e.preventDefault()
               if (shown.length) setOpen(false)
@@ -73,7 +80,13 @@ export function Combobox({
               e.preventDefault()
               if (!open) setOpen(true)
               else
-                setActiveIdx((active + (e.key === 'ArrowDown' ? 1 : rows.length - 1)) % rows.length)
+                setMoved(
+                  active < 0
+                    ? e.key === 'ArrowDown'
+                      ? 0
+                      : rows.length - 1
+                    : (active + (e.key === 'ArrowDown' ? 1 : rows.length - 1)) % rows.length,
+                )
             }
           }}
         />

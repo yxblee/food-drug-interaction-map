@@ -1,7 +1,7 @@
 import { useEffect, useMemo, useRef, useState } from 'react'
 import type { GraphPayload } from '@fdi/schema'
 import { SEVERITIES } from '@fdi/schema'
-import { buildIndex, nodeKey, searchNodes, type Index } from '@fdi/schema/domain'
+import { buildIndex, nodeKey, searchNodes, suggestNodes, type Index } from '@fdi/schema/domain'
 import { PillLabel } from '../PillLabel.tsx'
 import { dailymedUrl, MedlinePlusLink, NlmSource } from '../MedlinePlusLink.tsx'
 import { plural } from '../plural.ts'
@@ -64,7 +64,13 @@ export function MyMedsTab({
     [graph],
   )
   const options = useMemo(() => searchNodes(candidates, query, 8), [candidates, query])
-  const showNoMatch = options.length === 0 && !!query.trim()
+  const suggestions = useMemo(() => suggestNodes(candidates, query), [candidates, query])
+  const showNoMatch = options.length === 0 && suggestions.length === 0 && !!query.trim()
+  const notCheckedRow = {
+    key: 'not-checked',
+    label: `Add “${query.trim()}” as not checked`,
+    pick: () => addNotChecked(query),
+  }
   const warnings = useMemo(() => checkMeds(ix, meds), [ix, meds])
   const helps = useMemo(() => pairingsFor(ix, meds), [ix, meds])
   const name = (id: string) => ix.nodes.get(nodeKey('drug', id))?.name ?? id
@@ -229,31 +235,34 @@ export function MyMedsTab({
             setQuery(q)
             setNotice('')
           }}
+          noDefault={suggestions.length > 0}
           rows={
             showNoMatch
-              ? [
-                  {
-                    key: 'not-checked',
-                    label: `Add “${query.trim()}” as not checked`,
-                    pick: () => addNotChecked(query),
-                  },
+              ? [notCheckedRow]
+              : [
+                  ...[...options, ...suggestions].map((o) => ({
+                    key: o.id,
+                    label: (
+                      <>
+                        {o.name}
+                        {o.matched !== o.name && (
+                          <span className="mono-label mono-label--case"> ({o.matched})</span>
+                        )}
+                        {meds.includes(o.id) && <span className="mono-label"> · on your list</span>}
+                      </>
+                    ),
+                    pick: () => add(o.id, o.matched),
+                  })),
+                  ...(suggestions.length > 0 ? [notCheckedRow] : []),
                 ]
-              : options.map((o) => ({
-                  key: o.id,
-                  label: (
-                    <>
-                      {o.name}
-                      {o.matched !== o.name && (
-                        <span className="mono-label mono-label--case"> ({o.matched})</span>
-                      )}
-                      {meds.includes(o.id) && <span className="mono-label"> · on your list</span>}
-                    </>
-                  ),
-                  pick: () => add(o.id, o.matched),
-                }))
           }
         >
           {showNoMatch && <NoMatch hint="Check the spelling or try the generic name." />}
+          {suggestions.length > 0 && (
+            <p className="mono-label meds__didyoumean" role="status">
+              Did you mean ({suggestions.length} suggested)
+            </p>
+          )}
         </Combobox>
         <p role="status" className="meds__status">
           {undo ? (

@@ -783,3 +783,15 @@ test('long panels jump to a Severity group', async ({ page }) => {
     expect(h!.y + h!.height).toBeLessThanOrEqual(p!.y + p!.height + 1)
   }).toPass()
 })
+
+test('a typo offers "Did you mean" and picking it opens the panel', async ({ page }) => {
+  await page.goto('./')
+  const search = page.getByLabel('Search drugs, foods and mechanisms')
+  await search.fill('grapefuit')
+  await expect(page.getByText('Did you mean', { exact: true })).toBeVisible()
+  await expect(page.getByRole('status').filter({ hasText: /suggestion/ })).toBeVisible()
+  await page.getByRole('option', { name: /Grapefruit/ }).click()
+  await expect(
+    page.getByRole('complementary').getByRole('heading', { name: 'Grapefruit', exact: true }),
+  ).toBeVisible()
+})
