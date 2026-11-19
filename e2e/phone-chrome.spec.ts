@@ -89,17 +89,18 @@ test('360x740: Drug panel shows the first Severity badge above the fold', async 
   expect(box.y + box.height).toBeLessThanOrEqual(panel.y + panel.height - 40)
 })
 
-test('Drug panel attribution is sentence-case body text after the Interactions list', async ({
-  page,
-}) => {
+test('Drug panel shows the NLM attribution once, naming each linked source', async ({ page }) => {
   await page.goto('./?node=drug:simvastatin')
-  const note = page.locator('.panel .panel__attribution')
-  await expect(note).toHaveText(
-    'Source: MedlinePlus, National Library of Medicine. NLM is not responsible for and does not endorse this site.',
-  )
-  expect(await note.evaluate((e) => getComputedStyle(e).textTransform)).toBe('none')
-  const lastGroup = (await page.locator('.panel .panel__sev').last().boundingBox())!
-  expect((await note.boundingBox())!.y).toBeGreaterThan(lastGroup.y)
+  const note = page.locator('.panel').getByText('National Library of Medicine')
+  await expect(note).toHaveCount(1)
+  await expect(note).toContainText('Source: MedlinePlus and DailyMed, National Library of Medicine')
+  await expect(page.locator('.panel__attribution')).toHaveCount(0)
+})
+
+test('a Drug with neither NLM link shows no attribution', async ({ page }) => {
+  await page.goto('./?node=drug:statins')
+  await expect(page.locator('.panel__title')).not.toHaveText('…')
+  await expect(page.locator('.panel').getByText('National Library of Medicine')).toHaveCount(0)
 })
 
 test('the Explore key says what each Severity word means, as My meds does', async ({ page }) => {

@@ -241,13 +241,6 @@ export function SidePanel({ nodeKey, onSelect, onPrev, onNext, onClose, onNotFou
               </ul>
             </section>
           )}
-
-          {kind === 'drug' && (entity as Drug).medlineplus && (
-            <p className="panel__attribution">
-              Source: MedlinePlus, National Library of Medicine. NLM is not responsible for and does
-              not endorse this site.
-            </p>
-          )}
         </div>
       )}
     </aside>

@@ -43,3 +43,15 @@ test('My meds links each listed medication to MedlinePlus', async ({ page }) => 
   await expect(chips).toContainText('Adenosine')
   await expect(about.getByRole('link', { name: /MedlinePlus/ })).toHaveCount(1)
 })
+
+test('My meds shows the NLM attribution once for several listed medications', async ({ page }) => {
+  await page.goto('./')
+  await page.getByRole('tab', { name: 'My meds' }).click()
+  const input = page.getByLabel('Add a medication')
+  for (const name of ['simvastatin', 'acetaminophen']) {
+    await input.fill(name)
+    await input.press('Enter')
+  }
+  const about = page.getByRole('region', { name: 'About your medications' })
+  await expect(about.getByText('National Library of Medicine')).toHaveCount(1)
+})

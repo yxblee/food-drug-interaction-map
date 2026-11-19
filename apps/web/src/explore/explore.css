@@ -196,13 +196,6 @@
 .panel__meta > p {
   margin: 0.125rem 0;
 }
-/* Small body text, not the mono label: it says who the text comes from, in plain sentences. */
-.panel__attribution {
-  margin: 1rem 0 0;
-  font-size: 13px;
-  line-height: 1.5;
-  color: var(--muted);
-}
 .meds__about ul {
   list-style: none;
   padding: 0;
