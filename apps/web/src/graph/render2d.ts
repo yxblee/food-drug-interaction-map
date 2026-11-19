@@ -48,19 +48,37 @@ export type LabelBox = {
   h: number
 }
 
+export type Bounds = { x: number; y: number; w: number; h: number }
+
+/** The shift (screen px) that brings a label box fully inside the visible rect; zero if it already is. */
+export function nudgeInside(b: LabelBox, r: Bounds): { dx: number; dy: number } {
+  const fit = (lo: number, size: number, rLo: number, rSize: number) =>
+    lo < rLo ? rLo - lo : lo + size > rLo + rSize ? rLo + rSize - (lo + size) : 0
+  return { dx: fit(b.x, b.w, r.x, r.w), dy: fit(b.y, b.h, r.y, r.h) }
+}
+
 /**
  * Keys of the labels to show: greedy by priority (selected, undimmed, more Interactions, A-Z),
- * dropping any label whose box overlaps one already kept. Deterministic.
+ * dropping any label whose box overlaps one already kept. With `bounds`, any label not fully inside
+ * is dropped too, except the selected one, which the caller nudges in with `nudgeInside`. Deterministic.
  */
-export function chooseLabels(boxes: LabelBox[]): Set<string> {
-  const ranked = [...boxes].sort(
-    (a, b) =>
-      Number(b.selected) - Number(a.selected) ||
-      Number(a.dimmed) - Number(b.dimmed) ||
-      b.weight - a.weight ||
-      a.name.localeCompare(b.name) ||
-      a.key.localeCompare(b.key),
-  )
+export function chooseLabels(boxes: LabelBox[], bounds?: Bounds): Set<string> {
+  const inside = (b: LabelBox) => {
+    if (!bounds) return b
+    const { dx, dy } = nudgeInside(b, bounds)
+    return b.selected ? { ...b, x: b.x + dx, y: b.y + dy } : dx || dy ? null : b
+  }
+  const ranked = boxes
+    .map(inside)
+    .filter((b): b is LabelBox => b !== null)
+    .sort(
+      (a, b) =>
+        Number(b.selected) - Number(a.selected) ||
+        Number(a.dimmed) - Number(b.dimmed) ||
+        b.weight - a.weight ||
+        a.name.localeCompare(b.name) ||
+        a.key.localeCompare(b.key),
+    )
   const kept: LabelBox[] = []
   for (const b of ranked) {
     const clash = kept.some(
@@ -195,6 +213,10 @@ export function create2d(opts: RendererOptions): GraphRenderer {
   function paintLabels() {
     if (!root) return
     const els = root.selectAll<SVGGElement, SimNode>('g.node.is-labelled')
+    // Undo last pass's nudge so boxes are measured where the label naturally sits.
+    root.selectAll('text.label').attr('dx', null).attr('dy', null)
+    const bounds = host?.getBoundingClientRect()
+    const k = svg ? zoomTransform(svg.node()!).k : 1
     const boxes: LabelBox[] = []
     els.each(function (n) {
       const r = this.querySelector('text.label')?.getBoundingClientRect()
@@ -211,7 +233,25 @@ export function create2d(opts: RendererOptions): GraphRenderer {
           h: r.height,
         })
     })
-    const shown = chooseLabels(boxes)
+    const shown = chooseLabels(
+      boxes,
+      bounds && { x: bounds.x, y: bounds.y, w: bounds.width, h: bounds.height },
+    )
+    // The selected label is never hidden: shift it inside the map (screen px / zoom = user units).
+    for (const b of boxes) {
+      if (!b.selected || !bounds) continue
+      const { dx, dy } = nudgeInside(b, {
+        x: bounds.x,
+        y: bounds.y,
+        w: bounds.width,
+        h: bounds.height,
+      })
+      if (dx || dy)
+        root
+          .selectAll<SVGGElement, SimNode>('g.node.is-selected text.label')
+          .attr('dx', dx / k)
+          .attr('dy', dy / k)
+    }
     root
       .selectAll<SVGGElement, SimNode>('g.node')
       .classed('is-label-hidden', (n) => boxes.some((b) => b.key === n.key) && !shown.has(n.key))

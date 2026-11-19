@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vite-plus/test'
-import { chooseLabels, createSim } from './render2d.ts'
+import { chooseLabels, createSim, nudgeInside } from './render2d.ts'
 import type { LabelBox } from './render2d.ts'
 import type { RenderLink, RenderNode } from './renderGraph.ts'
 
@@ -87,5 +87,40 @@ describe('label collisions', () => {
     const boxes = [box('a', 0), box('b', 20), box('c', 40, { weight: 3 }), box('d', 300)]
     const first = [...chooseLabels(boxes)].sort()
     expect([...chooseLabels([...boxes].reverse())].sort()).toEqual(first)
+  })
+})
+
+describe('label edge clipping', () => {
+  const bounds = { x: 0, y: 0, w: 300, h: 200 }
+  const box = (key: string, x: number, o: Partial<LabelBox> = {}): LabelBox => ({
+    key,
+    name: key,
+    weight: 1,
+    selected: false,
+    dimmed: false,
+    x,
+    y: 50,
+    w: 50,
+    h: 10,
+    ...o,
+  })
+
+  it('hides a label partly outside the visible rect and keeps one fully inside', () => {
+    const shown = chooseLabels([box('in', 100), box('left', -20), box('right', 270)], bounds)
+    expect([...shown]).toEqual(['in'])
+  })
+
+  it('keeps a selected label that is partly outside, and reports the nudge that fits it', () => {
+    const sel = box('sel', -20, { selected: true })
+    expect([...chooseLabels([sel], bounds)]).toEqual(['sel'])
+    expect(nudgeInside(sel, bounds)).toEqual({ dx: 20, dy: 0 })
+    expect(nudgeInside(box('sel', 270), bounds)).toEqual({ dx: -20, dy: 0 })
+    expect(nudgeInside(box('sel', 100, { y: -5 }), bounds)).toEqual({ dx: 0, dy: 5 })
+    expect(nudgeInside(box('sel', 100), bounds)).toEqual({ dx: 0, dy: 0 })
+  })
+
+  it('does not treat a hidden clipped label as a collision for the rest', () => {
+    const shown = chooseLabels([box('edge', -20, { weight: 9 }), box('b', 10)], bounds)
+    expect([...shown]).toEqual(['b'])
   })
 })
