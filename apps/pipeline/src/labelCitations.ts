@@ -19,13 +19,21 @@ const DAILYMED = 'https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid='
 // Rewrites the title/url/setid lines of the one Citation item holding `old`; other lines are untouched.
 function rewrite(text: string, old: string, to: { title: string; setid: string }): string {
   const lines = text.split('\n')
-  const at = lines.findIndex((l) => l.trim() === `setid: ${JSON.stringify(old)}`)
+  // Files quote values or not; a rewritten item is written quoted (same YAML value).
+  const at = lines.findIndex((l) => new RegExp(`^\\s*setid: "?${old}"?\\s*$`).test(l))
   let start = at
   while (!lines[start].trimStart().startsWith('- ')) start--
   const fields = { title: to.title, url: DAILYMED + to.setid, setid: to.setid }
-  for (let i = start; i <= at; i++)
+  const out = lines.slice(0, start)
+  for (let i = start; i <= at; i++) {
+    // A long plain title may wrap onto continuation lines (no `key:`); drop them with the title.
+    if (i > start && !/^\s*(- )?\w+: /.test(lines[i])) continue
+    let line = lines[i]
     for (const [k, v] of Object.entries(fields))
-      lines[i] = lines[i].replace(new RegExp(`^(\\s*(?:- )?${k}: ).*$`), `$1${JSON.stringify(v)}`)
+      line = line.replace(new RegExp(`^(\\s*(?:- )?${k}: ).*$`), `$1${JSON.stringify(v)}`)
+    out.push(line)
+  }
+  lines.splice(0, at + 1, ...out)
   return lines.join('\n')
 }
 
@@ -77,10 +85,7 @@ const read = (dir: string) =>
     .map((f) => ({ file: join(dir, f), text: readFileSync(join(dir, f), 'utf8') }))
 
 // CLI entry (not unit tested): real data files, DailyMed (title) and openFDA (text).
-export async function runLabelCitations(
-  dir: string,
-  fetchUrl: (url: string) => Promise<Response>,
-) {
+export async function runLabelCitations(dir: string, fetchUrl: (url: string) => Promise<Response>) {
   const drugs: Record<string, string> = {}
   for (const f of read(join(dir, 'drugs'))) {
     const d = parse(f.text) as { id: string; dailymed?: string }

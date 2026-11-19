@@ -49,12 +49,27 @@ describe('relabel', () => {
     )
   })
 
+  it('rewrites unquoted items, dropping the continuation lines of a wrapped title', async () => {
+    const f = {
+      file: 'data/interactions/grapefruit--simvastatin.yaml',
+      text: `id: x\nfood: grapefruit\ndrug: simvastatin\ncitations:\n  - type: label\n    title: SIMVASTATIN [A long\n      wrapped name]\n    url: https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=${OLD}\n    setid: ${OLD}\nstatus: approved\n`,
+    }
+    const r = await relabel([f], drugs, foods, getLabel)
+    expect(r.changed[0].text).toBe(
+      `id: x\nfood: grapefruit\ndrug: simvastatin\ncitations:\n  - type: label\n${cite('SIMVASTATIN TABLET, FILM COATED [MERCK SHARP & DOHME LLC]', 'own-setid').split('\n').slice(1).join('\n')}status: approved\n`,
+    )
+  })
+
   it('keeps and reports a Citation when the Food is not in the Drug label', async () => {
     const f = interaction('grapefruit--isoniazid', 'isoniazid', cite('ISONIAZID [BRYANT]', OLD))
     const r = await relabel([f], drugs, foods, getLabel)
     expect(r.changed).toEqual([])
     expect(r.kept).toEqual([
-      { file: f.file, title: 'ISONIAZID [BRYANT]', reason: 'Drug label does not mention grapefruit' },
+      {
+        file: f.file,
+        title: 'ISONIAZID [BRYANT]',
+        reason: 'Drug label does not mention grapefruit',
+      },
     ])
   })
 

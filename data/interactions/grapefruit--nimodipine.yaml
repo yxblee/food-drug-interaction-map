@@ -19,9 +19,9 @@ details: Nimodipine is broken down by the CYP3A4 enzyme in the gut wall and
   advises against grapefruit and grapefruit juice during treatment.
 citations:
   - type: label
-    title: NIMODIPINE [BIONPHARMA INC.]
-    url: https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=e65d5108-22a2-4d87-a78d-15606f3cc9e2
-    setid: e65d5108-22a2-4d87-a78d-15606f3cc9e2
+    title: "NYMALIZE (NIMODIPINE) SOLUTION [AZURITY PHARMACEUTICALS, INC.]"
+    url: "https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=e660fa26-b5c4-4d6d-8887-9e22b6666a10"
+    setid: "e660fa26-b5c4-4d6d-8887-9e22b6666a10"
 status: approved
 source: openfda
 reviewed_at: 2026-11-18
