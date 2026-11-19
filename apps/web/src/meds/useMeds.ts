@@ -9,6 +9,7 @@ import {
   saveMeds,
   saveNotChecked,
 } from './medsStorage.ts'
+import { decodeShare, mergeShared } from './shareLink.ts'
 
 /** The Medication list, owned at App level so it outlives tab switches. Loads once the graph arrives. */
 export function useMeds(graph: GraphPayload | null) {
@@ -18,6 +19,8 @@ export function useMeds(graph: GraphPayload | null) {
     notChecked: string[]
     brands: Record<string, string>
     dropped: number
+    /** A Share link opened on this visit, waiting for the person's yes or no. */
+    shared: { ids: string[]; unknown: number } | null
   } | null>(null)
 
   // Adjust state during render (no effect round-trip) when the graph first arrives.
@@ -30,6 +33,7 @@ export function useMeds(graph: GraphPayload | null) {
       notChecked: storage ? loadNotChecked(storage) : [],
       brands: storage ? loadBrands(storage) : {},
       dropped: loaded.dropped.length,
+      shared: decodeShare(location.hash, isMedication),
     })
   }
 
@@ -69,7 +73,18 @@ export function useMeds(graph: GraphPayload | null) {
     setState((s) => (s ? { ...s, notChecked: update(s.notChecked) } : s))
   const setMeds = (update: (m: string[]) => string[]) =>
     setState((s) => (s ? { ...s, ids: update(s.ids) } : s))
+  /** Either answer removes the fragment, so a reload never asks again. */
+  const resolveShared = (add: boolean) => {
+    history.replaceState(null, '', location.pathname + location.search)
+    setState((s) =>
+      s
+        ? { ...s, ids: add && s.shared ? mergeShared(s.ids, s.shared.ids) : s.ids, shared: null }
+        : s,
+    )
+  }
   return {
+    shared: state?.shared ?? null,
+    resolveShared,
     meds: ids ?? [],
     setMeds,
     brands: brands ?? {},

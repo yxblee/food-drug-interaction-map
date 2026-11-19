@@ -116,6 +116,7 @@
 }
 .meds__actions {
   display: flex;
+  flex-wrap: wrap;
   gap: 8px;
   /* Desktop: sits under the picker; the results column spans all rows. */
   grid-column: 1;
@@ -136,6 +137,26 @@
 .meds__actions .pill-button:disabled {
   opacity: 0.5;
   cursor: default;
+}
+.meds__sharenote {
+  flex-basis: 100%;
+  margin: 0;
+  font-size: 0.85rem;
+  opacity: 0.8;
+}
+.meds__shared {
+  border: 1px solid var(--ink);
+  border-radius: 8px;
+  padding: 8px 12px;
+  margin: 8px 0;
+}
+.meds__shared p,
+.meds__shared ul {
+  margin: 0 0 8px;
+}
+.meds__sharedbtns {
+  display: flex;
+  gap: 8px;
 }
 .meds__main {
   grid-column: 2;
