@@ -50,6 +50,10 @@
   padding: 0;
   margin: 0.25rem 0 0.5rem;
 }
+/* An "Applies to" subheading opens a run: air above it, tied to the rows below. */
+.panel__sev > .mono-label {
+  margin: 0.75rem 0 0;
+}
 .panel__sev h3,
 .panel__pairs h3 {
   margin: 0.75rem 0 0.25rem;
