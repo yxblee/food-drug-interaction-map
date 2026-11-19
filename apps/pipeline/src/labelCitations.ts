@@ -14,6 +14,8 @@ interface DocFile {
   file: string
   text: string
 }
+// Labels use curly apostrophes (St. John\u2019s wort); Food names use straight ones.
+const straight = (s: string) => s.replace(/[\u2018\u2019]/g, "'")
 const DAILYMED = 'https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid='
 
 // Rewrites the title/url/setid lines of the one Citation item holding `old`; other lines are untouched.
@@ -62,7 +64,7 @@ export async function relabel(
       const label = await getLabel(own)
       if (!label)
         kept.push({ file: f.file, title: c.title, reason: `Drug label ${own} not fetched` })
-      else if (!mentions(label.text, terms))
+      else if (!mentions(straight(label.text), terms.map(straight)))
         kept.push({
           file: f.file,
           title: c.title,

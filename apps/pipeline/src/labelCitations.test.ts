@@ -60,6 +60,15 @@ describe('relabel', () => {
     )
   })
 
+  it('matches a Food name with a straight apostrophe against label text with a curly one', async () => {
+    const f = interaction('grapefruit--simvastatin', 'simvastatin', cite('X [Y]', OLD))
+    const r = await relabel([f], drugs, { grapefruit: ["St. John's wort"] }, async () => ({
+      title: 'T',
+      text: 'Avoid St. John\u2019s wort.',
+    }))
+    expect(r.rewritten).toHaveLength(1)
+  })
+
   it('keeps and reports a Citation when the Food is not in the Drug label', async () => {
     const f = interaction('grapefruit--isoniazid', 'isoniazid', cite('ISONIAZID [BRYANT]', OLD))
     const r = await relabel([f], drugs, foods, getLabel)
