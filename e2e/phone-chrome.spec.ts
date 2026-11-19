@@ -62,15 +62,31 @@ test('disclaimer is a one-line summary with the full text one tap away', async (
 
 test('360x740: Drug panel shows the first Severity badge above the fold', async ({ page }) => {
   await page.setViewportSize({ width: 360, height: 740 })
+  // Worst case: Simvastatin with both a MedlinePlus and a DailyMed link, whatever data/ holds.
+  const SETID = '1b4121ee-a733-4456-a917-be2603477839'
+  await page.route('**/api/graph.json', async (route) => {
+    const body = await (await route.fetch()).json()
+    body.nodes.find((n: { id: string }) => n.id === 'simvastatin').dailymed = SETID
+    await route.fulfill({ json: body })
+  })
+  await page.route('**/api/node/drug/simvastatin.json', async (route) => {
+    const body = await (await route.fetch()).json()
+    body.entity.dailymed = SETID
+    body.entity.medlineplus ??= 'https://medlineplus.gov/druginfo/meds/a692030.html'
+    await route.fulfill({ json: body })
+  })
   await page.goto('./?node=drug:simvastatin')
+  const links = page.locator('.panel .extlink')
+  await expect(links).toHaveCount(2)
+  const [a, b] = await links.evaluateAll((els) => els.map((e) => e.getBoundingClientRect().top))
+  expect(a).toBe(b) // one row
   const badge = page.locator('.panel .panel__sev .badge').first()
   await expect(badge).toBeVisible()
   const box = (await badge.boundingBox())!
-  // 24px margin: CI fonts render about 20px taller than local ones. With both a MedlinePlus
-  // and a DailyMed link, Simvastatin's badge sits about 36px inside the sheet on CI.
+  // 40px margin: CI fonts render about 20px taller than local ones.
   const panel = (await page.locator('.panel').boundingBox())!
   expect(box.y + box.height).toBeLessThanOrEqual(740 - 40)
-  expect(box.y + box.height).toBeLessThanOrEqual(panel.y + panel.height - 24)
+  expect(box.y + box.height).toBeLessThanOrEqual(panel.y + panel.height - 40)
 })
 
 test('Drug panel attribution is sentence-case body text after the Interactions list', async ({
