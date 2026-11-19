@@ -729,3 +729,27 @@ test.describe('2D map on touch', () => {
     await expect(page.getByRole('complementary')).toBeVisible()
   })
 })
+
+test('long panels jump to a Severity group', async ({ page }) => {
+  await page.setViewportSize({ width: 360, height: 740 })
+  await page.goto('./?node=food:grapefruit')
+  const panel = page.getByRole('complementary')
+  const nav = panel.getByRole('navigation', { name: 'Jump to severity' })
+  await expect(nav).toBeVisible()
+  const links = nav.getByRole('link')
+  expect(await links.count()).toBeGreaterThanOrEqual(2)
+  const box = await links.first().boundingBox()
+  expect(box!.height).toBeGreaterThanOrEqual(44)
+
+  const last = links.last()
+  await last.focus()
+  await page.keyboard.press('Enter')
+  const target = panel.locator('h3').filter({ hasText: (await last.innerText()).split(/\s/)[0] })
+  await expect(target.first()).toBeFocused()
+  // Smooth scrolling is still moving; retry until the heading settles inside the panel.
+  await expect(async () => {
+    const [p, h] = await Promise.all([panel.boundingBox(), target.first().boundingBox()])
+    expect(h!.y).toBeGreaterThanOrEqual(p!.y - 1)
+    expect(h!.y + h!.height).toBeLessThanOrEqual(p!.y + p!.height + 1)
+  }).toPass()
+})

@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vite-plus/test'
 import type { Interaction, ResolvedInteraction, Severity } from '@fdi/schema'
-import { panelGroups } from './panelGroups.ts'
+import { jumpLinks, panelGroups } from './panelGroups.ts'
 
 const row = (id: string, severity: Severity, inheritedFrom?: string) =>
   ({ interaction: { id, severity }, inheritedFrom }) as ResolvedInteraction<Interaction>
@@ -38,5 +38,26 @@ describe('panelGroups', () => {
       row('d', 'caution'),
     ])
     expect(groups.map((g) => g.inheritedFrom)).toEqual(['statins', undefined])
+  })
+})
+
+describe('jumpLinks', () => {
+  it('lists one link per Severity group in panel order, with counts', () => {
+    expect(jumpLinks(panelGroups(many).groups, false)).toEqual([
+      { id: 'sev-avoid', severity: 'avoid', count: 2 },
+      { id: 'sev-caution', severity: 'caution', count: 3 },
+      { id: 'sev-minimal', severity: 'minimal', count: 1 },
+    ])
+  })
+
+  it('adds Helpful pairings last', () => {
+    const links = jumpLinks(panelGroups(many).groups, true)
+    expect(links.at(-1)).toEqual({ id: 'pairs-title', count: 0 })
+  })
+
+  it('is empty with a single Severity group, even with pairings', () => {
+    const one = panelGroups([row('a', 'caution'), row('b', 'caution')]).groups
+    expect(jumpLinks(one, false)).toEqual([])
+    expect(jumpLinks(one, true)).toEqual([])
   })
 })
