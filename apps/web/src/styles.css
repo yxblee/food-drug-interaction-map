@@ -10,6 +10,17 @@
   --font-body: system-ui, -apple-system, 'Segoe UI', sans-serif;
   color-scheme: light dark;
 }
+/* First-paint dark defaults; must equal PALETTES.grey.dark (guarded by theme/firstPaint.test.ts). */
+@media (prefers-color-scheme: dark) {
+  :root {
+    --paper: #1b1a18;
+    --ink: #ecebe7;
+    --muted: #a29e96;
+    --line: #3d3b37;
+    --badge-bg: #f1efea;
+    --surface: #25241f;
+  }
+}
 
 * {
   box-sizing: border-box;
@@ -24,6 +35,9 @@ body {
   background: var(--paper);
   color: var(--ink);
   font: 15px/1.5 var(--font-body);
+}
+/* Set by useTheme after first paint, so only later changes (tint, OS scheme) fade. :where() keeps specificity at `body` so print.css still wins. */
+:where(html[data-theme-ready]) body {
   transition:
     background-color 400ms ease,
     color 400ms ease;
@@ -39,7 +53,7 @@ body::before {
   background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
 }
 @media (prefers-reduced-motion: reduce) {
-  body {
+  :where(html[data-theme-ready]) body {
     transition: none;
   }
 }

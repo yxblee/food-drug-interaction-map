@@ -25,5 +25,12 @@ export function useTheme(tinted: boolean, kind: Kind | null): Palette {
     s.setProperty('--chip-muted', palette.chipMuted)
     for (const [sev, color] of Object.entries(SEVERITY_COLORS)) s.setProperty(`--sev-${sev}`, color)
   }, [palette])
+  useEffect(() => {
+    // Two frames: the first painted frame has run, so later palette changes may fade.
+    const id = requestAnimationFrame(() =>
+      requestAnimationFrame(() => document.documentElement.setAttribute('data-theme-ready', '')),
+    )
+    return () => cancelAnimationFrame(id)
+  }, [])
   return palette
 }
