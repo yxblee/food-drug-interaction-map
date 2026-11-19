@@ -64,10 +64,7 @@ export function MyMedsTab({
     [graph],
   )
   const options = useMemo(() => searchNodes(candidates, query, 8), [candidates, query])
-  const suggestions = useMemo(
-    () => (options.length === 0 ? suggestNodes(candidates, query) : []),
-    [candidates, query, options.length],
-  )
+  const suggestions = useMemo(() => suggestNodes(candidates, query), [candidates, query])
   const showNoMatch = options.length === 0 && suggestions.length === 0 && !!query.trim()
   const notCheckedRow = {
     key: 'not-checked',
@@ -263,7 +260,7 @@ export function MyMedsTab({
           {showNoMatch && <NoMatch hint="Check the spelling or try the generic name." />}
           {suggestions.length > 0 && (
             <p className="mono-label meds__didyoumean" role="status">
-              No match in our dataset. Did you mean
+              Did you mean ({suggestions.length} suggested)
             </p>
           )}
         </Combobox>

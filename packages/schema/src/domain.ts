@@ -150,12 +150,14 @@ function editDistance(a: string, b: string): number {
  */
 export function suggestNodes(nodes: GraphNode[], q: string, limit = 3): SearchResult[] {
   const needle = q.trim().toLowerCase()
-  if (needle.length < 4 || searchNodes(nodes, needle, 1).length) return []
+  // Over 64 chars is no typo of any name; bounds the work a long URL query can cause.
+  if (needle.length < 4 || needle.length > 64 || searchNodes(nodes, needle, 1).length) return []
   const max = Math.min(2, Math.floor(needle.length / 4))
   const found: { dist: number; matched: string; node: GraphNode }[] = []
   for (const node of nodes) {
     let best: { dist: number; matched: string } | undefined
     for (const term of [node.name, ...node.aliases]) {
+      if (Math.abs(term.length - needle.length) > max) continue // too far apart to be within max edits
       const dist = editDistance(needle, term.toLowerCase())
       if (dist <= max && (!best || dist < best.dist)) best = { dist, matched: term }
     }

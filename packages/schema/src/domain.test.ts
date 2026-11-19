@@ -151,6 +151,12 @@ describe('suggestNodes', () => {
       { kind: 'drug', id: 'atorvastatin', name: 'Atorvastatin', matched: 'Lipitor', group: false },
     ])
   })
+  it('matches typos in Aliases and caps long queries at 2 edits', () => {
+    expect(ids('coumadim')).toEqual(['warfarin'])
+    expect(ids('atorvastatim')).toEqual(['atorvastatin'])
+    expect(ids('atorvastxtxn')).toEqual(['atorvastatin'])
+    expect(ids('atorvaxtxtxn')).toEqual([])
+  })
   it('suggests nothing when something matches exactly or partially', () => {
     expect(ids('grape')).toEqual([])
     expect(ids('atorvastatin')).toEqual([])
@@ -161,6 +167,7 @@ describe('suggestNodes', () => {
   })
   it('returns nothing for far-off queries and caps at 3', () => {
     expect(ids('zzzzzzzz')).toEqual([])
+    expect(ids('a'.repeat(5000))).toEqual([])
     const many = ['aaaab', 'aaaac', 'aaaad', 'aaaae'].map((x) => n('drug', x, x))
     expect(suggestNodes(many, 'aaaaf')).toHaveLength(3)
   })

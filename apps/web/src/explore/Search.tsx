@@ -26,10 +26,7 @@ export function Search({ nodes, interactions, state, update }: Props) {
   // An empty box lists every Drug then every Food A-Z; typing narrows to matches.
   const matches = useMemo(() => searchNodes(nodes, state.q), [nodes, state.q])
   // Only when nothing matches by name: the nearest names, offered as "Did you mean".
-  const suggestions = useMemo(
-    () => (matches.length === 0 ? suggestNodes(nodes, state.q) : []),
-    [nodes, state.q, matches.length],
-  )
+  const suggestions = useMemo(() => suggestNodes(nodes, state.q), [nodes, state.q])
   const suggesting = searching && suggestions.length > 0
   const found = suggesting ? suggestions : matches
   const results = searching ? found : [...browse.drugs, ...browse.foods]

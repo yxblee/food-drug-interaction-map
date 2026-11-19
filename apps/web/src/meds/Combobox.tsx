@@ -39,7 +39,6 @@ export function Combobox({
 }) {
   // null = untouched since the query changed.
   const [moved, setMoved] = useState<number | null>(null)
-  const setActiveIdx = setMoved
   const [open, setOpen] = useState(true)
   const shown = open ? rows : []
   const active =
@@ -66,7 +65,7 @@ export function Combobox({
           }
           onChange={(e) => {
             onQuery(e.target.value)
-            setActiveIdx(null)
+            setMoved(null)
             setOpen(true)
           }}
           onBlur={() => setOpen(false)}
@@ -81,7 +80,7 @@ export function Combobox({
               e.preventDefault()
               if (!open) setOpen(true)
               else
-                setActiveIdx(
+                setMoved(
                   active < 0
                     ? e.key === 'ArrowDown'
                       ? 0
