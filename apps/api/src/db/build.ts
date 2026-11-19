@@ -4,6 +4,7 @@ import { dirname, join } from 'node:path'
 import { DatabaseSync } from 'node:sqlite'
 import { parse } from 'yaml'
 import {
+  citationGaps,
   publishable,
   validateDataset,
   type Dataset,
@@ -89,8 +90,11 @@ export function writeDb(full: Dataset, outPath: string): string {
 export function buildDb(
   dataDir: string,
   outPath: string,
-): { version: string } | { errors: string[] } {
+): { version: string; gaps: string[] } | { errors: string[] } {
   const result = validateDataset(readDataDir(dataDir))
   if ('errors' in result) return result
-  return { version: writeDb(result.dataset, outPath) }
+  return {
+    version: writeDb(result.dataset, outPath),
+    gaps: citationGaps(result.dataset.interactions),
+  }
 }

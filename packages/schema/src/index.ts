@@ -1,3 +1,4 @@
 export * from './api.ts'
 export * from './entities.ts'
 export * from './validate.ts'
+export * from './citationGaps.ts'
