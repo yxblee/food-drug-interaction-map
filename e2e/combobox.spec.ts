@@ -230,7 +230,9 @@ test('My meds: Tab from the last chip lands on Clear all; remove buttons never o
   await expect(page.getByRole('button', { name: 'Print' })).toBeFocused()
   await page.keyboard.press('Tab')
   await expect(page.getByRole('button', { name: 'Copy' })).toBeFocused()
-  await expect(page.locator('.meds__actions .pill-label')).toHaveCount(4)
+  await page.keyboard.press('Tab')
+  await expect(page.getByRole('button', { name: 'Share link' })).toBeFocused()
+  await expect(page.locator('.meds__actions .pill-label')).toHaveCount(5)
 })
 
 test('empty Explore box browses every Drug and Food A-Z; keyboard opens one', async ({ page }) => {

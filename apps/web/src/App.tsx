@@ -24,7 +24,17 @@ export function App() {
   const [mapNote, setMapNote] = useState('')
   const focusMap = useRef(false)
   const focusMeds = useRef(false)
-  const { meds, setMeds, brands, setBrands, notChecked, setNotChecked, dropped } = useMeds(graph)
+  const {
+    meds,
+    setMeds,
+    brands,
+    setBrands,
+    notChecked,
+    setNotChecked,
+    dropped,
+    shared,
+    resolveShared,
+  } = useMeds(graph)
   const ix = useMemo(() => (graph ? buildIndex(graph.nodes, graph.interactions) : null), [graph])
   // Derived, so it follows the Medication list while the filter is on.
   const medsFilter = useMemo(
@@ -67,6 +77,11 @@ export function App() {
     focusMeds.current = false
     document.getElementById('med-input')?.focus()
   }, [state.tab, graph])
+
+  // A Share link opens on My meds, where the prompt lives.
+  useEffect(() => {
+    if (shared && state.tab !== 'meds') update({ tab: 'meds' })
+  }, [shared, state.tab, update])
 
   const openMeds = () => {
     focusMeds.current = true
@@ -163,6 +178,8 @@ export function App() {
           ) : (
             <MyMedsTab
               graph={graph}
+              shared={shared}
+              resolveShared={resolveShared}
               meds={meds}
               setMeds={setMeds}
               brands={brands}

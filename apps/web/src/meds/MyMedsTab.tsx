@@ -11,12 +11,15 @@ import { checkMeds, pairingsFor, type FoodWarning } from './checkMeds.ts'
 import { Combobox, NoMatch } from './Combobox.tsx'
 import { foodWarningsToText } from './foodWarningsToText.ts'
 import { FoodCheck } from './FoodCheck.tsx'
+import { encodeShare } from './shareLink.ts'
 import { WarningRow } from './WarningRow.tsx'
 import './meds.css'
 import './print.css'
 
 export interface MyMedsTabProps {
   graph: GraphPayload
+  shared: { ids: string[]; unknown: number } | null
+  resolveShared: (add: boolean) => void
   meds: string[]
   setMeds: (update: (m: string[]) => string[]) => void
   brands: Record<string, string>
@@ -28,6 +31,8 @@ export interface MyMedsTabProps {
 
 export function MyMedsTab({
   graph,
+  shared,
+  resolveShared,
   meds,
   setMeds,
   brands,
@@ -123,6 +128,34 @@ export function MyMedsTab({
       () => setNotice("Couldn't copy. Try Print instead"),
     )
   }
+  const shareLink = async () => {
+    const { fragment, leftOut } = encodeShare(meds, notChecked)
+    const url = location.origin + location.pathname + fragment
+    const left = leftOut
+      ? ` ${plural(leftOut, 'medication', 'medications')} not in our list ${leftOut === 1 ? 'was' : 'were'} left out.`
+      : ''
+    try {
+      if (navigator.share) {
+        await navigator.share({ title: 'My meds', url })
+        setNotice(`Link shared.${left}`)
+      } else {
+        await navigator.clipboard.writeText(url)
+        setNotice(`Link copied.${left}`)
+      }
+    } catch (e) {
+      if (!(e instanceof DOMException && e.name === 'AbortError')) {
+        setNotice("Couldn't share the link. Try Copy instead")
+      }
+    }
+  }
+  const answerShared = (add: boolean) => {
+    if (add && shared) {
+      const n = shared.ids.filter((id) => !meds.includes(id)).length
+      setNotice(`Added ${plural(n, 'medication', 'medications')}`)
+    } else setNotice('')
+    resolveShared(add)
+    input.current?.focus()
+  }
   const undoClear = () => {
     if (!undo) return
     setMeds(() => undo.ids)
@@ -145,6 +178,46 @@ export function MyMedsTab({
         <p className="meds__privacy">
           Your list stays on this device. It is never sent to our server.
         </p>
+        {shared && (
+          <div role="group" aria-labelledby="shared-title" className="meds__shared">
+            {shared.ids.length > 0 ? (
+              <>
+                <p id="shared-title">
+                  Add these {shared.ids.length}{' '}
+                  {shared.ids.length === 1 ? 'medication' : 'medications'} to your list?
+                </p>
+                <ul>
+                  {shared.ids.map((id) => (
+                    <li key={id}>{name(id)}</li>
+                  ))}
+                </ul>
+              </>
+            ) : (
+              <p id="shared-title">This link has no medications we recognise.</p>
+            )}
+            {shared.unknown > 0 && (
+              <p>
+                {shared.unknown === 1
+                  ? "1 link item wasn't recognised."
+                  : `${shared.unknown} link items weren't recognised.`}
+              </p>
+            )}
+            <div className="meds__sharedbtns">
+              {shared.ids.length > 0 && (
+                <button className="pill-button" autoFocus onClick={() => answerShared(true)}>
+                  <PillLabel>Add</PillLabel>
+                </button>
+              )}
+              <button
+                className="pill-button"
+                autoFocus={shared.ids.length === 0}
+                onClick={() => answerShared(false)}
+              >
+                <PillLabel>{shared.ids.length > 0 ? 'Not now' : 'Dismiss'}</PillLabel>
+              </button>
+            </div>
+          </div>
+        )}
         <Combobox
           id="med"
           label="Add a medication"
@@ -238,6 +311,16 @@ export function MyMedsTab({
             <button className="pill-button" disabled={warnings.length === 0} onClick={copyWarnings}>
               <PillLabel>Copy</PillLabel>
             </button>
+          )}
+          {meds.length > 0 && (navigator.share || navigator.clipboard) && (
+            <button className="pill-button" onClick={shareLink}>
+              <PillLabel>Share link</PillLabel>
+            </button>
+          )}
+          {meds.length > 0 && (
+            <p className="meds__sharenote">
+              A Share link holds your medication names, so anyone with it can see them.
+            </p>
           )}
         </div>
       )}
