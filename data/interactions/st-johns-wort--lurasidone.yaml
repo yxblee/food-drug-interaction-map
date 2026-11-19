@@ -18,10 +18,9 @@ details: The label names St. John's wort as an example of a strong CYP3A4
   be used with lurasidone, and it lists this as a contraindication.
 citations:
   - type: label
-    title: LURASIDONE HYDROCHLORIDE [Heritage Pharmaceuticals Inc. d/b/a Avet
-      Pharmaceuticals Inc.]
-    url: https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=083a1a52-5a13-4e28-8ef2-127ac4ce5b2d
-    setid: 083a1a52-5a13-4e28-8ef2-127ac4ce5b2d
+    title: "LATUDA (LURASIDONE HYDROCHLORIDE) TABLET, FILM COATED [SUMITOMO PHARMA AMERICA, INC.]"
+    url: "https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=afad3051-9df2-4c54-9684-e8262a133af8"
+    setid: "afad3051-9df2-4c54-9684-e8262a133af8"
 status: approved
 source: openfda
 reviewed_at: 2026-11-18

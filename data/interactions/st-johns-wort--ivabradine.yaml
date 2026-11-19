@@ -18,9 +18,9 @@ details: Ivabradine is mostly broken down by the CYP3A4 enzyme in the liver and
   section.
 citations:
   - type: label
-    title: IVABRADINE [Novadoz Pharmaceuticals LLC]
-    url: https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=676907d3-b374-4baa-8422-c04706409540
-    setid: 676907d3-b374-4baa-8422-c04706409540
+    title: "CORLANOR (IVABRADINE) TABLET, FILM COATED CORLANOR (IVABRADINE) SOLUTION [AMGEN INC]"
+    url: "https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=92018a65-38f6-45f7-91d4-a34921b81d0d"
+    setid: "92018a65-38f6-45f7-91d4-a34921b81d0d"
 status: approved
 source: openfda
 reviewed_at: 2026-11-18
