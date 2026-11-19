@@ -1,22 +1,34 @@
 import { useEffect, useMemo, useRef, useState } from 'react'
-import type { GraphNode } from '@fdi/schema'
+import type { GraphInteraction, GraphNode } from '@fdi/schema'
 import { groupTerm, nodeKey, searchNodes } from '@fdi/schema/domain'
 import type { ViewState } from '../urlState.ts'
 import { ClearButton } from '../ClearButton.tsx'
-import { isSlashFocus, matchCountLabel, searchPlaceholder } from './searchUi.ts'
+import { plural } from '../plural.ts'
+import {
+  browseGroups,
+  browseLabel,
+  isSlashFocus,
+  matchCountLabel,
+  searchPlaceholder,
+} from './searchUi.ts'
 
 interface Props {
   nodes: GraphNode[]
+  interactions: GraphInteraction[]
   state: ViewState
   update: (patch: Partial<ViewState>, opts?: { push?: boolean }) => void
 }
 
-export function Search({ nodes, state, update }: Props) {
+export function Search({ nodes, interactions, state, update }: Props) {
   const input = useRef<HTMLInputElement>(null)
-  const results = useMemo(() => searchNodes(nodes, state.q), [nodes, state.q])
   const searching = state.q.trim() !== ''
+  const browse = useMemo(() => browseGroups(nodes, interactions), [nodes, interactions])
+  // An empty box lists every Drug then every Food A-Z; typing narrows to matches.
+  const matches = useMemo(() => searchNodes(nodes, state.q), [nodes, state.q])
+  const results = searching ? matches : [...browse.drugs, ...browse.foods]
   // Picking a result, Escape or leaving the field closes the list until the query changes.
-  const [closed, setClosed] = useState(false)
+  // Starts closed: the empty-box browse list opens only on focus, never over the map on load.
+  const [closed, setClosed] = useState(true)
   const [finePointer] = useState(() => matchMedia('(pointer: fine)').matches)
   const [activeIdx, setActiveIdx] = useState(0)
   const open = results.length > 0 && !closed
@@ -31,6 +43,11 @@ export function Search({ nodes, state, update }: Props) {
     window.addEventListener('keydown', onKey)
     return () => window.removeEventListener('keydown', onKey)
   }, [])
+
+  useEffect(() => {
+    if (open)
+      document.getElementById(`search-option-${active}`)?.scrollIntoView({ block: 'nearest' })
+  }, [open, active])
 
   const select = (r: (typeof results)[number]) => {
     setClosed(true)
@@ -58,6 +75,7 @@ export function Search({ nodes, state, update }: Props) {
             setActiveIdx(0)
             update({ q: e.target.value })
           }}
+          onFocus={() => setClosed(false)}
           onBlur={() => setClosed(true)}
           onKeyDown={(e) => {
             if (e.key === 'Enter') {
@@ -78,13 +96,18 @@ export function Search({ nodes, state, update }: Props) {
           <ClearButton
             onClear={() => {
               update({ q: '' })
+              setClosed(false)
               input.current?.focus()
             }}
           />
         )}
       </div>
       <p className="search__count mono-label" role="status" aria-live="polite">
-        {searching ? matchCountLabel(results.length) : ''}
+        {searching
+          ? matchCountLabel(results.length)
+          : open
+            ? browseLabel(browse.drugs.length, browse.foods.length)
+            : ''}
       </p>
       {searching && results.length === 0 && (
         <p className="search__empty">
@@ -96,30 +119,60 @@ export function Search({ nodes, state, update }: Props) {
         id="search-options"
         role="listbox"
         aria-label="Matching drugs, foods and mechanisms"
-        className="search__results combo__list"
+        className={`search__results combo__list${searching ? '' : ' combo__list--browse'}`}
         hidden={!open}
         // Keep focus in the input when an option is pressed, so the blur above does not eat the click.
         onMouseDown={(e) => e.preventDefault()}
       >
-        {results.map((r, i) => (
-          <li
-            key={nodeKey(r.kind, r.id)}
-            id={`search-option-${i}`}
-            role="option"
-            aria-selected={active === i}
-            className="combo__option"
-            onClick={() => select(r)}
-          >
-            <span>
-              <span className="mono-label">
-                {r.kind}
-                {r.group ? ` · ${groupTerm(r.kind)}` : ''}
-              </span>{' '}
-              {r.name}
-              {r.matched !== r.name && <em className="search__alias"> (matched “{r.matched}”)</em>}
-            </span>
-          </li>
-        ))}
+        {searching
+          ? matches.map((r, i) => (
+              <li
+                key={nodeKey(r.kind, r.id)}
+                id={`search-option-${i}`}
+                role="option"
+                aria-selected={active === i}
+                className="combo__option"
+                onClick={() => select(r)}
+              >
+                <span>
+                  <span className="mono-label">
+                    {r.kind}
+                    {r.group ? ` · ${groupTerm(r.kind)}` : ''}
+                  </span>{' '}
+                  {r.name}
+                  {r.matched !== r.name && (
+                    <em className="search__alias"> (matched “{r.matched}”)</em>
+                  )}
+                </span>
+              </li>
+            ))
+          : [
+              { label: 'Drugs', rows: browse.drugs, offset: 0 },
+              { label: 'Foods', rows: browse.foods, offset: browse.drugs.length },
+            ].map(({ label, rows, offset }) => (
+              <li key={label} role="group" aria-labelledby={`browse-${label}`}>
+                <span id={`browse-${label}`} className="combo__heading mono-label">
+                  {label}
+                </span>
+                <ul role="presentation" className="combo__group">
+                  {rows.map((r, k) => (
+                    <li
+                      key={nodeKey(r.kind, r.id)}
+                      id={`search-option-${offset + k}`}
+                      role="option"
+                      aria-selected={active === offset + k}
+                      className="combo__option combo__option--browse"
+                      onClick={() => select(r)}
+                    >
+                      <span data-name>{r.name}</span>
+                      <span className="mono-label">
+                        {plural(r.count, 'Interaction', 'Interactions')}
+                      </span>
+                    </li>
+                  ))}
+                </ul>
+              </li>
+            ))}
       </ul>
     </div>
   )

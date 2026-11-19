@@ -232,3 +232,45 @@ test('My meds: Tab from the last chip lands on Clear all; remove buttons never o
   await expect(page.getByRole('button', { name: 'Copy' })).toBeFocused()
   await expect(page.locator('.meds__actions .pill-label')).toHaveCount(4)
 })
+
+test('empty Explore box browses every Drug and Food A-Z; keyboard opens one', async ({ page }) => {
+  await page.goto('./')
+  const search = exploreBox(page)
+  const list = page.getByRole('listbox', { name: 'Matching drugs, foods and mechanisms' })
+  await expect(list).toBeHidden() // closed until the box is focused
+  await search.focus()
+  await expect(list).toBeVisible()
+  await expect(list.getByRole('group', { name: 'Drugs' })).toBeVisible()
+  await expect(list.getByRole('group', { name: 'Foods' })).toBeVisible()
+  await expect(page.getByRole('status').filter({ hasText: /\d+ Drugs?, \d+ Foods?/ })).toBeVisible()
+  const names = await list
+    .getByRole('group', { name: 'Drugs' })
+    .getByRole('option')
+    .evaluateAll((els) => els.map((e) => e.querySelector('[data-name]')!.textContent!))
+  expect(names.length).toBeGreaterThan(1)
+  expect(names).toEqual([...names].sort((a, b) => a.localeCompare(b)))
+  // Every row shows its Interaction count and is at least 44px tall.
+  const first = list.getByRole('option').first()
+  await expect(first).toContainText(/\d+ Interactions?/)
+  expect((await first.boundingBox())!.height).toBeGreaterThanOrEqual(44)
+
+  await search.press('ArrowDown')
+  await search.press('Enter')
+  await expect(list).toBeHidden()
+  await expect(page).toHaveURL(/node=drug(%3A|:)/)
+
+  await search.press('ArrowDown')
+  await expect(list).toBeVisible()
+  await search.press('Escape')
+  await expect(list).toBeHidden()
+  await expect(search).toBeFocused()
+})
+
+test('browse list does not cover the Interactions panel controls', async ({ page }) => {
+  await page.goto('./')
+  await exploreBox(page).focus()
+  const list = page.getByRole('listbox', { name: 'Matching drugs, foods and mechanisms' })
+  const box = (await list.boundingBox())!
+  expect(box.y + box.height).toBeLessThanOrEqual(page.viewportSize()!.height)
+  expect(await list.evaluate((el) => el.scrollHeight > el.clientHeight)).toBe(true)
+})
