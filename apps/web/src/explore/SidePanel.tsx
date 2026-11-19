@@ -1,6 +1,6 @@
 import { PillLabel } from '../PillLabel.tsx'
 import { dailymedUrl, MedlinePlusLink, NlmSource } from '../MedlinePlusLink.tsx'
-import { useEffect, useRef, useState } from 'react'
+import { Fragment, useEffect, useRef, useState } from 'react'
 import { type Drug, type Food, type Mechanism, type NodeDetail } from '@fdi/schema'
 import { groupTerm, nodeKey as keyOf, splitKey } from '@fdi/schema/domain'
 import { fetchNode } from '../api.ts'
@@ -185,35 +185,39 @@ export function SidePanel({ nodeKey, onSelect, onPrev, onNext, onClose, onNotFou
                   ))}
                 </nav>
               )}
-              {groups.map(({ severity: sev, rows, inheritedFrom: from }) => {
-                const owner = from ? d.nodes[keyOf(kind, from)] : undefined
-                return (
-                  <section key={sev} aria-labelledby={`sev-${sev}`} className="panel__sev">
-                    <SeverityGroupHeading severity={sev} count={rows.length} />
-                    {owner && <p className="mono-label">Applies to {owner.name}</p>}
-                    {sev === 'avoid' && (
-                      <p className="irow__caution">
-                        Serious interaction. Check with your pharmacist or doctor before combining.
-                      </p>
-                    )}
-                    <ul className="panel__rows">
-                      {rows.map((row) => (
-                        <InteractionRow
-                          key={row.interaction.id}
-                          row={row}
-                          nodes={d.nodes}
-                          mechanisms={d.mechanisms}
-                          perspective={kind}
-                          onSelect={onSelect}
-                          grouped={{ inherited: !!from }}
-                          groupSeverity={sev}
-                          collapsible={collapsed}
-                        />
-                      ))}
-                    </ul>
-                  </section>
-                )
-              })}
+              {groups.map(({ severity: sev, rows, runs }) => (
+                <section key={sev} aria-labelledby={`sev-${sev}`} className="panel__sev">
+                  <SeverityGroupHeading severity={sev} count={rows.length} />
+                  {sev === 'avoid' && (
+                    <p className="irow__caution">
+                      Serious interaction. Check with your pharmacist or doctor before combining.
+                    </p>
+                  )}
+                  {runs.map(({ inheritedFrom: from, rows: runRows }) => {
+                    const owner = from ? d.nodes[keyOf(kind, from)] : undefined
+                    return (
+                      <Fragment key={from ?? ''}>
+                        {owner && <p className="mono-label">Applies to {owner.name}</p>}
+                        <ul className="panel__rows">
+                          {runRows.map((row) => (
+                            <InteractionRow
+                              key={row.interaction.id}
+                              row={row}
+                              nodes={d.nodes}
+                              mechanisms={d.mechanisms}
+                              perspective={kind}
+                              onSelect={onSelect}
+                              grouped={{ inherited: !!from }}
+                              groupSeverity={sev}
+                              collapsible={collapsed}
+                            />
+                          ))}
+                        </ul>
+                      </Fragment>
+                    )
+                  })}
+                </section>
+              ))}
             </>
           )}
 
