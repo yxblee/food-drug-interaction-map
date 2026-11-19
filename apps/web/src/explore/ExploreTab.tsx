@@ -101,7 +101,7 @@ export function ExploreTab({
   return (
     <div className="explore">
       <div className="explore__bar">
-        <Search nodes={nodes} state={state} update={update} />
+        <Search nodes={nodes} interactions={graph.interactions} state={state} update={update} />
         {medsFilter && (
           <button className="pill-button" onClick={clearMedsFilter}>
             <PillLabel>Showing your meds ✕</PillLabel>

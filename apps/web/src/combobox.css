@@ -45,3 +45,23 @@
   background: color-mix(in srgb, var(--ink) 10%, var(--surface));
   box-shadow: inset 4px 0 0 var(--ink);
 }
+
+/* Empty-box A-Z browse: long, so it scrolls inside the viewport instead of running off it. */
+.combo__list--browse {
+  max-height: min(60vh, 28rem);
+  overflow-y: auto;
+  overscroll-behavior: contain;
+}
+.combo__group {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.combo__heading {
+  display: block;
+  padding: 8px 12px 4px;
+}
+.combo__option--browse {
+  justify-content: space-between;
+  gap: 12px;
+}
