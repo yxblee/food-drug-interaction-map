@@ -27,7 +27,8 @@ export function Search({ nodes, interactions, state, update }: Props) {
   const matches = useMemo(() => searchNodes(nodes, state.q), [nodes, state.q])
   const results = searching ? matches : [...browse.drugs, ...browse.foods]
   // Picking a result, Escape or leaving the field closes the list until the query changes.
-  const [closed, setClosed] = useState(false)
+  // Starts closed: the empty-box browse list opens only on focus, never over the map on load.
+  const [closed, setClosed] = useState(true)
   const [finePointer] = useState(() => matchMedia('(pointer: fine)').matches)
   const [activeIdx, setActiveIdx] = useState(0)
   const open = results.length > 0 && !closed

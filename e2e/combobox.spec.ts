@@ -237,6 +237,7 @@ test('empty Explore box browses every Drug and Food A-Z; keyboard opens one', as
   await page.goto('./')
   const search = exploreBox(page)
   const list = page.getByRole('listbox', { name: 'Matching drugs, foods and mechanisms' })
+  await expect(list).toBeHidden() // closed until the box is focused
   await search.focus()
   await expect(list).toBeVisible()
   await expect(list.getByRole('group', { name: 'Drugs' })).toBeVisible()
