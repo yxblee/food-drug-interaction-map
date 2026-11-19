@@ -103,12 +103,14 @@ export function SidePanel({ nodeKey, onSelect, onPrev, onNext, onClose, onNotFou
               {(entity as Drug).medlineplus && (
                 <MedlinePlusLink
                   label="About this medication (MedlinePlus)"
+                  short="MedlinePlus"
                   url={(entity as Drug).medlineplus!}
                 />
               )}
               {(entity as Drug).dailymed && (
                 <MedlinePlusLink
                   label="Read the label (DailyMed)"
+                  short="DailyMed label"
                   url={dailymedUrl((entity as Drug).dailymed!)}
                 />
               )}

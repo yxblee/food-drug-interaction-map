@@ -163,6 +163,26 @@
 .panel__about {
   margin-block: 0;
 }
+.extlink__short {
+  display: none;
+}
+/* Phone: both source links share one 44px row instead of stacking. */
+@media (max-width: 40rem) {
+  .panel__about {
+    flex-direction: row;
+    flex-wrap: wrap;
+    column-gap: 1.25rem;
+  }
+  .extlink__full {
+    display: none;
+  }
+  .extlink__short {
+    display: inline;
+  }
+  .panel__about > .mono-label {
+    flex-basis: 100%;
+  }
+}
 /* Aliases and Part of share a line when they fit, so a phone sheet reaches the first Interaction sooner. */
 .panel__meta {
   display: flex;
