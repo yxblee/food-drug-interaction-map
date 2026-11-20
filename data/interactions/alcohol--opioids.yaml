@@ -12,6 +12,9 @@ citations:
     title: "OXYCODONE HYDROCHLORIDE SOLUTION [SPECGX LLC]"
     url: "https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=5451bcaa-0aca-4581-bcea-2f9c2a33b260"
     setid: "5451bcaa-0aca-4581-bcea-2f9c2a33b260"
+  - type: "guideline"
+    title: "Harmful Interactions: Mixing Alcohol with Medicines (NIAAA)"
+    url: "https://www.niaaa.nih.gov/publications/brochures-and-fact-sheets/harmful-interactions-mixing-alcohol-with-medicines"
 status: approved
 source: curated
 reviewed_at: 2026-10-09

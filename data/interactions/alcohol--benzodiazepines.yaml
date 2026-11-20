@@ -12,6 +12,9 @@ citations:
     title: "ALPRAZOLAM TABLET [ACTAVIS PHARMA, INC.]"
     url: "https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=a23063c0-099a-4256-b95f-3a857bbf704b"
     setid: "a23063c0-099a-4256-b95f-3a857bbf704b"
+  - type: "guideline"
+    title: "Harmful Interactions: Mixing Alcohol with Medicines (NIAAA)"
+    url: "https://www.niaaa.nih.gov/publications/brochures-and-fact-sheets/harmful-interactions-mixing-alcohol-with-medicines"
 status: approved
 source: curated
 reviewed_at: 2026-10-09

@@ -34,7 +34,7 @@ describe('seed dataset', () => {
   })
   it('backs every interaction with an authoritative citation and no placeholders', () => {
     const ok =
-      /^https:\/\/(dailymed\.nlm\.nih\.gov|pubmed\.ncbi\.nlm\.nih\.gov|ods\.od\.nih\.gov|www\.nccih\.nih\.gov|www\.niaaa\.nih\.gov|www\.ncbi\.nlm\.nih\.gov)\//
+      /^https:\/\/(dailymed\.nlm\.nih\.gov|pubmed\.ncbi\.nlm\.nih\.gov|ods\.od\.nih\.gov|medlineplus\.gov|www\.nccih\.nih\.gov|www\.niaaa\.nih\.gov|www\.ncbi\.nlm\.nih\.gov)\//
     for (const i of ds!.interactions) {
       if (i.source === 'curated') expect(i.status, i.id).toBe('approved')
       for (const c of i.citations) expect(c.url, i.id).toMatch(ok)
