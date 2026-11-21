@@ -186,3 +186,49 @@
     transform: none;
   }
 }
+
+/* 3D load state: centred while loading; a bottom notice if 3D failed and 2D is shown instead. */
+.graph-status {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  display: grid;
+  place-items: center;
+  pointer-events: none;
+}
+.graph-status:has(.graph-status__notice) {
+  place-items: end center;
+  padding-bottom: 16px;
+}
+.graph-status__loading {
+  margin: 0;
+  font: 600 13px/1.4 var(--font-mono);
+  color: var(--muted);
+}
+.graph-status__notice {
+  pointer-events: auto;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  gap: 4px 12px;
+  max-width: min(520px, calc(100% - 32px));
+  padding: 8px 12px;
+  border: 1px solid var(--btn-border);
+  color: var(--ink);
+  background: color-mix(in srgb, var(--paper) 55%, transparent);
+  -webkit-backdrop-filter: blur(8px);
+  backdrop-filter: blur(8px);
+}
+.graph-status__notice p {
+  margin: 0;
+}
+.graph-status__notice button {
+  min-height: 44px;
+  padding: 0 4px;
+}
+@supports not (backdrop-filter: blur(8px)) {
+  .graph-status__notice {
+    background: var(--surface);
+  }
+}
