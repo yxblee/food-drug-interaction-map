@@ -1,4 +1,4 @@
-import type { GraphPayload, Kind, Severity } from '@fdi/schema'
+import { SEVERITIES, type GraphPayload, type Kind, type Severity } from '@fdi/schema'
 import {
   SEVERITY_RANK,
   interactionsForDrug,
@@ -88,6 +88,24 @@ export function filterRenderGraph(rg: RenderGraph, keys: Set<string>): RenderGra
     nodes: rg.nodes.filter((n) => keys.has(n.key)),
     links: rg.links.filter((l) => keys.has(l.source) && keys.has(l.target)),
   }
+}
+
+/** Hide links of Severities that are off, then nodes left without one (the selected node stays). */
+export function filterBySeverity(
+  rg: RenderGraph,
+  shown: readonly Severity[],
+  selected: string | null,
+): RenderGraph {
+  if (SEVERITIES.every((s) => shown.includes(s))) return rg
+  const links = rg.links.filter((l) => l.kind === 'interaction' && shown.includes(l.severity!))
+  const keep = new Set(links.flatMap((l) => [l.source, l.target]))
+  if (selected) keep.add(selected)
+  // A group stays while one of its members is drawn.
+  for (const l of rg.links) if (l.kind === 'member' && keep.has(l.source)) keep.add(l.target)
+  return filterRenderGraph(
+    { nodes: rg.nodes, links: [...links, ...rg.links.filter((l) => l.kind === 'member')] },
+    keep,
+  )
 }
 
 export function computeFocus(

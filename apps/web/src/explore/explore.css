@@ -352,3 +352,60 @@
 .panel h3 {
   scroll-margin-top: 3rem;
 }
+
+/* Severity filter: toggle pills in the bar, a note below while any Severity is off. */
+.sev-filter__group {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px 8px;
+}
+.sev-filter__btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+}
+/* Hollow when off, filled when on: the state is not carried by colour alone. */
+.sev-filter__dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  border: 2px solid var(--sev-avoid);
+  box-sizing: border-box;
+}
+.sev-filter__btn--caution .sev-filter__dot {
+  border-color: var(--sev-caution);
+}
+.sev-filter__btn--monitor .sev-filter__dot {
+  border-color: var(--sev-monitor);
+}
+.sev-filter__btn--minimal .sev-filter__dot {
+  border-color: var(--sev-minimal);
+}
+.sev-filter__btn[aria-pressed='true'] .sev-filter__dot {
+  background: var(--sev-avoid);
+  /* A paper ring keeps the dot visible on the inked (pressed) pill in light and dark. */
+  box-shadow: 0 0 0 1px var(--paper);
+}
+.sev-filter__btn--caution[aria-pressed='true'] .sev-filter__dot {
+  background: var(--sev-caution);
+}
+.sev-filter__btn--monitor[aria-pressed='true'] .sev-filter__dot {
+  background: var(--sev-monitor);
+}
+.sev-filter__btn--minimal[aria-pressed='true'] .sev-filter__dot {
+  background: var(--sev-minimal);
+}
+.sev-filter__btn[aria-disabled='true'] {
+  cursor: default;
+}
+.sev-filter__note p {
+  margin: 0;
+  padding: 4px 0;
+  font-size: 13px;
+  background: color-mix(in srgb, var(--paper) 70%, transparent);
+}
+.sev-filter__note .link-button {
+  min-height: 44px;
+  display: inline-flex;
+  align-items: center;
+}

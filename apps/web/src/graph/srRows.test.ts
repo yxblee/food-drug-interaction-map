@@ -40,4 +40,8 @@ describe('srRows', () => {
       expect(srRows(ix, key)).toEqual(['Grapefruit with Simvastatin: avoid. Raises statin levels.'])
     },
   )
+  it('leaves out Interactions of hidden Severities', () => {
+    expect(srRows(ix, 'food:grapefruit', ['caution', 'monitor', 'minimal'])).toEqual([])
+    expect(srRows(ix, 'food:grapefruit', ['avoid'])).toHaveLength(1)
+  })
 })

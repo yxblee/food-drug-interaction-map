@@ -6,13 +6,19 @@ import { chooseView } from '../graph/chooseView.ts'
 import { GraphView } from '../graph/GraphView.tsx'
 import { useEnv } from '../graph/useEnv.ts'
 import { srRows } from '../graph/srRows.ts'
-import { computeFocus, filterRenderGraph, toRenderGraph } from '../graph/renderGraph.ts'
+import {
+  computeFocus,
+  filterBySeverity,
+  filterRenderGraph,
+  toRenderGraph,
+} from '../graph/renderGraph.ts'
 import type { Palette } from '../theme/tokens.ts'
 import type { ViewState } from '../urlState.ts'
 import { browseKeys, stepKey } from './browse.ts'
 import { Legend } from './Legend.tsx'
 import { SidePanel } from './SidePanel.tsx'
 import { Search } from './Search.tsx'
+import { SeverityFilter } from './SeverityFilter.tsx'
 import './explore.css'
 
 const STARTER = nodeKey('food', 'grapefruit')
@@ -76,8 +82,9 @@ export function ExploreTab({
 
   const renderGraph = useMemo(() => {
     const full = toRenderGraph(graph, { mechanisms: state.mech })
-    return medsFilter ? filterRenderGraph(full, medsFilter) : full
-  }, [graph, state.mech, medsFilter])
+    const mine = medsFilter ? filterRenderGraph(full, medsFilter) : full
+    return filterBySeverity(mine, state.sev, selected)
+  }, [graph, state.mech, state.sev, medsFilter, selected])
   const ix = useMemo(() => buildIndex(graph.nodes, graph.interactions), [graph])
   const matches = useMemo(
     () =>
@@ -92,7 +99,7 @@ export function ExploreTab({
   )
   const env = useEnv()
   const { view, canToggle } = chooseView(env, state.view)
-  const srList = useMemo(() => srRows(ix, selected), [ix, selected])
+  const srList = useMemo(() => srRows(ix, selected, state.sev), [ix, selected, state.sev])
   const onGraphSelect = useCallback(
     (key: string | null) => (key ? select(key) : update({ node: null }, { push: true })),
     [select, update],
@@ -125,6 +132,7 @@ export function ExploreTab({
         >
           <PillLabel>Mechanisms</PillLabel>
         </button>
+        <SeverityFilter shown={state.sev} onChange={(sev) => update({ sev })} />
         {!selected && !state.q && !medsFilter && known.has(STARTER) && (
           <p className="explore__hint">
             New here?{' '}

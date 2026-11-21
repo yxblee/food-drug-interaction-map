@@ -3,6 +3,7 @@ import type { GraphPayload } from '@fdi/schema'
 import { buildIndex } from '@fdi/schema/domain'
 import {
   computeFocus,
+  filterBySeverity,
   filterRenderGraph,
   fitCamera,
   fitTransform,
@@ -233,5 +234,36 @@ describe('fitCamera', () => {
     expect(fitCamera(line, 90, size, none, 0).target.x).toBe(0)
     expect(fitCamera(line, 90, size, { right: 400, bottom: 0 }, 0).target.x).toBeGreaterThan(0)
     expect(fitCamera(line, 90, size, { right: 0, bottom: 300 }, 0).target.y).toBeLessThan(0)
+  })
+})
+
+describe('filterBySeverity', () => {
+  const rg = toRenderGraph(g, { mechanisms: false })
+  const keys = (r: { nodes: { key: string }[] }) => r.nodes.map((n) => n.key).sort()
+
+  it('leaves the graph as it is when every Severity is shown', () => {
+    expect(filterBySeverity(rg, ['avoid', 'caution', 'monitor', 'minimal'], null)).toBe(rg)
+  })
+  it('drops links of hidden Severities and the nodes left without a link', () => {
+    const out = filterBySeverity(rg, ['avoid'], null)
+    expect(linkIds(out.links)).toEqual([
+      'drug:simvastatin>drug:statins',
+      'food:grapefruit>drug:simvastatin:avoid',
+    ])
+    // The group stays because its member is still drawn.
+    expect(keys(out)).toEqual(['drug:simvastatin', 'drug:statins', 'food:grapefruit'])
+  })
+  it('keeps the selected node even with no visible link', () => {
+    const out = filterBySeverity(rg, ['avoid'], 'food:st-johns-wort')
+    expect(keys(out)).toContain('food:st-johns-wort')
+    expect(linkIds(out.links)).not.toContain('food:st-johns-wort>drug:felodipine:monitor')
+  })
+  it('filters the mechanism route the same way', () => {
+    const out = filterBySeverity(toRenderGraph(g, { mechanisms: true }), ['monitor'], null)
+    expect(keys(out)).toEqual([
+      'drug:felodipine',
+      'food:st-johns-wort',
+      'mechanism:cyp3a4-induction',
+    ])
   })
 })
