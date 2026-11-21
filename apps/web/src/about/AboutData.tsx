@@ -1,7 +1,15 @@
 import { useEffect, useRef } from 'react'
 import type { GraphPayload } from '@fdi/schema'
-import { RXNORM_ATTRIBUTION, SOURCE_KINDS, datasetFacts, formatReviewed } from './facts.ts'
+import {
+  RXNORM_ATTRIBUTION,
+  SOURCE_KINDS,
+  datasetFacts,
+  formatReviewed,
+  recentlyReviewed,
+} from './facts.ts'
 import { csvFileName, interactionsToCsv } from './interactionsToCsv.ts'
+import { SEVERITY_LABEL } from '../explore/SeverityBadge.tsx'
+import { nodeKey } from '@fdi/schema/domain'
 import { ReportLink } from '../explore/ReportLink.tsx'
 import { ABOUT_REPORT_URL } from '../explore/reportUrl.ts'
 import './AboutData.css'
@@ -19,9 +27,32 @@ function downloadCsv(graph: GraphPayload) {
 }
 
 /** Modal dialog: the browser traps focus, closes on Escape and returns focus to the opener. */
-export function AboutData({ graph, onClose }: { graph: GraphPayload; onClose: () => void }) {
+export function AboutData({
+  graph,
+  onClose,
+  onSelectNode,
+}: {
+  graph: GraphPayload
+  onClose: () => void
+  /** Show this node ("food:kale") on the map. The caller closes the dialog. */
+  onSelectNode: (node: string) => void
+}) {
   const ref = useRef<HTMLDialogElement>(null)
   const f = datasetFacts(graph)
+  const recent = recentlyReviewed(graph)
+
+  const nodeLink = (kind: 'food' | 'drug', n: { id: string; name: string }) => (
+    <a
+      className="about__node"
+      href={`?node=${nodeKey(kind, n.id)}`}
+      onClick={(e) => {
+        e.preventDefault()
+        onSelectNode(nodeKey(kind, n.id))
+      }}
+    >
+      {n.name}
+    </a>
+  )
 
   useEffect(() => {
     const d = ref.current
@@ -57,6 +88,25 @@ export function AboutData({ graph, onClose }: { graph: GraphPayload; onClose: ()
           Every Interaction was written by hand and links to its Sources. Severity is our advice,
           taken from the main Source for that Interaction.
         </p>
+
+        {recent.length > 0 && (
+          <>
+            <h3 id="about-recent" className="about__sub">
+              Recently reviewed
+            </h3>
+            <ul aria-labelledby="about-recent" className="about__recent">
+              {recent.map((r) => (
+                <li key={r.id}>
+                  {nodeLink('food', r.food)} and {nodeLink('drug', r.drug)}
+                  <span className="about__recent-meta">
+                    {SEVERITY_LABEL[r.severity]}, reviewed on{' '}
+                    <time dateTime={r.reviewedAt}>{formatReviewed(r.reviewedAt)}</time>
+                  </span>
+                </li>
+              ))}
+            </ul>
+          </>
+        )}
 
         <h3 className="about__sub">Sources</h3>
         <p>Each Interaction links to published evidence. The kinds used here:</p>

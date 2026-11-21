@@ -221,7 +221,16 @@ export function App() {
           About the data
         </button>
       </footer>
-      {aboutOpen && graph && <AboutData graph={graph} onClose={() => setAboutOpen(false)} />}
+      {aboutOpen && graph && (
+        <AboutData
+          graph={graph}
+          onClose={() => setAboutOpen(false)}
+          onSelectNode={(node) => {
+            setAboutOpen(false)
+            update({ tab: 'explore', node, q: '', meds: false }, { push: true })
+          }}
+        />
+      )}
     </div>
   )
 }

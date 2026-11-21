@@ -63,3 +63,25 @@ test('About the data: downloads the Approved Interactions as a dated .csv, by ke
   expect(text).toContain('not medical advice')
   expect(text).toContain('Drug,Food,Severity,Effect,Mechanisms,Summary,Reviewed,Citation URLs')
 })
+
+test('About the data: Recently reviewed lists Interactions and a link selects that node on the map', async ({
+  page,
+}) => {
+  await page.goto('./')
+  await page.getByRole('button', { name: 'About the data' }).click()
+  const dlg = page.getByRole('dialog', { name: 'About the data' })
+  await expect(dlg.getByRole('heading', { name: 'Recently reviewed' })).toBeVisible()
+  const items = dlg.getByRole('list', { name: 'Recently reviewed' }).getByRole('listitem')
+  expect(await items.count()).toBeGreaterThan(0)
+  expect(await items.count()).toBeLessThanOrEqual(8)
+  await expect(items.first()).toContainText(/(Avoid|Caution|Monitor|Minimal)/)
+  await expect(items.first()).toContainText(/reviewed on \w+ \d{1,2}, \d{4}/)
+  await expect(items.first().locator('time')).toHaveAttribute('datetime', /^\d{4}-\d{2}-\d{2}$/)
+  const link = items.first().getByRole('link').first()
+  const href = (await link.getAttribute('href'))!
+  const node = new URL(href, 'http://x/').searchParams.get('node')!
+  await link.click()
+  await expect(dlg).toBeHidden()
+  await expect(page).toHaveURL(new RegExp(`node=${node.replace(':', '(:|%3A)')}`))
+  await expect(page.locator('aside.panel')).toBeVisible()
+})
