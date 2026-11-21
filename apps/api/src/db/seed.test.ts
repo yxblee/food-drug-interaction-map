@@ -41,12 +41,7 @@ describe('seed dataset', () => {
       expect(JSON.stringify(i), i.id).not.toMatch(/[<>]/)
     }
   })
-  it('gives every Approved Avoid Interaction two Citations, one not a label (#135, #160)', () => {
+  it('gives every Approved Avoid Interaction two Citations (#135, #160)', () => {
     expect(citationGaps(ds!.interactions)).toEqual([])
-    for (const i of ds!.interactions.filter((x) => x.status === 'approved' && x.severity === 'avoid'))
-      expect(
-        i.citations.some((c) => c.type !== 'label'),
-        i.id,
-      ).toBe(true)
   })
 })

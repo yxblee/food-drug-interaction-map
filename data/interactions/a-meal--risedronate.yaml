@@ -12,6 +12,10 @@ citations:
     title: "ACTONEL (RISEDRONATE SODIUM) TABLET, FILM COATED [ALLERGAN, INC.]"
     url: "https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=24ed00e0-25e2-49a8-97fc-66c1b417dc0b"
     setid: "24ed00e0-25e2-49a8-97fc-66c1b417dc0b"
+  - type: "review"
+    title: "Optimal Dosing Regimen of Osteoporosis Drugs in Relation to Food Intake as the Key for the Enhancement of the Treatment Effectiveness-A Concise Literature Review"
+    url: "https://pubmed.ncbi.nlm.nih.gov/33805435/"
+    pmid: "33805435"
 status: "approved"
 source: "curated"
 reviewed_at: 2026-11-20

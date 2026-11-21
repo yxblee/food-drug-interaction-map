@@ -12,6 +12,10 @@ citations:
     title: "FOSAMAX (ALENDRONATE SODIUM) TABLET [ORGANON LLC]"
     url: "https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=14e931fd-2c5f-4d90-b7db-5980706f4a56"
     setid: "14e931fd-2c5f-4d90-b7db-5980706f4a56"
+  - type: "study"
+    title: "Studies of the oral bioavailability of alendronate"
+    url: "https://pubmed.ncbi.nlm.nih.gov/7554702/"
+    pmid: "7554702"
 status: "approved"
 source: "curated"
 reviewed_at: 2026-11-20
