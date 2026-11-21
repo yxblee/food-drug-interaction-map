@@ -1,0 +1,17 @@
+id: "a-meal--risedronate"
+food: "a-meal"
+drug: "risedronate"
+mechanisms: ["reduced-absorption"]
+severity: "avoid"
+effect: "decreases"
+summary: "Risedronate taken close to food is absorbed less, so it may work less well."
+advice: "Take it at least 30 minutes before the first food or drink of the day other than water, with plain water. Ask your pharmacist about your own routine."
+details: "The Actonel label says to take it at least 30 minutes before the first food or drink of the day other than water. Absorption was about 55% lower when taken half an hour before breakfast than when fasting."
+citations:
+  - type: "label"
+    title: "ACTONEL (RISEDRONATE SODIUM) TABLET, FILM COATED [ALLERGAN, INC.]"
+    url: "https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=24ed00e0-25e2-49a8-97fc-66c1b417dc0b"
+    setid: "24ed00e0-25e2-49a8-97fc-66c1b417dc0b"
+status: "approved"
+source: "curated"
+reviewed_at: 2026-11-20

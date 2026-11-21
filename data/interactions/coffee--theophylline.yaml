@@ -9,9 +9,9 @@ advice: "Keep caffeine intake moderate and steady. Report tremor, a racing heart
 details: "The theophylline label lists dietary caffeine among items documented not to cause a clinically significant interaction, though both are processed by CYP1A2 and the label describes caffeine-like side effects of theophylline itself. Graded minimal on that basis; this is the one row where the proposed severity was lowered."
 citations:
   - type: "label"
-    title: "THEOPHYLLINE TABLET, EXTENDED RELEASE [PROFICIENT RX LP]"
-    url: "https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=882657ae-e15b-4c86-a571-b55460bd4726"
-    setid: "882657ae-e15b-4c86-a571-b55460bd4726"
+    title: "THEOPHYLLINE TABLET, EXTENDED RELEASE [TEVA PHARMACEUTICALS, INC.]"
+    url: "https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=25eabefa-518b-4030-9b72-01ac8b3deba9"
+    setid: "25eabefa-518b-4030-9b72-01ac8b3deba9"
 status: approved
 source: curated
 reviewed_at: 2026-10-09

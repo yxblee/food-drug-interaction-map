@@ -1,0 +1,13 @@
+id: "a-meal--venlafaxine"
+food: "a-meal"
+drug: "venlafaxine"
+summary: "The venlafaxine extended-release tablet label says to take it once a day with food."
+advice: "The venlafaxine extended-release tablet label says to take it once daily with food, in the morning or evening at about the same time each day. Ask your pharmacist how this applies to your own dose."
+citations:
+  - type: "label"
+    title: "VENLAFAXINE TABLET, EXTENDED RELEASE [ALMATICA PHARMA LLC]"
+    url: "https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=e81a2daf-b8b2-7c05-b532-bc775700b100"
+    setid: "e81a2daf-b8b2-7c05-b532-bc775700b100"
+status: "approved"
+source: "curated"
+reviewed_at: 2026-11-20

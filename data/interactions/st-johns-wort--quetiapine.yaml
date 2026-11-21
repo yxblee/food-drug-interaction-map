@@ -22,9 +22,9 @@ details: The label lists St. John's wort among the strong CYP3A4 inducers.
   the enzyme effect wears off.
 citations:
   - type: label
-    title: QUETIAPINE FUMARATE [A-S Medication Solutions]
-    url: https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=936b4ea8-82bf-461d-bc73-4b3bf3f3e9a0
-    setid: 936b4ea8-82bf-461d-bc73-4b3bf3f3e9a0
+    title: "SEROQUEL (QUETIAPINE) TABLET, FILM COATED [ASTRAZENECA PHARMACEUTICALS LP]"
+    url: "https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=0584dda8-bc3c-48fe-1a90-79608f78e8a0"
+    setid: "0584dda8-bc3c-48fe-1a90-79608f78e8a0"
 status: approved
 source: openfda
 reviewed_at: 2026-11-18

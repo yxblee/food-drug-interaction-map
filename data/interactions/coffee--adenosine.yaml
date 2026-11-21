@@ -9,9 +9,9 @@ advice: "Avoid coffee and other caffeine before a test or treatment that uses ad
 details: "The adenosine label states that methylxanthines such as caffeine antagonize adenosine, so larger doses may be needed or adenosine may not be effective. A study of stress perfusion imaging found that recent caffeine intake could invert adenosine's effect on myocardial blood flow."
 citations:
   - type: "label"
-    title: "ADENOSINE [REMEDYREPACK INC.]"
-    url: "https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=9508caf5-0e3a-4d32-909d-bff7ea40ec30"
-    setid: "9508caf5-0e3a-4d32-909d-bff7ea40ec30"
+    title: "ADENOSINE INJECTION, SOLUTION [FRESENIUS KABI USA, LLC]"
+    url: "https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=e660f71c-35ed-438e-8505-4538f5e925a2"
+    setid: "e660f71c-35ed-438e-8505-4538f5e925a2"
   - type: "study"
     title: "Caffeine intake inverts the effect of adenosine on myocardial perfusion during stress as measured by T1 mapping"
     url: "https://pubmed.ncbi.nlm.nih.gov/27473274/"

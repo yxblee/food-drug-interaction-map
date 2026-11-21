@@ -1,0 +1,17 @@
+id: "a-meal--alendronate"
+food: "a-meal"
+drug: "alendronate"
+mechanisms: ["reduced-absorption"]
+severity: "avoid"
+effect: "decreases"
+summary: "Alendronate taken with food is barely absorbed, so it may not work."
+advice: "Take it first thing in the day with plain water, at least 30 minutes before the first food, drink or medicine, and stay upright until after your first food. Ask your pharmacist about your own routine."
+details: "The Fosamax label says taking it with food, or waiting less than 30 minutes, lessens its effect by decreasing absorption. Bioavailability was negligible when it was taken with a standardized breakfast."
+citations:
+  - type: "label"
+    title: "FOSAMAX (ALENDRONATE SODIUM) TABLET [ORGANON LLC]"
+    url: "https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=14e931fd-2c5f-4d90-b7db-5980706f4a56"
+    setid: "14e931fd-2c5f-4d90-b7db-5980706f4a56"
+status: "approved"
+source: "curated"
+reviewed_at: 2026-11-20

@@ -2,7 +2,7 @@ id: "ciprofloxacin"
 name: "Ciprofloxacin"
 rxnorm: "2551"
 medlineplus: "https://medlineplus.gov/druginfo/meds/a688016.html"
-dailymed: "0fe3becb-f90e-4187-a8e8-bd0de5a79ad2"
+dailymed: "888dc7f9-ad9c-4c00-8d50-8ddfd9bd27c0"
 aliases: ["Cipro"]
 parent: "fluoroquinolones"
 drug_class: "Fluoroquinolone antibiotic"

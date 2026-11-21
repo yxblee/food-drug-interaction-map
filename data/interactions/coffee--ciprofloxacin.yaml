@@ -18,9 +18,9 @@ details: Ciprofloxacin blocks CYP1A2, the liver enzyme that clears caffeine. It
   caffeine and related xanthines, and adjusting the dose where needed.
 citations:
   - type: label
-    title: CIPROFLOXACIN HYDROCHLORIDE [HAWAII REPACK, INC.]
-    url: https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=0fe3becb-f90e-4187-a8e8-bd0de5a79ad2
-    setid: 0fe3becb-f90e-4187-a8e8-bd0de5a79ad2
+    title: "CIPRO (CIPROFLOXACIN HYDROCHLORIDE) TABLET, FILM COATED CIPRO (CIPROFLOXACIN) KIT [BAYER HEALTHCARE PHARMACEUTICALS INC.]"
+    url: "https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=888dc7f9-ad9c-4c00-8d50-8ddfd9bd27c0"
+    setid: "888dc7f9-ad9c-4c00-8d50-8ddfd9bd27c0"
 status: approved
 reviewed_at: 2026-10-15
 source: openfda

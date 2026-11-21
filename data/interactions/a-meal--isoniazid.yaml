@@ -1,0 +1,17 @@
+id: "a-meal--isoniazid"
+food: "a-meal"
+drug: "isoniazid"
+mechanisms: ["reduced-absorption"]
+severity: "caution"
+effect: "decreases"
+summary: "Isoniazid taken with food is absorbed much less."
+advice: "The label says isoniazid should not be taken with food. Ask your pharmacist or prescriber how to time it around meals."
+details: "The isoniazid label says it should not be administered with food and that studies show its bioavailability is reduced significantly when taken with food."
+citations:
+  - type: "label"
+    title: "ISONIAZID TABLET [TEVA PHARMACEUTICALS USA, INC.]"
+    url: "https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=9499f1cf-2f46-4047-8b71-90aee7dee854"
+    setid: "9499f1cf-2f46-4047-8b71-90aee7dee854"
+status: "approved"
+source: "curated"
+reviewed_at: 2026-11-20
