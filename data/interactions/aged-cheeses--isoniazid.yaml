@@ -9,9 +9,9 @@ advice: "Avoid tyramine-rich foods such as aged cheese and red wine while taking
 details: "The isoniazid label says tyramine- and histamine-containing foods should be avoided because the drug has some monoamine oxidase inhibiting activity, and gives cheese and red wine as examples. Its MAO inhibition is weaker than that of dedicated MAO inhibitor antidepressants, so reactions are less predictable, but the label still advises avoidance."
 citations:
   - type: "label"
-    title: "ISONIAZID TABLET [REMEDYREPACK INC.]"
-    url: "https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=6dab7b7b-a3a9-47ef-b423-134bc6970d8b"
-    setid: "6dab7b7b-a3a9-47ef-b423-134bc6970d8b"
+    title: "ISONIAZID TABLET [TEVA PHARMACEUTICALS USA, INC.]"
+    url: "https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=9499f1cf-2f46-4047-8b71-90aee7dee854"
+    setid: "9499f1cf-2f46-4047-8b71-90aee7dee854"
   - type: "guideline"
     title: "Isoniazid: MedlinePlus Drug Information"
     url: "https://medlineplus.gov/druginfo/meds/a682401.html"

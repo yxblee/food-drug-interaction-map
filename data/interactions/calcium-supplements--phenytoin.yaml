@@ -17,9 +17,9 @@ details: The label lists antacids, including calcium carbonate, among agents
   over-the-counter antacids can change phenytoin levels.
 citations:
   - type: label
-    title: PHENYTOIN SODIUM [Major Pharmaceuticals]
-    url: https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=46d5c0d1-a97b-46d9-8cf4-994780673337
-    setid: 46d5c0d1-a97b-46d9-8cf4-994780673337
+    title: "DILANTIN (EXTENDED PHENYTOIN SODIUM) CAPSULE, EXTENDED RELEASE [VIATRIS SPECIALTY LLC]"
+    url: "https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=86dd27d1-9cee-48ae-b55d-e2d2f7dbc593"
+    setid: "86dd27d1-9cee-48ae-b55d-e2d2f7dbc593"
 status: approved
 reviewed_at: 2026-10-15
 source: openfda

@@ -24,9 +24,9 @@ details: The label lists daily users of alcohol among groups with a higher
   pressure.
 citations:
   - type: label
-    title: ISONIAZID [REMEDYREPACK INC.]
-    url: https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=6dab7b7b-a3a9-47ef-b423-134bc6970d8b
-    setid: 6dab7b7b-a3a9-47ef-b423-134bc6970d8b
+    title: "ISONIAZID TABLET [TEVA PHARMACEUTICALS USA, INC.]"
+    url: "https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=9499f1cf-2f46-4047-8b71-90aee7dee854"
+    setid: "9499f1cf-2f46-4047-8b71-90aee7dee854"
 status: approved
 reviewed_at: 2026-10-15
 source: openfda

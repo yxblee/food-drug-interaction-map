@@ -21,9 +21,9 @@ details: Venlafaxine blocks reuptake of serotonin and norepinephrine. St. John's
   agent if syndrome occurs.
 citations:
   - type: label
-    title: VENLAFAXINE [REMEDYREPACK INC.]
-    url: https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=1ce5786e-22e6-4afa-8052-6eababc6aa4e
-    setid: 1ce5786e-22e6-4afa-8052-6eababc6aa4e
+    title: "VENLAFAXINE TABLET, EXTENDED RELEASE [ALMATICA PHARMA LLC]"
+    url: "https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=e81a2daf-b8b2-7c05-b532-bc775700b100"
+    setid: "e81a2daf-b8b2-7c05-b532-bc775700b100"
 status: approved
 reviewed_at: 2026-10-15
 source: openfda
