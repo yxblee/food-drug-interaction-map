@@ -188,7 +188,7 @@
 }
 
 /* 3D load state: centred while loading; a bottom notice if 3D failed and 2D is shown instead. */
-.graph-status {
+.explore > .graph-status {
   position: absolute;
   inset: 0;
   z-index: 1;
@@ -196,9 +196,10 @@
   place-items: center;
   pointer-events: none;
 }
-.graph-status:has(.graph-status__notice) {
+.explore > .graph-status:has(.graph-status__notice) {
   place-items: end center;
-  padding-bottom: 16px;
+  /* Clear the legend (bottom-left) and the zoom column (bottom-right). */
+  padding: 0 76px 16px 236px;
 }
 .graph-status__loading {
   margin: 0;
@@ -212,7 +213,7 @@
   align-items: center;
   justify-content: center;
   gap: 4px 12px;
-  max-width: min(520px, calc(100% - 32px));
+  max-width: 100%;
   padding: 8px 12px;
   border: 1px solid var(--btn-border);
   color: var(--ink);
