@@ -366,36 +366,30 @@
   gap: 6px;
   padding: 6px 10px;
 }
+.sev-filter__btn--avoid {
+  --sev: var(--sev-avoid);
+}
+.sev-filter__btn--caution {
+  --sev: var(--sev-caution);
+}
+.sev-filter__btn--monitor {
+  --sev: var(--sev-monitor);
+}
+.sev-filter__btn--minimal {
+  --sev: var(--sev-minimal);
+}
 /* Hollow when off, filled when on: the state is not carried by colour alone. */
 .sev-filter__dot {
   width: 10px;
   height: 10px;
   border-radius: 50%;
-  border: 2px solid var(--sev-avoid);
+  border: 2px solid var(--sev);
   box-sizing: border-box;
 }
-.sev-filter__btn--caution .sev-filter__dot {
-  border-color: var(--sev-caution);
-}
-.sev-filter__btn--monitor .sev-filter__dot {
-  border-color: var(--sev-monitor);
-}
-.sev-filter__btn--minimal .sev-filter__dot {
-  border-color: var(--sev-minimal);
-}
 .sev-filter__btn[aria-pressed='true'] .sev-filter__dot {
-  background: var(--sev-avoid);
+  background: var(--sev);
   /* A paper ring keeps the dot visible on the inked (pressed) pill in light and dark. */
   box-shadow: 0 0 0 1px var(--paper);
-}
-.sev-filter__btn--caution[aria-pressed='true'] .sev-filter__dot {
-  background: var(--sev-caution);
-}
-.sev-filter__btn--monitor[aria-pressed='true'] .sev-filter__dot {
-  background: var(--sev-monitor);
-}
-.sev-filter__btn--minimal[aria-pressed='true'] .sev-filter__dot {
-  background: var(--sev-minimal);
 }
 .sev-filter__btn[aria-disabled='true'] {
   cursor: default;

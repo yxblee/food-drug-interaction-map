@@ -6,12 +6,7 @@ import { chooseView } from '../graph/chooseView.ts'
 import { GraphView } from '../graph/GraphView.tsx'
 import { useEnv } from '../graph/useEnv.ts'
 import { srRows } from '../graph/srRows.ts'
-import {
-  computeFocus,
-  filterBySeverity,
-  filterRenderGraph,
-  toRenderGraph,
-} from '../graph/renderGraph.ts'
+import { computeFocus, filterRenderGraph, toRenderGraph } from '../graph/renderGraph.ts'
 import type { Palette } from '../theme/tokens.ts'
 import type { ViewState } from '../urlState.ts'
 import { browseKeys, stepKey } from './browse.ts'
@@ -80,11 +75,19 @@ export function ExploreTab({
   const next = useCallback(() => step(1), [step])
   const close = useCallback(() => update({ node: null }), [update])
 
+  const opts = { mechanisms: state.mech, severities: state.sev }
+  const base = useMemo(
+    () => toRenderGraph(graph, opts),
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [graph, state.mech, state.sev],
+  )
+  // A selected node the filter hides stays; only then does a selection rebuild the graph.
+  const kept = selected && !base.nodes.some((n) => n.key === selected) ? selected : null
   const renderGraph = useMemo(() => {
-    const full = toRenderGraph(graph, { mechanisms: state.mech })
-    const mine = medsFilter ? filterRenderGraph(full, medsFilter) : full
-    return filterBySeverity(mine, state.sev, selected)
-  }, [graph, state.mech, state.sev, medsFilter, selected])
+    const full = kept ? toRenderGraph(graph, { ...opts, selected: kept }) : base
+    return medsFilter ? filterRenderGraph(full, medsFilter) : full
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [graph, base, kept, medsFilter])
   const ix = useMemo(() => buildIndex(graph.nodes, graph.interactions), [graph])
   const matches = useMemo(
     () =>

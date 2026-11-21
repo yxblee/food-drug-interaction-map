@@ -31,7 +31,20 @@ export interface RenderGraph {
 export const nodeRadius = (n: RenderNode) =>
   n.kind === 'mechanism' ? 5 : 6 + Math.sqrt(n.weight) * 3
 
-export function toRenderGraph(g: GraphPayload, opts: { mechanisms: boolean }): RenderGraph {
+export function toRenderGraph(
+  g: GraphPayload,
+  opts: {
+    mechanisms: boolean
+    /** Severities to draw (all by default). Hidden ones are left out before routes merge. */
+    severities?: readonly Severity[]
+    /** Stays on the map even when no line reaches it. */
+    selected?: string | null
+  },
+): RenderGraph {
+  const filtered = !!opts.severities && !SEVERITIES.every((s) => opts.severities!.includes(s))
+  const interactions = filtered
+    ? g.interactions.filter((i) => opts.severities!.includes(i.severity))
+    : g.interactions
   const weight = new Map<string, number>()
   const bump = (k: string) => weight.set(k, (weight.get(k) ?? 0) + 1)
   const links = new Map<string, RenderLink>()
@@ -44,7 +57,7 @@ export function toRenderGraph(g: GraphPayload, opts: { mechanisms: boolean }): R
   }
   const usedMechanisms = new Set<string>()
 
-  for (const i of g.interactions) {
+  for (const i of interactions) {
     const food = nodeKey('food', i.food)
     const drug = nodeKey('drug', i.drug)
     bump(food)
@@ -62,9 +75,18 @@ export function toRenderGraph(g: GraphPayload, opts: { mechanisms: boolean }): R
     }
   }
 
+  // A group has no Interaction of its own to draw: it stays while one of its members is drawn.
+  const drawnParents = new Set(
+    g.nodes
+      .filter((n) => n.parent && weight.has(nodeKey(n.kind, n.id)))
+      .map((n) => nodeKey(n.kind, n.parent!)),
+  )
   const nodes = g.nodes
     .map((n) => ({ n, key: nodeKey(n.kind, n.id) }))
     .filter(({ n, key }) => n.kind !== 'mechanism' || usedMechanisms.has(key))
+    .filter(
+      ({ key }) => !filtered || weight.has(key) || drawnParents.has(key) || key === opts.selected,
+    )
     .map(({ n, key }) => ({
       key,
       kind: n.kind,
@@ -73,13 +95,15 @@ export function toRenderGraph(g: GraphPayload, opts: { mechanisms: boolean }): R
       group: n.group,
       weight: weight.get(key) ?? 0,
     }))
+  const present = new Set(nodes.map((n) => n.key))
   const members: RenderLink[] = g.nodes
     .filter((n) => n.parent)
     .map((n) => ({
       source: nodeKey(n.kind, n.id),
       target: nodeKey(n.kind, n.parent!),
-      kind: 'member',
+      kind: 'member' as const,
     }))
+    .filter((l) => present.has(l.source) && present.has(l.target))
   return { nodes, links: [...links.values(), ...members] }
 }
 
@@ -88,24 +112,6 @@ export function filterRenderGraph(rg: RenderGraph, keys: Set<string>): RenderGra
     nodes: rg.nodes.filter((n) => keys.has(n.key)),
     links: rg.links.filter((l) => keys.has(l.source) && keys.has(l.target)),
   }
-}
-
-/** Hide links of Severities that are off, then nodes left without one (the selected node stays). */
-export function filterBySeverity(
-  rg: RenderGraph,
-  shown: readonly Severity[],
-  selected: string | null,
-): RenderGraph {
-  if (SEVERITIES.every((s) => shown.includes(s))) return rg
-  const links = rg.links.filter((l) => l.kind === 'interaction' && shown.includes(l.severity!))
-  const keep = new Set(links.flatMap((l) => [l.source, l.target]))
-  if (selected) keep.add(selected)
-  // A group stays while one of its members is drawn.
-  for (const l of rg.links) if (l.kind === 'member' && keep.has(l.source)) keep.add(l.target)
-  return filterRenderGraph(
-    { nodes: rg.nodes, links: [...links, ...rg.links.filter((l) => l.kind === 'member')] },
-    keep,
-  )
 }
 
 export function computeFocus(

@@ -3,7 +3,6 @@ import type { GraphPayload } from '@fdi/schema'
 import { buildIndex } from '@fdi/schema/domain'
 import {
   computeFocus,
-  filterBySeverity,
   filterRenderGraph,
   fitCamera,
   fitTransform,
@@ -237,15 +236,20 @@ describe('fitCamera', () => {
   })
 })
 
-describe('filterBySeverity', () => {
-  const rg = toRenderGraph(g, { mechanisms: false })
+describe('toRenderGraph with a Severity filter', () => {
   const keys = (r: { nodes: { key: string }[] }) => r.nodes.map((n) => n.key).sort()
+  const ALL = ['avoid', 'caution', 'monitor', 'minimal'] as const
+  const only = (
+    shown: readonly ('avoid' | 'caution' | 'monitor' | 'minimal')[],
+    sel = null as string | null,
+    mechanisms = false,
+  ) => toRenderGraph(g, { mechanisms, severities: shown, selected: sel })
 
   it('leaves the graph as it is when every Severity is shown', () => {
-    expect(filterBySeverity(rg, ['avoid', 'caution', 'monitor', 'minimal'], null)).toBe(rg)
+    expect(only(ALL)).toEqual(toRenderGraph(g, { mechanisms: false }))
   })
-  it('drops links of hidden Severities and the nodes left without a link', () => {
-    const out = filterBySeverity(rg, ['avoid'], null)
+  it('drops lines of hidden Severities and the nodes left without one', () => {
+    const out = only(['avoid'])
     expect(linkIds(out.links)).toEqual([
       'drug:simvastatin>drug:statins',
       'food:grapefruit>drug:simvastatin:avoid',
@@ -253,17 +257,24 @@ describe('filterBySeverity', () => {
     // The group stays because its member is still drawn.
     expect(keys(out)).toEqual(['drug:simvastatin', 'drug:statins', 'food:grapefruit'])
   })
-  it('keeps the selected node even with no visible link', () => {
-    const out = filterBySeverity(rg, ['avoid'], 'food:st-johns-wort')
+  it('keeps the selected node even with no visible line', () => {
+    const out = only(['avoid'], 'food:st-johns-wort')
     expect(keys(out)).toContain('food:st-johns-wort')
     expect(linkIds(out.links)).not.toContain('food:st-johns-wort>drug:felodipine:monitor')
   })
   it('filters the mechanism route the same way', () => {
-    const out = filterBySeverity(toRenderGraph(g, { mechanisms: true }), ['monitor'], null)
-    expect(keys(out)).toEqual([
+    expect(keys(only(['monitor'], null, true))).toEqual([
       'drug:felodipine',
       'food:st-johns-wort',
       'mechanism:cyp3a4-induction',
     ])
+  })
+  it('keeps the route of a shown Interaction that shares a Mechanism with a hidden worse one', () => {
+    const out = only(['caution'], null, true)
+    expect(linkIds(out.links)).toEqual([
+      'food:grapefruit>mechanism:cyp3a4-inhibition:caution',
+      'mechanism:cyp3a4-inhibition>drug:felodipine:caution',
+    ])
+    expect(out.nodes.find((n) => n.key === 'food:grapefruit')?.weight).toBe(1)
   })
 })
