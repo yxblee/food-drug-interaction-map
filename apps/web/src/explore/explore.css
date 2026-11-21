@@ -357,12 +357,14 @@
 .sev-filter__group {
   display: flex;
   flex-wrap: wrap;
-  gap: 4px 8px;
+  gap: 4px;
 }
+/* Tight enough that all four fit one row at 360px, leaving the map its height. */
 .sev-filter__btn {
   display: inline-flex;
   align-items: center;
-  gap: 8px;
+  gap: 6px;
+  padding: 6px 10px;
 }
 /* Hollow when off, filled when on: the state is not carried by colour alone. */
 .sev-filter__dot {
