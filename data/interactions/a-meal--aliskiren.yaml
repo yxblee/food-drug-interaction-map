@@ -12,5 +12,6 @@ citations:
     title: "TEKTURNA (ALISKIREN HEMIFUMARATE) TABLET, FILM COATED [LXO US INC.]"
     url: "https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=3dd61fa5-1620-4ebf-bbdb-ede29b92fce2"
     setid: "3dd61fa5-1620-4ebf-bbdb-ede29b92fce2"
-status: "pending"
-source: "openfda"
+status: "approved"
+source: "curated"
+reviewed_at: 2026-11-20

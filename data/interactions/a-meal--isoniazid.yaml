@@ -12,5 +12,6 @@ citations:
     title: "ISONIAZID TABLET [TEVA PHARMACEUTICALS USA, INC.]"
     url: "https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=9499f1cf-2f46-4047-8b71-90aee7dee854"
     setid: "9499f1cf-2f46-4047-8b71-90aee7dee854"
-status: "pending"
-source: "openfda"
+status: "approved"
+source: "curated"
+reviewed_at: 2026-11-20

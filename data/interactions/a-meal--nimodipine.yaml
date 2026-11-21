@@ -12,5 +12,6 @@ citations:
     title: "NYMALIZE (NIMODIPINE) SOLUTION [AZURITY PHARMACEUTICALS, INC.]"
     url: "https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=e660fa26-b5c4-4d6d-8887-9e22b6666a10"
     setid: "e660fa26-b5c4-4d6d-8887-9e22b6666a10"
-status: "pending"
-source: "openfda"
+status: "approved"
+source: "curated"
+reviewed_at: 2026-11-20

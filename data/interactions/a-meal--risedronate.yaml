@@ -12,5 +12,6 @@ citations:
     title: "ACTONEL (RISEDRONATE SODIUM) TABLET, FILM COATED [ALLERGAN, INC.]"
     url: "https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=24ed00e0-25e2-49a8-97fc-66c1b417dc0b"
     setid: "24ed00e0-25e2-49a8-97fc-66c1b417dc0b"
-status: "pending"
-source: "openfda"
+status: "approved"
+source: "curated"
+reviewed_at: 2026-11-20
