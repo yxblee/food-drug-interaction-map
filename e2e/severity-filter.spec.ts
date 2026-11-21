@@ -74,3 +74,20 @@ test('fits at 360px without covering the zoom controls', async ({ page }) => {
   // Generous slack: CI fonts render about 20px taller than local.
   expect(b.y + b.height + 20).toBeLessThan(z.y)
 })
+
+test('the four pills stay on one row at 360px even with wider text, so the hint below never moves onto the map', async ({
+  page,
+}) => {
+  await page.setViewportSize({ width: 360, height: 740 })
+  await page.goto('./')
+  // Slack for CI fonts, which render wider and taller than local ones.
+  await page.addStyleTag({
+    content: '.sev-filter__btn { letter-spacing: 0.06em }',
+  })
+  const tops = await group(page)
+    .getByRole('button')
+    .evaluateAll((els) => els.map((e) => Math.round(e.getBoundingClientRect().top)))
+  expect(new Set(tops).size).toBe(1)
+  const last = (await group(page).getByRole('button').last().boundingBox())!
+  expect(last.x + last.width).toBeLessThanOrEqual(360)
+})
