@@ -1,6 +1,6 @@
 import { join } from 'node:path'
 import { describe, expect, it } from 'vite-plus/test'
-import { validateDataset } from '@fdi/schema'
+import { citationGaps, validateDataset } from '@fdi/schema'
 import { readDataDir } from './build.ts'
 
 const r = validateDataset(readDataDir(join(import.meta.dirname, '../../../../data')))
@@ -40,5 +40,8 @@ describe('seed dataset', () => {
       for (const c of i.citations) expect(c.url, i.id).toMatch(ok)
       expect(JSON.stringify(i), i.id).not.toMatch(/[<>]/)
     }
+  })
+  it('gives every Approved Avoid Interaction two Citations (#135, #160)', () => {
+    expect(citationGaps(ds!.interactions)).toEqual([])
   })
 })
