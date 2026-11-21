@@ -55,7 +55,10 @@ describe('recentlyReviewed', () => {
       severity,
       reviewed_at,
     }) as unknown as GraphPayload['interactions'][number]
-  const withIx = (interactions: GraphPayload['interactions'], extra = graph.nodes): GraphPayload => ({
+  const withIx = (
+    interactions: GraphPayload['interactions'],
+    extra = graph.nodes,
+  ): GraphPayload => ({
     ...graph,
     nodes: extra,
     interactions,

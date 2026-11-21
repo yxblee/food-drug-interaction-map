@@ -50,7 +50,10 @@ const RECENT_LIMIT = 8
  */
 export function recentlyReviewed(graph: GraphPayload): RecentInteraction[] {
   const names = new Map(graph.nodes.map((n) => [`${n.kind}:${n.id}`, n.name]))
-  const ref = (kind: 'food' | 'drug', id: string) => ({ id, name: names.get(`${kind}:${id}`) ?? id })
+  const ref = (kind: 'food' | 'drug', id: string) => ({
+    id,
+    name: names.get(`${kind}:${id}`) ?? id,
+  })
   return graph.interactions
     .flatMap((i) =>
       i.reviewed_at

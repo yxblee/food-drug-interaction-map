@@ -46,3 +46,27 @@
   cursor: pointer;
   white-space: nowrap;
 }
+.about__recent {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.about__recent li {
+  padding: 8px 0;
+  border-top: 1px solid var(--line);
+}
+.about__recent li:first-child {
+  border-top: 0;
+}
+.about__node {
+  display: inline-block;
+  min-height: 44px;
+  line-height: 44px;
+  margin-block: -8px;
+  color: inherit;
+  text-underline-offset: 3px;
+}
+.about__recent-meta {
+  display: block;
+  color: var(--muted);
+}
