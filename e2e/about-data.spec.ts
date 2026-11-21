@@ -75,6 +75,7 @@ test('About the data: Recently reviewed lists Interactions and a link selects th
   expect(await items.count()).toBeGreaterThan(0)
   expect(await items.count()).toBeLessThanOrEqual(8)
   await expect(items.first()).toContainText(/(Avoid|Caution|Monitor|Minimal)/)
+  await expect(items.first()).toContainText(/reviewed on \w+ \d{1,2}, \d{4}/)
   await expect(items.first().locator('time')).toHaveAttribute('datetime', /^\d{4}-\d{2}-\d{2}$/)
   const link = items.first().getByRole('link').first()
   const href = (await link.getAttribute('href'))!

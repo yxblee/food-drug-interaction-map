@@ -1,7 +1,7 @@
 import { readFileSync } from 'node:fs'
 import { join } from 'node:path'
 import { describe, expect, it } from 'vite-plus/test'
-import type { GraphPayload } from '@fdi/schema'
+import type { GraphPayload, Severity } from '@fdi/schema'
 import { RXNORM_ATTRIBUTION, datasetFacts, formatReviewed, recentlyReviewed } from './facts.ts'
 
 const node = (kind: 'drug' | 'food' | 'mechanism', id: string, group = false) => ({
@@ -47,7 +47,7 @@ it('RxNorm attribution matches docs/data-sources.md', () => {
 })
 
 describe('recentlyReviewed', () => {
-  const ix = (food: string, drug: string, reviewed_at?: string, severity = 'caution') =>
+  const ix = (food: string, drug: string, reviewed_at?: string, severity: Severity = 'caution') =>
     ({
       id: `${food}-${drug}`,
       food,

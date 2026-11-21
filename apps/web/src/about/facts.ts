@@ -1,4 +1,5 @@
 import type { Citation, GraphPayload, Severity } from '@fdi/schema'
+import { nodeKey } from '@fdi/schema/domain'
 
 /** Counts and dates shown in "About the data", read from the loaded Dataset, never hard-coded. */
 export function datasetFacts(graph: GraphPayload) {
@@ -49,10 +50,10 @@ const RECENT_LIMIT = 8
  * The graph holds only Approved Interactions; one with no review date has nothing to show.
  */
 export function recentlyReviewed(graph: GraphPayload): RecentInteraction[] {
-  const names = new Map(graph.nodes.map((n) => [`${n.kind}:${n.id}`, n.name]))
-  const ref = (kind: 'food' | 'drug', id: string) => ({
+  const names = new Map(graph.nodes.map((n) => [nodeKey(n.kind, n.id), n.name]))
+  const named = (kind: 'food' | 'drug', id: string) => ({
     id,
-    name: names.get(`${kind}:${id}`) ?? id,
+    name: names.get(nodeKey(kind, id)) ?? id,
   })
   return graph.interactions
     .flatMap((i) =>
@@ -60,8 +61,8 @@ export function recentlyReviewed(graph: GraphPayload): RecentInteraction[] {
         ? [
             {
               id: i.id,
-              food: ref('food', i.food),
-              drug: ref('drug', i.drug),
+              food: named('food', i.food),
+              drug: named('drug', i.drug),
               severity: i.severity,
               reviewedAt: i.reviewed_at,
             },

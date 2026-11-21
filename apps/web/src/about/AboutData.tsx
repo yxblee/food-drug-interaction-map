@@ -9,6 +9,7 @@ import {
 } from './facts.ts'
 import { csvFileName, interactionsToCsv } from './interactionsToCsv.ts'
 import { SEVERITY_LABEL } from '../explore/SeverityBadge.tsx'
+import { nodeKey } from '@fdi/schema/domain'
 import { ReportLink } from '../explore/ReportLink.tsx'
 import { ABOUT_REPORT_URL } from '../explore/reportUrl.ts'
 import './AboutData.css'
@@ -43,10 +44,10 @@ export function AboutData({
   const nodeLink = (kind: 'food' | 'drug', n: { id: string; name: string }) => (
     <a
       className="about__node"
-      href={`?node=${kind}:${n.id}`}
+      href={`?node=${nodeKey(kind, n.id)}`}
       onClick={(e) => {
         e.preventDefault()
-        onSelectNode(`${kind}:${n.id}`)
+        onSelectNode(nodeKey(kind, n.id))
       }}
     >
       {n.name}
