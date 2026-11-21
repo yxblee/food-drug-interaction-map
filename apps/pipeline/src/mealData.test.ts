@@ -57,4 +57,9 @@ describe('"a meal" entries (#153)', () => {
     )
     expect(wrong.map((d) => d.id)).toEqual([])
   })
+  it('timing advice from labels: an a-meal Interaction (decreases) per empty-stomach Drug', () => {
+    const have = new Set(mealDocs.filter((d) => d.effect === 'decreases').map((d) => d.drug))
+    for (const drug of ['levothyroxine', 'alendronate', 'risedronate', 'isoniazid', 'nimodipine'])
+      expect(have, drug).toContain(drug)
+  })
 })

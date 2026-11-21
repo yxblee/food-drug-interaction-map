@@ -1,0 +1,16 @@
+id: "a-meal--nimodipine"
+food: "a-meal"
+drug: "nimodipine"
+mechanisms: ["reduced-absorption"]
+severity: "caution"
+effect: "decreases"
+summary: "A meal can sharply lower how much nimodipine reaches the blood."
+advice: "Take it one hour before a meal or two hours after one. Ask your pharmacist how this applies to your own dose."
+details: "The Nymalize label says to give it one hour before or two hours after a meal. After a standard breakfast, peak levels were 68% lower and bioavailability 38% lower than when fasting."
+citations:
+  - type: "label"
+    title: "NYMALIZE (NIMODIPINE) SOLUTION [AZURITY PHARMACEUTICALS, INC.]"
+    url: "https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=e660fa26-b5c4-4d6d-8887-9e22b6666a10"
+    setid: "e660fa26-b5c4-4d6d-8887-9e22b6666a10"
+status: "pending"
+source: "openfda"

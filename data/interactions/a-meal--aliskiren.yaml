@@ -1,0 +1,16 @@
+id: "a-meal--aliskiren"
+food: "a-meal"
+drug: "aliskiren"
+mechanisms: ["reduced-absorption"]
+severity: "monitor"
+effect: "decreases"
+summary: "A high-fat meal can sharply lower how much aliskiren is absorbed."
+advice: "Take it the same way in relation to meals every day. Ask your pharmacist how this applies to your own dose."
+details: "The Tekturna label says to keep a routine pattern with regard to meals. With a high-fat meal, aliskiren exposure (AUC) was 71% lower and peak level 85% lower."
+citations:
+  - type: "label"
+    title: "TEKTURNA (ALISKIREN HEMIFUMARATE) TABLET, FILM COATED [LXO US INC.]"
+    url: "https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=3dd61fa5-1620-4ebf-bbdb-ede29b92fce2"
+    setid: "3dd61fa5-1620-4ebf-bbdb-ede29b92fce2"
+status: "pending"
+source: "openfda"
