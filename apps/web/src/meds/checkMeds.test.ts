@@ -32,6 +32,7 @@ const ia = (
   effect: 'increases',
   summary: '',
   advice: '',
+  citations: [],
 })
 
 const ix = buildIndex(

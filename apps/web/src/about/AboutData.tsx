@@ -1,9 +1,22 @@
 import { useEffect, useRef } from 'react'
 import type { GraphPayload } from '@fdi/schema'
 import { RXNORM_ATTRIBUTION, SOURCE_KINDS, datasetFacts, formatReviewed } from './facts.ts'
+import { csvFileName, interactionsToCsv } from './interactionsToCsv.ts'
 import { ReportLink } from '../explore/ReportLink.tsx'
 import { ABOUT_REPORT_URL } from '../explore/reportUrl.ts'
 import './AboutData.css'
+
+/** Built in the browser from the loaded Dataset: no request, so it works offline. */
+function downloadCsv(graph: GraphPayload) {
+  const url = URL.createObjectURL(
+    new Blob([interactionsToCsv(graph)], { type: 'text/csv;charset=utf-8' }),
+  )
+  const a = document.createElement('a')
+  a.href = url
+  a.download = csvFileName(graph)
+  a.click()
+  URL.revokeObjectURL(url)
+}
 
 /** Modal dialog: the browser traps focus, closes on Escape and returns focus to the opener. */
 export function AboutData({ graph, onClose }: { graph: GraphPayload; onClose: () => void }) {
@@ -72,6 +85,15 @@ export function AboutData({ graph, onClose }: { graph: GraphPayload; onClose: ()
             empty list is never a sign that something is safe.
           </li>
         </ul>
+
+        <h3 className="about__sub">Take the data with you</h3>
+        <p>
+          Every Interaction as a spreadsheet file: Drug, Food, Severity, Effect, Mechanisms,
+          summary, review date and Source links. Helpful pairings are not included.
+        </p>
+        <button className="about__download pill-button" onClick={() => downloadCsv(graph)}>
+          Download the interactions (CSV)
+        </button>
 
         <h3 className="about__sub">Your medication list</h3>
         <p>It stays on this device. It is never sent anywhere.</p>

@@ -58,7 +58,7 @@ describe('GET /api/graph', () => {
     const body = (await (await get('/api/graph')).json()) as GraphPayload
     expect(body.stats).toEqual({ reviewedAt: '2026-10-08', citationTypes: ['label'] })
   })
-  it('returns all nodes and approved interactions without heavy fields', async () => {
+  it('returns all nodes and approved interactions without the long-form fields', async () => {
     const body = (await (await get('/api/graph')).json()) as GraphPayload
     expect(body.version).toBe(store.version)
     expect(body.nodes).toHaveLength(10)
@@ -69,7 +69,13 @@ describe('GET /api/graph', () => {
       'sample-fruits--statins',
     ])
     expect(body.interactions[0]).not.toHaveProperty('details')
-    expect(body.interactions[0]).not.toHaveProperty('citations')
+  })
+  it("carries each Interaction's Citations and review date so the browser can export them", async () => {
+    const body = (await (await get('/api/graph')).json()) as GraphPayload
+    const g = body.interactions.find((i) => i.id === 'grapefruit--simvastatin')!
+    expect(g.reviewed_at).toBe('2026-10-08')
+    expect(g.citations.length).toBeGreaterThan(0)
+    expect(g.citations[0]).toHaveProperty('url')
   })
   it("carries a Drug's MedlinePlus link, and only where it has one", async () => {
     const { nodes } = (await (await get('/api/graph')).json()) as GraphPayload
