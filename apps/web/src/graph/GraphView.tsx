@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState, type KeyboardEvent } from 'react'
 import type { Palette } from '../theme/tokens.ts'
 import { nearestInDirection, stepInOrder, type NavDir, type NavPoint } from './nav.ts'
+import { load3d, type LoadState } from './load3d.ts'
 import { create2d } from './render2d.ts'
 import { NO_INSET, type Inset, type RenderGraph } from './renderGraph.ts'
 import type { Focus, GraphRenderer } from './types.ts'
@@ -55,6 +56,16 @@ export function GraphView(props: Props) {
     latest.current = props
   })
 
+  // 3D that failed to load falls back to 2D for this visit; the URL's view is left alone.
+  const [load, setLoad] = useState<LoadState>('ready')
+  const [attempt, setAttempt] = useState(0)
+  const [seenView, setSeenView] = useState(props.view)
+  if (seenView !== props.view) {
+    setSeenView(props.view)
+    setLoad('ready')
+  }
+  const view = props.view === '3d' && load !== 'failed' ? '3d' : '2d'
+
   useEffect(() => {
     let cancelled = false
     const el = host.current!
@@ -70,9 +81,14 @@ export function GraphView(props: Props) {
       renderer.current = r
     }
     // The 3D renderer (three.js) is its own chunk, fetched only when 3D is shown.
-    if (props.view === '3d') {
-      void import('./render3d.ts').then(({ create3d }) => {
-        if (!cancelled) start(create3d({ motion: props.motion }))
+    if (view === '3d') {
+      void load3d(
+        () => import('./render3d.ts'),
+        { motion: props.motion },
+        (s) => !cancelled && setLoad(s),
+      ).then((r) => {
+        if (r && !cancelled) start(r)
+        else r?.destroy()
       })
     } else {
       start(create2d({ motion: props.motion }))
@@ -82,7 +98,7 @@ export function GraphView(props: Props) {
       renderer.current?.destroy()
       renderer.current = null
     }
-  }, [props.view, props.motion])
+  }, [view, props.motion, attempt])
 
   useEffect(() => {
     if (!renderer.current || applied.current === props.graph) return
@@ -124,7 +140,7 @@ export function GraphView(props: Props) {
     renderer.current?.setActive(p.key)
     host.current?.setAttribute('data-active', '')
     // 2D exposes the node through aria-activedescendant; 3D has no DOM nodes to point at.
-    if (props.view === '3d') setAnnounce(p.label)
+    if (view === '3d') setAnnounce(p.label)
   }
   const onFocus = (e: React.FocusEvent) => {
     if (e.target !== e.currentTarget) return
@@ -177,7 +193,7 @@ export function GraphView(props: Props) {
         onBlur={onBlur}
         onKeyDown={onKeyDown}
       />
-      {props.view === '2d' && (
+      {view === '2d' && (
         <div ref={controls} className="graph-zoom" role="group" aria-label="Map zoom">
           <button type="button" aria-label="Zoom in" onClick={() => renderer.current?.zoomBy?.(2)}>
             <svg {...ICON}>
@@ -204,6 +220,26 @@ export function GraphView(props: Props) {
           </button>
         </div>
       )}
+      <div className="graph-status" role="status">
+        {load === 'loading' && view === '3d' && (
+          <p className="graph-status__loading">Loading 3D map…</p>
+        )}
+        {load === 'failed' && (
+          <div className="graph-status__notice">
+            <p>The 3D map could not load, so this is the 2D map.</p>
+            <button
+              type="button"
+              className="link-button"
+              onClick={() => {
+                setLoad('loading')
+                setAttempt((n) => n + 1)
+              }}
+            >
+              Try 3D again
+            </button>
+          </div>
+        )}
+      </div>
       <p id="graph-help" className="sr-only">
         Use the arrow keys to move between items, Enter to open one, Escape to leave the map.
       </p>
