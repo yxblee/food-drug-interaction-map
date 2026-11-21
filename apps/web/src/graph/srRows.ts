@@ -6,9 +6,10 @@ import {
   splitKey,
   type Index,
 } from '@fdi/schema/domain'
+import type { Severity } from '@fdi/schema'
 
 // Plain-text lines for the selected item's interactions, read out instead of the aria-hidden 3D canvas.
-export function srRows(ix: Index, selected: string | null): string[] {
+export function srRows(ix: Index, selected: string | null, shown?: readonly Severity[]): string[] {
   if (!selected) return []
   const [kind, id] = splitKey(selected)
   const rows =
@@ -17,9 +18,11 @@ export function srRows(ix: Index, selected: string | null): string[] {
       : kind === 'food'
         ? interactionsForFood(ix, id)
         : interactionsForMechanism(ix, id)
-  return rows.map(({ interaction: i }) => {
-    const food = ix.nodes.get(nodeKey('food', i.food))?.name
-    const drug = ix.nodes.get(nodeKey('drug', i.drug))?.name
-    return `${food} with ${drug}: ${i.severity}. ${i.summary}`
-  })
+  return rows
+    .filter(({ interaction: i }) => !shown || shown.includes(i.severity))
+    .map(({ interaction: i }) => {
+      const food = ix.nodes.get(nodeKey('food', i.food))?.name
+      const drug = ix.nodes.get(nodeKey('drug', i.drug))?.name
+      return `${food} with ${drug}: ${i.severity}. ${i.summary}`
+    })
 }

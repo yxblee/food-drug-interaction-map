@@ -10,6 +10,7 @@ describe('urlState', () => {
       node: null,
       view: null,
       mech: true,
+      sev: ['avoid', 'caution', 'monitor', 'minimal'],
       tint: false,
       meds: false,
     })
@@ -21,6 +22,7 @@ describe('urlState', () => {
       node: 'food:grapefruit',
       view: '2d',
       mech: false,
+      sev: ['avoid', 'monitor'],
       tint: true,
       meds: true,
     } as const
@@ -45,5 +47,15 @@ describe('urlState', () => {
     expect(decodeWithStoredTint('?tint=1', '0').tint).toBe(true)
     expect(decodeWithStoredTint('?tint=0', '1').tint).toBe(false)
     expect(decodeWithStoredTint('', null).tint).toBe(false)
+  })
+  it('writes the Severity filter only when it is not all four, in a fixed order', () => {
+    expect(encode({ ...DEFAULT_STATE, sev: ['avoid'] })).toBe('sev=avoid')
+    expect(encode({ ...DEFAULT_STATE, sev: ['minimal', 'avoid'] })).toBe('sev=avoid%2Cminimal')
+    expect(decode('?sev=avoid,caution').sev).toEqual(['avoid', 'caution'])
+  })
+  it('ignores a Severity filter that names nothing valid', () => {
+    expect(decode('?sev=').sev).toEqual(DEFAULT_STATE.sev)
+    expect(decode('?sev=urgent').sev).toEqual(DEFAULT_STATE.sev)
+    expect(decode('?sev=urgent,avoid,avoid').sev).toEqual(['avoid'])
   })
 })

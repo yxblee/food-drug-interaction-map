@@ -13,6 +13,7 @@ import { browseKeys, stepKey } from './browse.ts'
 import { Legend } from './Legend.tsx'
 import { SidePanel } from './SidePanel.tsx'
 import { Search } from './Search.tsx'
+import { SeverityFilter } from './SeverityFilter.tsx'
 import './explore.css'
 
 const STARTER = nodeKey('food', 'grapefruit')
@@ -74,10 +75,19 @@ export function ExploreTab({
   const next = useCallback(() => step(1), [step])
   const close = useCallback(() => update({ node: null }), [update])
 
+  const opts = { mechanisms: state.mech, severities: state.sev }
+  const base = useMemo(
+    () => toRenderGraph(graph, opts),
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [graph, state.mech, state.sev],
+  )
+  // A selected node the filter hides stays; only then does a selection rebuild the graph.
+  const kept = selected && !base.nodes.some((n) => n.key === selected) ? selected : null
   const renderGraph = useMemo(() => {
-    const full = toRenderGraph(graph, { mechanisms: state.mech })
+    const full = kept ? toRenderGraph(graph, { ...opts, selected: kept }) : base
     return medsFilter ? filterRenderGraph(full, medsFilter) : full
-  }, [graph, state.mech, medsFilter])
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [graph, base, kept, medsFilter])
   const ix = useMemo(() => buildIndex(graph.nodes, graph.interactions), [graph])
   const matches = useMemo(
     () =>
@@ -92,7 +102,7 @@ export function ExploreTab({
   )
   const env = useEnv()
   const { view, canToggle } = chooseView(env, state.view)
-  const srList = useMemo(() => srRows(ix, selected), [ix, selected])
+  const srList = useMemo(() => srRows(ix, selected, state.sev), [ix, selected, state.sev])
   const onGraphSelect = useCallback(
     (key: string | null) => (key ? select(key) : update({ node: null }, { push: true })),
     [select, update],
@@ -125,6 +135,7 @@ export function ExploreTab({
         >
           <PillLabel>Mechanisms</PillLabel>
         </button>
+        <SeverityFilter shown={state.sev} onChange={(sev) => update({ sev })} />
         {!selected && !state.q && !medsFilter && known.has(STARTER) && (
           <p className="explore__hint">
             New here?{' '}
