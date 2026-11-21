@@ -56,6 +56,7 @@ const i = (
   effect: 'increases',
   summary: 's',
   advice: 'a',
+  citations: [],
 })
 
 const interactions = [

@@ -53,6 +53,7 @@ const g: GraphPayload = {
       effect: 'increases',
       summary: '',
       advice: '',
+      citations: [],
     },
     {
       id: 'grapefruit--felodipine',
@@ -63,6 +64,7 @@ const g: GraphPayload = {
       effect: 'increases',
       summary: '',
       advice: '',
+      citations: [],
     },
     {
       id: 'st-johns-wort--felodipine',
@@ -73,6 +75,7 @@ const g: GraphPayload = {
       effect: 'decreases',
       summary: '',
       advice: '',
+      citations: [],
     },
   ],
 }

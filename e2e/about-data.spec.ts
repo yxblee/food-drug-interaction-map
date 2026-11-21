@@ -43,3 +43,23 @@ test('About the data: generic Report a mistake link', async ({ page }) => {
   expect((await a.boundingBox())!.height).toBeGreaterThanOrEqual(44)
   expect(new URL((await a.getAttribute('href'))!).search).toBe('?template=wrong-interaction.yml')
 })
+
+test('About the data: downloads the Approved Interactions as a dated .csv, by keyboard', async ({
+  page,
+}) => {
+  await page.goto('./')
+  await page.getByRole('button', { name: 'About the data' }).click()
+  const btn = page.getByRole('button', { name: 'Download the interactions (CSV)' })
+  await expect(btn).toBeVisible()
+  expect((await btn.boundingBox())!.height).toBeGreaterThanOrEqual(44)
+  await btn.focus()
+  const [download] = await Promise.all([
+    page.waitForEvent('download'),
+    page.keyboard.press('Enter'),
+  ])
+  expect(download.suggestedFilename()).toMatch(/^food-drug-interactions-\d{4}-\d{2}-\d{2}\.csv$/)
+  const path = await download.path()
+  const text = (await import('node:fs')).readFileSync(path, 'utf8')
+  expect(text).toContain('not medical advice')
+  expect(text).toContain('Drug,Food,Severity,Effect,Mechanisms,Summary,Reviewed,Citation URLs')
+})

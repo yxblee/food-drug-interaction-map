@@ -17,7 +17,16 @@ export interface GraphNode {
 
 export type GraphInteraction = Pick<
   Interaction,
-  'id' | 'food' | 'drug' | 'mechanisms' | 'severity' | 'effect' | 'summary' | 'advice'
+  | 'id'
+  | 'food'
+  | 'drug'
+  | 'mechanisms'
+  | 'severity'
+  | 'effect'
+  | 'summary'
+  | 'advice'
+  | 'citations'
+  | 'reviewed_at'
 >
 
 /** Facts about the Dataset itself, derived from its Approved Interactions at build time. */

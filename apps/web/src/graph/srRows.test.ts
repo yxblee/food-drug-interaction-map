@@ -25,6 +25,7 @@ const interactions: GraphInteraction[] = [
     effect: 'increases',
     summary: 'Raises statin levels.',
     advice: '',
+    citations: [],
   },
 ]
 const ix = buildIndex(nodes, interactions)

@@ -30,6 +30,7 @@
   padding-top: 12px;
   border-top: 1px solid var(--line);
 }
+.about__download,
 .about__close {
   min-height: 44px;
   margin-top: 8px;

@@ -91,7 +91,7 @@ export function loadStore(dbPath: string): Store {
     nodes,
     pairings,
     interactions: interactions.map(
-      ({ id, food, drug, mechanisms, severity, effect, summary, advice }) => ({
+      ({
         id,
         food,
         drug,
@@ -100,6 +100,19 @@ export function loadStore(dbPath: string): Store {
         effect,
         summary,
         advice,
+        citations,
+        reviewed_at,
+      }) => ({
+        id,
+        food,
+        drug,
+        mechanisms,
+        severity,
+        effect,
+        summary,
+        advice,
+        citations,
+        reviewed_at,
       }),
     ),
   }

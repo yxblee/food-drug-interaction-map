@@ -30,6 +30,7 @@ const warning = (
         effect: 'increases',
         summary: '',
         advice,
+        citations: [],
       },
     },
   ],
