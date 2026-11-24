@@ -185,7 +185,7 @@ export function SidePanel({
 
           {interactionId && !named && (
             <p className="notice" role="status">
-              That Interaction isn't listed here.
+              That interaction isn't listed here.
             </p>
           )}
           {d.interactions.length === 0 ? (

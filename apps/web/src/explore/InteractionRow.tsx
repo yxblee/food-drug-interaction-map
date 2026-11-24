@@ -183,9 +183,7 @@ export function InteractionRow({
             <button className="pill-button" onClick={copyLink}>
               <PillLabel>Copy link to this Interaction</PillLabel>
             </button>
-            <span role="status" className="mono-label">
-              {copied}
-            </span>
+            <span role="status">{copied}</span>
           </p>
         )}
         <ReportLink
@@ -196,25 +194,21 @@ export function InteractionRow({
     </>
   )
 
+  // The target of an Interaction link: focusable by script only, named by its counterpart heading.
+  const rowProps = {
+    id: `ixn-${i.id}`,
+    tabIndex: -1,
+    'aria-labelledby': grouped && !hideName ? `ixn-name-${i.id}` : undefined,
+  }
   if (!collapsible)
     return (
-      <li
-        className="irow"
-        id={`ixn-${i.id}`}
-        tabIndex={-1}
-        aria-labelledby={grouped && !hideName ? `ixn-name-${i.id}` : undefined}
-      >
+      <li className="irow" {...rowProps}>
         {(showBadge || !hideName) && <div className="irow__head">{head}</div>}
         {body}
       </li>
     )
   return (
-    <li
-      className="irow irow--collapsible"
-      id={`ixn-${i.id}`}
-      tabIndex={-1}
-      aria-labelledby={grouped && !hideName ? `ixn-name-${i.id}` : undefined}
-    >
+    <li className="irow irow--collapsible" {...rowProps}>
       <details>
         <summary className="irow__head">{head}</summary>
         <p>
