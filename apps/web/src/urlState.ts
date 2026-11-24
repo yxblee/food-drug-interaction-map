@@ -1,10 +1,12 @@
-import { SEVERITIES, type Severity } from '@fdi/schema'
+import { InteractionId, SEVERITIES, type Severity } from '@fdi/schema'
 
 export type Tab = 'explore' | 'meds'
 export interface ViewState {
   tab: Tab
   q: string
   node: string | null
+  /** One Interaction id: opened, expanded and focused in the `node` panel. Cleared when `node` changes. */
+  interaction: string | null
   view: '3d' | '2d' | null
   mech: boolean
   /** Severities drawn on the map; all four by default. */
@@ -18,6 +20,7 @@ export const DEFAULT_STATE: ViewState = {
   tab: 'explore',
   q: '',
   node: null,
+  interaction: null,
   view: null,
   mech: true,
   sev: SEVERITIES,
@@ -35,11 +38,13 @@ export function decode(search: string): ViewState {
   const p = new URLSearchParams(search)
   const tab = p.get('tab')
   const node = p.get('node')
+  const interaction = p.get('interaction')
   const view = p.get('view')
   return {
     tab: tab === 'meds' ? 'meds' : 'explore',
     q: p.get('q') ?? '',
     node: node && NODE_KEY.test(node) ? node : null,
+    interaction: InteractionId.safeParse(interaction).success ? interaction : null,
     view: view === '3d' || view === '2d' ? view : null,
     mech: p.get('mech') !== '0',
     sev: decodeSev(p.get('sev')),
@@ -53,6 +58,7 @@ export function encode(s: ViewState): string {
   if (s.tab !== 'explore') p.set('tab', s.tab)
   if (s.q) p.set('q', s.q)
   if (s.node) p.set('node', s.node)
+  if (s.interaction) p.set('interaction', s.interaction)
   if (s.view) p.set('view', s.view)
   if (!s.mech) p.set('mech', '0')
   if (s.sev.length < SEVERITIES.length)

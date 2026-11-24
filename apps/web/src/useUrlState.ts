@@ -23,6 +23,8 @@ export function useUrlState(): [
   const update = useCallback((patch: Partial<ViewState>, opts: { push?: boolean } = {}) => {
     setState((prev) => {
       const next = { ...prev, ...patch }
+      // A new panel is no longer the one the Interaction link named.
+      if ('node' in patch && !('interaction' in patch)) next.interaction = null
       const qs = encode(next)
       const url = qs ? `?${qs}` : location.pathname
       if (opts.push) history.pushState(null, '', url)

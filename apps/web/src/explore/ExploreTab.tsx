@@ -58,6 +58,16 @@ export function ExploreTab({
   useEffect(() => {
     if (node && !selected) update({ node: null })
   }, [node, selected, update])
+  // A link to one Interaction: without a panel, open its Drug's; an id nobody knows is said so, then dropped.
+  const linked = state.interaction
+  const linkedRow = linked ? graph.interactions.find((i) => i.id === linked) : undefined
+  const [missingIx, setMissingIx] = useState<{ node: string | null } | null>(null)
+  if (linked && !linkedRow && !missingIx) setMissingIx({ node })
+  useEffect(() => {
+    if (!linked) return
+    if (!linkedRow) update({ interaction: null })
+    else if (!selected) update({ node: nodeKey('drug', linkedRow.drug), interaction: linked })
+  }, [linked, linkedRow, selected, update])
   const onNotFound = useCallback(() => {
     setStaleNode(node)
     update({ node: null })
@@ -181,8 +191,14 @@ export function ExploreTab({
           That item is no longer in the dataset.
         </p>
       )}
+      {missingIx && missingIx.node === node && (
+        <p className="notice" role="status">
+          That interaction isn't in the dataset.
+        </p>
+      )}
       {selected && (
         <SidePanel
+          interactionId={linkedRow?.id ?? null}
           nodeKey={selected}
           onSelect={select}
           onPrev={prev}

@@ -8,6 +8,7 @@ describe('urlState', () => {
       tab: 'explore',
       q: '',
       node: null,
+      interaction: null,
       view: null,
       mech: true,
       sev: ['avoid', 'caution', 'monitor', 'minimal'],
@@ -20,6 +21,7 @@ describe('urlState', () => {
       tab: 'meds',
       q: 'grape fruit',
       node: 'food:grapefruit',
+      interaction: 'grapefruit--simvastatin',
       view: '2d',
       mech: false,
       sev: ['avoid', 'monitor'],
@@ -57,5 +59,28 @@ describe('urlState', () => {
     expect(decode('?sev=').sev).toEqual(DEFAULT_STATE.sev)
     expect(decode('?sev=urgent').sev).toEqual(DEFAULT_STATE.sev)
     expect(decode('?sev=urgent,avoid,avoid').sev).toEqual(['avoid'])
+  })
+  it('writes the Interaction id only when set, after node, and keeps the other view settings', () => {
+    expect(encode({ ...DEFAULT_STATE, node: 'drug:warfarin' })).not.toContain('interaction')
+    const s = {
+      ...DEFAULT_STATE,
+      node: 'drug:warfarin',
+      interaction: 'st-johns-wort--warfarin',
+      view: '2d',
+      sev: ['avoid'],
+    } as const
+    expect(encode(s)).toBe(
+      'node=drug%3Awarfarin&interaction=st-johns-wort--warfarin&view=2d&sev=avoid',
+    )
+    expect(decode('?' + encode(s))).toEqual(s)
+  })
+  it('ignores an Interaction id that is not "<food>--<drug>"', () => {
+    expect(decode('?interaction=warfarin').interaction).toBeNull()
+    expect(decode('?interaction=Bad--Id').interaction).toBeNull()
+    expect(decode('?interaction=a--b--c').interaction).toBeNull()
+    expect(decode('?interaction=').interaction).toBeNull()
+    expect(decode('?interaction=grapefruit--simvastatin').interaction).toBe(
+      'grapefruit--simvastatin',
+    )
   })
 })

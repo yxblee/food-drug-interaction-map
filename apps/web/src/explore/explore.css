@@ -419,3 +419,22 @@ h4.irow__name {
   margin: 0;
   font: inherit;
 }
+/* "Copy link to this Interaction": a 44px pill that wraps at 360px, its confirmation beside it. */
+.irow__copy {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.5rem;
+  margin: 0.5rem 0;
+}
+.irow__copy .pill-button {
+  max-width: 100%;
+}
+.irow:focus-visible {
+  outline: 2px solid currentColor;
+  outline-offset: 2px;
+}
+/* Room above for the focus ring when a link scrolls the row to the panel's top. */
+.irow {
+  scroll-margin-top: 8px;
+}

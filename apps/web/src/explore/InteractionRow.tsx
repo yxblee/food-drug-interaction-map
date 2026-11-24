@@ -1,3 +1,4 @@
+import { useState } from 'react'
 import type {
   Citation,
   GraphNode,
@@ -11,6 +12,8 @@ import { nodeKey } from '@fdi/schema/domain'
 import { SeverityBadge } from './SeverityBadge.tsx'
 import { ReportLink } from './ReportLink.tsx'
 import { reportUrl } from './reportUrl.ts'
+import { PillLabel } from '../PillLabel.tsx'
+import { DEFAULT_STATE, encode } from '../urlState.ts'
 
 interface Props {
   row: ResolvedInteraction<Interaction>
@@ -28,6 +31,8 @@ interface Props {
   collapsible?: boolean
   /** A lead sentence above already names the only counterpart, so the row leaves the name out. */
   hideName?: boolean
+  /** The panel this row is shown in: the link opens it there. Defaults to the row's Drug. */
+  linkNode?: string
 }
 
 /** "Sources": a Citation list, one 44px link row each. Shared by Interactions and Helpful pairings. */
@@ -73,8 +78,21 @@ export function InteractionRow({
   cautionFirst,
   collapsible,
   hideName,
+  linkNode,
 }: Props) {
   const i = row.interaction
+  const [copied, setCopied] = useState('')
+  const copyLink = () => {
+    const qs = encode({
+      ...DEFAULT_STATE,
+      node: linkNode ?? nodeKey('drug', i.drug),
+      interaction: i.id,
+    })
+    navigator.clipboard.writeText(`${location.origin}${location.pathname}?${qs}`).then(
+      () => setCopied('Link copied'),
+      () => setCopied("Couldn't copy the link"),
+    )
+  }
   // The Drug class or Food group this row is inherited from, on the viewed side.
   const inheritedFrom = row.inheritedFrom
     ? nodes[nodeKey(perspective, row.inheritedFrom)]
@@ -110,7 +128,11 @@ export function InteractionRow({
   const head = (
     <>
       {showBadge && <SeverityBadge severity={i.severity} />}
-      {!hideName && <Name className="irow__name">{names}</Name>}
+      {!hideName && (
+        <Name className="irow__name" id={grouped ? `ixn-name-${i.id}` : undefined}>
+          {names}
+        </Name>
+      )}
     </>
   )
 
@@ -156,6 +178,14 @@ export function InteractionRow({
         )}
         <Sources citations={i.citations} />
         <p className="mono-label">Reviewed {i.reviewed_at}</p>
+        {navigator.clipboard && (
+          <p className="irow__copy">
+            <button className="pill-button" onClick={copyLink}>
+              <PillLabel>Copy link to this Interaction</PillLabel>
+            </button>
+            <span role="status">{copied}</span>
+          </p>
+        )}
         <ReportLink
           href={reportUrl({ id: i.id, food: food?.name ?? i.food, drug: drug?.name ?? i.drug })}
           about={`${food?.name ?? i.food} and ${drug?.name ?? i.drug}`}
@@ -164,15 +194,21 @@ export function InteractionRow({
     </>
   )
 
+  // The target of an Interaction link: focusable by script only, named by its counterpart heading.
+  const rowProps = {
+    id: `ixn-${i.id}`,
+    tabIndex: -1,
+    'aria-labelledby': grouped && !hideName ? `ixn-name-${i.id}` : undefined,
+  }
   if (!collapsible)
     return (
-      <li className="irow">
+      <li className="irow" {...rowProps}>
         {(showBadge || !hideName) && <div className="irow__head">{head}</div>}
         {body}
       </li>
     )
   return (
-    <li className="irow irow--collapsible">
+    <li className="irow irow--collapsible" {...rowProps}>
       <details>
         <summary className="irow__head">{head}</summary>
         <p>
