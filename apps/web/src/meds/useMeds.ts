@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from 'react'
+import { useCallback, useEffect, useMemo, useState } from 'react'
 import type { GraphPayload } from '@fdi/schema'
 import { safeStorage } from '../storage.ts'
 import {
@@ -23,10 +23,13 @@ export function useMeds(graph: GraphPayload | null) {
     shared: { ids: string[]; unknown: number } | null
   } | null>(null)
 
+  const isMedication = useCallback(
+    (id: string) => !!graph?.nodes.some((n) => n.kind === 'drug' && n.id === id && !n.group),
+    [graph],
+  )
+
   // Adjust state during render (no effect round-trip) when the graph first arrives.
   if (graph && !state) {
-    const isMedication = (id: string) =>
-      graph.nodes.some((n) => n.kind === 'drug' && n.id === id && !n.group)
     const loaded = storage ? loadMeds(storage, isMedication) : { ids: [], dropped: [] }
     setState({
       ids: loaded.ids,
@@ -36,6 +39,18 @@ export function useMeds(graph: GraphPayload | null) {
       shared: decodeShare(location.hash, isMedication),
     })
   }
+
+  // A Share link followed in a tab that already has the app changes only the fragment: no reload.
+  const ready = !!state
+  useEffect(() => {
+    if (!ready) return
+    const onHashChange = () => {
+      const shared = decodeShare(location.hash, isMedication)
+      if (shared) setState((s) => (s ? { ...s, shared } : s))
+    }
+    addEventListener('hashchange', onHashChange)
+    return () => removeEventListener('hashchange', onHashChange)
+  }, [ready, isMedication])
 
   const ids = state?.ids
   useEffect(() => {
