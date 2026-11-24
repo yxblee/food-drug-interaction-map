@@ -38,28 +38,39 @@ test('an inherited row opens in the viewed member panel', async ({ page }) => {
   await expect(panel.locator(`li[id="ixn-${inherited}"]`)).toBeFocused()
 })
 
-test('Copy link puts this row, in this panel, on the clipboard and says so politely', async ({
-  page,
-  context,
-}) => {
-  await context.grantPermissions(['clipboard-read', 'clipboard-write']).catch(() => {})
-  await page.setViewportSize({ width: 360, height: 780 })
-  await page.goto('./?node=drug%3Awarfarin&view=2d')
-  const panel = page.getByRole('complementary')
-  const row = panel.locator('li.irow').first()
-  await row.locator('details.irow__more > summary').click()
-  const copy = row.getByRole('button', { name: 'Copy link to this Interaction' })
-  const box = (await copy.boundingBox())!
-  expect(box.height).toBeGreaterThanOrEqual(44)
-  expect(box.x + box.width).toBeLessThanOrEqual(360)
-  await copy.click()
-  await expect(row.getByRole('status')).toHaveText('Link copied')
-  await expect(copy).toBeFocused()
-  const copied = new URL(await page.evaluate(() => navigator.clipboard.readText()))
-  expect(copied.searchParams.get('node')).toBe('drug:warfarin')
-  expect(copied.searchParams.get('interaction')).toMatch(/^[a-z0-9-]+--warfarin$/)
-  expect(copied.searchParams.has('view')).toBe(false)
-})
+// Both panel layouts: a Drug with few rows lists them open; one with many collapses each row to a
+// line first. The copy control must be reachable in either.
+for (const [drug, collapsed] of [
+  ['isoniazid', false],
+  ['warfarin', true],
+] as const) {
+  test(`Copy link works in the ${collapsed ? 'collapsed' : 'open'} layout (${drug}) and says so politely`, async ({
+    page,
+    context,
+  }) => {
+    await context.grantPermissions(['clipboard-read', 'clipboard-write']).catch(() => {})
+    await page.setViewportSize({ width: 360, height: 780 })
+    await page.goto(`./?node=drug%3A${drug}&view=2d`)
+    const panel = page.getByRole('complementary')
+    const row = panel.locator('li.irow').first()
+    await expect(row).toBeVisible()
+    // Guards the premise: if the Dataset moves a Drug across the 5-row line, this fails loudly.
+    await expect(row).toHaveClass(collapsed ? /irow--collapsible/ : /^(?!.*irow--collapsible)/)
+    if (collapsed) await row.locator('summary').first().click()
+    await row.locator('details.irow__more > summary').click()
+    const copy = row.getByRole('button', { name: 'Copy link to this Interaction' })
+    const box = (await copy.boundingBox())!
+    expect(box.height).toBeGreaterThanOrEqual(44)
+    expect(box.x + box.width).toBeLessThanOrEqual(360)
+    await copy.click()
+    await expect(row.getByRole('status')).toHaveText('Link copied')
+    await expect(copy).toBeFocused()
+    const copied = new URL(await page.evaluate(() => navigator.clipboard.readText()))
+    expect(copied.searchParams.get('node')).toBe(`drug:${drug}`)
+    expect(copied.searchParams.get('interaction')).toMatch(new RegExp(`^[a-z0-9-]+--${drug}$`))
+    expect(copied.searchParams.has('view')).toBe(false)
+  })
+}
 
 test('an unknown id says so, keeps the map and drops the key', async ({ page }) => {
   await page.goto('./?interaction=nothing--here&view=2d')
