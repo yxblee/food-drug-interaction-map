@@ -104,11 +104,13 @@ export function InteractionRow({
       {collapsible ? n?.name : link(n)}
     </span>
   ))
+  // Explore rows are headings one level below their Severity group's h3; My meds names the Food above.
+  const Name = grouped ? 'h4' : 'span'
   const showBadge = !grouped && groupSeverity !== i.severity
   const head = (
     <>
       {showBadge && <SeverityBadge severity={i.severity} />}
-      {!hideName && <span className="irow__name">{names}</span>}
+      {!hideName && <Name className="irow__name">{names}</Name>}
     </>
   )
 
@@ -124,7 +126,11 @@ export function InteractionRow({
       </p>
       {!cautionFirst && caution}
       <details className="irow__more">
-        <summary>Details and sources</summary>
+        <summary
+          aria-label={`Details and sources for ${food?.name ?? i.food} and ${drug?.name ?? i.drug}`}
+        >
+          Details and sources
+        </summary>
         <div className="irow__details">{paragraphs(i.details)}</div>
         <p className="mono-label">Mechanism</p>
         <ul className="irow__mechs">
