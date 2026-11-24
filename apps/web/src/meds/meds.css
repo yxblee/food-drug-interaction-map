@@ -290,3 +290,13 @@
   margin: 0;
   font: inherit;
 }
+
+/* Jump links reuse the Explore panel's row; headings land clear of the sticky app header. */
+.meds__sev h3 {
+  scroll-margin-top: 1rem;
+}
+
+/* In a collapsed row the lead is the summary line itself: inline, no extra gap. */
+.warning summary .warning__lead {
+  margin: 0;
+}

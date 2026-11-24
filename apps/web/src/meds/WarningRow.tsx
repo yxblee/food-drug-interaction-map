@@ -11,11 +11,14 @@ export function WarningRow({
   warning: w,
   helps = [],
   showSeverity,
+  collapsible,
 }: {
   warning: FoodWarning
   /** Helpful pairings for the Medication list, to say when this Food helps another listed Drug. */
   helps?: DrugPairings[]
   showSeverity?: boolean
+  /** A long list: every row, Avoid and Caution too, starts as one line that opens to its advice. */
+  collapsible?: boolean
 }) {
   const [detail, setDetail] = useState<NodeDetail | null>(null)
   const [failed, setFailed] = useState(false)
@@ -40,7 +43,7 @@ export function WarningRow({
     </Fragment>
   )
   // Avoid and Caution show their advice up front; Monitor and Minimal stay collapsed on screen.
-  const upFront = w.severity === 'avoid' || w.severity === 'caution'
+  const upFront = !collapsible && (w.severity === 'avoid' || w.severity === 'caution')
   const load = () => {
     if (detail) return
     setFailed(false)
@@ -106,7 +109,7 @@ export function WarningRow({
     </>
   )
   return (
-    <li className="warning">
+    <li className={collapsible ? 'warning warning--collapsed' : 'warning'}>
       {upFront ? (
         <>
           <div className="warning__lead">{lead}</div>
@@ -114,7 +117,9 @@ export function WarningRow({
         </>
       ) : (
         <details>
-          <summary>{lead}</summary>
+          <summary>
+            <span className="warning__lead">{lead}</span>
+          </summary>
           {body}
         </details>
       )}
