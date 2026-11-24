@@ -40,7 +40,7 @@ test('a long list collapses every Food to one line that opens to its advice', as
     .first()
   await expect(first.locator('.warning__name')).toBeVisible()
   await expect(first.locator('.warning__drugs')).toBeVisible()
-  await expect(first.locator('.sev-badge, [class*="badge"]').first()).toBeVisible()
+  await expect(first.locator('.badge').first()).toBeVisible()
   // Opening shows the advice.
   await first.click()
   await expect(
@@ -71,4 +71,29 @@ test('print keeps every row expanded', async ({ page }) => {
   await expect(
     page.locator('section[aria-labelledby^="sev-"] li.warning > details:not([open])'),
   ).toHaveCount(0)
+})
+
+test('the Helps to take with jump link focuses its heading', async ({ page }) => {
+  await open(page, LONG)
+  const link = page.getByRole('navigation', { name: 'Jump to severity' }).getByRole('link', {
+    name: 'Helps to take with',
+  })
+  await link.focus()
+  await page.keyboard.press('Enter')
+  await expect(page.locator('#helps-title')).toBeFocused()
+})
+
+test('at 375px a long list is collapsed', async ({ page }) => {
+  await page.setViewportSize({ width: 375, height: 812 })
+  await open(page, LONG)
+  await expect(page.getByRole('navigation', { name: 'Jump to severity' })).toBeVisible()
+  await expect(
+    page.locator('section[aria-labelledby^="sev-"] li.warning > details[open]'),
+  ).toHaveCount(0)
+})
+
+test('at 375px a short list has no jump links', async ({ page }) => {
+  await page.setViewportSize({ width: 375, height: 812 })
+  await open(page, SHORT)
+  await expect(page.getByRole('navigation', { name: 'Jump to severity' })).toHaveCount(0)
 })

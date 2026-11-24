@@ -20,23 +20,6 @@ export interface PanelGroup {
   runs: PanelRun[]
 }
 
-/** Rows grouped by Severity, most severe first; empty groups are skipped. */
-export function panelGroups(rows: ResolvedInteraction<Interaction>[]) {
-  const groups: PanelGroup[] = SEVERITIES.flatMap((severity) => {
-    const mine = rows.filter((r) => r.interaction.severity === severity)
-    if (!mine.length) return []
-    // Direct rows first, then each Inherited source in order of appearance.
-    const inherited = new Set(mine.map((r) => r.inheritedFrom).filter((f) => f !== undefined))
-    const sources = [...(mine.some((r) => !r.inheritedFrom) ? [undefined] : []), ...inherited]
-    const runs = sources.map((from) => ({
-      inheritedFrom: from,
-      rows: mine.filter((r) => r.inheritedFrom === from),
-    }))
-    return [{ severity, rows: mine, runs }]
-  })
-  return { collapsed: collapsesAt(rows.length), groups }
-}
-
 /** Anything with a Severity, such as a My meds Food warning, grouped most severe first; empty groups skipped. */
 export function severityGroups<T extends { severity: Severity }>(items: T[]) {
   const groups = SEVERITIES.flatMap((severity) => {
@@ -44,6 +27,24 @@ export function severityGroups<T extends { severity: Severity }>(items: T[]) {
     return rows.length ? [{ severity, rows }] : []
   })
   return { collapsed: collapsesAt(items.length), groups }
+}
+
+/** Rows grouped by Severity, most severe first; empty groups are skipped. */
+export function panelGroups(rows: ResolvedInteraction<Interaction>[]) {
+  const { collapsed, groups: bySeverity } = severityGroups(
+    rows.map((r) => Object.assign(r, { severity: r.interaction.severity })),
+  )
+  const groups: PanelGroup[] = bySeverity.map(({ severity, rows: mine }) => {
+    // Direct rows first, then each Inherited source in order of appearance.
+    const inherited = new Set(mine.map((r) => r.inheritedFrom).filter((f) => f !== undefined))
+    const sources = [...(mine.some((r) => !r.inheritedFrom) ? [undefined] : []), ...inherited]
+    const runs = sources.map((from) => ({
+      inheritedFrom: from,
+      rows: mine.filter((r) => r.inheritedFrom === from),
+    }))
+    return { severity, rows: mine, runs }
+  })
+  return { collapsed, groups }
 }
 
 export interface JumpLink {
