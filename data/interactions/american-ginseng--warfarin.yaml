@@ -1,0 +1,21 @@
+id: american-ginseng--warfarin
+food: american-ginseng
+drug: warfarin
+mechanisms: [reduced-warfarin-levels-unclear]
+severity: caution
+effect: decreases
+summary: "American ginseng lowered warfarin's effect on INR in a small trial, so it may make warfarin work less well."
+advice: "Tell the clinic that manages your warfarin before you start or stop American ginseng, and expect extra INR checks if you do. Keep the product and dose steady."
+details: "In a randomized, placebo-controlled trial in 20 healthy volunteers, two weeks of American ginseng lowered peak INR and the blood levels of warfarin compared with placebo. The study was small and used healthy young people rather than patients on long-term warfarin. A 2008 American Family Physician review calls the research conflicting: American ginseng reduced warfarin levels, while Asian ginseng (a different plant) did not change warfarin's kinetics or dynamics. The review advises avoiding the combination if possible. This entry is about American ginseng only."
+citations:
+  - type: "study"
+    title: "Brief communication: American ginseng reduces warfarin's effect in healthy patients: a randomized, controlled Trial."
+    url: "https://pubmed.ncbi.nlm.nih.gov/15238367/"
+    pmid: "15238367"
+  - type: "review"
+    title: "Herbal and dietary supplement--drug interactions in patients with chronic illnesses."
+    url: "https://pubmed.ncbi.nlm.nih.gov/18236826/"
+    pmid: "18236826"
+status: approved
+source: curated
+reviewed_at: 2026-11-23

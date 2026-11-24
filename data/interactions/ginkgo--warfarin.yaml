@@ -1,0 +1,28 @@
+id: ginkgo--warfarin
+food: ginkgo
+drug: warfarin
+mechanisms: [possible-antiplatelet-effect]
+severity: monitor
+effect: increases
+summary: "Ginkgo may raise bleeding risk with warfarin, but controlled studies have not shown an effect on warfarin itself."
+advice: "Tell the clinic that manages your warfarin before you start or stop ginkgo, and report unusual bruising or bleeding. If you take it, keep the product and dose steady."
+details: "NCCIH says ginkgo may increase the risk of bleeding in people taking anticoagulants such as warfarin. The evidence is mixed. A small crossover study in 12 healthy volunteers found that ginkgo at recommended doses did not change warfarin levels, INR or platelet aggregation, and a 2008 American Family Physician review notes that controlled studies show no effect on warfarin's kinetics or dynamics while experts still advise caution. A 2021 systematic review of warfarin and food, herb and supplement interactions still lists ginkgo among the products linked to bleeding. Because warfarin has a narrow safe range, it is worth telling your care team even though the evidence is unsettled."
+citations:
+  - type: "guideline"
+    title: "Ginkgo: Usefulness and Safety"
+    url: "https://www.nccih.nih.gov/health/ginkgo"
+  - type: "review"
+    title: "Herbal and dietary supplement--drug interactions in patients with chronic illnesses."
+    url: "https://pubmed.ncbi.nlm.nih.gov/18236826/"
+    pmid: "18236826"
+  - type: "study"
+    title: "Effect of ginkgo and ginger on the pharmacokinetics and pharmacodynamics of warfarin in healthy subjects."
+    url: "https://pubmed.ncbi.nlm.nih.gov/15801937/"
+    pmid: "15801937"
+  - type: "review"
+    title: "Warfarin and food, herbal or dietary supplement interactions: A systematic review."
+    url: "https://pubmed.ncbi.nlm.nih.gov/32478963/"
+    pmid: "32478963"
+status: approved
+source: curated
+reviewed_at: 2026-11-23
