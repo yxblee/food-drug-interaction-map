@@ -17,7 +17,7 @@ describe('seed dataset', () => {
     expect(drugs).toBeGreaterThanOrEqual(55)
     expect(ds!.foods.length).toBe(48)
     expect(ds!.mechanisms.length).toBeGreaterThanOrEqual(22)
-    expect(ds!.interactions.filter((i) => i.source === 'curated').length).toBe(59)
+    expect(ds!.interactions.filter((i) => i.source === 'curated').length).toBe(62)
   })
   it('keeps grapefruit relatives as a group, not citrus (ADR 0001)', () => {
     const rel = ds!.foods.filter((f) => f.parent === 'grapefruit-relatives').map((f) => f.id)
