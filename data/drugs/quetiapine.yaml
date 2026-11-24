@@ -1,6 +1,7 @@
 id: quetiapine
 name: Quetiapine
 rxnorm: "51272"
+medlineplus: "https://medlineplus.gov/druginfo/meds/a698019.html"
 dailymed: "0584dda8-bc3c-48fe-1a90-79608f78e8a0"
 aliases:
   - Quetiapine fumarate

@@ -60,7 +60,9 @@ export function WarningRow({
           <SeverityBadge severity={w.severity} />{' '}
         </>
       )}
-      <strong>{w.food.name}</strong>
+      <h4 className="warning__name">
+        <strong>{w.food.name}</strong>
+      </h4>
       {w.food.group && <span className="mono-label"> {groupTerm('food')}</span>}:{' '}
       <span className="warning__drugs">
         {affecting.length > 0 && (
@@ -107,7 +109,7 @@ export function WarningRow({
     <li className="warning">
       {upFront ? (
         <>
-          <p className="warning__lead">{lead}</p>
+          <div className="warning__lead">{lead}</div>
           {body}
         </>
       ) : (

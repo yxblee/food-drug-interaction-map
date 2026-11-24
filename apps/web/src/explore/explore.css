@@ -414,3 +414,8 @@
   display: inline-flex;
   align-items: center;
 }
+/* Counterpart names are h4 for screen reader navigation; keep the plain-text look. */
+h4.irow__name {
+  margin: 0;
+  font: inherit;
+}

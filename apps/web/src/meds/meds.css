@@ -285,3 +285,8 @@
     order: 1;
   }
 }
+.warning__name {
+  display: inline;
+  margin: 0;
+  font: inherit;
+}
