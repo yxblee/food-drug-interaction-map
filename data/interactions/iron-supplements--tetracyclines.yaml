@@ -6,7 +6,7 @@ severity: caution
 effect: decreases
 summary: "Iron supplements can bind tetracycline antibiotics and seriously reduce how much is absorbed."
 advice: "Space tetracycline antibiotics away from iron supplements, following your pharmacist's timing advice. Do not take them together."
-details: "The tetracycline and doxycycline labels say absorption is impaired by iron-containing preparations. In a 1970 study in healthy volunteers, ferrous sulphate taken together with tetracycline, oxytetracycline, methacycline or doxycycline seriously impaired absorption of each antibiotic, and the authors advised avoiding even small doses of iron taken at the same time."
+details: "The tetracycline and doxycycline labels say absorption is impaired by iron-containing preparations. In a 1970 study in healthy volunteers, ferrous sulfate taken together with tetracycline, oxytetracycline, methacycline or doxycycline seriously impaired absorption of each antibiotic, and the authors advised avoiding even small doses of iron taken at the same time."
 citations:
   - type: "label"
     title: "TETRACYCLINE HYDROCHLORIDE CAPSULE [BRYANT RANCH PREPACK]"

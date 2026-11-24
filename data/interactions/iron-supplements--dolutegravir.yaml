@@ -6,7 +6,7 @@ severity: caution
 effect: decreases
 summary: "Iron supplements can lower dolutegravir levels by about half when taken on an empty stomach."
 advice: "Take dolutegravir 2 hours before or 6 hours after an iron supplement. If you take them together with a meal, the label says they can be taken at the same time. Ask your pharmacist which applies to you."
-details: "The Tivicay label says that, when fasting, dolutegravir should be taken 2 hours before or 6 hours after oral supplements containing iron, and that they can be taken together with food. In 24 healthy volunteers, ferrous fumarate taken with dolutegravir while fasting lowered dolutegravir exposure (AUC) by 54%. Taking dolutegravir 2 hours before the iron, or taking both with a meal, cancelled the effect. Lower levels could weaken HIV treatment, so timing matters."
+details: "The Tivicay label says that, when fasting, dolutegravir should be taken 2 hours before or 6 hours after oral supplements containing iron, and that they can be taken together with food. In a study of healthy volunteers, ferrous fumarate taken with dolutegravir on an empty stomach cut dolutegravir levels by about half (54%). Taking dolutegravir 2 hours before the iron, or taking both with a meal, counteracted this. Lower levels could weaken HIV treatment, so timing matters."
 citations:
   - type: "label"
     title: "TIVICAY PD (DOLUTEGRAVIR SODIUM) TABLET, FOR SUSPENSION TIVICAY (DOLUTEGRAVIR SODIUM) TABLET, FILM COATED [VIIV HEALTHCARE COMPANY]"
