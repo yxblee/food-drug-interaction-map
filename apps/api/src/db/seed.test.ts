@@ -36,7 +36,11 @@ describe('seed dataset', () => {
     const ok =
       /^https:\/\/(dailymed\.nlm\.nih\.gov|pubmed\.ncbi\.nlm\.nih\.gov|ods\.od\.nih\.gov|medlineplus\.gov|www\.nccih\.nih\.gov|www\.niaaa\.nih\.gov|www\.ncbi\.nlm\.nih\.gov)\//
     for (const i of ds!.interactions) {
-      if (i.source === 'curated') expect(i.status, i.id).toBe('approved')
+      if (i.source === 'curated' && i.status === 'pending') {
+        // hand-curated drafts wait for owner review: two Citations, not yet reviewed
+        expect(i.citations.length, i.id).toBeGreaterThanOrEqual(2)
+        expect(i.reviewed_at, i.id).toBeUndefined()
+      } else if (i.source === 'curated') expect(i.status, i.id).toBe('approved')
       for (const c of i.citations) expect(c.url, i.id).toMatch(ok)
       expect(JSON.stringify(i), i.id).not.toMatch(/[<>]/)
     }
