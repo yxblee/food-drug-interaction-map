@@ -90,3 +90,16 @@ test('a Share link followed in a tab that already has the app asks, without a re
   await page.evaluate(() => (location.hash = '#nothing=here'))
   await expect(page.getByRole('group', { name: /Add these/ })).toHaveCount(0)
 })
+
+test('a Share link followed from another tab asks, and Not now clears it without re-asking', async ({
+  page,
+}) => {
+  await page.goto('./')
+  await page.evaluate(() => (location.hash = '#meds=warfarin'))
+  const prompt = page.getByRole('group', { name: /Add these 1 medication/ })
+  await prompt.getByRole('button', { name: 'Not now' }).click()
+
+  await expect(prompt).toHaveCount(0)
+  expect(new URL(page.url()).hash).toBe('')
+  await expect(chips(page).getByRole('listitem')).toHaveCount(0)
+})
