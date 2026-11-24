@@ -109,7 +109,7 @@ export function WarningRow({
     </>
   )
   return (
-    <li className="warning">
+    <li className={collapsible ? 'warning warning--collapsed' : 'warning'}>
       {upFront ? (
         <>
           <div className="warning__lead">{lead}</div>
@@ -117,7 +117,9 @@ export function WarningRow({
         </>
       ) : (
         <details>
-          <summary>{lead}</summary>
+          <summary>
+            <span className="warning__lead">{lead}</span>
+          </summary>
           {body}
         </details>
       )}

@@ -367,7 +367,7 @@ export function MyMedsTab({
             </p>
           ) : (
             <>
-              <JumpNav links={jumpLinks(groups, helps.length > 0, 'helps-title')} />
+              {collapsed && <JumpNav links={jumpLinks(groups, helps.length > 0, 'helps-title')} />}
               {groups.map(({ severity: sev, rows }) => (
                 <section key={sev} aria-labelledby={`sev-${sev}`} className="meds__sev">
                   <SeverityGroupHeading severity={sev} />

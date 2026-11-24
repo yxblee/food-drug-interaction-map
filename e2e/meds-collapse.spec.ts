@@ -17,6 +17,7 @@ async function open(page: Page, meds: string[]) {
 test('a short list looks as it does today: no jump links, no collapsed rows', async ({ page }) => {
   await open(page, SHORT)
   expect(await rows(page).count()).toBeLessThanOrEqual(5)
+  await expect(page.locator('li.warning--collapsed')).toHaveCount(0)
   await expect(page.getByRole('navigation', { name: 'Jump to severity' })).toHaveCount(0)
   // Avoid and Caution keep their advice up front, not behind a summary.
   await expect(

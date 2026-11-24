@@ -295,3 +295,36 @@
 .meds__sev h3 {
   scroll-margin-top: 1rem;
 }
+
+/* In a collapsed row the lead is the summary line itself: inline, no extra gap. */
+.warning summary .warning__lead {
+  margin: 0;
+}
+
+/* Phone: the jump row sits snug between the status line and the first Severity group, so the
+   first Avoid Food still shows on the first screen. */
+@media (max-width: 768px) {
+  .meds__results .jump {
+    margin-top: 0;
+  }
+  .meds__results .jump + .meds__sev h3 {
+    margin-top: 0;
+  }
+}
+@media (max-width: 768px) {
+  /* Collapsed rows keep their 44px target but sit closer to the group heading. */
+  .meds__sev .warning--collapsed > details > summary {
+    padding-block: 2px 4px;
+  }
+  .jump + .meds__sev .sev-meaning {
+    margin-bottom: 0;
+  }
+}
+@media (max-width: 768px) {
+  .meds__sev .warning--collapsed > details {
+    line-height: 1.3;
+  }
+  .meds__sev .warning--collapsed {
+    padding-top: 0;
+  }
+}
