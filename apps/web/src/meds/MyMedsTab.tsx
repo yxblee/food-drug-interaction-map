@@ -1,10 +1,11 @@
-import { useEffect, useMemo, useRef, useState } from 'react'
+import { Fragment, useEffect, useMemo, useRef, useState } from 'react'
 import type { GraphPayload } from '@fdi/schema'
 import { buildIndex, nodeKey, searchNodes, suggestNodes, type Index } from '@fdi/schema/domain'
 import { PillLabel } from '../PillLabel.tsx'
 import { dailymedUrl, MedlinePlusLink, NlmSource } from '../MedlinePlusLink.tsx'
 import { plural } from '../plural.ts'
 import { SeverityGroupHeading, SeverityWords } from '../explore/SeverityBadge.tsx'
+import { useMedia } from '../graph/useEnv.ts'
 import { JumpNav } from '../explore/JumpNav.tsx'
 import { jumpLinks, severityGroups } from '../explore/panelGroups.ts'
 import { PAIRING_MEANING, PairingRow } from '../explore/PairingRow.tsx'
@@ -75,6 +76,8 @@ export function MyMedsTab({
   const warnings = useMemo(() => checkMeds(ix, meds), [ix, meds])
   const helps = useMemo(() => pairingsFor(ix, meds), [ix, meds])
   const { collapsed, groups } = severityGroups(warnings)
+  const phone = useMedia('(max-width: 768px)')
+  const jump = <JumpNav links={jumpLinks(groups, helps.length > 0, 'helps-title')} />
   const name = (id: string) => ix.nodes.get(nodeKey('drug', id))?.name ?? id
   const link = (id: string) => ix.nodes.get(nodeKey('drug', id))?.medlineplus
   const label = (id: string) => ix.nodes.get(nodeKey('drug', id))?.dailymed
@@ -367,22 +370,26 @@ export function MyMedsTab({
             </p>
           ) : (
             <>
-              {collapsed && <JumpNav links={jumpLinks(groups, helps.length > 0, 'helps-title')} />}
-              {groups.map(({ severity: sev, rows }) => (
-                <section key={sev} aria-labelledby={`sev-${sev}`} className="meds__sev">
-                  <SeverityGroupHeading severity={sev} />
-                  <ul className="meds__list">
-                    {rows.map((w) => (
-                      <WarningRow
-                        key={w.food.id}
-                        warning={w}
-                        helps={helps}
-                        collapsible={collapsed}
-                        showSeverity={collapsed}
-                      />
-                    ))}
-                  </ul>
-                </section>
+              {collapsed && !phone && jump}
+              {groups.map(({ severity: sev, rows }, g) => (
+                <Fragment key={sev}>
+                  <section aria-labelledby={`sev-${sev}`} className="meds__sev">
+                    <SeverityGroupHeading severity={sev} />
+                    <ul className="meds__list">
+                      {rows.map((w) => (
+                        <WarningRow
+                          key={w.food.id}
+                          warning={w}
+                          helps={helps}
+                          collapsible={collapsed}
+                          showSeverity={collapsed}
+                        />
+                      ))}
+                    </ul>
+                  </section>
+                  {/* Phone: after the first group, so the first Avoid Food keeps the first screen. */}
+                  {collapsed && phone && g === 0 && jump}
+                </Fragment>
               ))}
             </>
           )}
