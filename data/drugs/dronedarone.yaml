@@ -1,6 +1,7 @@
 id: dronedarone
 name: Dronedarone
 rxnorm: "233698"
+medlineplus: "https://medlineplus.gov/druginfo/meds/a609034.html"
 dailymed: "7fa41601-7fb5-4155-8e50-2ae903f0d2d6"
 aliases:
   - Multaq

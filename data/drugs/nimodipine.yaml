@@ -1,6 +1,7 @@
 id: nimodipine
 name: Nimodipine
 rxnorm: "7426"
+medlineplus: "https://medlineplus.gov/druginfo/meds/a689010.html"
 dailymed: "e660fa26-b5c4-4d6d-8887-9e22b6666a10"
 aliases:
   - Nymalize

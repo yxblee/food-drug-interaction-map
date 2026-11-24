@@ -1,6 +1,7 @@
 id: ranolazine
 name: Ranolazine
 rxnorm: "35829"
+medlineplus: "https://medlineplus.gov/druginfo/meds/a606015.html"
 dailymed: "a624dc7f-921d-4554-a813-f72dca0133c3"
 aliases:
   - Ranexa
