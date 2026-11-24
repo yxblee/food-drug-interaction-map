@@ -1,0 +1,24 @@
+id: fish-oil--warfarin
+food: fish-oil
+drug: warfarin
+mechanisms: [possible-antiplatelet-effect]
+severity: monitor
+effect: increases
+summary: "Evidence is mixed on whether fish oil raises warfarin's effect; one case report showed a high INR, but a trial found none."
+advice: "If you take fish oil or omega-3 supplements, mention them to the clinic that manages your warfarin, and keep the dose steady. Ask about an extra INR check if you change it."
+details: "A case report described a significant rise in INR after a patient's fish oil dose was doubled. A small randomized, placebo-controlled trial in patients on long-term warfarin found no significant change in INR with 3 to 6 grams of fish oil a day, though it was very small (16 patients). A 2008 American Family Physician review summarizes the same split: case reports of raised INR, but a clinical study showing no effect on anticoagulation. Fish oil may slightly reduce platelet stickiness, which could add to warfarin's effect, but this is not proven. Fish oil in food is not the concern here, this entry is about supplements."
+citations:
+  - type: "review"
+    title: "Herbal and dietary supplement--drug interactions in patients with chronic illnesses."
+    url: "https://pubmed.ncbi.nlm.nih.gov/18236826/"
+    pmid: "18236826"
+  - type: "study"
+    title: "Fish oil interaction with warfarin."
+    url: "https://pubmed.ncbi.nlm.nih.gov/14742793/"
+    pmid: "14742793"
+  - type: "study"
+    title: "Effects of Marine Fish Oils on the Anticoagulation Status of Patients Receiving Chronic Warfarin Therapy."
+    url: "https://pubmed.ncbi.nlm.nih.gov/10767122/"
+    pmid: "10767122"
+status: pending
+source: curated
