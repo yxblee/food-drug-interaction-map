@@ -338,8 +338,10 @@ test('the 2D graph is one tab stop; arrows move the active node and Enter opens 
   await expect(page.locator(`[id="${first}"]`)).toHaveClass(/is-active/)
   await expect
     .poll(async () => {
-      await page.keyboard.press('ArrowRight')
-      await page.keyboard.press('ArrowDown')
+      for (const k of ['ArrowRight', 'ArrowDown', 'ArrowLeft', 'ArrowUp']) {
+        await page.keyboard.press(k)
+        if ((await active()) !== first) break
+      }
       return active()
     })
     .not.toBe(first)

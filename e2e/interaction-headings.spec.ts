@@ -6,7 +6,7 @@ import { expect, test } from '@playwright/test'
 test('Drug panel (few rows, grouped): each Interaction name is an h4 and select buttons still work', async ({
   page,
 }) => {
-  await page.goto('./?node=drug%3Awarfarin')
+  await page.goto('./?node=drug%3Aisoniazid')
   const panel = page.getByRole('complementary')
   const rows = panel.locator('li.irow')
   await expect(rows.first()).toBeVisible()
