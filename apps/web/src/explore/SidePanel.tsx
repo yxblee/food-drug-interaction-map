@@ -16,11 +16,21 @@ interface Props {
   onNext: () => void
   onClose: () => void
   onNotFound: () => void
+  /** An Interaction to open, expand and focus once the panel has loaded. */
+  interactionId?: string | null
 }
 
 type Load = { key: string; detail?: NodeDetail; error?: boolean }
 
-export function SidePanel({ nodeKey, onSelect, onPrev, onNext, onClose, onNotFound }: Props) {
+export function SidePanel({
+  nodeKey,
+  onSelect,
+  onPrev,
+  onNext,
+  onClose,
+  onNotFound,
+  interactionId,
+}: Props) {
   const [load, setLoad] = useState<Load>({ key: nodeKey })
   const [kind, id] = splitKey(nodeKey)
 
@@ -64,6 +74,18 @@ export function SidePanel({ nodeKey, onSelect, onPrev, onNext, onClose, onNotFou
 
   const d = load.key === nodeKey ? load.detail : undefined
   const entity = d?.entity
+  const named =
+    !!interactionId && !!d && d.interactions.some((r) => r.interaction.id === interactionId)
+  useEffect(() => {
+    if (!interactionId || !named) return
+    const row = document.getElementById(`ixn-${interactionId}`)
+    if (!row) return
+    // Open the row (when collapsed) and its details so the advice and the copy control show.
+    row.querySelectorAll('details').forEach((el) => (el.open = true))
+    row.focus({ preventScroll: true })
+    const calm = window.matchMedia('(prefers-reduced-motion: reduce)').matches
+    row.scrollIntoView({ block: 'start', behavior: calm ? 'auto' : 'smooth' })
+  }, [d, interactionId, named])
   const { collapsed, groups } = panelGroups(d?.interactions ?? [])
   const links = jumpLinks(groups, !!d && d.pairings.length > 0 && kind !== 'mechanism')
   const jump = (e: React.MouseEvent, id: string) => {
@@ -161,6 +183,11 @@ export function SidePanel({ nodeKey, onSelect, onPrev, onNext, onClose, onNotFou
             </p>
           )}
 
+          {interactionId && !named && (
+            <p className="notice" role="status">
+              That Interaction isn't listed here.
+            </p>
+          )}
           {d.interactions.length === 0 ? (
             <p>
               No food–drug interactions recorded for this item in our dataset. That does not mean a
@@ -210,6 +237,7 @@ export function SidePanel({ nodeKey, onSelect, onPrev, onNext, onClose, onNotFou
                               grouped={{ inherited: !!from }}
                               groupSeverity={sev}
                               collapsible={collapsed}
+                              linkNode={nodeKey}
                             />
                           ))}
                         </ul>
