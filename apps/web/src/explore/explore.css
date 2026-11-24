@@ -434,3 +434,7 @@ h4.irow__name {
   outline: 2px solid currentColor;
   outline-offset: 2px;
 }
+/* Room above for the focus ring when a link scrolls the row to the panel's top. */
+.irow {
+  scroll-margin-top: 8px;
+}
