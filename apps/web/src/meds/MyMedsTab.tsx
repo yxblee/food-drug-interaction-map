@@ -1,11 +1,12 @@
 import { useEffect, useMemo, useRef, useState } from 'react'
 import type { GraphPayload } from '@fdi/schema'
-import { SEVERITIES } from '@fdi/schema'
 import { buildIndex, nodeKey, searchNodes, suggestNodes, type Index } from '@fdi/schema/domain'
 import { PillLabel } from '../PillLabel.tsx'
 import { dailymedUrl, MedlinePlusLink, NlmSource } from '../MedlinePlusLink.tsx'
 import { plural } from '../plural.ts'
 import { SeverityGroupHeading, SeverityWords } from '../explore/SeverityBadge.tsx'
+import { JumpNav } from '../explore/JumpNav.tsx'
+import { jumpLinks, severityGroups } from '../explore/panelGroups.ts'
 import { PAIRING_MEANING, PairingRow } from '../explore/PairingRow.tsx'
 import { checkMeds, pairingsFor, type FoodWarning } from './checkMeds.ts'
 import { Combobox, NoMatch } from './Combobox.tsx'
@@ -73,6 +74,7 @@ export function MyMedsTab({
   }
   const warnings = useMemo(() => checkMeds(ix, meds), [ix, meds])
   const helps = useMemo(() => pairingsFor(ix, meds), [ix, meds])
+  const { collapsed, groups } = severityGroups(warnings)
   const name = (id: string) => ix.nodes.get(nodeKey('drug', id))?.name ?? id
   const link = (id: string) => ix.nodes.get(nodeKey('drug', id))?.medlineplus
   const label = (id: string) => ix.nodes.get(nodeKey('drug', id))?.dailymed
@@ -364,24 +366,31 @@ export function MyMedsTab({
               Ask your pharmacist if you're unsure.
             </p>
           ) : (
-            SEVERITIES.map((sev) => {
-              const group = warnings.filter((w) => w.severity === sev)
-              if (!group.length) return null
-              return (
+            <>
+              <JumpNav links={jumpLinks(groups, helps.length > 0, 'helps-title')} />
+              {groups.map(({ severity: sev, rows }) => (
                 <section key={sev} aria-labelledby={`sev-${sev}`} className="meds__sev">
                   <SeverityGroupHeading severity={sev} />
                   <ul className="meds__list">
-                    {group.map((w) => (
-                      <WarningRow key={w.food.id} warning={w} helps={helps} />
+                    {rows.map((w) => (
+                      <WarningRow
+                        key={w.food.id}
+                        warning={w}
+                        helps={helps}
+                        collapsible={collapsed}
+                        showSeverity={collapsed}
+                      />
                     ))}
                   </ul>
                 </section>
-              )
-            })
+              ))}
+            </>
           )}
           {helps.length > 0 && (
             <section aria-labelledby="helps-title" className="meds__sev meds__helps">
-              <h3 id="helps-title">Helps to take with</h3>
+              <h3 id="helps-title" tabIndex={-1}>
+                Helps to take with
+              </h3>
               <p className="sev-meaning">{PAIRING_MEANING}</p>
               <ul className="meds__list">
                 {helps.map(({ drug, pairings }) => (

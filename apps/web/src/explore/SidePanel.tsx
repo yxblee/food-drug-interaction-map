@@ -4,7 +4,8 @@ import { Fragment, useEffect, useRef, useState } from 'react'
 import { type Drug, type Food, type Mechanism, type NodeDetail } from '@fdi/schema'
 import { groupTerm, nodeKey as keyOf, splitKey } from '@fdi/schema/domain'
 import { fetchNode } from '../api.ts'
-import { SEVERITY_LABEL, SeverityBadge, SeverityGroupHeading } from './SeverityBadge.tsx'
+import { SeverityGroupHeading } from './SeverityBadge.tsx'
+import { JumpNav } from './JumpNav.tsx'
 import { InteractionRow } from './InteractionRow.tsx'
 import { PAIRING_MEANING, PairingRow } from './PairingRow.tsx'
 import { jumpLinks, panelGroups } from './panelGroups.ts'
@@ -88,14 +89,6 @@ export function SidePanel({
   }, [d, interactionId, named])
   const { collapsed, groups } = panelGroups(d?.interactions ?? [])
   const links = jumpLinks(groups, !!d && d.pairings.length > 0 && kind !== 'mechanism')
-  const jump = (e: React.MouseEvent, id: string) => {
-    e.preventDefault()
-    const h = document.getElementById(id)
-    if (!h) return
-    h.focus({ preventScroll: true })
-    const calm = window.matchMedia('(prefers-reduced-motion: reduce)').matches
-    h.scrollIntoView({ block: 'start', behavior: calm ? 'auto' : 'smooth' })
-  }
   const header = d
     ? [kind, d.parent?.name ?? (d.node.group ? groupTerm(kind) : null)].filter(Boolean).join(' · ')
     : kind
@@ -195,23 +188,7 @@ export function SidePanel({
             </p>
           ) : (
             <>
-              {links.length > 0 && (
-                <nav className="jump" aria-label="Jump to severity">
-                  {links.map((l) => (
-                    <a key={l.id} href={`#${l.id}`} onClick={(e) => jump(e, l.id)}>
-                      {l.severity ? (
-                        <>
-                          <SeverityBadge severity={l.severity} decorative />
-                          <span className="sr-only">{SEVERITY_LABEL[l.severity]} </span>
-                          {l.count}
-                        </>
-                      ) : (
-                        'Helps to take with'
-                      )}
-                    </a>
-                  ))}
-                </nav>
-              )}
+              <JumpNav links={links} />
               {groups.map(({ severity: sev, rows, runs }) => (
                 <section key={sev} aria-labelledby={`sev-${sev}`} className="panel__sev">
                   <SeverityGroupHeading severity={sev} count={rows.length} />

@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vite-plus/test'
 import type { Interaction, ResolvedInteraction, Severity } from '@fdi/schema'
-import { jumpLinks, panelGroups } from './panelGroups.ts'
+import { jumpLinks, panelGroups, severityGroups } from './panelGroups.ts'
 
 const row = (id: string, severity: Severity, inheritedFrom?: string) =>
   ({ interaction: { id, severity }, inheritedFrom }) as ResolvedInteraction<Interaction>
@@ -88,5 +88,43 @@ describe('jumpLinks', () => {
     const one = panelGroups([row('a', 'caution'), row('b', 'caution')]).groups
     expect(jumpLinks(one, false)).toEqual([])
     expect(jumpLinks(one, true)).toEqual([])
+  })
+})
+
+describe('severityGroups (My meds Foods to watch)', () => {
+  const food = (id: string, severity: Severity) => ({ id, severity })
+  const foods = [
+    food('a', 'caution'),
+    food('b', 'avoid'),
+    food('c', 'minimal'),
+    food('d', 'caution'),
+    food('e', 'avoid'),
+    food('f', 'monitor'),
+  ]
+
+  it('groups Foods by Severity, most severe first, and collapses above five', () => {
+    const { collapsed, groups } = severityGroups(foods)
+    expect(groups.map((g) => [g.severity, g.rows.map((f) => f.id)])).toEqual([
+      ['avoid', ['b', 'e']],
+      ['caution', ['a', 'd']],
+      ['monitor', ['f']],
+      ['minimal', ['c']],
+    ])
+    expect(collapsed).toBe(true)
+  })
+
+  it('leaves five or fewer Foods expanded', () => {
+    expect(severityGroups(foods.slice(0, 5)).collapsed).toBe(false)
+    expect(severityGroups([])).toEqual({ collapsed: false, groups: [] })
+  })
+
+  it('feeds the same jump links as the Explore panel', () => {
+    expect(jumpLinks(severityGroups(foods).groups, true, 'helps-title')).toEqual([
+      { id: 'sev-avoid', severity: 'avoid', count: 2 },
+      { id: 'sev-caution', severity: 'caution', count: 2 },
+      { id: 'sev-monitor', severity: 'monitor', count: 1 },
+      { id: 'sev-minimal', severity: 'minimal', count: 1 },
+      { id: 'helps-title', count: 0 },
+    ])
   })
 })

@@ -3,6 +3,9 @@ import { SEVERITIES, type Interaction, type ResolvedInteraction, type Severity }
 /** A panel with more rows than this shows each row as one collapsed line. */
 export const COLLAPSE_ABOVE = 5
 
+/** True when a list of this many rows shows each row as one collapsed line. */
+export const collapsesAt = (count: number) => count > COLLAPSE_ABOVE
+
 export interface PanelRun {
   /** The Drug class or Food group these Inherited interactions come from, stated once. */
   inheritedFrom?: string
@@ -31,7 +34,16 @@ export function panelGroups(rows: ResolvedInteraction<Interaction>[]) {
     }))
     return [{ severity, rows: mine, runs }]
   })
-  return { collapsed: rows.length > COLLAPSE_ABOVE, groups }
+  return { collapsed: collapsesAt(rows.length), groups }
+}
+
+/** Anything with a Severity, such as a My meds Food warning, grouped most severe first; empty groups skipped. */
+export function severityGroups<T extends { severity: Severity }>(items: T[]) {
+  const groups = SEVERITIES.flatMap((severity) => {
+    const rows = items.filter((i) => i.severity === severity)
+    return rows.length ? [{ severity, rows }] : []
+  })
+  return { collapsed: collapsesAt(items.length), groups }
 }
 
 export interface JumpLink {
@@ -42,12 +54,16 @@ export interface JumpLink {
 }
 
 /** Jump links for a panel: one per Severity group, then Helpful pairings. None unless two or more. */
-export function jumpLinks(groups: PanelGroup[], hasPairings: boolean): JumpLink[] {
+export function jumpLinks(
+  groups: { severity: Severity; rows: readonly unknown[] }[],
+  hasPairings: boolean,
+  pairingsId = 'pairs-title',
+): JumpLink[] {
   const links: JumpLink[] = groups.map((g) => ({
     id: `sev-${g.severity}`,
     severity: g.severity,
     count: g.rows.length,
   }))
-  if (hasPairings) links.push({ id: 'pairs-title', count: 0 })
+  if (hasPairings) links.push({ id: pairingsId, count: 0 })
   return groups.length >= 2 ? links : []
 }
