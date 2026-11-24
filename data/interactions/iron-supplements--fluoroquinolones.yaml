@@ -1,0 +1,20 @@
+id: iron-supplements--fluoroquinolones
+food: iron-supplements
+drug: fluoroquinolones
+mechanisms: [chelation]
+severity: caution
+effect: decreases
+summary: "Iron supplements can bind quinolone antibiotics in the gut so much less is absorbed."
+advice: "Take the antibiotic at least 2 hours before or 6 hours after an iron supplement, unless your pharmacist gives different timing."
+details: "The ciprofloxacin label says metal cations such as iron, and products containing calcium, iron or zinc, should be separated from the antibiotic by at least 2 hours before or 6 hours after. In 8 healthy volunteers, ferrous sulphate (100 mg of iron) lowered the total absorption (AUC) of ciprofloxacin by 57%, norfloxacin by 73% and ofloxacin by 25%. Lower antibiotic levels could let an infection go untreated, so timing matters."
+citations:
+  - type: "label"
+    title: "CIPRO (CIPROFLOXACIN HYDROCHLORIDE) TABLET, FILM COATED CIPRO (CIPROFLOXACIN) KIT [BAYER HEALTHCARE PHARMACEUTICALS INC.]"
+    url: "https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=888dc7f9-ad9c-4c00-8d50-8ddfd9bd27c0"
+    setid: "888dc7f9-ad9c-4c00-8d50-8ddfd9bd27c0"
+  - type: "study"
+    title: "The effect of ferrous sulphate on the absorption of norfloxacin, ciprofloxacin and ofloxacin."
+    url: "https://pubmed.ncbi.nlm.nih.gov/8148225/"
+    pmid: "8148225"
+status: pending
+source: curated
