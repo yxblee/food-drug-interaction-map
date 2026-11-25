@@ -1,0 +1,20 @@
+id: st-johns-wort--tacrolimus
+food: st-johns-wort
+drug: tacrolimus
+mechanisms: [cyp3a4-induction, p-glycoprotein-induction]
+severity: caution
+effect: decreases
+summary: "St. John's wort can lower tacrolimus levels and raise the risk of transplant rejection."
+advice: "Do not start or stop St. John's wort without talking to your transplant team. If you do change it, expect your tacrolimus level to be checked and your dose possibly adjusted."
+details: "St. John's wort can increase CYP3A4, an enzyme that breaks down tacrolimus, and P-glycoprotein, a pump that limits how much is absorbed. The Prograf label names St. John's wort among strong CYP3A inducers that may lower tacrolimus trough levels and increase the risk of rejection, and calls for a higher dose with level monitoring. In a study of 10 healthy volunteers, 18 days of St. John's wort lowered exposure to a single tacrolimus dose by about a third."
+citations:
+  - type: "label"
+    title: "PROGRAF (TACROLIMUS) CAPSULE, GELATIN COATED PROGRAF (TACROLIMUS) INJECTION, SOLUTION PROGRAF (TACROLIMUS) GRANULE, FOR SUSPENSION [ASTELLAS PHARMA US, INC.]"
+    url: "https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=7f667de1-9dfa-4bd6-8ba0-15ee2d78873b"
+    setid: "7f667de1-9dfa-4bd6-8ba0-15ee2d78873b"
+  - type: "study"
+    title: "Effects of St. John's wort (Hypericum perforatum) on tacrolimus pharmacokinetics in healthy volunteers (J Clin Pharmacol 2004)"
+    url: "https://pubmed.ncbi.nlm.nih.gov/14681346/"
+    pmid: "14681346"
+status: pending
+source: curated

@@ -17,7 +17,7 @@ describe('seed dataset', () => {
     expect(drugs).toBeGreaterThanOrEqual(55)
     expect(ds!.foods.length).toBe(48)
     expect(ds!.mechanisms.length).toBeGreaterThanOrEqual(22)
-    expect(ds!.interactions.filter((i) => i.source === 'curated').length).toBe(62)
+    expect(ds!.interactions.filter((i) => i.source === 'curated').length).toBe(64)
   })
   it('keeps grapefruit relatives as a group, not citrus (ADR 0001)', () => {
     const rel = ds!.foods.filter((f) => f.parent === 'grapefruit-relatives').map((f) => f.id)
@@ -31,6 +31,22 @@ describe('seed dataset', () => {
   it('pins the e2e interactions', () => {
     expect(get('grapefruit-relatives--simvastatin')?.severity).toBe('avoid')
     expect(get('leafy-greens--warfarin')?.severity).toBe('caution')
+  })
+  it("keeps the new St John's wort Interactions Pending until the owner reviews them (#185)", () => {
+    // [Drug, PubMed id]; the first Citation is that Drug's own DailyMed label
+    for (const [drug, pmid] of [
+      ['digoxin', '10546917'],
+      ['tacrolimus', '14681346'],
+    ] as const) {
+      const i = get(`st-johns-wort--${drug}`)
+      expect(i?.status, drug).toBe('pending')
+      expect(i?.reviewed_at, drug).toBeUndefined()
+      const label = ds!.drugs.find((d) => d.id === drug)?.dailymed
+      expect(
+        i?.citations.map((c) => c.setid ?? c.pmid),
+        drug,
+      ).toEqual([label, pmid])
+    }
   })
   it('backs every interaction with an authoritative citation and no placeholders', () => {
     const ok =
