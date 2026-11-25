@@ -1,0 +1,21 @@
+id: magnesium-supplements--dolutegravir
+food: magnesium-supplements
+drug: dolutegravir
+mechanisms: [chelation]
+severity: caution
+effect: decreases
+summary: "Magnesium-containing products such as antacids can lower dolutegravir levels a lot by binding it in the gut."
+advice: "Take dolutegravir 2 hours before or 6 hours after magnesium-containing antacids, laxatives or supplements. Ask your pharmacist how far apart to space a magnesium supplement."
+details: "The Tivicay label says dolutegravir should be taken 2 hours before or 6 hours after cation-containing antacids or laxatives, and its patient information names medicines that contain magnesium. In a study of healthy volunteers, an aluminum and magnesium antacid taken with dolutegravir cut dolutegravir levels by about three-quarters (74%), and taking dolutegravir 2 hours before the antacid reduced the loss to about a quarter (26%). Neither source tested a magnesium supplement itself, so this applies the antacid finding to supplements."
+citations:
+  - type: "label"
+    title: "TIVICAY PD (DOLUTEGRAVIR SODIUM) TABLET, FOR SUSPENSION TIVICAY (DOLUTEGRAVIR SODIUM) TABLET, FILM COATED [VIIV HEALTHCARE COMPANY]"
+    url: "https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=63df5af3-b8ac-4e76-9830-2dbb340af922"
+    setid: "63df5af3-b8ac-4e76-9830-2dbb340af922"
+  - type: "study"
+    title: "Pharmacokinetics of the HIV integrase inhibitor S/GSK1349572 co-administered with acid-reducing agents and multivitamins in healthy volunteers."
+    url: "https://pubmed.ncbi.nlm.nih.gov/21493648/"
+    pmid: "21493648"
+status: approved
+source: curated
+reviewed_at: 2026-11-25
