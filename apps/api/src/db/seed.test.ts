@@ -45,7 +45,7 @@ describe('seed dataset', () => {
       expect(JSON.stringify(i), i.id).not.toMatch(/[<>]/)
     }
   })
-  it('drafts the iron and magnesium chelation Interactions as Pending with a label and a second source (#178)', () => {
+  it('has the iron and magnesium chelation Interactions Approved with a label and a second source (#178)', () => {
     const ids = [
       'iron-supplements--fluoroquinolones',
       'iron-supplements--tetracyclines',
@@ -54,9 +54,9 @@ describe('seed dataset', () => {
     ]
     for (const id of ids) {
       const i = get(id)
-      expect(i?.status, id).toBe('pending')
+      expect(i?.status, id).toBe('approved')
       expect(i?.mechanisms, id).toEqual(['chelation'])
-      expect(i?.reviewed_at, id).toBeUndefined()
+      expect(i?.reviewed_at, id).toBe('2026-11-25')
       expect(
         i?.citations.some((c) => c.type === 'label'),
         id,
