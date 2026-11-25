@@ -1,7 +1,7 @@
 import { useMemo, useSyncExternalStore } from 'react'
 import type { Env } from './chooseView.ts'
 
-function useMedia(query: string): boolean {
+export function useMedia(query: string): boolean {
   return useSyncExternalStore(
     (notify) => {
       const mq = window.matchMedia(query)

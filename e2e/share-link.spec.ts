@@ -64,3 +64,42 @@ test('Share link pill fits the action row at 360px and announces the notice', as
     page.getByRole('status').filter({ hasText: /1 medication not in our list was left out/ }),
   ).toBeVisible()
 })
+
+test('a Share link followed in a tab that already has the app asks, without a reload', async ({
+  page,
+}) => {
+  await page.goto('./?tab=meds')
+  await expect(page.getByLabel('Add a medication')).toBeVisible()
+  await page.evaluate(() => {
+    ;(window as unknown as { stillHere: boolean }).stillHere = true
+    location.hash = '#meds=warfarin,warfarin,not-a-drug,metformin'
+  })
+
+  const prompt = page.getByRole('group', { name: /Add these 2 medications/ })
+  await expect(prompt).toContainText("1 link item wasn't recognised")
+  await prompt.getByRole('button', { name: 'Add' }).click()
+
+  await expect(chips(page)).toContainText('Warfarin')
+  await expect(chips(page)).toContainText('Metformin')
+  await expect(prompt).toHaveCount(0)
+  expect(new URL(page.url()).hash).toBe('')
+  expect(await page.evaluate(() => (window as unknown as { stillHere?: boolean }).stillHere)).toBe(
+    true,
+  )
+  // a fragment with no usable list shows nothing
+  await page.evaluate(() => (location.hash = '#nothing=here'))
+  await expect(page.getByRole('group', { name: /Add these/ })).toHaveCount(0)
+})
+
+test('a Share link followed from another tab asks, and Not now clears it without re-asking', async ({
+  page,
+}) => {
+  await page.goto('./')
+  await page.evaluate(() => (location.hash = '#meds=warfarin'))
+  const prompt = page.getByRole('group', { name: /Add these 1 medication/ })
+  await prompt.getByRole('button', { name: 'Not now' }).click()
+
+  await expect(prompt).toHaveCount(0)
+  expect(new URL(page.url()).hash).toBe('')
+  await expect(chips(page).getByRole('listitem')).toHaveCount(0)
+})
