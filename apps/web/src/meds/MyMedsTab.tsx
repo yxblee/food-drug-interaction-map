@@ -9,7 +9,7 @@ import { useMedia } from '../graph/useEnv.ts'
 import { JumpNav } from '../explore/JumpNav.tsx'
 import { jumpLinks, severityGroups } from '../explore/panelGroups.ts'
 import { PAIRING_MEANING, PairingRow } from '../explore/PairingRow.tsx'
-import { checkMeds, pairingsFor, type FoodWarning } from './checkMeds.ts'
+import { checkMeds, medsWithNoFoods, pairingsFor, type FoodWarning } from './checkMeds.ts'
 import { Combobox, NoMatch } from './Combobox.tsx'
 import { foodWarningsToText } from './foodWarningsToText.ts'
 import { FoodCheck } from './FoodCheck.tsx'
@@ -75,6 +75,7 @@ export function MyMedsTab({
   }
   const warnings = useMemo(() => checkMeds(ix, meds), [ix, meds])
   const helps = useMemo(() => pairingsFor(ix, meds), [ix, meds])
+  const noFoods = medsWithNoFoods(ix, meds, warnings)
   const { collapsed, groups } = severityGroups(warnings)
   const phone = useMedia('(max-width: 768px)')
   const jump = <JumpNav links={jumpLinks(groups, helps.length > 0, 'helps-title')} />
@@ -391,6 +392,12 @@ export function MyMedsTab({
                   {collapsed && phone && g === 0 && jump}
                 </Fragment>
               ))}
+              {noFoods.length > 0 && (
+                <p className="meds__nofoods">
+                  No Foods to watch in our dataset for {noFoods.map((d) => d.name).join(', ')}. Our
+                  dataset is not exhaustive. Ask your pharmacist if you&apos;re unsure.
+                </p>
+              )}
             </>
           )}
           {helps.length > 0 && (

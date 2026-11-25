@@ -6,6 +6,7 @@ import {
   checkMeds,
   helpedBy,
   mapKeysFor,
+  medsWithNoFoods,
   namesOnlyDrug,
   pairingsFor,
 } from './checkMeds.ts'
@@ -43,6 +44,8 @@ const ix = buildIndex(
     node('drug', 'sartans', { group: true }),
     node('drug', 'losartan', { parent: 'sartans' }),
     node('drug', 'warfarin'),
+    node('drug', 'metformin'),
+    node('drug', 'digoxin'),
     node('food', 'grapefruit'),
     node('food', 'alcohol'),
     node('food', 'greens'),
@@ -205,6 +208,21 @@ const pix = buildIndex(
     pr('greens', 'atorvastatin'),
   ],
 )
+
+describe('medsWithNoFoods', () => {
+  const names = (ids: string[]) => medsWithNoFoods(ix, ids, checkMeds(ix, ids)).map((d) => d.name)
+  it('names only the Medications no Food warning covers, in list order', () => {
+    expect(names(['metformin', 'warfarin', 'digoxin'])).toEqual(['Metformin', 'Digoxin'])
+  })
+  it('counts Inherited interactions: a class member with only class warnings is not named', () => {
+    expect(names(['atorvastatin', 'metformin'])).toEqual(['Metformin'])
+  })
+  it('names nobody when every Medication has Foods to watch, or the id is unknown', () => {
+    expect(names(['warfarin', 'losartan'])).toEqual([])
+    expect(names(['warfarin', 'nope'])).toEqual([])
+    expect(names([])).toEqual([])
+  })
+})
 
 describe('pairingsFor', () => {
   it('returns [] with no meds, unknown ids or no pairings', () => {

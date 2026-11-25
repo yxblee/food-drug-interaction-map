@@ -47,6 +47,15 @@ export function checkMeds(ix: Index, drugIds: string[]): FoodWarning[] {
   return out.sort(bySeverityThenFood)
 }
 
+/** Listed Medications that none of their Food warnings name, in list order. */
+export function medsWithNoFoods(ix: Index, drugIds: string[], warnings: FoodWarning[]) {
+  const warned = new Set(warnings.flatMap((w) => w.affected.map((h) => h.drug.id)))
+  return drugIds.flatMap((id) => {
+    const drug = ix.nodes.get(nodeKey('drug', id))
+    return drug && !warned.has(id) ? [drug] : []
+  })
+}
+
 export function mapKeysFor(ix: Index, warnings: FoodWarning[], drugIds: string[]): Set<string> {
   const keys = new Set(drugIds.map((id) => nodeKey('drug', id)))
   for (const id of drugIds) {
