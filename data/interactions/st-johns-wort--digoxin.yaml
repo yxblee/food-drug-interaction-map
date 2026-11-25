@@ -6,7 +6,7 @@ severity: caution
 effect: decreases
 summary: "St. John's wort can lower digoxin levels, so the medicine may work less well."
 advice: "Do not start or stop St. John's wort without talking to your prescriber. If you do change it, expect your digoxin level to be checked and your dose possibly adjusted."
-details: "St. John's wort can increase P-glycoprotein, a pump that limits how much digoxin the body takes in. The digoxin label lists St. John's wort among products that lower digoxin concentrations and calls for measuring digoxin levels before it is started, continued monitoring and a higher dose if needed. In a placebo-controlled study of healthy volunteers, 10 days of a St. John's wort extract lowered digoxin exposure by about a quarter; the authors suggested P-glycoprotein induction as the likely reason."
+details: "St. John's wort can increase P-glycoprotein, a pump that limits how much digoxin the body takes in. The digoxin label lists St. John's wort among products that lower digoxin concentrations and calls for measuring digoxin levels before it is started, continued monitoring and a higher dose if needed. In a placebo-controlled study of healthy volunteers, 10 days of a St. John's wort extract lowered digoxin exposure by about a quarter; the authors suggested P-glycoprotein induction as a possible reason."
 citations:
   - type: "label"
     title: "DIGOXIN TABLET [AMNEAL PHARMACEUTICALS OF NEW YORK LLC]"

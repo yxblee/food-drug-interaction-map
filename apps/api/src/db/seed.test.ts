@@ -32,7 +32,7 @@ describe('seed dataset', () => {
     expect(get('grapefruit-relatives--simvastatin')?.severity).toBe('avoid')
     expect(get('leafy-greens--warfarin')?.severity).toBe('caution')
   })
-  it("keeps the new St John's wort Interactions Pending until the owner reviews them (#185)", () => {
+  it("pins the new St John's wort Interactions as Pending, with their Citations (#185)", () => {
     // [Drug, PubMed id]; the first Citation is that Drug's own DailyMed label
     for (const [drug, pmid] of [
       ['digoxin', '10546917'],
