@@ -17,7 +17,7 @@ describe('seed dataset', () => {
     expect(drugs).toBeGreaterThanOrEqual(55)
     expect(ds!.foods.length).toBe(48)
     expect(ds!.mechanisms.length).toBeGreaterThanOrEqual(22)
-    expect(ds!.interactions.filter((i) => i.source === 'curated').length).toBe(62)
+    expect(ds!.interactions.filter((i) => i.source === 'curated').length).toBe(66)
   })
   it('keeps grapefruit relatives as a group, not citrus (ADR 0001)', () => {
     const rel = ds!.foods.filter((f) => f.parent === 'grapefruit-relatives').map((f) => f.id)
@@ -43,6 +43,28 @@ describe('seed dataset', () => {
       } else if (i.source === 'curated') expect(i.status, i.id).toBe('approved')
       for (const c of i.citations) expect(c.url, i.id).toMatch(ok)
       expect(JSON.stringify(i), i.id).not.toMatch(/[<>]/)
+    }
+  })
+  it('has the iron and magnesium chelation Interactions Approved with a label and a second source (#178)', () => {
+    const ids = [
+      'iron-supplements--fluoroquinolones',
+      'iron-supplements--tetracyclines',
+      'iron-supplements--dolutegravir',
+      'magnesium-supplements--dolutegravir',
+    ]
+    for (const id of ids) {
+      const i = get(id)
+      expect(i?.status, id).toBe('approved')
+      expect(i?.mechanisms, id).toEqual(['chelation'])
+      expect(i?.reviewed_at, id).toBe('2026-11-25')
+      expect(
+        i?.citations.some((c) => c.type === 'label'),
+        id,
+      ).toBe(true)
+      expect(
+        i?.citations.some((c) => c.type !== 'label'),
+        id,
+      ).toBe(true)
     }
   })
   it('gives every Approved Avoid Interaction two Citations (#135, #160)', () => {
