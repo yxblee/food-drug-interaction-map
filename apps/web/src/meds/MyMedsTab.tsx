@@ -365,10 +365,7 @@ export function MyMedsTab({
               which foods to watch.
             </p>
           ) : warnings.length === 0 ? (
-            <p>
-              No food interactions in our dataset for these drugs. Our dataset is not exhaustive.
-              Ask your pharmacist if you're unsure.
-            </p>
+            <p>No food interactions in our dataset for these drugs. {NOT_EXHAUSTIVE}</p>
           ) : (
             <>
               {collapsed && !phone && jump}
@@ -394,8 +391,8 @@ export function MyMedsTab({
               ))}
               {noFoods.length > 0 && (
                 <p className="meds__nofoods">
-                  No Foods to watch in our dataset for {noFoods.map((d) => d.name).join(', ')}. Our
-                  dataset is not exhaustive. Ask your pharmacist if you&apos;re unsure.
+                  No Foods to watch in our dataset for {noFoods.map((d) => d.name).join(', ')}.{' '}
+                  {NOT_EXHAUSTIVE}
                 </p>
               )}
             </>
@@ -473,6 +470,8 @@ const nodesOf = (ix: Index, food: string, drug: string) => ({
 const chipId = (id: string) => `med-chip-${id}`
 
 const UNDO_MS = 10_000
+
+const NOT_EXHAUSTIVE = "Our dataset is not exhaustive. Ask your pharmacist if you're unsure."
 
 function resultsSummary(warnings: FoodWarning[] | null, notChecked: number): string {
   const unchecked = notChecked ? `${notChecked} not checked` : ''

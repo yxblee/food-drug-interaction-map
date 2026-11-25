@@ -47,7 +47,7 @@ export function checkMeds(ix: Index, drugIds: string[]): FoodWarning[] {
   return out.sort(bySeverityThenFood)
 }
 
-/** Listed Medications that none of their Food warnings name, in list order. */
+/** Listed Medications that no Food warning names, in list order. */
 export function medsWithNoFoods(ix: Index, drugIds: string[], warnings: FoodWarning[]) {
   const warned = new Set(warnings.flatMap((w) => w.affected.map((h) => h.drug.id)))
   return drugIds.flatMap((id) => {
