@@ -12,7 +12,7 @@ import {
   zoomIdentity,
   zoomTransform,
 } from 'd3'
-import type { Selection, Simulation, ZoomBehavior } from 'd3'
+import type { Selection, Simulation, ZoomBehavior, ZoomTransform } from 'd3'
 import {
   NO_INSET,
   fitTransform,
@@ -135,6 +135,8 @@ export function create2d(opts: RendererOptions): GraphRenderer {
   let onSelect: (key: string | null) => void = () => {}
   let inset: Inset = NO_INSET
   let fitTimer: ReturnType<typeof setTimeout> | undefined
+  // Where the running zoom animation will end; null when none is running.
+  let heading: ZoomTransform | null = null
 
   function resize() {
     if (!host || !svg) return
@@ -159,9 +161,20 @@ export function create2d(opts: RendererOptions): GraphRenderer {
     }[]
     const t = fitTransform(pts, { width: host.clientWidth, height: host.clientHeight }, inset)
     if (!t) return
-    const to = zoomIdentity.translate(t.x, t.y).scale(t.k)
-    if (opts.motion) zoomer.transform(svg.transition().duration(500), to)
-    else zoomer.transform(svg, to)
+    moveTo(zoomIdentity.translate(t.x, t.y).scale(t.k), 500)
+  }
+  function moveTo(to: ZoomTransform, ms: number) {
+    if (!svg || !zoomer) return
+    if (!opts.motion) return zoomer.transform(svg, to)
+    heading = to
+    // A wheel, drag or pinch interrupts; the check keeps a replaced move from clearing its successor.
+    const done = () => {
+      if (heading === to) heading = null
+    }
+    zoomer.transform(
+      svg.transition().duration(ms).on('end.heading interrupt.heading cancel.heading', done),
+      to,
+    )
   }
 
   // The node under a pointer event, by distance to its centre rather than its drawn shape.
@@ -378,8 +391,13 @@ export function create2d(opts: RendererOptions): GraphRenderer {
 
     zoomBy(factor) {
       if (!svg || !zoomer) return
-      if (opts.motion) zoomer.scaleBy(svg.transition().duration(200), factor)
-      else zoomer.scaleBy(svg, factor)
+      // Build on the running move's end, not on the part-way frame, so no press is partly lost.
+      const from = heading ?? zoomTransform(svg.node()!)
+      const [min, max] = zoomer.scaleExtent()
+      const k = Math.min(max, Math.max(min, from.k * factor))
+      // The viewBox puts the view centre at 0,0, so zooming about it scales the offset alike.
+      const r = k / from.k
+      moveTo(zoomIdentity.translate(from.x * r, from.y * r).scale(k), 200)
     },
 
     reset() {

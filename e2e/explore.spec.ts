@@ -652,10 +652,9 @@ test('controls over the graph are frosted at rest and solid on focus', async ({ 
 
 test.describe('2D map on touch', () => {
   type Pg = import('@playwright/test').Page
-  async function to2d(page: Pg, info: { project: { name: string } }) {
-    // No transitions: on a busy machine the first fit can outlast the wait below, and a second
-    // zoom click can interrupt the first one part-way.
-    await page.emulateMedia({ reducedMotion: 'reduce' })
+  async function to2d(page: Pg, info: { project: { name: string } }, motion = false) {
+    // No transitions by default: on a busy machine the first fit can outlast the wait below.
+    await page.emulateMedia({ reducedMotion: motion ? 'no-preference' : 'reduce' })
     await page.goto('./')
     if (info.project.name !== 'mobile') await page.getByRole('button', { name: '2D' }).click()
     await expect(page.locator('svg.graph2d')).toBeVisible()
@@ -681,6 +680,72 @@ test.describe('2D map on touch', () => {
     await expect.poll(() => scale(page)).toBeLessThan(before * 0.9)
     await page.getByRole('button', { name: 'Reset map view' }).click()
     await expect.poll(async () => Math.abs((await scale(page)) - before) < 0.01).toBe(true)
+  })
+
+  test.describe('with motion on', () => {
+    // The page clock holds animation frames until runFor, so presses land exactly where we say:
+    // d3 has drawn nothing between two of them unless the test runs the clock.
+    async function animated(page: Pg, info: { project: { name: string } }) {
+      await page.clock.install()
+      await to2d(page, info, true)
+      await page.clock.pauseAt(Date.now() + 60_000)
+      await page.clock.runFor(1000) // past the first fit
+    }
+    // Clicks dispatched in one task: no frame can be drawn between them.
+    const press = (page: Pg, ...names: string[]) =>
+      page.evaluate((labels) => {
+        for (const l of labels)
+          document.querySelector<HTMLButtonElement>(`button[aria-label="${l}"]`)!.click()
+      }, names)
+    const settled = async (page: Pg) => {
+      await page.clock.runFor(1000)
+      return scale(page)
+    }
+
+    for (const [names, factor] of [
+      [['Zoom out', 'Zoom out'], 0.25],
+      [['Zoom in', 'Zoom in'], 4],
+      [['Zoom in', 'Zoom in', 'Zoom out'], 2],
+    ] as const) {
+      for (const gap of [0, 100]) {
+        test(`${names.join(', ')} ${gap} ms apart scales by ${factor}`, async ({ page }, info) => {
+          await animated(page, info)
+          // Start from a scale that leaves room inside the 0.2 to 4 limits.
+          await press(page, ...(factor < 1 ? ['Zoom in'] : ['Zoom out']))
+          const before = await settled(page)
+          for (const name of names) {
+            await press(page, name)
+            if (gap) await page.clock.runFor(gap)
+          }
+          const limit = (k: number) => Math.min(4, Math.max(0.2, k))
+          const expected = names.reduce((k, n) => limit(k * (n === 'Zoom in' ? 2 : 0.5)), before)
+          expect(await settled(page)).toBeCloseTo(expected, 3)
+        })
+      }
+    }
+
+    test('a wheel zoom between two presses is not undone', async ({ page }, info) => {
+      await animated(page, info)
+      const before = await scale(page)
+      await press(page, 'Zoom in')
+      await page.clock.runFor(100)
+      const partWay = await scale(page)
+      expect(partWay).toBeGreaterThan(before)
+      await page.locator('svg.graph2d').dispatchEvent('wheel', { deltaY: 100 })
+      const wheeled = await scale(page)
+      expect(wheeled).toBeLessThan(partWay)
+      await press(page, 'Zoom out')
+      expect(await settled(page)).toBeCloseTo(Math.max(0.2, wheeled / 2), 3)
+    })
+
+    test('a press during Reset map view scales from the reset view', async ({ page }, info) => {
+      await animated(page, info)
+      const fitted = await scale(page)
+      await press(page, 'Zoom in')
+      await settled(page)
+      await press(page, 'Reset map view', 'Zoom in')
+      expect(await settled(page)).toBeCloseTo(Math.min(4, fitted * 2), 3)
+    })
   })
 
   test('labels are at least 11px on screen', async ({ page }, info) => {
