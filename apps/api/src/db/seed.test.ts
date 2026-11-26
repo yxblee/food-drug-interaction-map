@@ -48,7 +48,7 @@ describe('seed dataset', () => {
       ).toEqual([label, pmid])
     }
   })
-  it('drafts alcohol Interactions where a DailyMed label names alcohol (#197)', () => {
+  it('has the alcohol Interactions Approved where a DailyMed label names alcohol (#197)', () => {
     // [Drug, Severity from the label's advice, other Sources]; the first Citation is the Drug's label
     const mp = 'https://medlineplus.gov/druginfo/meds/'
     for (const [drug, severity, others] of [
@@ -60,7 +60,8 @@ describe('seed dataset', () => {
       ['tinidazole', 'avoid', [`${mp}a604036.html`]],
     ] as const) {
       const i = get(`alcohol--${drug}`)
-      expect(i?.status, drug).toBe('pending')
+      expect(i?.status, drug).toBe('approved')
+      expect(i?.reviewed_at, drug).toBe('2026-11-26')
       expect(i?.severity, drug).toBe(severity)
       const label = ds!.drugs.find((d) => d.id === drug)?.dailymed
       expect(

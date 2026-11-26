@@ -19,5 +19,6 @@ citations:
   - type: "guideline"
     title: "Glyburide: MedlinePlus Drug Information"
     url: "https://medlineplus.gov/druginfo/meds/a684058.html"
-status: pending
+status: approved
 source: curated
+reviewed_at: 2026-11-26
