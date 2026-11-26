@@ -163,9 +163,15 @@ export function create2d(opts: RendererOptions): GraphRenderer {
     if (!t) return
     moveTo(zoomIdentity.translate(t.x, t.y).scale(t.k), 500)
   }
-  function moveTo(to: ZoomTransform, ms: number) {
+  // `at` is the screen point the move zooms about; the view centre by default.
+  function moveTo(
+    to: ZoomTransform,
+    ms: number,
+    at?: [number, number],
+    animate: boolean = opts.motion,
+  ) {
     if (!svg || !zoomer) return
-    if (!opts.motion) return zoomer.transform(svg, to)
+    if (!animate) return zoomer.transform(svg, to)
     zoomTarget = to
     // The check keeps a replaced move from clearing its successor's target.
     const done = () => {
@@ -174,7 +180,15 @@ export function create2d(opts: RendererOptions): GraphRenderer {
     zoomer.transform(
       svg.transition().duration(ms).on('end.target interrupt.target cancel.target', done),
       to,
+      at,
     )
+  }
+  // `from` scaled by `factor`, within the zoom limits, keeping the screen point `at` still.
+  function scaled(from: ZoomTransform, factor: number, [x, y]: [number, number]) {
+    const [min, max] = zoomer!.scaleExtent()
+    const k = Math.min(max, Math.max(min, from.k * factor))
+    const r = k / from.k
+    return zoomIdentity.translate(x - (x - from.x) * r, y - (y - from.y) * r).scale(k)
   }
 
   // The node under a pointer event, by distance to its centre rather than its drawn shape.
@@ -292,21 +306,46 @@ export function create2d(opts: RendererOptions): GraphRenderer {
           paintLabels()
         })
       svg.call(zoomer)
-      // d3 interrupts a running move when a wheel or touch gesture starts, not on its later steps,
-      // so the move would overwrite them. Wrapped, since d3 stops other listeners on this element;
-      // it prevents the default only on steps it applies.
-      for (const type of ['wheel.zoom', 'touchmove.zoom']) {
-        const apply = svg.on(type) // no touch handler without touch support
-        if (!apply) continue
-        svg.on(
+      // d3 interrupts a running move when a wheel, drag or touch gesture starts, not on its later
+      // steps, so the move would overwrite them. Wrapped, since d3 stops other listeners; it
+      // prevents the default only on steps it applies.
+      const map = svg
+      const interruptOnStep = <E extends Element | Window>(
+        target: Selection<E, unknown, null, undefined>,
+        type: string,
+        options: AddEventListenerOptions,
+      ) => {
+        // None for touch without touch support, or for the mouse after a press d3 ignored.
+        const apply = target.on(type)
+        if (!apply) return
+        target.on(
           type,
           function (e: Event, d) {
             apply.call(this, e, d)
-            if (e.defaultPrevented) select(this).interrupt()
+            if (e.defaultPrevented) map.interrupt()
           },
-          { passive: false },
+          options,
         )
       }
+      for (const type of ['wheel.zoom', 'touchmove.zoom'])
+        interruptOnStep(map, type, { passive: false })
+      // A drag's steps are heard on the window, only while the mouse button is held.
+      const pressMouse = map.on('mousedown.zoom')!
+      map.on('mousedown.zoom', function (e: MouseEvent, d) {
+        pressMouse.call(this, e, d)
+        interruptOnStep(select(e.view!), 'mousemove.zoom', { capture: true })
+      })
+      // d3 keeps its double-click (and double-tap) destination to itself, so a button press
+      // couldn't build on it: the same zoom, made here instead.
+      map.on('dblclick.zoom', function (e: MouseEvent | TouchEvent) {
+        if (e.ctrlKey || ('button' in e && e.button)) return // d3's default filter
+        e.preventDefault()
+        e.stopImmediatePropagation()
+        const at = pointer('changedTouches' in e ? e.changedTouches[0] : e, this)
+        const from = zoomTransform(this)
+        // 250 ms even with reduced motion, as d3 does.
+        moveTo(scaled(from, e.shiftKey ? 0.5 : 2, at), 250, at, true)
+      })
       svg.on('click', (e: MouseEvent) => onSelect(hit(e)))
       // Mouse only, so touch never leaves a stuck hover.
       svg.on('pointermove', (e: PointerEvent) => {
@@ -408,11 +447,8 @@ export function create2d(opts: RendererOptions): GraphRenderer {
       if (!svg || !zoomer) return
       // Build on the running move's end, not on the part-way frame, so no press is partly lost.
       const from = zoomTarget ?? zoomTransform(svg.node()!)
-      const [min, max] = zoomer.scaleExtent()
-      const k = Math.min(max, Math.max(min, from.k * factor))
-      // The viewBox puts the view centre at 0,0, so zooming about it scales the offset alike.
-      const r = k / from.k
-      moveTo(zoomIdentity.translate(from.x * r, from.y * r).scale(k), 200)
+      // The viewBox puts the view centre at 0,0.
+      moveTo(scaled(from, factor, [0, 0]), 200)
     },
 
     reset() {
