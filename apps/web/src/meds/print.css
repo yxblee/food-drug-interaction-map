@@ -104,6 +104,10 @@
     content-visibility: visible;
     display: block;
   }
+  .meds__nofoods {
+    margin-top: 14pt;
+    break-inside: avoid;
+  }
   .meds__unchecked {
     border: 1pt solid #000;
     border-radius: 0;
