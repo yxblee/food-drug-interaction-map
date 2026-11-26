@@ -1,0 +1,7 @@
+id: "tinidazole"
+name: "Tinidazole"
+rxnorm: "10612"
+medlineplus: "https://medlineplus.gov/druginfo/meds/a604036.html"
+dailymed: "a0d01539-8413-4703-94cc-d221918630a1"
+aliases: ["Tindamax"]
+drug_class: "Nitroimidazole antibiotic"

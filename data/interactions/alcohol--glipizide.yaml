@@ -1,0 +1,20 @@
+id: alcohol--glipizide
+food: alcohol
+drug: glipizide
+mechanisms: [additive-hypoglycemia]
+severity: avoid
+effect: increases
+summary: "Alcohol with glipizide can make low blood sugar more likely and change how well the medicine works."
+advice: "Do not drink alcohol while taking extended-release glipizide (Glucotrol XL). If you take another form of glipizide, ask your prescriber what is safe for you."
+details: "The Glucotrol XL patient information says not to drink alcohol while taking it because it can increase the chance of serious side effects. The same label says low blood sugar is more likely when alcohol is taken, and that alcohol may strengthen or weaken the glucose-lowering effect. In a study of 10 people without diabetes who took glipizide, alcohol did not deepen the fall in blood sugar but slowed its return toward the fasting level."
+citations:
+  - type: "label"
+    title: "GLUCOTROL XL (GLIPIZIDE) TABLET, EXTENDED RELEASE [ROERIG]"
+    url: "https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=eed99b60-d043-4249-9b2a-f05e46fb588d"
+    setid: "eed99b60-d043-4249-9b2a-f05e46fb588d"
+  - type: "study"
+    title: "Interaction of ethanol and glipizide in humans (Diabetes Care 1987)"
+    url: "https://pubmed.ncbi.nlm.nih.gov/3428047/"
+    pmid: "3428047"
+status: pending
+source: curated

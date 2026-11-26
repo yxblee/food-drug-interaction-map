@@ -17,7 +17,7 @@ describe('seed dataset', () => {
     expect(drugs).toBeGreaterThanOrEqual(55)
     expect(ds!.foods.length).toBe(48)
     expect(ds!.mechanisms.length).toBeGreaterThanOrEqual(22)
-    expect(ds!.interactions.filter((i) => i.source === 'curated').length).toBe(68)
+    expect(ds!.interactions.filter((i) => i.source === 'curated').length).toBe(74)
   })
   it('keeps grapefruit relatives as a group, not citrus (ADR 0001)', () => {
     const rel = ds!.foods.filter((f) => f.parent === 'grapefruit-relatives').map((f) => f.id)
@@ -46,6 +46,27 @@ describe('seed dataset', () => {
         i?.citations.map((c) => c.setid ?? c.pmid),
         drug,
       ).toEqual([label, pmid])
+    }
+  })
+  it('drafts alcohol Interactions where a DailyMed label names alcohol (#197)', () => {
+    // [Drug, Severity from the label's advice, second Source]; the first Citation is the Drug's label
+    const mp = 'https://medlineplus.gov/druginfo/meds/'
+    for (const [drug, severity, second] of [
+      ['gabapentin', 'caution', `${mp}a694007.html`],
+      ['glimepiride', 'caution', `${mp}a696016.html`],
+      ['glipizide', 'avoid', '3428047'],
+      ['glyburide', 'caution', '10587839'],
+      ['nitroglycerin', 'avoid', '6430619'],
+      ['tinidazole', 'avoid', `${mp}a604036.html`],
+    ] as const) {
+      const i = get(`alcohol--${drug}`)
+      expect(i?.status, drug).toBe('pending')
+      expect(i?.severity, drug).toBe(severity)
+      const label = ds!.drugs.find((d) => d.id === drug)?.dailymed
+      expect(
+        i?.citations.map((c) => c.setid ?? c.pmid ?? c.url),
+        drug,
+      ).toEqual([label, second])
     }
   })
   it('backs every interaction with an authoritative citation and no placeholders', () => {

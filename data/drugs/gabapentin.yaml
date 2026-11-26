@@ -1,0 +1,7 @@
+id: "gabapentin"
+name: "Gabapentin"
+rxnorm: "25480"
+medlineplus: "https://medlineplus.gov/druginfo/meds/a694007.html"
+dailymed: "97935fd9-1d4a-43b6-a5d9-de994591187b"
+aliases: ["Gralise", "Horizant", "Neurontin", "Relgaabi", "Gabarone"]
+drug_class: "Gabapentinoid"

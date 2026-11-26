@@ -1,0 +1,19 @@
+id: alcohol--gabapentin
+food: alcohol
+drug: gabapentin
+mechanisms: [cns-depression]
+severity: caution
+effect: increases
+summary: "Alcohol can make the drowsiness and dizziness from gabapentin worse."
+advice: "Do not drink alcohol while taking gabapentin without first talking with your healthcare provider, and do not drive or use heavy machinery until you know how it affects you."
+details: "The Neurontin Medication Guide says not to drink alcohol or take other medicines that cause sleepiness or dizziness without first talking with a healthcare provider, because the combination may make sleepiness or dizziness worse. The MedlinePlus gabapentin page also says alcohol can add to the drowsiness the medicine causes."
+citations:
+  - type: "label"
+    title: "NEURONTIN (GABAPENTIN) CAPSULE NEURONTIN (GABAPENTIN) TABLET, FILM COATED NEURONTIN (GABAPENTIN) SOLUTION [VIATRIS SPECIALTY LLC]"
+    url: "https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=97935fd9-1d4a-43b6-a5d9-de994591187b"
+    setid: "97935fd9-1d4a-43b6-a5d9-de994591187b"
+  - type: "guideline"
+    title: "Gabapentin: MedlinePlus Drug Information"
+    url: "https://medlineplus.gov/druginfo/meds/a694007.html"
+status: pending
+source: curated

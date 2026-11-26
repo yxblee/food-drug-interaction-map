@@ -1,0 +1,19 @@
+id: alcohol--glimepiride
+food: alcohol
+drug: glimepiride
+mechanisms: [additive-hypoglycemia]
+severity: caution
+effect: increases
+summary: "Alcohol can strengthen or weaken glimepiride unpredictably and makes low blood sugar more likely."
+advice: "Ask your prescriber about the safe use of alcohol while taking glimepiride, and learn how to recognize and treat low blood sugar."
+details: "The glimepiride label says both short-term and long-term alcohol use may strengthen or weaken the glucose-lowering effect in an unpredictable way, and that low blood sugar is more likely when alcohol is taken. The MedlinePlus glimepiride page says alcohol can make side effects worse and may also cause flushing, headache, nausea and vomiting."
+citations:
+  - type: "label"
+    title: "GLIMEPIRIDE TABLET [ACCORD HEALTHCARE INC]"
+    url: "https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=9b74fbac-9e04-4927-9981-1e3dace89c6d"
+    setid: "9b74fbac-9e04-4927-9981-1e3dace89c6d"
+  - type: "guideline"
+    title: "Glimepiride: MedlinePlus Drug Information"
+    url: "https://medlineplus.gov/druginfo/meds/a696016.html"
+status: pending
+source: curated

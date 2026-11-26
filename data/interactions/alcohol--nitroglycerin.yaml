@@ -1,0 +1,20 @@
+id: alcohol--nitroglycerin
+food: alcohol
+drug: nitroglycerin
+mechanisms: [additive-blood-pressure-lowering]
+severity: avoid
+effect: increases
+summary: "Alcohol with nitroglycerin can lower your blood pressure."
+advice: "Do not drink alcohol while taking nitroglycerin."
+details: "The patient information for Nitrostat, a nitroglycerin tablet placed under the tongue, says not to consume alcohol while taking it because this can lower blood pressure. In a small study of healthy volunteers, systolic blood pressure was significantly lower when nitroglycerin was taken about an hour after a large amount of alcohol than when it was taken before drinking. Very soon after drinking, systolic blood pressure after nitroglycerin was not significantly different with alcohol or juice."
+citations:
+  - type: "label"
+    title: "NITROSTAT (NITROGLYCERIN) TABLET [VIATRIS SPECIALTY LLC]"
+    url: "https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=9a52da75-d0af-4237-96c0-0b12adfa8636"
+    setid: "9a52da75-d0af-4237-96c0-0b12adfa8636"
+  - type: "study"
+    title: "Does alcohol intensify the hemodynamic effects of nitroglycerin? (Clin Cardiol 1984)"
+    url: "https://pubmed.ncbi.nlm.nih.gov/6430619/"
+    pmid: "6430619"
+status: pending
+source: curated

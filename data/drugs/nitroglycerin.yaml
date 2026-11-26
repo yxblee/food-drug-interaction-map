@@ -1,0 +1,7 @@
+id: "nitroglycerin"
+name: "Nitroglycerin"
+rxnorm: "4917"
+medlineplus: "https://medlineplus.gov/druginfo/meds/a601086.html"
+dailymed: "9a52da75-d0af-4237-96c0-0b12adfa8636"
+aliases: ["Rectiv", "Nitrolingual", "Gonitro", "Nitro-Dur", "Nitro-Bid", "Nitrostat", "NitroMist"]
+drug_class: "Nitrate"
