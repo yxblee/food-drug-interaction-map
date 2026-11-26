@@ -163,15 +163,10 @@ export function create2d(opts: RendererOptions): GraphRenderer {
     if (!t) return
     moveTo(zoomIdentity.translate(t.x, t.y).scale(t.k), 500)
   }
-  // `at` is the screen point the move zooms about; the view centre by default.
-  function moveTo(
-    to: ZoomTransform,
-    ms: number,
-    at?: [number, number],
-    animate: boolean = opts.motion,
-  ) {
+  // Jumps without motion. `at` is the screen point the move zooms about; the view centre by default.
+  function moveTo(to: ZoomTransform, ms: number, at?: [number, number]) {
     if (!svg || !zoomer) return
-    if (!animate) return zoomer.transform(svg, to)
+    if (!opts.motion) return zoomer.transform(svg, to)
     zoomTarget = to
     // The check keeps a replaced move from clearing its successor's target.
     const done = () => {
@@ -343,8 +338,7 @@ export function create2d(opts: RendererOptions): GraphRenderer {
         e.stopImmediatePropagation()
         const at = pointer('changedTouches' in e ? e.changedTouches[0] : e, this)
         const from = zoomTransform(this)
-        // 250 ms even with reduced motion, as d3 does.
-        moveTo(scaled(from, e.shiftKey ? 0.5 : 2, at), 250, at, true)
+        moveTo(scaled(from, e.shiftKey ? 0.5 : 2, at), 250, at)
       })
       svg.on('click', (e: MouseEvent) => onSelect(hit(e)))
       // Mouse only, so touch never leaves a stuck hover.
