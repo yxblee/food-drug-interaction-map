@@ -11,7 +11,7 @@ Two ways in, over one curated dataset:
 
 **Live demo:** [yxblee.github.io/food-drug-interaction-map](https://yxblee.github.io/food-drug-interaction-map/). A static proof of concept of the full-stack app: the Dataset as of the last deploy from `main`, redeployed after every green push.
 
-**Status:** core app built (schema, API, 53 cited interactions, Explore, My meds, end-to-end tests). See the [design spec](docs/superpowers/specs/2026-10-08-core-app-design.md), [implementation plan](docs/superpowers/plans/2026-10-08-core-app.md), [glossary](GLOSSARY.md) and [data sources](docs/data-sources.md).
+**Status:** core app built (schema, API, 129 approved cited interactions, Explore, My meds, end-to-end tests). See the [design spec](docs/superpowers/specs/2026-10-08-core-app-design.md), [implementation plan](docs/superpowers/plans/2026-10-08-core-app.md), [glossary](GLOSSARY.md) and [data sources](docs/data-sources.md).
 
 ## Development
 
@@ -52,13 +52,13 @@ Needs Node ≥ 24.11 and pnpm. Layout: `apps/api` (Hono), `apps/web` (React), `p
 I take medications and manage them for a family member; "can I eat this with it?" has no quick, cited, whole-list answer (see [Build Session 1 evidence](#build-session-1-evidence)). Choices:
 
 - **Two views, one dataset.** *My meds* answers my own question (what should I watch, by severity). *Explore* shows the mechanism links so related warnings make sense together.
-- **Curated, not scraped.** The research databases are mostly predicted or text-mined, so I hand-wrote 53 interactions, each citing a drug label, NIH fact sheet or review. Their grades are never mapped onto severity.
+- **Curated, not scraped.** The research databases are mostly predicted or text-mined, so I hand-wrote the interactions, each citing a drug label, NIH fact sheet or review. Their grades are never mapped onto severity.
 - **Private by design.** The medication list lives only in the browser's storage; the check runs on the device and never calls the API with a drug name.
 - **Small stack.** YAML in git → validated → SQLite → small read API → React app. No accounts, no drug–drug interactions, US drug names, English only.
 
 ### Data
 
-`data/` holds 75 drugs (including classes such as statins and MAOIs), 42 foods, 25 mechanisms and 83 approved interactions as YAML, plus Helpful pairings (a Food that helps a Drug, such as taking it with a meal) in `data/pairings/` once they are checked against a label; none are published yet. Sources are DailyMed labels, NIH ODS/NCCIH fact sheets and PubMed reviews, linked but not copied (permission and terms in [docs/data-sources.md](docs/data-sources.md)). Brand names come from RxNorm through the NLM RxNav API (`node --run pipeline -- brands`). Each interaction file carries severity, a plain-language summary and advice, and its citations, so every result on screen traces to a file in `data/` and a source link.
+`data/` holds 91 drugs (including classes such as statins and MAOIs), 48 foods, 29 mechanisms and 129 approved interactions as YAML, plus 8 published Helpful pairings (a Food that helps a Drug, such as taking it with a meal) in `data/pairings/`, each checked against a label. Sources are DailyMed labels, NIH ODS/NCCIH fact sheets and PubMed reviews, linked but not copied (permission and terms in [docs/data-sources.md](docs/data-sources.md)). Brand names come from RxNorm through the NLM RxNav API (`node --run pipeline -- brands`). Each interaction file carries severity, a plain-language summary and advice, and its citations, so every result on screen traces to a file in `data/` and a source link.
 
 ### Run locally
 
