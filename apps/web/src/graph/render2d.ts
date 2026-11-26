@@ -311,13 +311,14 @@ export function create2d(opts: RendererOptions): GraphRenderer {
       // prevents the default only on steps it applies.
       const map = svg
       const interruptOnStep = <E extends Element | Window>(
-        on: Selection<E, unknown, null, undefined>,
+        target: Selection<E, unknown, null, undefined>,
         type: string,
         options: AddEventListenerOptions,
       ) => {
-        const apply = on.on(type) // no touch handler without touch support
+        // None for touch without touch support, or for the mouse after a press d3 ignored.
+        const apply = target.on(type)
         if (!apply) return
-        on.on(
+        target.on(
           type,
           function (e: Event, d) {
             apply.call(this, e, d)
@@ -329,9 +330,9 @@ export function create2d(opts: RendererOptions): GraphRenderer {
       for (const type of ['wheel.zoom', 'touchmove.zoom'])
         interruptOnStep(map, type, { passive: false })
       // A drag's steps are heard on the window, only while the mouse button is held.
-      const grab = map.on('mousedown.zoom')!
+      const pressMouse = map.on('mousedown.zoom')!
       map.on('mousedown.zoom', function (e: MouseEvent, d) {
-        grab.call(this, e, d)
+        pressMouse.call(this, e, d)
         interruptOnStep(select(e.view!), 'mousemove.zoom', { capture: true })
       })
       // d3 keeps its double-click (and double-tap) destination to itself, so a button press

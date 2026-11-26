@@ -789,6 +789,12 @@ test.describe('2D map on touch', () => {
         const { a, e, f } = document.querySelector<SVGGElement>('svg.graph2d > g')!.getScreenCTM()!
         return { a, e, f }
       })
+    type View = Awaited<ReturnType<typeof view>>
+    /** Where the map spot under screen point `at` has gone, going from one view to another. */
+    const carried = (at: { x: number; y: number }, from: View, to: View) => ({
+      x: ((at.x - from.e) / from.a) * to.a + to.e,
+      y: ((at.y - from.f) / from.a) * to.a + to.f,
+    })
     /** Where the view centre (viewBox 0,0) is on screen, and a point clear of every control. */
     const points = async (page: Pg) => {
       const centre = await page.evaluate(() => {
@@ -837,9 +843,9 @@ test.describe('2D map on touch', () => {
           expect(to.a).toBeCloseTo(clamp(from.a * 4), 3)
           // The tapped spot stays put through the double zoom, then the press doubles its
           // distance from the centre.
-          const spot = { x: (at.x - from.e) / from.a, y: (at.y - from.f) / from.a }
-          expect(spot.x * to.a + to.e).toBeCloseTo(2 * at.x - centre.x, 0)
-          expect(spot.y * to.a + to.f).toBeCloseTo(2 * at.y - centre.y, 0)
+          const spot = carried(at, from, to)
+          expect(spot.x).toBeCloseTo(2 * at.x - centre.x, 0)
+          expect(spot.y).toBeCloseTo(2 * at.y - centre.y, 0)
         })
       }
     }
@@ -854,8 +860,9 @@ test.describe('2D map on touch', () => {
       await page.clock.runFor(1000)
       const to = await view(page)
       expect(to.a).toBeCloseTo(clamp(from.a / 2), 3)
-      expect(((at.x - from.e) / from.a) * to.a + to.e).toBeCloseTo(at.x, 0)
-      expect(((at.y - from.f) / from.a) * to.a + to.f).toBeCloseTo(at.y, 0)
+      const spot = carried(at, from, to)
+      expect(spot.x).toBeCloseTo(at.x, 0)
+      expect(spot.y).toBeCloseTo(at.y, 0)
     })
 
     // Pressed either before the drag, or from the keyboard while the mouse button is held.
