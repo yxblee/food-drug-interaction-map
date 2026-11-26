@@ -653,6 +653,9 @@ test('controls over the graph are frosted at rest and solid on focus', async ({ 
 test.describe('2D map on touch', () => {
   type Pg = import('@playwright/test').Page
   async function to2d(page: Pg, info: { project: { name: string } }) {
+    // No transitions: on a busy machine the first fit can outlast the wait below, and a second
+    // zoom click can interrupt the first one part-way.
+    await page.emulateMedia({ reducedMotion: 'reduce' })
     await page.goto('./')
     if (info.project.name !== 'mobile') await page.getByRole('button', { name: '2D' }).click()
     await expect(page.locator('svg.graph2d')).toBeVisible()

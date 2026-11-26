@@ -33,7 +33,7 @@ async function activeContrast(page: Page, option: Locator, list: Locator) {
   }
 }
 
-/** Polled: colours transition after a theme switch, so a single sample can land mid-fade. */
+/** Polled: the app sets its theme variables in an effect, after the media query has changed. */
 const expectContrast = (page: Page, option: Locator, list: Locator) =>
   expect
     .poll(async () => {
@@ -60,6 +60,9 @@ for (const [name, setup] of SETUPS) {
   test(`active option is visible in ${name}: Explore, Add a medication, Food check`, async ({
     page,
   }) => {
+    // Resting colours only. With motion, a busy machine starves frames: the 3D map's startup blocks
+    // the page past the poll, and the theme fade stalls part-way. Reduced motion has neither.
+    await page.emulateMedia({ reducedMotion: 'reduce' })
     await page.goto('./')
     await setup(page)
     await exploreBox(page).fill('gra')
