@@ -1,0 +1,4 @@
+id: "additive-hypoglycemia"
+name: "Added low blood sugar risk"
+kind: "pharmacodynamic"
+explanation: "Some diabetes medicines lower blood sugar, and drinking alcohol can make low blood sugar (hypoglycemia) more likely while you take them."

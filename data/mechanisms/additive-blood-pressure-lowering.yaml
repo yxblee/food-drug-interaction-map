@@ -1,0 +1,4 @@
+id: "additive-blood-pressure-lowering"
+name: "Added blood pressure lowering"
+kind: "pharmacodynamic"
+explanation: "Some medicines lower blood pressure, and alcohol can lower it too. Together the drop can be larger than with the medicine alone."

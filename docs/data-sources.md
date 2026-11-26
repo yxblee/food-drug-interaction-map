@@ -50,7 +50,7 @@ Brand-name Aliases in `data/drugs/` come from [RxNorm](https://www.nlm.nih.gov/r
 - For each Drug with an `rxnorm` id (never a Drug class), it reads the Brand names (`/rxcui/{id}/related.json?tty=BN`) and keeps those whose only ingredient (`tty=IN`) is that Drug. A combination product's brand, such as Vytorin (ezetimibe and simvastatin), is not an Alias of either ingredient.
 - New Brand names are added after the existing Aliases, which are never removed or reordered. A name another Drug already answers to is skipped and printed.
 - A Drug without an `rxnorm` id is looked up by name (`/rxcui.json?name=…&search=2`) and printed for a person to confirm. Nothing is written for it.
-- RxNorm also lists veterinary products and brands sold only for the skin, eye or ear. Those were dropped on review and are listed in `EXCLUDED` in `apps/pipeline/src/brands.ts`, so a rerun does not bring them back. Review the diff of every run the same way.
+- RxNorm also lists veterinary products and brands sold only for the skin, eye or ear. Those were dropped on review, as was Horizant (gabapentin enacarbil, whose label advises against any alcohol, unlike gabapentin's). They are listed in `EXCLUDED` in `apps/pipeline/src/brands.ts`, so a rerun does not bring them back. Review the diff of every run the same way.
 
 ## Medication pages from MedlinePlus
 

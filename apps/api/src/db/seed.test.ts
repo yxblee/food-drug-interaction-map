@@ -17,7 +17,7 @@ describe('seed dataset', () => {
     expect(drugs).toBeGreaterThanOrEqual(55)
     expect(ds!.foods.length).toBe(48)
     expect(ds!.mechanisms.length).toBeGreaterThanOrEqual(22)
-    expect(ds!.interactions.filter((i) => i.source === 'curated').length).toBe(68)
+    expect(ds!.interactions.filter((i) => i.source === 'curated').length).toBe(74)
   })
   it('keeps grapefruit relatives as a group, not citrus (ADR 0001)', () => {
     const rel = ds!.foods.filter((f) => f.parent === 'grapefruit-relatives').map((f) => f.id)
@@ -47,6 +47,34 @@ describe('seed dataset', () => {
         drug,
       ).toEqual([label, pmid])
     }
+  })
+  it('has the alcohol Interactions Approved where a DailyMed label names alcohol (#197)', () => {
+    // [Drug, Severity from the label's advice, other Sources]; the first Citation is the Drug's label
+    const mp = 'https://medlineplus.gov/druginfo/meds/'
+    for (const [drug, severity, others] of [
+      ['gabapentin', 'caution', [`${mp}a694007.html`]],
+      ['glimepiride', 'caution', [`${mp}a696016.html`]],
+      ['glipizide', 'avoid', ['3428047', `${mp}a684060.html`]],
+      ['glyburide', 'caution', ['10587839', `${mp}a684058.html`]],
+      ['nitroglycerin', 'avoid', ['6430619', `${mp}a601086.html`]],
+      ['tinidazole', 'avoid', [`${mp}a604036.html`]],
+    ] as const) {
+      const i = get(`alcohol--${drug}`)
+      expect(i?.status, drug).toBe('approved')
+      expect(i?.reviewed_at, drug).toBe('2026-11-26')
+      expect(i?.severity, drug).toBe(severity)
+      const label = ds!.drugs.find((d) => d.id === drug)?.dailymed
+      expect(
+        i?.citations.map((c) => c.setid ?? c.pmid ?? c.url),
+        drug,
+      ).toEqual([label, ...others])
+    }
+  })
+  it('finds glimepiride by its brand name Amaryl (#197)', () => {
+    expect(ds!.drugs.find((d) => d.id === 'glimepiride')?.aliases).toContain('Amaryl')
+  })
+  it('does not answer to Horizant with gabapentin’s milder alcohol advice (#197)', () => {
+    expect(ds!.drugs.find((d) => d.id === 'gabapentin')?.aliases).not.toContain('Horizant')
   })
   it('backs every interaction with an authoritative citation and no placeholders', () => {
     const ok =

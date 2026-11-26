@@ -1,0 +1,20 @@
+id: alcohol--tinidazole
+food: alcohol
+drug: tinidazole
+mechanisms: [disulfiram-like-reaction]
+severity: avoid
+effect: increases
+summary: "Alcohol with tinidazole can cause stomach cramps, nausea, vomiting, headache and flushing."
+advice: "Do not drink alcohol or use products containing ethanol or propylene glycol while taking tinidazole and for 3 days afterwards."
+details: "The Tindamax label says alcoholic beverages and preparations containing ethanol or propylene glycol should be avoided during therapy and for 3 days afterwards because abdominal cramps, nausea, vomiting, headaches and flushing may occur. The MedlinePlus tinidazole page gives the same advice."
+citations:
+  - type: "label"
+    title: "TINDAMAX (TINIDAZOLE) TABLET, FILM COATED [MISSION PHARMACAL COMPANY]"
+    url: "https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=a0d01539-8413-4703-94cc-d221918630a1"
+    setid: "a0d01539-8413-4703-94cc-d221918630a1"
+  - type: "guideline"
+    title: "Tinidazole: MedlinePlus Drug Information"
+    url: "https://medlineplus.gov/druginfo/meds/a604036.html"
+status: approved
+source: curated
+reviewed_at: 2026-11-26
