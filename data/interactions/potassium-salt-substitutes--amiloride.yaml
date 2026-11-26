@@ -1,0 +1,19 @@
+id: potassium-salt-substitutes--amiloride
+food: potassium-salt-substitutes
+drug: amiloride
+mechanisms: [additive-hyperkalemia]
+severity: avoid
+effect: increases
+summary: "Potassium-based salt substitutes can raise potassium quickly with amiloride."
+advice: "Do not use salt substitutes containing potassium while taking amiloride. The label allows potassium only for severe or hard-to-treat low potassium, with careful blood tests, so follow your prescriber if that applies to you."
+details: "The amiloride label says potassium supplements, potassium-containing salt substitutes or a potassium-rich diet should not be used with amiloride except in severe or refractory low potassium, because the combination can bring rapid rises in blood potassium. The MedlinePlus amiloride page says to avoid potassium-containing salt substitutes."
+citations:
+  - type: "label"
+    title: "AMILORIDE HYDROCHLORIDE TABLET [PADAGIS US LLC]"
+    url: "https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=2b70cf0c-45be-428f-b396-5001ed4e30fc"
+    setid: "2b70cf0c-45be-428f-b396-5001ed4e30fc"
+  - type: "guideline"
+    title: "Amiloride: MedlinePlus Drug Information"
+    url: "https://medlineplus.gov/druginfo/meds/a615029.html"
+status: pending
+source: curated

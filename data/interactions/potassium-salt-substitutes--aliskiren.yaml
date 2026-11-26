@@ -1,0 +1,19 @@
+id: potassium-salt-substitutes--aliskiren
+food: potassium-salt-substitutes
+drug: aliskiren
+mechanisms: [additive-hyperkalemia]
+severity: caution
+effect: increases
+summary: "Potassium-based salt substitutes may add to the risk of high potassium with aliskiren."
+advice: "Do not use salt substitutes containing potassium without first talking with your prescriber."
+details: "The Tekturna label tells prescribers to advise patients not to use potassium supplements or salt substitutes containing potassium without consulting the prescribing physician. The MedlinePlus aliskiren page says the same about talking with a doctor first."
+citations:
+  - type: "label"
+    title: "TEKTURNA (ALISKIREN HEMIFUMARATE) TABLET, FILM COATED [LXO US INC.]"
+    url: "https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=3dd61fa5-1620-4ebf-bbdb-ede29b92fce2"
+    setid: "3dd61fa5-1620-4ebf-bbdb-ede29b92fce2"
+  - type: "guideline"
+    title: "Aliskiren: MedlinePlus Drug Information"
+    url: "https://medlineplus.gov/druginfo/meds/a607039.html"
+status: pending
+source: curated

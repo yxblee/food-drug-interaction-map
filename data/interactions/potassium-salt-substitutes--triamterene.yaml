@@ -1,0 +1,19 @@
+id: potassium-salt-substitutes--triamterene
+food: potassium-salt-substitutes
+drug: triamterene
+mechanisms: [additive-hyperkalemia]
+severity: avoid
+effect: increases
+summary: "Potassium-based salt substitutes can push potassium too high with triamterene."
+advice: "Do not use salt substitutes containing potassium while taking triamterene."
+details: "The Dyrenium label says patients should not be placed on potassium supplements, potassium salts or potassium-containing salt substitutes with it, and lists salt substitutes among things that may cause high potassium, especially with kidney problems. The MedlinePlus triamterene page says to avoid potassium-containing salt substitutes."
+citations:
+  - type: "label"
+    title: "DYRENIUM (TRIAMTERENE) CAPSULE [ADVANZ PHARMA (US) CORP.]"
+    url: "https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=ebb177c0-d45d-4443-a85a-e76bd9931a42"
+    setid: "ebb177c0-d45d-4443-a85a-e76bd9931a42"
+  - type: "guideline"
+    title: "Triamterene: MedlinePlus Drug Information"
+    url: "https://medlineplus.gov/druginfo/meds/a682337.html"
+status: pending
+source: curated

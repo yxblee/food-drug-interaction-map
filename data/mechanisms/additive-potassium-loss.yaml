@@ -1,0 +1,4 @@
+id: "additive-potassium-loss"
+name: "Added potassium loss"
+kind: "pharmacodynamic"
+explanation: "Some water pills make the body lose potassium in urine. Glycyrrhizin in black licorice also lowers potassium, so together the level can fall too low."

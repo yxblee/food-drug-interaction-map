@@ -1,0 +1,7 @@
+id: "furosemide"
+name: "Furosemide"
+rxnorm: "4603"
+medlineplus: "https://medlineplus.gov/druginfo/meds/a682858.html"
+dailymed: "2c9b4d8f-0770-482d-a9e6-9c616a440b1a"
+aliases: ["Lasix", "Furoscix"]
+drug_class: "Loop diuretic"

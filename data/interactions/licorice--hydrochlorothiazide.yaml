@@ -1,0 +1,24 @@
+id: licorice--hydrochlorothiazide
+food: licorice
+drug: hydrochlorothiazide
+mechanisms: [additive-potassium-loss]
+severity: caution
+effect: increases
+summary: "Real licorice can add to the potassium loss hydrochlorothiazide causes."
+advice: "Limit black licorice and licorice products while taking hydrochlorothiazide, and tell your prescriber if you eat them."
+details: "The hydrochlorothiazide section of the Hyzaar (losartan and hydrochlorothiazide) label says glycyrrhizin, found in liquorice, intensifies electrolyte loss, particularly low potassium. A review says thiazide and loop diuretics increase the risk of severe low potassium. In a two-week trial in 10 healthy volunteers, potassium fell when 32 g of liquorice a day was taken with 25 mg hydrochlorothiazide, and 2 developed low potassium."
+citations:
+  - type: "label"
+    title: "HYZAAR (LOSARTAN POTASSIUM AND HYDROCHLOROTHIAZIDE) TABLET, FILM COATED [ORGANON LLC]"
+    url: "https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=4116ccde-2e23-45f4-b12f-6337df877744"
+    setid: "4116ccde-2e23-45f4-b12f-6337df877744"
+  - type: "review"
+    title: "Liquorice Toxicity: A Comprehensive Narrative Review"
+    url: "https://pubmed.ncbi.nlm.nih.gov/37764649/"
+    pmid: "37764649"
+  - type: "study"
+    title: "Effects of low-dose liquorice alone or in combination with hydrochlorothiazide on the plasma potassium in healthy volunteers"
+    url: "https://pubmed.ncbi.nlm.nih.gov/19562574/"
+    pmid: "19562574"
+status: pending
+source: curated
