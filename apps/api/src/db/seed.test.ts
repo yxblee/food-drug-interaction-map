@@ -32,15 +32,15 @@ describe('seed dataset', () => {
     expect(get('grapefruit-relatives--simvastatin')?.severity).toBe('avoid')
     expect(get('leafy-greens--warfarin')?.severity).toBe('caution')
   })
-  it("pins the new St John's wort Interactions as Pending, with their Citations (#185)", () => {
+  it("has the St John's wort Interactions Approved, with their Citations (#185)", () => {
     // [Drug, PubMed id]; the first Citation is that Drug's own DailyMed label
     for (const [drug, pmid] of [
       ['digoxin', '10546917'],
       ['tacrolimus', '14681346'],
     ] as const) {
       const i = get(`st-johns-wort--${drug}`)
-      expect(i?.status, drug).toBe('pending')
-      expect(i?.reviewed_at, drug).toBeUndefined()
+      expect(i?.status, drug).toBe('approved')
+      expect(i?.reviewed_at, drug).toBe('2026-11-25')
       const label = ds!.drugs.find((d) => d.id === drug)?.dailymed
       expect(
         i?.citations.map((c) => c.setid ?? c.pmid),
