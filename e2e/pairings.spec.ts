@@ -57,6 +57,11 @@ async function withFixturePairings(page: Page) {
   })
 }
 
+// A test can finish while the app is still fetching node payloads (My meds loads one per warning),
+// leaving a handler in flight when the context closes. Nothing reads its result by then, so drop it.
+// `wait` is not enough: the first handler to return switches interception off under the others.
+test.afterEach(({ page }) => page.unrouteAll({ behavior: 'ignoreErrors' }))
+
 async function addMeds(page: Page, meds: string[]) {
   await page.goto('./')
   await page.getByRole('tab', { name: 'My meds' }).click()
