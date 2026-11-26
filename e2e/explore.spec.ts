@@ -701,24 +701,26 @@ test.describe('2D map on touch', () => {
       await page.clock.runFor(1000)
       return scale(page)
     }
+    const clamp = (k: number) => Math.min(4, Math.max(0.2, k))
+    const wheel = (page: Pg, deltaY: number) =>
+      page.locator('svg.graph2d').dispatchEvent('wheel', { deltaY })
 
-    for (const [names, factor] of [
-      [['Zoom out', 'Zoom out'], 0.25],
-      [['Zoom in', 'Zoom in'], 4],
-      [['Zoom in', 'Zoom in', 'Zoom out'], 2],
+    // `room` is pressed first, so the sequence starts away from the 0.2 to 4 limits.
+    for (const [room, names] of [
+      ['Zoom in', ['Zoom out', 'Zoom out']],
+      ['Zoom out', ['Zoom in', 'Zoom in']],
+      ['Zoom out', ['Zoom in', 'Zoom in', 'Zoom out']],
     ] as const) {
       for (const gap of [0, 100]) {
-        test(`${names.join(', ')} ${gap} ms apart scales by ${factor}`, async ({ page }, info) => {
+        test(`${names.join(', ')} ${gap} ms apart each apply in full`, async ({ page }, info) => {
           await animated(page, info)
-          // Start from a scale that leaves room inside the 0.2 to 4 limits.
-          await press(page, ...(factor < 1 ? ['Zoom in'] : ['Zoom out']))
+          await press(page, room)
           const before = await settled(page)
           for (const name of names) {
             await press(page, name)
             if (gap) await page.clock.runFor(gap)
           }
-          const limit = (k: number) => Math.min(4, Math.max(0.2, k))
-          const expected = names.reduce((k, n) => limit(k * (n === 'Zoom in' ? 2 : 0.5)), before)
+          const expected = names.reduce((k, n) => clamp(k * (n === 'Zoom in' ? 2 : 0.5)), before)
           expect(await settled(page)).toBeCloseTo(expected, 3)
         })
       }
@@ -731,11 +733,54 @@ test.describe('2D map on touch', () => {
       await page.clock.runFor(100)
       const partWay = await scale(page)
       expect(partWay).toBeGreaterThan(before)
-      await page.locator('svg.graph2d').dispatchEvent('wheel', { deltaY: 100 })
+      await wheel(page, 100)
       const wheeled = await scale(page)
       expect(wheeled).toBeLessThan(partWay)
       await press(page, 'Zoom out')
-      expect(await settled(page)).toBeCloseTo(Math.max(0.2, wheeled / 2), 3)
+      expect(await settled(page)).toBeCloseTo(clamp(wheeled / 2), 3)
+    })
+
+    // d3 interrupts a transition only when a wheel gesture starts, not on its later steps.
+    test('a later step of a wheel gesture is not undone by a press', async ({ page }, info) => {
+      await animated(page, info)
+      await wheel(page, 100)
+      await press(page, 'Zoom in')
+      await page.clock.runFor(50) // inside the wheel gesture's 150 ms idle window
+      await wheel(page, 100)
+      const wheeled = await scale(page)
+      expect(await settled(page)).toBeCloseTo(wheeled, 3)
+    })
+
+    test('a wheel step past the zoom limit leaves a press running', async ({ page }, info) => {
+      await animated(page, info)
+      for (let i = 0; i < 5; i++) await press(page, 'Zoom in')
+      expect(await settled(page)).toBeCloseTo(4, 3)
+      await press(page, 'Zoom out')
+      await wheel(page, -100)
+      expect(await settled(page)).toBeCloseTo(2, 3)
+    })
+
+    test('a pinch in progress is not undone by a press', async ({ page }, info) => {
+      test.skip(info.project.name !== 'mobile', 'd3 listens for touch only on touch devices')
+      await animated(page, info)
+      const pinch = (type: string, spread: number) =>
+        page.evaluate(
+          ([type, spread]) => {
+            const target = document.querySelector('svg.graph2d')!
+            const touches = [-spread, spread].map(
+              (x, identifier) => new Touch({ identifier, target, clientX: 200 + x, clientY: 300 }),
+            )
+            const init = { touches, changedTouches: touches, bubbles: true, cancelable: true }
+            target.dispatchEvent(new TouchEvent(type, init))
+          },
+          [type, spread] as const,
+        )
+      await pinch('touchstart', 100)
+      await press(page, 'Zoom in')
+      await page.clock.runFor(50)
+      await pinch('touchmove', 60)
+      const pinched = await scale(page)
+      expect(await settled(page)).toBeCloseTo(pinched, 3)
     })
 
     test('a press during Reset map view scales from the reset view', async ({ page }, info) => {
@@ -744,7 +789,7 @@ test.describe('2D map on touch', () => {
       await press(page, 'Zoom in')
       await settled(page)
       await press(page, 'Reset map view', 'Zoom in')
-      expect(await settled(page)).toBeCloseTo(Math.min(4, fitted * 2), 3)
+      expect(await settled(page)).toBeCloseTo(clamp(fitted * 2), 3)
     })
   })
 
