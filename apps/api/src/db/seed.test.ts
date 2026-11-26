@@ -76,8 +76,8 @@ describe('seed dataset', () => {
   it('does not answer to Horizant with gabapentin’s milder alcohol advice (#197)', () => {
     expect(ds!.drugs.find((d) => d.id === 'gabapentin')?.aliases).not.toContain('Horizant')
   })
-  it('holds the salt substitute and licorice Interactions Pending with a label and a second Source (#207)', () => {
-    // [Interaction, Severity from the label's advice, label setid, other Sources]
+  it('holds the salt substitute and licorice Interactions Pending with a label and a second Citation (#207)', () => {
+    // [Interaction, Severity, label setid when not the Drug's own, other Citations]
     const mp = 'https://medlineplus.gov/druginfo/meds/'
     const salt = 'potassium-salt-substitutes--'
     // the only current label found naming liquorice for hydrochlorothiazide is a combination's

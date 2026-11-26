@@ -6,7 +6,7 @@ severity: caution
 effect: increases
 summary: "Potassium-based salt substitutes can add to the risk of high potassium with eplerenone."
 advice: "Do not use salt substitutes containing potassium unless your prescriber has agreed."
-details: "The Inspra label tells patients not to use potassium supplements or salt substitutes containing potassium without consulting the prescribing physician. The MedlinePlus eplerenone page is stricter and says not to use salt substitutes containing potassium while taking it."
+details: "The Inspra label tells patients not to use potassium supplements or salt substitutes containing potassium without consulting the prescribing physician. The same label contraindicates potassium supplements in people treated for high blood pressure, without naming salt substitutes there. The MedlinePlus eplerenone page is stricter and says not to use salt substitutes containing potassium while taking it."
 citations:
   - type: "label"
     title: "INSPRA (EPLERENONE) TABLET, FILM COATED [VIATRIS SPECIALTY LLC]"
