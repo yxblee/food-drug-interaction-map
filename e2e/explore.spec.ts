@@ -783,6 +783,103 @@ test.describe('2D map on touch', () => {
       expect(await settled(page)).toBeCloseTo(pinched, 3)
     })
 
+    // Screen point = world point * a + (e, f).
+    const view = (page: Pg) =>
+      page.evaluate(() => {
+        const { a, e, f } = document.querySelector<SVGGElement>('svg.graph2d > g')!.getScreenCTM()!
+        return { a, e, f }
+      })
+    /** Where the view centre (viewBox 0,0) is on screen, and a point clear of every control. */
+    const points = async (page: Pg) => {
+      const centre = await page.evaluate(() => {
+        const { e, f } = document.querySelector<SVGSVGElement>('svg.graph2d')!.getScreenCTM()!
+        return { x: e, y: f }
+      })
+      // Whole pixels: a MouseEvent drops the fraction of clientX and clientY.
+      return { centre, at: { x: Math.round(centre.x) + 60, y: Math.round(centre.y) - 40 } }
+    }
+    const touch = (page: Pg, type: string, ...at: { x: number; y: number }[]) =>
+      page.evaluate(
+        ([type, at]) => {
+          const target = document.querySelector('svg.graph2d')!
+          const touches = at.map(
+            (p, identifier) => new Touch({ identifier, target, clientX: p.x, clientY: p.y }),
+          )
+          const down = type === 'touchend' ? [] : touches
+          const init = { touches: down, changedTouches: touches, bubbles: true, cancelable: true }
+          target.dispatchEvent(new TouchEvent(type, init))
+        },
+        [type, at] as const,
+      )
+
+    for (const how of ['double-click', 'double-tap'] as const) {
+      for (const gap of [0, 100]) {
+        test(`a press ${gap} ms into a ${how} zoom builds on its end`, async ({ page }, info) => {
+          test.skip(how === 'double-tap' && info.project.name !== 'mobile', 'touch devices only')
+          await animated(page, info)
+          await press(page, 'Zoom out') // room below the upper limit
+          await settled(page)
+          const { centre, at } = await points(page)
+          const from = await view(page)
+          if (how === 'double-click')
+            await page
+              .locator('svg.graph2d')
+              .dispatchEvent('dblclick', { clientX: at.x, clientY: at.y })
+          else
+            for (let i = 0; i < 2; i++) {
+              await touch(page, 'touchstart', at)
+              await touch(page, 'touchend', at)
+            }
+          if (gap) await page.clock.runFor(gap)
+          await press(page, 'Zoom in')
+          await page.clock.runFor(1000)
+          const to = await view(page)
+          expect(to.a).toBeCloseTo(clamp(from.a * 4), 3)
+          // The tapped spot stays put through the double zoom, then the press doubles its
+          // distance from the centre.
+          const spot = { x: (at.x - from.e) / from.a, y: (at.y - from.f) / from.a }
+          expect(spot.x * to.a + to.e).toBeCloseTo(2 * at.x - centre.x, 0)
+          expect(spot.y * to.a + to.f).toBeCloseTo(2 * at.y - centre.y, 0)
+        })
+      }
+    }
+
+    test('shift double-click zooms out about the pointer', async ({ page }, info) => {
+      await animated(page, info)
+      const { at } = await points(page)
+      const from = await view(page)
+      await page
+        .locator('svg.graph2d')
+        .dispatchEvent('dblclick', { clientX: at.x, clientY: at.y, shiftKey: true })
+      await page.clock.runFor(1000)
+      const to = await view(page)
+      expect(to.a).toBeCloseTo(clamp(from.a / 2), 3)
+      expect(((at.x - from.e) / from.a) * to.a + to.e).toBeCloseTo(at.x, 0)
+      expect(((at.y - from.f) / from.a) * to.a + to.f).toBeCloseTo(at.y, 0)
+    })
+
+    // Pressed either before the drag, or from the keyboard while the mouse button is held.
+    for (const when of ['before', 'during'] as const) {
+      test(`a drag is not undone by a button zoom pressed ${when} it`, async ({ page }, info) => {
+        await animated(page, info)
+        const { at } = await points(page)
+        await page.mouse.move(at.x, at.y)
+        if (when === 'before') await press(page, 'Zoom in')
+        await page.clock.runFor(50)
+        await page.mouse.down()
+        if (when === 'during') await press(page, 'Zoom in')
+        await page.clock.runFor(50)
+        await page.mouse.move(at.x - 90, at.y + 50)
+        const dragged = await view(page)
+        await page.clock.runFor(1000)
+        expect(await view(page)).toEqual(dragged)
+        await page.mouse.up()
+        await page.clock.runFor(10) // d3 swallows clicks until a timeout after a drag
+        await press(page, 'Zoom out')
+        expect(await settled(page)).toBeCloseTo(clamp(dragged.a / 2), 3)
+      })
+    }
+
     test('a press during Reset map view scales from the reset view', async ({ page }, info) => {
       await animated(page, info)
       const fitted = await scale(page)
