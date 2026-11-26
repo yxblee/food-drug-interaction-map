@@ -135,7 +135,7 @@ export function create2d(opts: RendererOptions): GraphRenderer {
   let onSelect: (key: string | null) => void = () => {}
   let inset: Inset = NO_INSET
   let fitTimer: ReturnType<typeof setTimeout> | undefined
-  // Where the running button, fit or reset zoom will end; null when none is running.
+  // Where the running animated zoom (moveTo) will end; null when none is running.
   let zoomTarget: ZoomTransform | null = null
 
   function resize() {
@@ -331,7 +331,7 @@ export function create2d(opts: RendererOptions): GraphRenderer {
         interruptOnStep(select(e.view!), 'mousemove.zoom', { capture: true })
       })
       // d3 keeps its double-click (and double-tap) destination to itself, so a button press
-      // couldn't build on it: the same zoom, made here instead.
+      // couldn't build on it, and it animates even under reduced motion: its zoom, made here.
       map.on('dblclick.zoom', function (e: MouseEvent | TouchEvent) {
         if (e.ctrlKey || ('button' in e && e.button)) return // d3's default filter
         e.preventDefault()
