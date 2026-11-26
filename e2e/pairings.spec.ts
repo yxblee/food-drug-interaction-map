@@ -1,7 +1,7 @@
 import { expect, test, type Page } from '@playwright/test'
 
-// The real Dataset has no Helpful pairings yet. These two are test fixtures, injected into the
-// static payloads the app fetches; nothing under data/ carries them.
+// Two test fixtures that replace the real Helpful pairings in the static payloads the app fetches.
+// Their wording is test text; the real pairings live in data/pairings/.
 const fixture = (food: string, drug: string) => ({
   id: `${food}--${drug}`,
   food,
