@@ -49,15 +49,15 @@ describe('seed dataset', () => {
     }
   })
   it('drafts alcohol Interactions where a DailyMed label names alcohol (#197)', () => {
-    // [Drug, Severity from the label's advice, second Source]; the first Citation is the Drug's label
+    // [Drug, Severity from the label's advice, other Sources]; the first Citation is the Drug's label
     const mp = 'https://medlineplus.gov/druginfo/meds/'
-    for (const [drug, severity, second] of [
-      ['gabapentin', 'caution', `${mp}a694007.html`],
-      ['glimepiride', 'caution', `${mp}a696016.html`],
-      ['glipizide', 'avoid', '3428047'],
-      ['glyburide', 'caution', '10587839'],
-      ['nitroglycerin', 'avoid', '6430619'],
-      ['tinidazole', 'avoid', `${mp}a604036.html`],
+    for (const [drug, severity, others] of [
+      ['gabapentin', 'caution', [`${mp}a694007.html`]],
+      ['glimepiride', 'caution', [`${mp}a696016.html`]],
+      ['glipizide', 'avoid', ['3428047', `${mp}a684060.html`]],
+      ['glyburide', 'caution', ['10587839', `${mp}a684058.html`]],
+      ['nitroglycerin', 'avoid', ['6430619', `${mp}a601086.html`]],
+      ['tinidazole', 'avoid', [`${mp}a604036.html`]],
     ] as const) {
       const i = get(`alcohol--${drug}`)
       expect(i?.status, drug).toBe('pending')
@@ -66,8 +66,14 @@ describe('seed dataset', () => {
       expect(
         i?.citations.map((c) => c.setid ?? c.pmid ?? c.url),
         drug,
-      ).toEqual([label, second])
+      ).toEqual([label, ...others])
     }
+  })
+  it('finds glimepiride by its brand name Amaryl (#197)', () => {
+    expect(ds!.drugs.find((d) => d.id === 'glimepiride')?.aliases).toContain('Amaryl')
+  })
+  it('does not answer to Horizant with gabapentin’s milder alcohol advice (#197)', () => {
+    expect(ds!.drugs.find((d) => d.id === 'gabapentin')?.aliases).not.toContain('Horizant')
   })
   it('backs every interaction with an authoritative citation and no placeholders', () => {
     const ok =

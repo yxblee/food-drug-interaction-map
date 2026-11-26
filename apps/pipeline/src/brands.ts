@@ -80,6 +80,8 @@ export const EXCLUDED = new Set([
   ...['amzeeq', 'arestin', 'cequa', 'cetraxal', 'ciloxan', 'metrocream', 'metrogel', 'metrolotion'],
   ...['noritate', 'nydamax', 'restasis', 'rosadan', 'vectical', 'verkazia', 'vevye', 'viabecline'],
   ...['vitastem', 'zilxi'],
+  // gabapentin enacarbil, a prodrug whose label advises against any alcohol, unlike gabapentin's
+  'horizant',
   // a pack variant of Tylenol, not a separate Brand name
   'tylenol gelcap extra strength',
 ])
