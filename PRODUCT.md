@@ -26,7 +26,7 @@ Searches and chatbots answer one drug at a time with no comparable severity, no 
 
 ## Capabilities and Constraints
 
-- Curated Dataset in `data/` YAML: 85 Drugs (including 10 Drug classes), 48 Foods, 27 Mechanisms, 117 Approved Interactions and, so far, no Helpful pairings (the code and schema are in place; the pairings follow once each is checked against its label); validated into SQLite, served by a small read API or exported as static JSON.
+- Curated Dataset in `data/` YAML: 85 Drugs (including 10 Drug classes), 48 Foods, 27 Mechanisms, 123 Approved Interactions and 8 Helpful pairings (the code and schema are in place; the pairings follow once each is checked against its label); validated into SQLite, served by a small read API or exported as static JSON.
 - A Helpful pairing is not an Interaction and has no Severity, so every Severity keeps meaning "a warning" (`docs/adr/0005-helpful-pairings-are-not-interactions.md`). It appears under "Helps to take with" in My meds and under Interactions in the Explore panel, and only reports what a Source says.
 - Severity vocabulary is fixed: avoid, caution, monitor, minimal. It is advice from the primary Citation, not a clinical grade; research-database grades are never mapped onto it.
 - Effect is increases or decreases.
@@ -42,7 +42,7 @@ Searches and chatbots answer one drug at a time with no comparable severity, no 
 
 ## Evidence on Hand
 
-- 62 hand-written Interactions, each citing a DailyMed label, NIH ODS/NCCIH fact sheet or PubMed review (`data/`, `docs/data-sources.md`). Sources are linked, not copied.
+- 68 hand-written Interactions, each citing a DailyMed label, NIH ODS/NCCIH fact sheet or PubMed review (`data/`, `docs/data-sources.md`). Sources are linked, not copied.
 - Live demo: https://yxblee.github.io/food-drug-interaction-map/
 - No testimonials, user counts, clinical validation or endorsements exist; do not fabricate them.
 - Absence from the Dataset does not mean a combination is safe; never imply otherwise.
