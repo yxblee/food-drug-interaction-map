@@ -1,7 +1,7 @@
 import { expect, test, type Page } from '@playwright/test'
 
-// The real Dataset has no Helpful pairings yet. These two are test fixtures, injected into the
-// static payloads the app fetches; nothing under data/ carries them.
+// Two test fixtures that replace the real Helpful pairings in the static payloads the app fetches.
+// Their wording is test text; the real pairings live in data/pairings/.
 const fixture = (food: string, drug: string) => ({
   id: `${food}--${drug}`,
   food,
@@ -58,9 +58,14 @@ async function withFixturePairings(page: Page) {
 }
 
 // A test can finish while the app is still fetching node payloads (My meds loads one per warning),
-// leaving a handler in flight when the context closes. Nothing reads its result by then, so drop it.
-// `wait` is not enough: the first handler to return switches interception off under the others.
-test.afterEach(({ page }) => page.unrouteAll({ behavior: 'ignoreErrors' }))
+// leaving handlers in flight when the context closes. Wait for them, so their errors fail the test.
+// unrouteAll empties the route list, and the first handler to return then switches interception off
+// under the others. The pass-through route, added before any can return, keeps it on.
+test.afterEach(async ({ page }) => {
+  const settled = page.unrouteAll({ behavior: 'wait' })
+  await page.route('**/*', (route) => route.fallback())
+  await settled
+})
 
 async function addMeds(page: Page, meds: string[]) {
   await page.goto('./')
