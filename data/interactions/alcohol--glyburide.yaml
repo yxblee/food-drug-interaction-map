@@ -5,8 +5,8 @@ mechanisms: [additive-hypoglycemia]
 severity: caution
 effect: increases
 summary: "Low blood sugar is more likely if you drink alcohol while taking glyburide."
-advice: "Be careful with alcohol while taking glyburide, ask your prescriber about its safe use and know the signs of low blood sugar."
-details: "The glyburide label says low blood sugar is more likely when alcohol is taken, when food intake is too low or after severe or prolonged exercise. In a study of 10 older adults with type 2 diabetes taking glyburide and fasting, alcohol given into a vein, in an amount like one or two drinks, led to lower blood sugar than placebo. The label also says disulfiram-like reactions, an unpleasant reaction known from alcohol with the medicine disulfiram, have very rarely been reported with glyburide. The MedlinePlus glyburide page says to ask a doctor about the safe use of alcohol."
+advice: "Be careful with alcohol while taking glyburide, ask your prescriber about the safe use of alcohol and know the signs of low blood sugar."
+details: "The glyburide label says low blood sugar is more likely when alcohol is taken, when food intake is too low or after severe or prolonged exercise. In a study of 10 older adults with type 2 diabetes taking glyburide and fasting, alcohol given into a vein, in an amount like one or two drinks, led to lower blood sugar than placebo. The label also says disulfiram-like reactions have very rarely been reported with glyburide. The MedlinePlus glyburide page says to ask a doctor about the safe use of alcohol, that alcohol can make side effects worse and that it may rarely cause symptoms such as flushing, headache, nausea, vomiting, chest pain, mental confusion and breathing difficulty."
 citations:
   - type: "label"
     title: "GLYBURIDE TABLET [TEVA PHARMACEUTICALS USA, INC.]"

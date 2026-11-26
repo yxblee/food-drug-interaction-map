@@ -6,7 +6,7 @@ severity: avoid
 effect: increases
 summary: "Alcohol with nitroglycerin can lower your blood pressure."
 advice: "Do not drink alcohol while taking nitroglycerin tablets placed under the tongue (Nitrostat). If you use another form of nitroglycerin, ask your prescriber about the safe use of alcohol."
-details: "The patient information for Nitrostat, a nitroglycerin tablet placed under the tongue, says not to consume alcohol while taking it because this can lower blood pressure. In a small study of healthy volunteers, systolic blood pressure was significantly lower when nitroglycerin was taken about an hour after a large amount of alcohol than when it was taken before drinking. Very soon after drinking, systolic blood pressure after nitroglycerin was not significantly different with alcohol or juice. The MedlinePlus page for the under-the-tongue tablet says alcohol can make side effects worse."
+details: "The patient information for Nitrostat, a nitroglycerin tablet placed under the tongue, says not to consume alcohol while taking it because this can lower blood pressure. In a small study of healthy volunteers, systolic blood pressure was significantly lower when nitroglycerin was taken about an hour after a large amount of alcohol than when it was taken before drinking. Very soon after drinking, systolic blood pressure after nitroglycerin was not significantly different with alcohol or juice. The MedlinePlus page for the under-the-tongue tablet says to ask a doctor about the safe use of alcohol and that alcohol can make side effects worse."
 citations:
   - type: "label"
     title: "NITROSTAT (NITROGLYCERIN) TABLET [VIATRIS SPECIALTY LLC]"
