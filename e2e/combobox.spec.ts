@@ -60,8 +60,8 @@ for (const [name, setup] of SETUPS) {
   test(`active option is visible in ${name}: Explore, Add a medication, Food check`, async ({
     page,
   }) => {
-    // Resting colours only. With motion, a busy machine starves frames: the 3D map's startup blocks
-    // the page past the poll, and the theme fade stalls part-way. Reduced motion has neither.
+    // Resting colours only. With motion, a busy machine starves frames and the theme fade stalls
+    // part-way. Reduced motion has no fade.
     await page.emulateMedia({ reducedMotion: 'reduce' })
     await page.goto('./')
     await setup(page)

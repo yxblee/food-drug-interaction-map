@@ -13,18 +13,35 @@ export function useMedia(query: string): boolean {
 }
 
 // three.js (>= r163) only supports WebGL2, so WebGL1 contexts are deliberately not accepted.
-function hasWebgl2(): boolean {
+function probeWebgl2(): Pick<Env, 'webgl' | 'software'> {
   try {
-    return !!document.createElement('canvas').getContext('webgl2')
+    const context = (attrs?: WebGLContextAttributes) =>
+      document.createElement('canvas').getContext('webgl2', attrs)
+    const gl = context()
+    if (!gl) return { webgl: false, software: false }
+    // Chromium passes failIfMajorPerformanceCaveat on SwiftShader unless it fell back to it, so
+    // the renderer name is checked too. The caveat still covers browsers that hide the name.
+    const info = gl.getExtension('WEBGL_debug_renderer_info')
+    const name = String(gl.getParameter(info ? info.UNMASKED_RENDERER_WEBGL : gl.RENDERER))
+    const software =
+      /swiftshader|llvmpipe|softpipe|software|basic render/i.test(name) ||
+      !context({ failIfMajorPerformanceCaveat: true })
+    return { webgl: true, software }
   } catch {
-    return false
+    return { webgl: false, software: false }
   }
 }
+
+// Probed once per page: each probe takes a WebGL context, and browsers cap how many stay alive.
+let probed: ReturnType<typeof probeWebgl2> | undefined
 
 /** Re-evaluates when the viewport or motion preference changes. */
 export function useEnv(): Env {
   const mobile = useMedia('(max-width: 768px), (pointer: coarse)')
   const reducedMotion = useMedia('(prefers-reduced-motion: reduce)')
-  const webgl = useMemo(() => hasWebgl2(), [])
-  return useMemo(() => ({ mobile, webgl, reducedMotion }), [mobile, webgl, reducedMotion])
+  const { webgl, software } = (probed ??= probeWebgl2())
+  return useMemo(
+    () => ({ mobile, webgl, software, reducedMotion }),
+    [mobile, webgl, software, reducedMotion],
+  )
 }

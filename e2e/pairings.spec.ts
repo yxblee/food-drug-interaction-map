@@ -60,11 +60,6 @@ async function withFixturePairings(page: Page) {
 
 waitForRouteHandlersAtTeardown()
 
-// Reduced motion gets the 2D map on desktop. The default 3D map is drawn in software here and, on a
-// busy machine, blocks the page so long that the panel misses its 5 s expect (#208). Nothing in
-// this file tests the map.
-test.use({ contextOptions: { reducedMotion: 'reduce' } })
-
 async function addMeds(page: Page, meds: string[]) {
   await page.goto('./')
   await page.getByRole('tab', { name: 'My meds' }).click()
