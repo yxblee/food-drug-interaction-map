@@ -13,6 +13,7 @@ async function fakeWebgl(page: Page, renderer: string, caveat: boolean) {
   await page.addInitScript(
     ({ renderer, caveat }) => {
       const gl = WebGL2RenderingContext.prototype
+      // oxlint-disable-next-line typescript/unbound-method -- called with .call(this)
       const getParameter = gl.getParameter
       gl.getParameter = function (this: WebGL2RenderingContext, p: number) {
         // 0x9246 is UNMASKED_RENDERER_WEBGL.
@@ -21,6 +22,7 @@ async function fakeWebgl(page: Page, renderer: string, caveat: boolean) {
       const canvas = HTMLCanvasElement.prototype as unknown as {
         getContext: (type: string, attrs?: WebGLContextAttributes) => unknown
       }
+      // oxlint-disable-next-line typescript/unbound-method -- called with .call(this)
       const getContext = canvas.getContext
       canvas.getContext = function (type, attrs) {
         if (!attrs?.failIfMajorPerformanceCaveat) return getContext.call(this, type, attrs)
