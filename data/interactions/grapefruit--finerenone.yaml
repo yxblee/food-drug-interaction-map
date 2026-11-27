@@ -15,5 +15,6 @@ citations:
   - type: "guideline"
     title: "Finerenone: MedlinePlus Drug Information"
     url: "https://medlineplus.gov/druginfo/meds/a621038.html"
-status: pending
+status: approved
 source: curated
+reviewed_at: 2026-11-27

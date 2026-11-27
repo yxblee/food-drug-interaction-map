@@ -103,7 +103,7 @@ describe('seed dataset', () => {
       ).toEqual([setid ?? own, ...others])
     }
   })
-  it('has the grapefruit and alcohol Interactions for the #207 Drugs Pending with two Citations', () => {
+  it('has the grapefruit and alcohol Interactions for the #207 Drugs Approved with two Citations', () => {
     // [Interaction, Severity, other Citations]; the first Citation is the Drug's label
     const mp = 'https://medlineplus.gov/druginfo/meds/'
     const hyzaar = '4116ccde-2e23-45f4-b12f-6337df877744'
@@ -114,7 +114,8 @@ describe('seed dataset', () => {
       ['alcohol--hydrochlorothiazide', 'caution', [hyzaar, `${mp}a682571.html`]],
     ] as const) {
       const i = get(id)
-      expect(i?.status, id).toBe('pending')
+      expect(i?.status, id).toBe('approved')
+      expect(i?.reviewed_at, id).toBe('2026-11-27')
       expect(i?.severity, id).toBe(severity)
       const own = ds!.drugs.find((d) => d.id === i?.drug)?.dailymed
       expect(own, id).toBeTruthy()
