@@ -1,0 +1,19 @@
+id: alcohol--furosemide
+food: alcohol
+drug: furosemide
+mechanisms: [additive-blood-pressure-lowering]
+severity: caution
+effect: increases
+summary: "Alcohol can worsen dizziness or fainting on standing up while taking furosemide."
+advice: "Be careful with alcohol while taking furosemide. Get up slowly, and tell your prescriber if you feel dizzy or faint."
+details: "The Lasix label says low blood pressure on standing up may occur and be made worse by alcohol. The MedlinePlus furosemide page says alcohol can add to dizziness, lightheadedness and fainting on getting up."
+citations:
+  - type: "label"
+    title: "LASIX (FUROSEMIDE) TABLET [VALIDUS PHARMACEUTICALS LLC]"
+    url: "https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=2c9b4d8f-0770-482d-a9e6-9c616a440b1a"
+    setid: "2c9b4d8f-0770-482d-a9e6-9c616a440b1a"
+  - type: "guideline"
+    title: "Furosemide: MedlinePlus Drug Information"
+    url: "https://medlineplus.gov/druginfo/meds/a682858.html"
+status: pending
+source: curated

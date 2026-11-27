@@ -17,7 +17,7 @@ describe('seed dataset', () => {
     expect(drugs).toBeGreaterThanOrEqual(55)
     expect(ds!.foods.length).toBe(48)
     expect(ds!.mechanisms.length).toBeGreaterThanOrEqual(22)
-    expect(ds!.interactions.filter((i) => i.source === 'curated').length).toBe(81)
+    expect(ds!.interactions.filter((i) => i.source === 'curated').length).toBe(85)
   })
   it('keeps grapefruit relatives as a group, not citrus (ADR 0001)', () => {
     const rel = ds!.foods.filter((f) => f.parent === 'grapefruit-relatives').map((f) => f.id)
@@ -101,6 +101,27 @@ describe('seed dataset', () => {
         i?.citations.map((c) => c.setid ?? c.pmid ?? c.url),
         id,
       ).toEqual([setid ?? own, ...others])
+    }
+  })
+  it('has the grapefruit and alcohol Interactions for the #207 Drugs Pending with two Citations', () => {
+    // [Interaction, Severity, other Citations]; the first Citation is the Drug's label
+    const mp = 'https://medlineplus.gov/druginfo/meds/'
+    const hyzaar = '4116ccde-2e23-45f4-b12f-6337df877744'
+    for (const [id, severity, others] of [
+      ['grapefruit--finerenone', 'avoid', [`${mp}a621038.html`]],
+      ['grapefruit--eplerenone', 'minimal', [`${mp}a603004.html`]],
+      ['alcohol--furosemide', 'caution', [`${mp}a682858.html`]],
+      ['alcohol--hydrochlorothiazide', 'caution', [hyzaar, `${mp}a682571.html`]],
+    ] as const) {
+      const i = get(id)
+      expect(i?.status, id).toBe('pending')
+      expect(i?.severity, id).toBe(severity)
+      const own = ds!.drugs.find((d) => d.id === i?.drug)?.dailymed
+      expect(own, id).toBeTruthy()
+      expect(
+        i?.citations.map((c) => c.setid ?? c.pmid ?? c.url),
+        id,
+      ).toEqual([own, ...others])
     }
   })
   it('does not answer to veterinary furosemide brands (#207)', () => {
