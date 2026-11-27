@@ -1,5 +1,5 @@
 import { expect, test, type Page } from '@playwright/test'
-import { waitForRouteHandlersAtTeardown } from './route-teardown'
+import { waitForRouteHandlersAtTeardown } from './route-teardown.ts'
 
 // Two test fixtures that replace the real Helpful pairings in the static payloads the app fetches.
 // Their wording is test text; the real pairings live in data/pairings/.

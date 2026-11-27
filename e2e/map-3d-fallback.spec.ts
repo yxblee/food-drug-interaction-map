@@ -1,5 +1,5 @@
 import { expect, test } from '@playwright/test'
-import { waitForRouteHandlersAtTeardown } from './route-teardown'
+import { waitForRouteHandlersAtTeardown } from './route-teardown.ts'
 
 waitForRouteHandlersAtTeardown()
 
