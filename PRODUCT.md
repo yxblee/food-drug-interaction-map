@@ -26,7 +26,7 @@ Searches and chatbots answer one drug at a time with no comparable severity, no 
 
 ## Capabilities and Constraints
 
-- Curated Dataset in `data/` YAML: 97 Drugs (including 10 Drug classes), 48 Foods, 30 Mechanisms, 136 Approved Interactions and 8 Helpful pairings (the code and schema are in place; the pairings follow once each is checked against its label); validated into SQLite, served by a small read API or exported as static JSON.
+- Curated Dataset in `data/` YAML: 97 Drugs (including 10 Drug classes), 48 Foods, 30 Mechanisms, 136 Approved Interactions and 8 published Helpful pairings (each checked against its label); validated into SQLite, served by a small read API or exported as static JSON.
 - A Helpful pairing is not an Interaction and has no Severity, so every Severity keeps meaning "a warning" (`docs/adr/0005-helpful-pairings-are-not-interactions.md`). It appears under "Helps to take with" in My meds and under Interactions in the Explore panel, and only reports what a Source says.
 - Severity vocabulary is fixed: avoid, caution, monitor, minimal. It is advice from the primary Citation, not a clinical grade; research-database grades are never mapped onto it.
 - Effect is increases or decreases.
