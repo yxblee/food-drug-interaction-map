@@ -109,7 +109,7 @@ describe('seed dataset', () => {
     const hyzaar = '4116ccde-2e23-45f4-b12f-6337df877744'
     for (const [id, severity, others] of [
       ['grapefruit--finerenone', 'avoid', [`${mp}a621038.html`]],
-      ['grapefruit--eplerenone', 'minimal', [`${mp}a603004.html`]],
+      ['grapefruit--eplerenone', 'monitor', [`${mp}a603004.html`]],
       ['alcohol--furosemide', 'caution', [`${mp}a682858.html`]],
       ['alcohol--hydrochlorothiazide', 'caution', [hyzaar, `${mp}a682571.html`]],
     ] as const) {
