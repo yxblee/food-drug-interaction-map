@@ -12,6 +12,9 @@ citations:
     title: "CIPROFLOXACIN HYDROCHLORIDE TABLET, FILM COATED [WESTMINSTER PHARMACEUTICALS, LLC]"
     url: "https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=c47250c2-bece-46b5-8b3b-b7c97d9005d8"
     setid: "c47250c2-bece-46b5-8b3b-b7c97d9005d8"
+  - type: "guideline"
+    title: "Ciprofloxacin: MedlinePlus Drug Information"
+    url: "https://medlineplus.gov/druginfo/meds/a688016.html"
 status: approved
 source: curated
 reviewed_at: 2026-10-09

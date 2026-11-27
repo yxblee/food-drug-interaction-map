@@ -12,6 +12,9 @@ citations:
     title: "TYLENOL EXTRA STRENGTH (ACETAMINOPHEN) TABLET, FILM COATED [KENVUE BRANDS LLC]"
     url: "https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=103d109d-f520-409c-8da2-eb6b0fbec891"
     setid: "103d109d-f520-409c-8da2-eb6b0fbec891"
+  - type: "guideline"
+    title: "Acetaminophen: MedlinePlus Drug Information"
+    url: "https://medlineplus.gov/druginfo/meds/a681004.html"
 status: approved
 source: curated
 reviewed_at: 2026-10-09

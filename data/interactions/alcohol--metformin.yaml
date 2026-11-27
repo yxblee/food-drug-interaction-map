@@ -12,6 +12,9 @@ citations:
     title: "METFORMIN HYDROCHLORIDE TABLET"
     url: "https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=8cd5555c-f6b2-28d8-e053-2a95a90a5f1e"
     setid: "8cd5555c-f6b2-28d8-e053-2a95a90a5f1e"
+  - type: "guideline"
+    title: "Metformin: MedlinePlus Drug Information"
+    url: "https://medlineplus.gov/druginfo/meds/a696005.html"
 status: approved
 source: curated
 reviewed_at: 2026-10-09

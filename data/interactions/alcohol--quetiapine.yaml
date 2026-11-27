@@ -25,6 +25,9 @@ citations:
     title: "SEROQUEL (QUETIAPINE) TABLET, FILM COATED [ASTRAZENECA PHARMACEUTICALS LP]"
     url: "https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=0584dda8-bc3c-48fe-1a90-79608f78e8a0"
     setid: "0584dda8-bc3c-48fe-1a90-79608f78e8a0"
+  - type: "guideline"
+    title: "Quetiapine: MedlinePlus Drug Information"
+    url: "https://medlineplus.gov/druginfo/meds/a698019.html"
 status: approved
 source: openfda
 reviewed_at: 2026-11-18
