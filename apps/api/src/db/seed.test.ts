@@ -141,6 +141,31 @@ describe('seed dataset', () => {
       ).toBe(true)
     }
   })
+  it('gives 12 single-Source Caution Interactions a second MedlinePlus Citation (#216)', () => {
+    for (const [id, page] of [
+      ['alcohol--acetaminophen', 'a681004'],
+      ['alcohol--isoniazid', 'a682401'],
+      ['alcohol--metformin', 'a696005'],
+      ['alcohol--quetiapine', 'a698019'],
+      ['calcium-fortified-juice--fluoroquinolones', 'a688016'],
+      ['calcium-supplements--dolutegravir', 'a613043'],
+      ['dairy--fluoroquinolones', 'a688016'],
+      ['iron-supplements--levodopa', 'a601068'],
+      ['iron-supplements--levothyroxine', 'a682461'],
+      ['magnesium-supplements--fluoroquinolones', 'a688016'],
+      ['zinc-supplements--fluoroquinolones', 'a688016'],
+      ['zinc-supplements--tetracyclines', 'a682098'],
+    ]) {
+      const i = get(id!)
+      expect(i?.status, id).toBe('approved')
+      expect(i?.severity, id).toBe('caution')
+      expect(i?.citations.length, id).toBe(2)
+      expect(i?.citations[1], id).toMatchObject({
+        type: 'guideline',
+        url: `https://medlineplus.gov/druginfo/meds/${page}.html`,
+      })
+    }
+  })
   it('gives every Approved Avoid Interaction two Citations (#135, #160)', () => {
     expect(citationGaps(ds!.interactions)).toEqual([])
   })
