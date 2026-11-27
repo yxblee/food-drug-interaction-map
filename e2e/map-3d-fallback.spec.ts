@@ -1,4 +1,7 @@
 import { expect, test } from '@playwright/test'
+import { waitForRouteHandlersAtTeardown } from './route-teardown.ts'
+
+waitForRouteHandlersAtTeardown()
 
 // #154: when the 3D chunk cannot load, the map falls back to 2D with a notice and a retry.
 test.beforeEach(({}, info) => {

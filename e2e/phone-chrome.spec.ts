@@ -1,4 +1,7 @@
 import { expect, test, type Page } from '@playwright/test'
+import { waitForRouteHandlersAtTeardown } from './route-teardown.ts'
+
+waitForRouteHandlersAtTeardown()
 
 async function addMeds(page: Page) {
   await page.goto('./?tab=meds')

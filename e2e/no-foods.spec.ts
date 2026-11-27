@@ -1,4 +1,7 @@
 import { expect, test, type Page } from '@playwright/test'
+import { waitForRouteHandlersAtTeardown } from './route-teardown.ts'
+
+waitForRouteHandlersAtTeardown()
 
 // Every Drug in the shipped Dataset has Foods to watch (itself or through its class), so the
 // fixture takes Adenosine's Interactions away.
