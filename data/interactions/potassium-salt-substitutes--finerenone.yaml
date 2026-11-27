@@ -1,0 +1,20 @@
+id: potassium-salt-substitutes--finerenone
+food: potassium-salt-substitutes
+drug: finerenone
+mechanisms: [additive-hyperkalemia]
+severity: caution
+effect: increases
+summary: "Potassium-based salt substitutes can add to the risk of high potassium with finerenone."
+advice: "Talk with your prescriber before using salt substitutes containing potassium, and keep up your potassium blood tests."
+details: "The Kerendia label tells patients to consult their physician before using potassium supplements or salt substitutes containing potassium, and to have potassium checked periodically. The MedlinePlus finerenone page also says to talk to a doctor before using these salt substitutes."
+citations:
+  - type: "label"
+    title: "KERENDIA (FINERENONE) TABLET, FILM COATED KERENDIA (FINERENONE) TABLET [BAYER HEALTHCARE PHARMACEUTICALS INC.]"
+    url: "https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=fc726765-5d5a-4d6e-b037-b847bda9fb7c"
+    setid: "fc726765-5d5a-4d6e-b037-b847bda9fb7c"
+  - type: "guideline"
+    title: "Finerenone: MedlinePlus Drug Information"
+    url: "https://medlineplus.gov/druginfo/meds/a621038.html"
+status: approved
+source: curated
+reviewed_at: 2026-11-27

@@ -17,7 +17,7 @@ describe('seed dataset', () => {
     expect(drugs).toBeGreaterThanOrEqual(55)
     expect(ds!.foods.length).toBe(48)
     expect(ds!.mechanisms.length).toBeGreaterThanOrEqual(22)
-    expect(ds!.interactions.filter((i) => i.source === 'curated').length).toBe(74)
+    expect(ds!.interactions.filter((i) => i.source === 'curated').length).toBe(81)
   })
   it('keeps grapefruit relatives as a group, not citrus (ADR 0001)', () => {
     const rel = ds!.foods.filter((f) => f.parent === 'grapefruit-relatives').map((f) => f.id)
@@ -75,6 +75,36 @@ describe('seed dataset', () => {
   })
   it('does not answer to Horizant with gabapentin’s milder alcohol advice (#197)', () => {
     expect(ds!.drugs.find((d) => d.id === 'gabapentin')?.aliases).not.toContain('Horizant')
+  })
+  it('has the salt substitute and licorice Interactions Approved with a label and a second Citation (#207)', () => {
+    // [Interaction, Severity, label setid when not the Drug's own, other Citations]
+    const mp = 'https://medlineplus.gov/druginfo/meds/'
+    const salt = 'potassium-salt-substitutes--'
+    // the only current label found naming liquorice for hydrochlorothiazide is a combination's
+    const hyzaar = '4116ccde-2e23-45f4-b12f-6337df877744'
+    for (const [id, severity, setid, others] of [
+      [`${salt}aliskiren`, 'caution', undefined, [`${mp}a607039.html`]],
+      [`${salt}amiloride`, 'avoid', undefined, [`${mp}a615029.html`]],
+      [`${salt}eplerenone`, 'caution', undefined, [`${mp}a603004.html`]],
+      [`${salt}finerenone`, 'caution', undefined, [`${mp}a621038.html`]],
+      [`${salt}triamterene`, 'avoid', undefined, [`${mp}a682337.html`]],
+      ['licorice--furosemide', 'caution', undefined, ['37764649']],
+      ['licorice--hydrochlorothiazide', 'caution', hyzaar, ['37764649', '19562574']],
+    ] as const) {
+      const i = get(id)
+      expect(i?.status, id).toBe('approved')
+      expect(i?.reviewed_at, id).toBe('2026-11-27')
+      expect(i?.severity, id).toBe(severity)
+      const own = ds!.drugs.find((d) => d.id === i?.drug)?.dailymed
+      expect(own, id).toBeTruthy()
+      expect(
+        i?.citations.map((c) => c.setid ?? c.pmid ?? c.url),
+        id,
+      ).toEqual([setid ?? own, ...others])
+    }
+  })
+  it('does not answer to veterinary furosemide brands (#207)', () => {
+    expect(ds!.drugs.find((d) => d.id === 'furosemide')?.aliases).toEqual(['Lasix', 'Furoscix'])
   })
   it('backs every interaction with an authoritative citation and no placeholders', () => {
     const ok =

@@ -1,0 +1,21 @@
+id: licorice--furosemide
+food: licorice
+drug: furosemide
+mechanisms: [additive-potassium-loss]
+severity: caution
+effect: increases
+summary: "Large amounts of real licorice can add to the potassium loss furosemide causes."
+advice: "Avoid eating large amounts of black licorice or licorice products while taking furosemide, and tell your prescriber if you eat it."
+details: "The Lasix label says low potassium may develop with it, including during use of licorice in large amounts. A review of licorice toxicity says thiazide and loop diuretics increase the risk of severe low potassium."
+citations:
+  - type: "label"
+    title: "LASIX (FUROSEMIDE) TABLET [VALIDUS PHARMACEUTICALS LLC]"
+    url: "https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=2c9b4d8f-0770-482d-a9e6-9c616a440b1a"
+    setid: "2c9b4d8f-0770-482d-a9e6-9c616a440b1a"
+  - type: "review"
+    title: "Liquorice Toxicity: A Comprehensive Narrative Review"
+    url: "https://pubmed.ncbi.nlm.nih.gov/37764649/"
+    pmid: "37764649"
+status: approved
+source: curated
+reviewed_at: 2026-11-27

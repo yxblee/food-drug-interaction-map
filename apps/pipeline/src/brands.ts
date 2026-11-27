@@ -75,7 +75,7 @@ export function withAliases(text: string, aliases: string[]): string {
 export const EXCLUDED = new Set([
   // veterinary products
   ...['amodip', 'atopica', 'cyclavance', 'modulis', 'optimmune', 'reconcile', 'sporimune'],
-  ...['thyro-tabs', 'thyrokare', 'thyrocryn'],
+  ...['thyro-tabs', 'thyrokare', 'thyrocryn', 'disal', 'salix - substance'],
   // sold only for the skin, eye, ear or gum pocket, where food does not change the Drug's action
   ...['amzeeq', 'arestin', 'cequa', 'cetraxal', 'ciloxan', 'metrocream', 'metrogel', 'metrolotion'],
   ...['noritate', 'nydamax', 'restasis', 'rosadan', 'vectical', 'verkazia', 'vevye', 'viabecline'],
