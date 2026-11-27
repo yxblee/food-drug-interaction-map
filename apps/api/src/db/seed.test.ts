@@ -76,7 +76,7 @@ describe('seed dataset', () => {
   it('does not answer to Horizant with gabapentin’s milder alcohol advice (#197)', () => {
     expect(ds!.drugs.find((d) => d.id === 'gabapentin')?.aliases).not.toContain('Horizant')
   })
-  it('holds the salt substitute and licorice Interactions Pending with a label and a second Citation (#207)', () => {
+  it('has the salt substitute and licorice Interactions Approved with a label and a second Citation (#207)', () => {
     // [Interaction, Severity, label setid when not the Drug's own, other Citations]
     const mp = 'https://medlineplus.gov/druginfo/meds/'
     const salt = 'potassium-salt-substitutes--'
@@ -92,7 +92,8 @@ describe('seed dataset', () => {
       ['licorice--hydrochlorothiazide', 'caution', hyzaar, ['37764649', '19562574']],
     ] as const) {
       const i = get(id)
-      expect(i?.status, id).toBe('pending')
+      expect(i?.status, id).toBe('approved')
+      expect(i?.reviewed_at, id).toBe('2026-11-27')
       expect(i?.severity, id).toBe(severity)
       const own = ds!.drugs.find((d) => d.id === i?.drug)?.dailymed
       expect(own, id).toBeTruthy()

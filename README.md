@@ -11,7 +11,7 @@ Two ways in, over one curated dataset:
 
 **Live demo:** [yxblee.github.io/food-drug-interaction-map](https://yxblee.github.io/food-drug-interaction-map/). A static proof of concept of the full-stack app: the Dataset as of the last deploy from `main`, redeployed after every green push.
 
-**Status:** core app built (schema, API, 129 approved cited interactions, Explore, My meds, end-to-end tests). See the [design spec](docs/superpowers/specs/2026-10-08-core-app-design.md), [implementation plan](docs/superpowers/plans/2026-10-08-core-app.md), [glossary](GLOSSARY.md) and [data sources](docs/data-sources.md).
+**Status:** core app built (schema, API, 136 approved cited interactions, Explore, My meds, end-to-end tests). See the [design spec](docs/superpowers/specs/2026-10-08-core-app-design.md), [implementation plan](docs/superpowers/plans/2026-10-08-core-app.md), [glossary](GLOSSARY.md) and [data sources](docs/data-sources.md).
 
 ## Development
 
@@ -58,7 +58,7 @@ I take medications and manage them for a family member; "can I eat this with it?
 
 ### Data
 
-`data/` holds 91 drugs (including classes such as statins and MAOIs), 48 foods, 29 mechanisms and 129 approved interactions as YAML, plus 8 published Helpful pairings (a Food that helps a Drug, such as taking it with a meal) in `data/pairings/`, each checked against a label. Sources are DailyMed labels, NIH ODS/NCCIH fact sheets and PubMed reviews, linked but not copied (permission and terms in [docs/data-sources.md](docs/data-sources.md)). Brand names come from RxNorm through the NLM RxNav API (`node --run pipeline -- brands`). Each interaction file carries severity, a plain-language summary and advice, and its citations, so every result on screen traces to a file in `data/` and a source link.
+`data/` holds 97 drugs (including classes such as statins and MAOIs), 48 foods, 30 mechanisms and 136 approved interactions as YAML, plus 8 published Helpful pairings (a Food that helps a Drug, such as taking it with a meal) in `data/pairings/`, each checked against a label. Sources are DailyMed labels, NIH ODS/NCCIH fact sheets and PubMed reviews, linked but not copied (permission and terms in [docs/data-sources.md](docs/data-sources.md)). Brand names come from RxNorm through the NLM RxNav API (`node --run pipeline -- brands`). Each interaction file carries severity, a plain-language summary and advice, and its citations, so every result on screen traces to a file in `data/` and a source link.
 
 ### Run locally
 
