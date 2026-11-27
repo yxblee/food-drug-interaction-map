@@ -1,4 +1,7 @@
 import { expect, test, type Page } from '@playwright/test'
+import { waitForRouteHandlersAtTeardown } from './route-teardown'
+
+waitForRouteHandlersAtTeardown()
 
 // Simvastatin's payload gets a fixed setid so the href is stable whatever data/ holds.
 const SETID = '1b4121ee-a733-4456-a917-be2603477839'

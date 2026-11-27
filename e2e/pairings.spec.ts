@@ -1,4 +1,5 @@
 import { expect, test, type Page } from '@playwright/test'
+import { waitForRouteHandlersAtTeardown } from './route-teardown'
 
 // Two test fixtures that replace the real Helpful pairings in the static payloads the app fetches.
 // Their wording is test text; the real pairings live in data/pairings/.
@@ -57,15 +58,7 @@ async function withFixturePairings(page: Page) {
   })
 }
 
-// A test can finish while the app is still fetching node payloads (My meds loads one per warning),
-// leaving handlers in flight when the context closes. Wait for them, so their errors fail the test.
-// unrouteAll empties the route list, and the first handler to return then switches interception off
-// under the others. The pass-through route, added before any can return, keeps it on.
-test.afterEach(async ({ page }) => {
-  const settled = page.unrouteAll({ behavior: 'wait' })
-  await page.route('**/*', (route) => route.fallback())
-  await settled
-})
+waitForRouteHandlersAtTeardown()
 
 async function addMeds(page: Page, meds: string[]) {
   await page.goto('./')
