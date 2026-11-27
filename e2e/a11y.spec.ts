@@ -2,8 +2,8 @@ import AxeBuilder from '@axe-core/playwright'
 import { expect, test, type Page } from '@playwright/test'
 
 // No rule is excluded or disabled. Not covered: axe gives no contrast verdict ("incomplete") for
-// text drawn over the 2D map (node labels, legend, frosted controls); theme/tokens.test.ts
-// guards the colour pairs.
+// text drawn over the 2D map (node labels, legend, frosted controls). The token pairs are tested
+// on solid backgrounds in apps/web/src/theme/tokens.test.ts, not the frosted composite.
 const TAGS = ['wcag2a', 'wcag2aa', 'wcag21a', 'wcag21aa', 'wcag22aa']
 
 /**
@@ -12,22 +12,21 @@ const TAGS = ['wcag2a', 'wcag2aa', 'wcag21a', 'wcag21aa', 'wcag22aa']
  */
 async function expectNoViolations(page: Page, content: string) {
   const { width } = page.viewportSize()!
-  // First as the person lands on it. Then with every disclosure open, which axe otherwise skips,
-  // on a screen tall enough to unclip scrolled text, which axe cannot measure for contrast.
-  for (const expanded of [false, true]) {
-    if (expanded) {
+  // As the person lands on it; with every disclosure open, which axe otherwise skips; then on a
+  // screen tall enough to unclip scrolled text, which axe cannot measure for contrast.
+  for (const state of ['landed', 'open', 'tall'] as const) {
+    if (state === 'open')
       await page
         .locator('details')
         .evaluateAll((all) => all.forEach((d) => ((d as HTMLDetailsElement).open = true)))
-      await page.setViewportSize({ width, height: 20_000 })
-    }
+    if (state === 'tall') await page.setViewportSize({ width, height: 20_000 })
     const { violations, passes } = await new AxeBuilder({ page }).withTags(TAGS).analyze()
     expect(
       violations.flatMap((v) =>
         v.nodes.map((n) => `${v.id}: ${n.target.join(' ')} (${n.failureSummary})`),
       ),
     ).toEqual([])
-    if (!expanded) continue
+    if (state !== 'tall') continue
     // Guards against a vacuous pass.
     const measured = passes.find((p) => p.id === 'color-contrast')?.nodes ?? []
     expect(
@@ -44,7 +43,7 @@ for (const colorScheme of ['light', 'dark'] as const) {
   test.describe(`axe WCAG 2.2 AA, ${colorScheme}`, () => {
     // Reduced motion: no colour is measured mid-transition.
     test.use({ colorScheme, contextOptions: { reducedMotion: 'reduce' } })
-    // Two axe runs per view, the second over every row, are slow on CI.
+    // Three axe runs per view, two over every row, are slow on CI.
     test.slow()
 
     test('My meds, empty', async ({ page }) => {
