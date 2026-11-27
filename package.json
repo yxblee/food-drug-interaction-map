@@ -10,6 +10,7 @@
     "pipeline": "node apps/pipeline/src/cli.ts"
   },
   "devDependencies": {
+    "@axe-core/playwright": "^4.14.1",
     "@playwright/test": "^1.64.0",
     "@types/node": "^24.0.0",
     "typescript": "^7.0.2",
