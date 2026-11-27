@@ -682,15 +682,81 @@ test.describe('2D map on touch', () => {
     await expect.poll(async () => Math.abs((await scale(page)) - before) < 0.01).toBe(true)
   })
 
-  test.describe('with motion on', () => {
-    // The page clock holds animation frames until runFor, so presses land exactly where we say:
-    // d3 has drawn nothing between two of them unless the test runs the clock.
-    async function animated(page: Pg, info: { project: { name: string } }) {
-      await page.clock.install()
-      await to2d(page, info, true)
-      await page.clock.pauseAt(Date.now() + 60_000)
-      await page.clock.runFor(1000) // past the first fit
+  const clamp = (k: number) => Math.min(4, Math.max(0.2, k))
+  // Screen point = world point * a + (e, f).
+  const view = (page: Pg) =>
+    page.evaluate(() => {
+      const { a, e, f } = document.querySelector<SVGGElement>('svg.graph2d > g')!.getScreenCTM()!
+      return { a, e, f }
+    })
+  type View = Awaited<ReturnType<typeof view>>
+  /** Where the map spot under screen point `at` has gone, going from one view to another. */
+  const carried = (at: { x: number; y: number }, from: View, to: View) => ({
+    x: ((at.x - from.e) / from.a) * to.a + to.e,
+    y: ((at.y - from.f) / from.a) * to.a + to.f,
+  })
+  /** Where the view centre (viewBox 0,0) is on screen, and a point clear of every control. */
+  const points = async (page: Pg) => {
+    const centre = await page.evaluate(() => {
+      const { e, f } = document.querySelector<SVGSVGElement>('svg.graph2d')!.getScreenCTM()!
+      return { x: e, y: f }
+    })
+    // Whole pixels: a MouseEvent drops the fraction of clientX and clientY.
+    return { centre, at: { x: Math.round(centre.x) + 60, y: Math.round(centre.y) - 40 } }
+  }
+  const touch = (page: Pg, type: string, ...at: { x: number; y: number }[]) =>
+    page.evaluate(
+      ([type, at]) => {
+        const target = document.querySelector('svg.graph2d')!
+        const touches = at.map(
+          (p, identifier) => new Touch({ identifier, target, clientX: p.x, clientY: p.y }),
+        )
+        const down = type === 'touchend' ? [] : touches
+        const init = { touches: down, changedTouches: touches, bubbles: true, cancelable: true }
+        target.dispatchEvent(new TouchEvent(type, init))
+      },
+      [type, at] as const,
+    )
+
+  const doubleTap = async (page: Pg, at: { x: number; y: number }) => {
+    for (let i = 0; i < 2; i++) {
+      await touch(page, 'touchstart', at)
+      await touch(page, 'touchend', at)
     }
+  }
+  // The page clock holds animation frames until runFor, so presses land exactly where we say:
+  // d3 has drawn nothing between two of them unless the test runs the clock.
+  async function frozen(page: Pg, info: { project: { name: string } }, motion: boolean) {
+    await page.clock.install()
+    await to2d(page, info, motion)
+    await page.clock.pauseAt(Date.now() + 60_000)
+    await page.clock.runFor(1000) // past the first fit
+  }
+
+  test.describe('with reduced motion', () => {
+    for (const how of ['double-click', 'shift double-click', 'double-tap'] as const) {
+      test(`a ${how} zooms about the spot with no animation`, async ({ page }, info) => {
+        test.skip(how === 'double-tap' && info.project.name !== 'mobile', 'touch devices only')
+        await frozen(page, info, false)
+        const { at } = await points(page)
+        const from = await view(page)
+        const shiftKey = how === 'shift double-click'
+        if (how === 'double-tap') await doubleTap(page, at)
+        else
+          await page
+            .locator('svg.graph2d')
+            .dispatchEvent('dblclick', { clientX: at.x, clientY: at.y, shiftKey })
+        const to = await view(page) // no frame has been drawn since the gesture
+        expect(to.a).toBeCloseTo(clamp(from.a * (shiftKey ? 0.5 : 2)), 3)
+        const spot = carried(at, from, to)
+        expect(spot.x).toBeCloseTo(at.x, 0)
+        expect(spot.y).toBeCloseTo(at.y, 0)
+      })
+    }
+  })
+
+  test.describe('with motion on', () => {
+    const animated = (page: Pg, info: { project: { name: string } }) => frozen(page, info, true)
     // Clicks dispatched in one task: no frame can be drawn between them.
     const press = (page: Pg, ...names: string[]) =>
       page.evaluate((labels) => {
@@ -701,7 +767,6 @@ test.describe('2D map on touch', () => {
       await page.clock.runFor(1000)
       return scale(page)
     }
-    const clamp = (k: number) => Math.min(4, Math.max(0.2, k))
     const wheel = (page: Pg, deltaY: number) =>
       page.locator('svg.graph2d').dispatchEvent('wheel', { deltaY })
 
@@ -783,41 +848,6 @@ test.describe('2D map on touch', () => {
       expect(await settled(page)).toBeCloseTo(pinched, 3)
     })
 
-    // Screen point = world point * a + (e, f).
-    const view = (page: Pg) =>
-      page.evaluate(() => {
-        const { a, e, f } = document.querySelector<SVGGElement>('svg.graph2d > g')!.getScreenCTM()!
-        return { a, e, f }
-      })
-    type View = Awaited<ReturnType<typeof view>>
-    /** Where the map spot under screen point `at` has gone, going from one view to another. */
-    const carried = (at: { x: number; y: number }, from: View, to: View) => ({
-      x: ((at.x - from.e) / from.a) * to.a + to.e,
-      y: ((at.y - from.f) / from.a) * to.a + to.f,
-    })
-    /** Where the view centre (viewBox 0,0) is on screen, and a point clear of every control. */
-    const points = async (page: Pg) => {
-      const centre = await page.evaluate(() => {
-        const { e, f } = document.querySelector<SVGSVGElement>('svg.graph2d')!.getScreenCTM()!
-        return { x: e, y: f }
-      })
-      // Whole pixels: a MouseEvent drops the fraction of clientX and clientY.
-      return { centre, at: { x: Math.round(centre.x) + 60, y: Math.round(centre.y) - 40 } }
-    }
-    const touch = (page: Pg, type: string, ...at: { x: number; y: number }[]) =>
-      page.evaluate(
-        ([type, at]) => {
-          const target = document.querySelector('svg.graph2d')!
-          const touches = at.map(
-            (p, identifier) => new Touch({ identifier, target, clientX: p.x, clientY: p.y }),
-          )
-          const down = type === 'touchend' ? [] : touches
-          const init = { touches: down, changedTouches: touches, bubbles: true, cancelable: true }
-          target.dispatchEvent(new TouchEvent(type, init))
-        },
-        [type, at] as const,
-      )
-
     for (const how of ['double-click', 'double-tap'] as const) {
       for (const gap of [0, 100]) {
         test(`a press ${gap} ms into a ${how} zoom builds on its end`, async ({ page }, info) => {
@@ -831,11 +861,7 @@ test.describe('2D map on touch', () => {
             await page
               .locator('svg.graph2d')
               .dispatchEvent('dblclick', { clientX: at.x, clientY: at.y })
-          else
-            for (let i = 0; i < 2; i++) {
-              await touch(page, 'touchstart', at)
-              await touch(page, 'touchend', at)
-            }
+          else await doubleTap(page, at)
           if (gap) await page.clock.runFor(gap)
           await press(page, 'Zoom in')
           await page.clock.runFor(1000)
