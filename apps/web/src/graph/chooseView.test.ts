@@ -1,7 +1,7 @@
 import { describe, expect, it } from 'vite-plus/test'
 import { chooseView } from './chooseView.ts'
 
-const desktop = { mobile: false, webgl: true, reducedMotion: false }
+const desktop = { mobile: false, webgl: true, software: false, reducedMotion: false }
 
 describe('chooseView', () => {
   it('defaults to 3D with a toggle on desktop', () => {
@@ -23,5 +23,11 @@ describe('chooseView', () => {
       view: '3d',
       canToggle: true,
     })
+  })
+  it('defaults to 2D with a toggle when WebGL is software-rendered', () => {
+    const software = { ...desktop, software: true }
+    expect(chooseView(software, null)).toEqual({ view: '2d', canToggle: true })
+    expect(chooseView(software, '3d')).toEqual({ view: '3d', canToggle: true })
+    expect(chooseView(software, '2d')).toEqual({ view: '2d', canToggle: true })
   })
 })

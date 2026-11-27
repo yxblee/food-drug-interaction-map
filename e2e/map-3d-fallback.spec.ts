@@ -13,12 +13,12 @@ test('a blocked 3D chunk shows the 2D map, a notice, and Try 3D again recovers',
 }) => {
   let blocked = true
   await page.route(/render3d/, (route) => (blocked ? route.abort() : route.continue()))
-  await page.goto('./')
+  await page.goto('./?view=3d')
   await expect(page.locator('svg.graph2d')).toBeVisible()
   const notice = page.getByRole('status').filter({ hasText: 'could not load' })
   await expect(notice).toBeVisible()
   // The URL's view preference is not rewritten by the fallback.
-  expect(new URL(page.url()).searchParams.get('view')).toBeNull()
+  expect(new URL(page.url()).searchParams.get('view')).toBe('3d')
 
   const retry = page.getByRole('button', { name: 'Try 3D again' })
   await retry.focus()

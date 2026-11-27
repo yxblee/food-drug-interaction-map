@@ -6,13 +6,13 @@ for (const size of [
   { width: 375, height: 812 },
   { width: 1280, height: 800 },
 ]) {
-  for (const path of ['./', './?node=food:grapefruit']) {
+  for (const path of ['./?view=3d', './?view=3d&node=food:grapefruit']) {
     test(`visible 2D labels lie inside the map at ${size.width}x${size.height} (${path})`, async ({
       page,
     }) => {
       await page.setViewportSize(size)
       await page.goto(path)
-      // Phones start in 2D; desktop starts in 3D and has the 2D pill. Wait for whichever shows.
+      // Phones ignore ?view=3d; desktop opens 3D and has the 2D pill. Wait for whichever shows.
       const d2 = page.getByRole('button', { name: '2D', exact: true })
       await d2.or(page.locator('svg.graph2d')).first().waitFor()
       if (await d2.isVisible()) await d2.click()

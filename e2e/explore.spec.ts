@@ -1,7 +1,7 @@
 import { expect, test } from '@playwright/test'
 
 test('search, select and share a food', async ({ page }, info) => {
-  await page.goto('./')
+  await page.goto('./?view=3d')
   const search = page.getByLabel('Search drugs, foods and mechanisms')
   await search.fill('grapefruit')
   await expect(page.getByText(/\d+ match/)).toBeVisible()
@@ -354,8 +354,8 @@ test('the 2D graph is one tab stop; arrows move the active node and Enter opens 
 })
 
 test('the 3D graph is one tab stop with arrow and Enter navigation', async ({ page }, info) => {
-  test.skip(info.project.name === 'mobile', '3D is the desktop default')
-  await page.goto('./')
+  test.skip(info.project.name === 'mobile', '3D is desktop only')
+  await page.goto('./?view=3d')
   const graph = page.getByRole('application', { name: 'Map of foods, drugs and mechanisms' })
   await expect(page.locator('.graph3d canvas')).toBeAttached()
   await graph.focus()
