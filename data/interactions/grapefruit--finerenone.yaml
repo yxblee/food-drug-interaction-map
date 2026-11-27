@@ -1,0 +1,20 @@
+id: grapefruit--finerenone
+food: grapefruit
+drug: finerenone
+mechanisms: [cyp3a4-inhibition]
+severity: avoid
+effect: increases
+summary: "Grapefruit is expected to raise finerenone levels and increase the risk of side effects."
+advice: "Do not eat grapefruit or drink grapefruit juice while taking finerenone."
+details: "The Kerendia label says to avoid grapefruit and grapefruit juice, as they are expected to raise finerenone levels. Finerenone is broken down by CYP3A4, and the label says strong CYP3A4 inhibitors raise its levels, which may increase the risk of side effects. The MedlinePlus finerenone page gives the same advice to avoid grapefruit."
+citations:
+  - type: "label"
+    title: "KERENDIA (FINERENONE) TABLET, FILM COATED KERENDIA (FINERENONE) TABLET [BAYER HEALTHCARE PHARMACEUTICALS INC.]"
+    url: "https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=fc726765-5d5a-4d6e-b037-b847bda9fb7c"
+    setid: "fc726765-5d5a-4d6e-b037-b847bda9fb7c"
+  - type: "guideline"
+    title: "Finerenone: MedlinePlus Drug Information"
+    url: "https://medlineplus.gov/druginfo/meds/a621038.html"
+status: approved
+source: curated
+reviewed_at: 2026-11-27

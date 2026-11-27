@@ -1,0 +1,20 @@
+id: grapefruit--eplerenone
+food: grapefruit
+drug: eplerenone
+mechanisms: [cyp3a4-inhibition]
+severity: monitor
+effect: increases
+summary: "Grapefruit juice raised eplerenone levels by about a quarter."
+advice: "Ask your doctor about eating grapefruit or drinking grapefruit juice while taking eplerenone."
+details: "The Inspra label reports that grapefruit juice raised eplerenone exposure by 25% and gives no instruction about grapefruit. Its limits are for stronger CYP3A inhibitors: strong ones must not be used, and moderate ones, which raised exposure by 100% to 190%, need a lower dose. The MedlinePlus eplerenone page says to talk to your doctor about grapefruit and grapefruit juice."
+citations:
+  - type: "label"
+    title: "INSPRA (EPLERENONE) TABLET, FILM COATED [VIATRIS SPECIALTY LLC]"
+    url: "https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=1a52bedc-8e2c-4116-a296-a87770676b4a"
+    setid: "1a52bedc-8e2c-4116-a296-a87770676b4a"
+  - type: "guideline"
+    title: "Eplerenone: MedlinePlus Drug Information"
+    url: "https://medlineplus.gov/druginfo/meds/a603004.html"
+status: approved
+source: curated
+reviewed_at: 2026-11-27

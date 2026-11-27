@@ -1,0 +1,24 @@
+id: alcohol--hydrochlorothiazide
+food: alcohol
+drug: hydrochlorothiazide
+mechanisms: [additive-blood-pressure-lowering]
+severity: caution
+effect: increases
+summary: "Alcohol can worsen dizziness or fainting on standing up while taking hydrochlorothiazide."
+advice: "Be careful with alcohol while taking hydrochlorothiazide. Get up slowly, and tell your prescriber if you feel dizzy or faint."
+details: "The Inzirqo label says low blood pressure, including on standing up, may be made worse by alcohol. The hydrochlorothiazide section of the Hyzaar (losartan and hydrochlorothiazide) label says alcohol may increase low blood pressure on standing. The MedlinePlus hydrochlorothiazide page says alcohol can add to dizziness, lightheadedness and fainting on getting up."
+citations:
+  - type: "label"
+    title: "INZIRQO (HYDROCHLOROTHIAZIDE) POWDER, FOR SUSPENSION [ANI PHARMACEUTICALS, INC.]"
+    url: "https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=41aaea48-6c1b-42c8-a96f-5923d49dc934"
+    setid: "41aaea48-6c1b-42c8-a96f-5923d49dc934"
+  - type: "label"
+    title: "HYZAAR (LOSARTAN POTASSIUM AND HYDROCHLOROTHIAZIDE) TABLET, FILM COATED [ORGANON LLC]"
+    url: "https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=4116ccde-2e23-45f4-b12f-6337df877744"
+    setid: "4116ccde-2e23-45f4-b12f-6337df877744"
+  - type: "guideline"
+    title: "Hydrochlorothiazide: MedlinePlus Drug Information"
+    url: "https://medlineplus.gov/druginfo/meds/a682571.html"
+status: approved
+source: curated
+reviewed_at: 2026-11-27
