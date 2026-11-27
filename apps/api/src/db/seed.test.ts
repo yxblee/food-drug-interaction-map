@@ -141,7 +141,7 @@ describe('seed dataset', () => {
       ).toBe(true)
     }
   })
-  it('gives 12 single-Source Caution Interactions a second MedlinePlus Citation (#216)', () => {
+  it('gives 11 single-Citation Caution Interactions a second one from MedlinePlus (#216)', () => {
     for (const [id, page] of [
       ['alcohol--acetaminophen', 'a681004'],
       ['alcohol--isoniazid', 'a682401'],
@@ -154,7 +154,6 @@ describe('seed dataset', () => {
       ['iron-supplements--levothyroxine', 'a682461'],
       ['magnesium-supplements--fluoroquinolones', 'a688016'],
       ['zinc-supplements--fluoroquinolones', 'a688016'],
-      ['zinc-supplements--tetracyclines', 'a682098'],
     ]) {
       const i = get(id!)
       expect(i?.status, id).toBe('approved')

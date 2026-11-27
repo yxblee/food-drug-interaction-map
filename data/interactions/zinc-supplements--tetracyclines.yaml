@@ -11,9 +11,6 @@ citations:
   - type: "guideline"
     title: "NIH Office of Dietary Supplements: Zinc fact sheet for health professionals (Interactions with Medications)"
     url: "https://ods.od.nih.gov/factsheets/Zinc-HealthProfessional/"
-  - type: "guideline"
-    title: "Tetracycline: MedlinePlus Drug Information"
-    url: "https://medlineplus.gov/druginfo/meds/a682098.html"
 status: approved
 source: ods
 reviewed_at: 2026-11-18
