@@ -264,7 +264,7 @@ The guide's stamp. Pill, light badge background, 1px `currentColor` outline, upp
 - **Notices / banner:** hairline outline on surface; the danger banner uses an Oxblood outline.
 
 ### Inputs / Fields
-- **Both inputs (Explore search, medication):** inherit the body font at 16px (iOS Safari zooms smaller text on focus) and are at least 44px tall. Both are ARIA comboboxes over a listbox: ArrowUp/Down move the active option, Enter picks it (first by default), Escape closes. When the query matches nothing but has near names, both show them under a "Did you mean" label; in the medication input no option is active until an arrow key moves onto one, so Enter never adds a guess.
+- **Both inputs (Explore search, medication):** inherit the body font at 16px (iOS Safari zooms smaller text on focus) and are at least 44px tall. Both are ARIA comboboxes over a listbox: ArrowUp/Down move the active option, Enter picks it (first by default), Escape closes. When the query matches nothing but has near names, both show them under a "Did you mean" label; in the medication input no option is active until an arrow key moves onto one, so Enter never adds a guess. The active option takes a 10% ink tint and an ink bar, and its muted text (kind, alias, count) turns ink: muted on that tint is under 4.5:1 in dark grey and sand.
 - **Medication input:** pill, Bone Surface, Weathered Grey outline, 10px 14px padding; suggestions below on a 12px-radius surface with 8px-radius rows that fill with paper on hover/focus.
 - **Explore search:** square, frosted at rest and solid on hover or focus (see Frosted Controls), hairline outline, 8px 10px padding, max 420px; results as a ruled list with muted aliases and a muted match count.
 - **Focus:** global 2px ink outline.

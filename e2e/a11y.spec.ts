@@ -39,6 +39,13 @@ async function expectNoViolations(page: Page, content: string) {
   }
 }
 
+/** Explore on the 2D map: the 3D canvas is out of scope for axe. */
+async function openExplore(page: Page, params = '') {
+  await page.goto(`./?view=2d${params}`)
+  // The nodes land after the empty svg does, past the default 5 s on a loaded runner.
+  await expect(page.locator('svg.graph2d g.node').first()).toBeAttached({ timeout: 20_000 })
+}
+
 for (const colorScheme of ['light', 'dark'] as const) {
   test.describe(`axe WCAG 2.2 AA, ${colorScheme}`, () => {
     // Reduced motion: no colour is measured mid-transition.
@@ -70,14 +77,34 @@ for (const colorScheme of ['light', 'dark'] as const) {
       await expectNoViolations(page, 'li.irow')
     })
 
-    test('Explore, 2D map with a Food panel', async ({ page }) => {
-      // `view=2d`: the 3D canvas is out of scope for axe.
-      await page.goto('./?view=2d&node=food:grapefruit')
-      // The nodes land after the empty svg does, past the default 5 s on a loaded runner.
-      await expect(page.locator('svg.graph2d g.node').first()).toBeAttached({ timeout: 20_000 })
-      await expect(page.getByRole('complementary').locator('li.irow').first()).toBeVisible()
-      await expectNoViolations(page, 'li.irow')
-    })
+    // No one Drug has both inherited rows and a Helpful pairing, so the Drug panel takes two.
+    for (const [panel, node] of [
+      ['Food', 'food:grapefruit'],
+      ['Drug', 'drug:lovastatin'], // a Helpful pairing
+      ['Drug with inherited rows', 'drug:alendronate'], // and jump links, collapsed rows
+      ['Mechanism', 'mechanism:cyp3a4-inhibition'],
+    ] as const) {
+      test(`Explore, 2D map with a ${panel} panel`, async ({ page }) => {
+        await openExplore(page, `&node=${node}`)
+        await expect(page.getByRole('complementary').locator('li.irow').first()).toBeVisible()
+        await expectNoViolations(page, '.panel li.irow')
+      })
+    }
+
+    for (const [title, query, didYouMean] of [
+      ['a typed query', 'grape', false],
+      ['a misspelled query ("Did you mean")', 'grapefuit', true],
+    ] as const) {
+      test(`Explore, search suggestions for ${title}`, async ({ page }) => {
+        await openExplore(page)
+        await page.getByLabel('Search drugs, foods and mechanisms').fill(query)
+        await expect(page.getByRole('option', { name: /Grapefruit/ }).first()).toBeVisible()
+        await expect(page.getByText('Did you mean', { exact: true })).toBeVisible({
+          visible: didYouMean,
+        })
+        await expectNoViolations(page, '.search__results [role="option"]')
+      })
+    }
 
     test('About the data', async ({ page }) => {
       await page.goto('./?view=2d')

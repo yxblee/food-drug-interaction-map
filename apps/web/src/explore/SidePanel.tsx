@@ -127,14 +127,14 @@ export function SidePanel({
               {(entity as Drug).medlineplus && (
                 <MedlinePlusLink
                   label="About this medication (MedlinePlus)"
-                  short="MedlinePlus"
+                  short="About this medication"
                   url={(entity as Drug).medlineplus!}
                 />
               )}
               {(entity as Drug).dailymed && (
                 <MedlinePlusLink
                   label="Read the label (DailyMed)"
-                  short="DailyMed label"
+                  short="Read the label"
                   url={dailymedUrl((entity as Drug).dailymed!)}
                 />
               )}

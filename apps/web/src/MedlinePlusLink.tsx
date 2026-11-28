@@ -2,7 +2,11 @@ interface Props {
   url: string
   /** Visible text; the panel says "this medication", a list names the Drug. */
   label: string
-  /** Shorter visible text for phone widths; the accessible name stays `label` and contains it. */
+  /**
+   * Shorter visible text for phone widths. The accessible name stays `label`, which must contain
+   * this outside any parentheses: axe's label-in-name check (WCAG 2.5.3) ignores
+   * parenthesised words.
+   */
   short?: string
 }
 
