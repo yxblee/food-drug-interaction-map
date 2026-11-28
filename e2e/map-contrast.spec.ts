@@ -35,7 +35,7 @@ const LABELS = 'svg.graph2d g.node:not(.is-dim) text.label'
 const OVERLAYS = '.explore__bar :is(input, button, p), .legend, .graph-zoom button, .panel'
 
 const STATES = [
-  { name: 'no selection', query: '?view=2d', has: ['.search__input', '.explore__hint'] },
+  { name: 'no selection', query: '?view=2d', has: ['.explore__hint', '.legend summary'] },
   { name: 'no selection, Color on', query: '?view=2d&tint=1', has: ['.explore__hint'] },
   { name: 'Food selected', query: '?view=2d&node=food:grapefruit', has: [] },
   {
@@ -288,6 +288,7 @@ for (const colorScheme of ['light', 'dark'] as const) {
         for (const selector of [
           ...(labels ? [LABELS] : []),
           PILL,
+          '.search__input',
           '.graph-zoom button',
           ...state.has,
         ])
