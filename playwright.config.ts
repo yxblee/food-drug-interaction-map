@@ -1,8 +1,12 @@
 import { createServer } from 'node:net'
 import { defineConfig, devices } from '@playwright/test'
 
+// SwiftShader for WebGL only. `--use-angle=swiftshader` would composite the whole page on it too,
+// which stalls pages for seconds under load (#228, e2e/browser-flags.spec.ts).
 const swiftshader = {
-  launchOptions: { args: ['--use-angle=swiftshader', '--enable-unsafe-swiftshader'] },
+  launchOptions: {
+    args: ['--use-gl=angle', '--use-angle=swiftshader-webgl', '--enable-unsafe-swiftshader'],
+  },
 }
 
 // CI uses a fixed port. Locally, pick a free one so a run never reuses another worktree's server.
