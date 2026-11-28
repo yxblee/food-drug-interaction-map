@@ -163,6 +163,54 @@ describe('seed dataset', () => {
       ).toBe(true)
     }
   })
+  it('gives 11 Caution Interactions a second Citation from MedlinePlus (#216)', () => {
+    // [Interaction, page]
+    for (const [id, page] of [
+      ['alcohol--acetaminophen', 'a681004'],
+      ['alcohol--isoniazid', 'a682401'],
+      ['alcohol--metformin', 'a696005'],
+      ['alcohol--quetiapine', 'a698019'],
+      ['calcium-fortified-juice--fluoroquinolones', 'a688016'],
+      ['calcium-supplements--dolutegravir', 'a613043'],
+      ['dairy--fluoroquinolones', 'a688016'],
+      ['iron-supplements--levodopa', 'a601068'],
+      ['iron-supplements--levothyroxine', 'a682461'],
+      ['magnesium-supplements--fluoroquinolones', 'a688016'],
+      ['zinc-supplements--fluoroquinolones', 'a688016'],
+    ]) {
+      const i = get(id!)
+      expect(i?.status, id).toBe('approved')
+      expect(i?.reviewed_at, id).toBe('2026-11-28')
+      expect(i?.severity, id).toBe('caution')
+      expect(i?.citations.length, id).toBe(2)
+      expect(i?.citations[1], id).toMatchObject({
+        type: 'guideline',
+        url: `https://medlineplus.gov/druginfo/meds/${page}.html`,
+      })
+    }
+  })
+  it('pins the tightened wording (#216)', () => {
+    expect(get('alcohol--acetaminophen')?.advice).toBe(
+      'If you have 3 or more alcoholic drinks every day, do not take acetaminophen unless your doctor says it is safe, and never take more than the labelled daily limit.',
+    )
+    expect(get('alcohol--quetiapine')?.advice).toBe(
+      'Do not drink alcohol while taking quetiapine unless your prescriber says it is safe. Avoid driving or operating machinery until you know how it affects you. Be extra careful when starting the drug or raising the dose, because drowsiness and dizziness are most common then.',
+    )
+    expect(get('alcohol--quetiapine')?.summary).not.toContain('limited')
+    // the label's Medication Guide says not to drink too; only its interactions section says limit
+    expect(get('alcohol--quetiapine')?.details).toContain('Medication Guide')
+    expect(get('magnesium-supplements--fluoroquinolones')?.details).toContain('magnesium hydroxide')
+    expect(get('iron-supplements--levodopa')?.advice).toBe(
+      'Iron supplements and multivitamins with iron may interact with levodopa. Tell your pharmacist or prescriber about any iron product you take and ask how to space them.',
+    )
+    for (const mineral of ['magnesium', 'zinc']) {
+      const i = get(`${mineral}-supplements--fluoroquinolones`)
+      expect(i?.advice, mineral).toBe(
+        `Take the antibiotic at least 2 hours before or 6 hours after ${mineral} supplements, or antacids or multivitamins that contain ${mineral}, unless your pharmacist advises otherwise.`,
+      )
+      expect(i?.details, mineral).not.toMatch(/timing above|spacing above/)
+    }
+  })
   it('gives every Approved Avoid Interaction two Citations (#135, #160)', () => {
     expect(citationGaps(ds!.interactions)).toEqual([])
   })

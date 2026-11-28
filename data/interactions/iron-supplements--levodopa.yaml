@@ -5,12 +5,15 @@ mechanisms: [chelation]
 severity: caution
 effect: decreases
 summary: "Iron supplements may reduce how much levodopa the body absorbs, possibly by binding it in the gut."
-advice: "Ask your pharmacist or prescriber about spacing iron and levodopa, and mention any iron product you take, including multivitamins with iron."
+advice: "Iron supplements and multivitamins with iron may interact with levodopa. Tell your pharmacist or prescriber about any iron product you take and ask how to space them."
 details: "The NIH fact sheet says some evidence shows iron supplements reduce levodopa absorption in healthy people, possibly through chelation, and that US levodopa labels warn iron-containing supplements might lessen its effect."
 citations:
   - type: "guideline"
     title: "NIH Office of Dietary Supplements: Iron fact sheet for health professionals (Interactions with Medications)"
     url: "https://ods.od.nih.gov/factsheets/Iron-HealthProfessional/"
+  - type: "guideline"
+    title: "Levodopa and Carbidopa: MedlinePlus Drug Information"
+    url: "https://medlineplus.gov/druginfo/meds/a601068.html"
 status: approved
 source: ods
-reviewed_at: 2026-11-18
+reviewed_at: 2026-11-28

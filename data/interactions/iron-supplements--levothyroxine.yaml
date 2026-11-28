@@ -11,6 +11,9 @@ citations:
   - type: "guideline"
     title: "NIH Office of Dietary Supplements: Iron fact sheet for health professionals (Interactions with Medications)"
     url: "https://ods.od.nih.gov/factsheets/Iron-HealthProfessional/"
+  - type: "guideline"
+    title: "Levothyroxine: MedlinePlus Drug Information"
+    url: "https://medlineplus.gov/druginfo/meds/a682461.html"
 status: approved
 source: ods
-reviewed_at: 2026-11-18
+reviewed_at: 2026-11-28
