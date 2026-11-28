@@ -175,7 +175,7 @@
   .panel__about {
     flex-direction: row;
     flex-wrap: wrap;
-    column-gap: 1.25rem;
+    column-gap: 0.75rem;
   }
   .extlink__full {
     display: none;

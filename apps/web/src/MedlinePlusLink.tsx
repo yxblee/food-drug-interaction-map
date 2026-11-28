@@ -4,7 +4,8 @@ interface Props {
   label: string
   /**
    * Shorter visible text for phone widths. The accessible name stays `label`, which must contain
-   * this outside any parentheses: label-in-name (WCAG 2.5.3) ignores parenthesised words.
+   * this outside any parentheses: axe's label-in-name check (WCAG 2.5.3) ignores
+   * parenthesised words.
    */
   short?: string
 }

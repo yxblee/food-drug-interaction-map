@@ -77,29 +77,30 @@ for (const colorScheme of ['light', 'dark'] as const) {
       await expectNoViolations(page, 'li.irow')
     })
 
-    for (const [view, node] of [
+    // No one Drug has both inherited rows and a Helpful pairing, so the Drug panel takes two.
+    for (const [panel, node] of [
       ['Food', 'food:grapefruit'],
-      // A class member with an inherited `avoid` row and a Helpful pairing: every panel part.
-      ['Drug', 'drug:lovastatin'],
+      ['Drug', 'drug:lovastatin'], // a Helpful pairing
+      ['Drug with inherited rows', 'drug:alendronate'], // and jump links, collapsed rows
       ['Mechanism', 'mechanism:cyp3a4-inhibition'],
     ] as const) {
-      test(`Explore, 2D map with a ${view} panel`, async ({ page }) => {
+      test(`Explore, 2D map with a ${panel} panel`, async ({ page }) => {
         await openExplore(page, `&node=${node}`)
         await expect(page.getByRole('complementary').locator('li.irow').first()).toBeVisible()
         await expectNoViolations(page, '.panel li.irow')
       })
     }
 
-    for (const [view, query, option] of [
-      ['a typed query', 'grape', /Grapefruit/],
-      ['a misspelled query ("Did you mean")', 'grapefuit', /Grapefruit/],
+    for (const [title, query, didYouMean] of [
+      ['a typed query', 'grape', false],
+      ['a misspelled query ("Did you mean")', 'grapefuit', true],
     ] as const) {
-      test(`Explore, search suggestions for ${view}`, async ({ page }) => {
+      test(`Explore, search suggestions for ${title}`, async ({ page }) => {
         await openExplore(page)
         await page.getByLabel('Search drugs, foods and mechanisms').fill(query)
-        await expect(page.getByRole('option', { name: option }).first()).toBeVisible()
+        await expect(page.getByRole('option', { name: /Grapefruit/ }).first()).toBeVisible()
         await expect(page.getByText('Did you mean', { exact: true })).toBeVisible({
-          visible: query === 'grapefuit',
+          visible: didYouMean,
         })
         await expectNoViolations(page, '.search__results [role="option"]')
       })
