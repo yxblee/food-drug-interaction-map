@@ -5,13 +5,8 @@ mechanisms:
   - cns-depression
 severity: caution
 effect: increases
-summary: Alcohol can make quetiapine's effects on thinking and coordination
-  stronger, so drinking should be limited.
-advice: Limit alcoholic drinks while taking quetiapine. Avoid driving or
-  operating machinery until you know how the combination affects you. Be extra
-  careful when starting the drug or raising the dose, because drowsiness and
-  dizziness are most common then. Ask your prescriber how much alcohol, if any,
-  is safe for you.
+summary: "Alcohol can make quetiapine's effects on thinking and coordination stronger, so do not drink while taking it unless your prescriber says it is safe."
+advice: "Do not drink alcohol while taking quetiapine unless your prescriber says it is safe. Avoid driving or operating machinery until you know how it affects you. Be extra careful when starting the drug or raising the dose, because drowsiness and dizziness are most common then."
 details: Quetiapine acts on the central nervous system and often causes
   drowsiness, dizziness and impaired judgment. In a clinical trial in people
   with certain psychotic disorders, quetiapine increased alcohol's effects on
@@ -19,12 +14,16 @@ details: Quetiapine acts on the central nervous system and often causes
   reactions and a higher risk of falls. Quetiapine can also lower blood pressure
   on standing, and alcohol may add to that. The label advises limiting alcoholic
   beverages and being cautious when quetiapine is combined with other centrally
-  acting substances.
+  acting substances. The MedlinePlus quetiapine page goes
+  further and says not to drink alcohol while taking quetiapine.
 citations:
   - type: label
     title: "SEROQUEL (QUETIAPINE) TABLET, FILM COATED [ASTRAZENECA PHARMACEUTICALS LP]"
     url: "https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=0584dda8-bc3c-48fe-1a90-79608f78e8a0"
     setid: "0584dda8-bc3c-48fe-1a90-79608f78e8a0"
+  - type: "guideline"
+    title: "Quetiapine: MedlinePlus Drug Information"
+    url: "https://medlineplus.gov/druginfo/meds/a698019.html"
 status: approved
 source: openfda
 reviewed_at: 2026-11-18
