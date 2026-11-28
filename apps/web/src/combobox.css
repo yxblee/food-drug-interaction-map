@@ -42,6 +42,8 @@
 }
 /* Ink bar plus tint: the bar is the 3:1 indicator, so the state is not colour alone. */
 .combo__option[aria-selected='true'] {
+  /* Muted text drops under 4.5:1 on this tint in dark, so it takes ink here. */
+  --muted: var(--ink);
   background: color-mix(in srgb, var(--ink) 10%, var(--surface));
   box-shadow: inset 4px 0 0 var(--ink);
 }

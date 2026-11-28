@@ -39,6 +39,13 @@ async function expectNoViolations(page: Page, content: string) {
   }
 }
 
+/** Explore on the 2D map: the 3D canvas is out of scope for axe. */
+async function openExplore(page: Page, params = '') {
+  await page.goto(`./?view=2d${params}`)
+  // The nodes land after the empty svg does, past the default 5 s on a loaded runner.
+  await expect(page.locator('svg.graph2d g.node').first()).toBeAttached({ timeout: 20_000 })
+}
+
 for (const colorScheme of ['light', 'dark'] as const) {
   test.describe(`axe WCAG 2.2 AA, ${colorScheme}`, () => {
     // Reduced motion: no colour is measured mid-transition.
@@ -70,14 +77,33 @@ for (const colorScheme of ['light', 'dark'] as const) {
       await expectNoViolations(page, 'li.irow')
     })
 
-    test('Explore, 2D map with a Food panel', async ({ page }) => {
-      // `view=2d`: the 3D canvas is out of scope for axe.
-      await page.goto('./?view=2d&node=food:grapefruit')
-      // The nodes land after the empty svg does, past the default 5 s on a loaded runner.
-      await expect(page.locator('svg.graph2d g.node').first()).toBeAttached({ timeout: 20_000 })
-      await expect(page.getByRole('complementary').locator('li.irow').first()).toBeVisible()
-      await expectNoViolations(page, 'li.irow')
-    })
+    for (const [view, node] of [
+      ['Food', 'food:grapefruit'],
+      // A class member with an inherited `avoid` row and a Helpful pairing: every panel part.
+      ['Drug', 'drug:lovastatin'],
+      ['Mechanism', 'mechanism:cyp3a4-inhibition'],
+    ] as const) {
+      test(`Explore, 2D map with a ${view} panel`, async ({ page }) => {
+        await openExplore(page, `&node=${node}`)
+        await expect(page.getByRole('complementary').locator('li.irow').first()).toBeVisible()
+        await expectNoViolations(page, '.panel li.irow')
+      })
+    }
+
+    for (const [view, query, option] of [
+      ['a typed query', 'grape', /Grapefruit/],
+      ['a misspelled query ("Did you mean")', 'grapefuit', /Grapefruit/],
+    ] as const) {
+      test(`Explore, search suggestions for ${view}`, async ({ page }) => {
+        await openExplore(page)
+        await page.getByLabel('Search drugs, foods and mechanisms').fill(query)
+        await expect(page.getByRole('option', { name: option }).first()).toBeVisible()
+        await expect(page.getByText('Did you mean', { exact: true })).toBeVisible({
+          visible: query === 'grapefuit',
+        })
+        await expectNoViolations(page, '.search__results [role="option"]')
+      })
+    }
 
     test('About the data', async ({ page }) => {
       await page.goto('./?view=2d')
