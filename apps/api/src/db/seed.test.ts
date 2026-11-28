@@ -142,16 +142,16 @@ describe('seed dataset', () => {
     }
   })
   it('gives 11 Caution Interactions a second Citation from MedlinePlus (#216)', () => {
-    // [Interaction, page, review date: 2026-11-28 where the owner approved the Citation]
+    // [Interaction, page, review date: 2026-11-28 where the owner has seen all of the new text]
     for (const [id, page, reviewed] of [
-      ['alcohol--acetaminophen', 'a681004', '2026-10-09'],
+      ['alcohol--acetaminophen', 'a681004', '2026-11-28'],
       ['alcohol--isoniazid', 'a682401', '2026-11-28'],
       ['alcohol--metformin', 'a696005', '2026-11-28'],
       ['alcohol--quetiapine', 'a698019', '2026-11-18'],
       ['calcium-fortified-juice--fluoroquinolones', 'a688016', '2026-11-28'],
       ['calcium-supplements--dolutegravir', 'a613043', '2026-11-28'],
       ['dairy--fluoroquinolones', 'a688016', '2026-11-28'],
-      ['iron-supplements--levodopa', 'a601068', '2026-11-18'],
+      ['iron-supplements--levodopa', 'a601068', '2026-11-28'],
       ['iron-supplements--levothyroxine', 'a682461', '2026-11-28'],
       ['magnesium-supplements--fluoroquinolones', 'a688016', '2026-11-18'],
       ['zinc-supplements--fluoroquinolones', 'a688016', '2026-11-18'],
@@ -175,6 +175,9 @@ describe('seed dataset', () => {
       'Do not drink alcohol while taking quetiapine unless your prescriber says it is safe. Avoid driving or operating machinery until you know how it affects you. Be extra careful when starting the drug or raising the dose, because drowsiness and dizziness are most common then.',
     )
     expect(get('alcohol--quetiapine')?.summary).not.toContain('limited')
+    // the label's Medication Guide says not to drink too; only its interactions section says limit
+    expect(get('alcohol--quetiapine')?.details).toContain('Medication Guide')
+    expect(get('magnesium-supplements--fluoroquinolones')?.details).toContain('magnesium hydroxide')
     expect(get('iron-supplements--levodopa')?.advice).toBe(
       'Iron supplements and multivitamins with iron may interact with levodopa. Tell your pharmacist or prescriber about any iron product you take and ask how to space them.',
     )
