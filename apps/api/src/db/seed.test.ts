@@ -141,28 +141,35 @@ describe('seed dataset', () => {
       ).toBe(true)
     }
   })
-  it('gives 11 single-Citation Caution Interactions a second one from MedlinePlus (#216)', () => {
+  it('has 6 Caution Interactions reviewed with a second Citation from MedlinePlus (#216)', () => {
     for (const [id, page] of [
-      ['alcohol--acetaminophen', 'a681004'],
       ['alcohol--isoniazid', 'a682401'],
       ['alcohol--metformin', 'a696005'],
-      ['alcohol--quetiapine', 'a698019'],
       ['calcium-fortified-juice--fluoroquinolones', 'a688016'],
       ['calcium-supplements--dolutegravir', 'a613043'],
       ['dairy--fluoroquinolones', 'a688016'],
-      ['iron-supplements--levodopa', 'a601068'],
       ['iron-supplements--levothyroxine', 'a682461'],
-      ['magnesium-supplements--fluoroquinolones', 'a688016'],
-      ['zinc-supplements--fluoroquinolones', 'a688016'],
     ]) {
       const i = get(id!)
       expect(i?.status, id).toBe('approved')
+      expect(i?.reviewed_at, id).toBe('2026-11-28')
       expect(i?.severity, id).toBe('caution')
       expect(i?.citations.length, id).toBe(2)
       expect(i?.citations[1], id).toMatchObject({
         type: 'guideline',
         url: `https://medlineplus.gov/druginfo/meds/${page}.html`,
       })
+    }
+  })
+  it('leaves the second Citations the owner did not approve out (#216)', () => {
+    for (const id of [
+      'alcohol--acetaminophen',
+      'alcohol--quetiapine',
+      'iron-supplements--levodopa',
+      'magnesium-supplements--fluoroquinolones',
+      'zinc-supplements--fluoroquinolones',
+    ]) {
+      expect(get(id)?.citations.length, id).toBe(1)
     }
   })
   it('gives every Approved Avoid Interaction two Citations (#135, #160)', () => {
