@@ -13,11 +13,16 @@ waitForRouteHandlersAtTeardown()
 // Control hairlines are not measured: each control is identified by its text or glyph
 // (Understanding SC 1.4.11).
 
+const PILL = '.explore__bar .pill-button'
+// A pressed pill is opaque ink; the others are frosted and need their own parked pass.
+const FROSTED_PILL = `${PILL}:not([aria-pressed='true'])`
+
 const CONTROLS = [
   '.search__input',
   '.combo__clear',
   '.search__count',
-  '.explore__bar .pill-button',
+  PILL,
+  FROSTED_PILL,
   '.explore__hint',
   '.sev-filter__note p',
   '.legend summary',
@@ -33,6 +38,11 @@ const STATES = [
   { name: 'no selection', query: '?view=2d', has: ['.search__input', '.explore__hint'] },
   { name: 'no selection, Color on', query: '?view=2d&tint=1', has: ['.explore__hint'] },
   { name: 'Food selected', query: '?view=2d&node=food:grapefruit', has: [] },
+  {
+    name: 'Food selected, Severities and Mechanisms off',
+    query: '?view=2d&node=food:grapefruit&sev=avoid&mech=0',
+    has: [FROSTED_PILL, '.sev-filter__note p'],
+  },
   {
     name: 'Food selected while searching',
     query: '?view=2d&node=food:grapefruit&q=grape',
@@ -50,7 +60,7 @@ const STATES = [
     query: '?view=2d&q=simva&sev=avoid&mech=0&meds=1',
     has: ['.combo__clear', '.sev-filter__note p'],
     // The one match's label can run off a phone screen, where it is hidden.
-    labels: false,
+    phoneLabels: false,
   },
 ]
 
@@ -226,14 +236,17 @@ async function openMap(page: Page, query: string) {
 }
 
 /**
- * Moves the map, at its closest zoom, so the selected (solid ink) node sits behind the start of a
- * control's text: the hardest backdrop a person can drag under it.
+ * Moves the map, at its closest zoom, so a node sits behind the start of a control's text: the
+ * selected (solid ink) one, the hardest backdrop a person can drag there, or with no selection any
+ * undimmed one. Returns whether the node landed there.
  */
-async function parkSelectedNode(page: Page, box: Box) {
-  await page.evaluate(
+async function parkNode(page: Page, box: Box) {
+  return page.evaluate(
     ([x, y]) => {
       const svg = document.querySelector<SVGSVGElement>('svg.graph2d')!
-      const node = svg.querySelector<SVGGElement>('g.node.is-selected')!
+      const node =
+        svg.querySelector<SVGGElement>('g.node.is-selected') ??
+        svg.querySelector<SVGGElement>('g.node:not(.is-dim)')!
       const at = node.transform.baseVal.consolidate()!.matrix
       const r = svg.getBoundingClientRect()
       // 4 is render2d's closest zoom; the viewBox puts 0,0 at the centre.
@@ -241,9 +254,22 @@ async function parkSelectedNode(page: Page, box: Box) {
       const ty = y - (r.y + r.height / 2) - 4 * at.f
       svg.style.setProperty('--k', '4')
       svg.querySelector(':scope > g')!.setAttribute('transform', `translate(${tx},${ty}) scale(4)`)
+      const at2 = node.querySelector('.shape')!.getBoundingClientRect()
+      return at2.left <= x && x <= at2.right && at2.top <= y && y <= at2.bottom
     },
     [box.x + Math.min(box.width / 2, 28), box.y + box.height / 2],
   )
+}
+
+/** Failures for the first visible match of `selector` with a node parked behind it. */
+async function measureParked(page: Page, selector: string) {
+  const control = page.locator(selector).filter({ visible: true }).first()
+  const box = (await control.count()) ? await control.boundingBox() : null
+  if (!box) return []
+  expect(await parkNode(page, box), `node behind ${selector}`).toBe(true)
+  const results = await measure(page, [selector], box)
+  expect(results, `measured behind ${selector}`).not.toHaveLength(0)
+  return failing(results).map((f) => `node behind ${f}`)
 }
 
 for (const colorScheme of ['light', 'dark'] as const) {
@@ -253,33 +279,23 @@ for (const colorScheme of ['light', 'dark'] as const) {
     test.slow()
 
     for (const state of STATES) {
-      test(`labels and controls: ${state.name}`, async ({ page }) => {
+      test(`labels and controls: ${state.name}`, async ({ page }, info) => {
         await openMap(page, state.query)
         const results = [...(await measure(page, [LABELS])), ...(await measure(page, CONTROLS))]
+        const measured = new Set(results.map((r) => r.selector))
         // Guards against a vacuous pass.
+        const labels = info.project.name !== 'mobile' || state.phoneLabels !== false
         for (const selector of [
-          ...(state.labels === false ? [] : [LABELS]),
-          '.explore__bar .pill-button',
+          ...(labels ? [LABELS] : []),
+          PILL,
           '.graph-zoom button',
           ...state.has,
         ])
-          expect(
-            results.map((r) => r.selector),
-            'measured',
-          ).toContain(selector)
+          expect([...measured], 'measured').toContain(selector)
         const failures = failing(results)
-
-        if (state.query.includes('node='))
-          // One control per selector: its siblings share the backdrop recipe and colours.
-          for (const selector of CONTROLS) {
-            const control = page.locator(selector).filter({ visible: true }).first()
-            const box = (await control.count()) ? await control.boundingBox() : null
-            if (!box) continue
-            await parkSelectedNode(page, box)
-            failures.push(
-              ...failing(await measure(page, [selector], box)).map((f) => `node behind ${f}`),
-            )
-          }
+        // One control per selector: its siblings share the backdrop recipe and colours.
+        for (const selector of CONTROLS)
+          if (measured.has(selector)) failures.push(...(await measureParked(page, selector)))
         // One line per element, however many passes it failed.
         expect([...new Set(failures)]).toEqual([])
       })
@@ -288,10 +304,13 @@ for (const colorScheme of ['light', 'dark'] as const) {
     test('the 3D-failed notice', async ({ page }, info) => {
       test.skip(info.project.name === 'mobile', '3D is desktop only')
       await page.route(/render3d/, (route) => route.abort())
-      await openMap(page, '?view=3d')
+      await openMap(page, '?view=3d&node=food:grapefruit')
       const results = await measure(page, ['.graph-status__notice'])
       expect(results).toHaveLength(1)
-      expect(failing(results)).toEqual([])
+      expect([
+        ...failing(results),
+        ...(await measureParked(page, '.graph-status__notice')),
+      ]).toEqual([])
     })
   })
 }
