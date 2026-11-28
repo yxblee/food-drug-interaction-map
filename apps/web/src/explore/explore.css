@@ -236,6 +236,13 @@
 .explore__bar .search {
   position: relative;
 }
+/* The match count sits straight on the map: frost it, with the darker label colour. */
+.explore__bar .search__count:not(:empty) {
+  width: fit-content;
+  padding: 2px 6px;
+  background: var(--frost);
+  color: var(--btn-label);
+}
 /* Overlay the map: results and the no-match note must not push the pills below. */
 .explore__bar .search__results,
 .explore__bar .search__empty {

@@ -110,6 +110,11 @@
   font: calc(11px / var(--k, 1)) var(--font-mono);
   letter-spacing: 0.1em;
   fill: var(--muted);
+  /* A paper halo, so a link or shape never shows through behind the letters. */
+  stroke: var(--paper);
+  stroke-width: calc(3px / var(--k, 1));
+  stroke-linejoin: round;
+  paint-order: stroke;
   pointer-events: none;
 }
 /* At rest only groups, focused nodes and the hovered or keyboard-focused node carry a label. */
@@ -140,6 +145,14 @@
   flex-direction: column;
   gap: 8px;
 }
+/* Phones: above the panel's bottom sheet a column would reach the Severity pills, so use a row. */
+@media (max-width: 40rem) {
+  .explore:has(.panel) .graph-zoom {
+    flex-direction: row;
+    /* Tight to the sheet, so it also clears the pills on a 640px-tall phone. */
+    bottom: calc(var(--inset-bottom, 0px) + 4px);
+  }
+}
 .graph-zoom button {
   display: grid;
   place-items: center;
@@ -149,7 +162,7 @@
   border: 1px solid var(--btn-border);
   border-radius: 999px;
   color: var(--btn-label);
-  background: color-mix(in srgb, var(--paper) 55%, transparent);
+  background: var(--frost);
   -webkit-backdrop-filter: blur(8px);
   backdrop-filter: blur(8px);
   cursor: pointer;
@@ -217,7 +230,7 @@
   padding: 8px 12px;
   border: 1px solid var(--btn-border);
   color: var(--ink);
-  background: color-mix(in srgb, var(--paper) 55%, transparent);
+  background: var(--frost);
   -webkit-backdrop-filter: blur(8px);
   backdrop-filter: blur(8px);
 }
