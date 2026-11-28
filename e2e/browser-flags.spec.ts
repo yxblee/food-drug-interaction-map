@@ -5,10 +5,7 @@ import { expect, test } from '@playwright/test'
 // Only WebGL belongs on SwiftShader: see the launch flags in playwright.config.ts.
 test('SwiftShader draws WebGL only, not the page', async ({ page, browser }) => {
   const cdp = await browser.newBrowserCDPSession()
-  // The protocol types `featureStatus` as an untyped object.
-  const { gpu } = (await cdp.send('SystemInfo.getInfo')) as unknown as {
-    gpu: { featureStatus?: { gpu_compositing?: string } }
-  }
+  const { gpu } = await cdp.send('SystemInfo.getInfo')
   expect(gpu.featureStatus?.gpu_compositing).toBe('disabled_software')
 
   // 3D specs still need a WebGL2 context, and map-default.spec.ts needs it to be a software one.
