@@ -12,6 +12,9 @@ citations:
     title: "JANTOVEN (WARFARIN SODIUM) TABLET [UPSHER-SMITH LABORATORIES, LLC]"
     url: "https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=19a69a72-ac5d-45d5-a94d-a5aaecbe4730"
     setid: "19a69a72-ac5d-45d5-a94d-a5aaecbe4730"
+  - type: "guideline"
+    title: "Warfarin: MedlinePlus Drug Information"
+    url: "https://medlineplus.gov/druginfo/meds/a682277.html"
 status: approved
 source: curated
 reviewed_at: 2026-10-09

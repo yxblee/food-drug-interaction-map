@@ -24,6 +24,9 @@ citations:
     title: "VENLAFAXINE TABLET, EXTENDED RELEASE [ALMATICA PHARMA LLC]"
     url: "https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=e81a2daf-b8b2-7c05-b532-bc775700b100"
     setid: "e81a2daf-b8b2-7c05-b532-bc775700b100"
+  - type: guideline
+    title: "St. John's Wort: Usefulness and Safety (NCCIH)"
+    url: "https://www.nccih.nih.gov/health/st-johns-wort"
 status: approved
 reviewed_at: 2026-10-15
 source: openfda

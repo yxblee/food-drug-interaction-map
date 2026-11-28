@@ -12,6 +12,9 @@ citations:
     title: "ZYVOX (LINEZOLID) INJECTION, SOLUTION ZYVOX (LINEZOLID) GRANULE, FOR SUSPENSION ZYVOX (LINEZOLID) TABLET, FILM COATED [PHARMACIA & UPJOHN COMPANY LLC]"
     url: "https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=6e70e63b-bfd5-478d-a8ee-8ba22c9efabd"
     setid: "6e70e63b-bfd5-478d-a8ee-8ba22c9efabd"
+  - type: "guideline"
+    title: "Linezolid: MedlinePlus Drug Information"
+    url: "https://medlineplus.gov/druginfo/meds/a602004.html"
 status: approved
 source: curated
 reviewed_at: 2026-10-09

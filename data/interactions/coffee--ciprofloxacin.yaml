@@ -21,6 +21,9 @@ citations:
     title: "CIPRO (CIPROFLOXACIN HYDROCHLORIDE) TABLET, FILM COATED CIPRO (CIPROFLOXACIN) KIT [BAYER HEALTHCARE PHARMACEUTICALS INC.]"
     url: "https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=888dc7f9-ad9c-4c00-8d50-8ddfd9bd27c0"
     setid: "888dc7f9-ad9c-4c00-8d50-8ddfd9bd27c0"
+  - type: guideline
+    title: "Ciprofloxacin: MedlinePlus Drug Information"
+    url: "https://medlineplus.gov/druginfo/meds/a688016.html"
 status: approved
 reviewed_at: 2026-10-15
 source: openfda
