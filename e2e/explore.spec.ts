@@ -48,16 +48,16 @@ test('explore controls keep the 16px gutter and a readable search field', async 
   expect((await mechanisms.boundingBox())!.x).toBeGreaterThanOrEqual(16)
 
   const search = page.getByLabel('Search drugs, foods and mechanisms')
-  const [border, placeholder, muted] = await search.evaluate((el) => {
+  const [border, placeholder, label] = await search.evaluate((el) => {
     const probe = document.createElement('span')
-    probe.style.color = 'var(--muted)'
+    probe.style.color = 'var(--btn-label)'
     document.body.append(probe)
-    const m = getComputedStyle(probe).color
+    const l = getComputedStyle(probe).color
     probe.remove()
-    return [getComputedStyle(el).borderTopColor, getComputedStyle(el, '::placeholder').color, m]
+    return [getComputedStyle(el).borderTopColor, getComputedStyle(el, '::placeholder').color, l]
   })
   expect(border).toContain('0.26') // hairline --btn-border, frosted by the shared recipe
-  expect(placeholder).toBe(muted)
+  expect(placeholder).toBe(label) // muted is under 4.5:1 on the frost over the map (#227)
 })
 
 test('a first visit explains the map and suggests where to start', async ({ page }) => {

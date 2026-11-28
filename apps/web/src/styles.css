@@ -151,6 +151,9 @@ h3 {
   --btn-border-hover: color-mix(in oklch, var(--ink) 60%, transparent);
   /* 72%, not the reference's 64%: 64% is under 4.5:1 on the sage, plum, slate and sand papers. */
   --btn-label: color-mix(in oklch, var(--ink) 72%, transparent);
+  /* Frosted controls over the graph. 85% surface keeps their text AA even with a solid ink node
+     zoomed and dragged behind them (e2e/map-contrast.spec.ts). */
+  --frost: color-mix(in srgb, var(--surface) 85%, transparent);
 }
 .pill-button {
   border: 1px solid var(--btn-border);
@@ -211,7 +214,7 @@ h3 {
   .explore__hint,
   .legend
 ) {
-  background: color-mix(in srgb, var(--paper) 55%, transparent);
+  background: var(--frost);
   -webkit-backdrop-filter: blur(8px);
   backdrop-filter: blur(8px);
   border: 1px solid var(--btn-border);
@@ -288,6 +291,10 @@ h3 {
 ::placeholder {
   color: var(--muted);
   opacity: 1;
+}
+/* Over the graph, muted is under 4.5:1 on the frost. */
+.search__input::placeholder {
+  color: var(--btn-label);
 }
 :focus-visible {
   outline: 2px solid var(--ink);

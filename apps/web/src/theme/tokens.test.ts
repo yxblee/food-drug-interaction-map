@@ -45,6 +45,11 @@ describe('palettes', () => {
           expect(contrastRatio(mix(p.ink, bg, 0.72), bg)).toBeGreaterThanOrEqual(4.5)
         }
       })
+      it(`${tint}/${mode}: button label on the frost over a solid ink node is AA`, () => {
+        // --frost in styles.css: 85% surface. An ink node is the hardest thing to pass behind it.
+        const frost = mix(p.surface, p.ink, 0.85)
+        expect(contrastRatio(mix(p.ink, frost, 0.72), frost)).toBeGreaterThanOrEqual(4.5)
+      })
       it(`${tint}/${mode}: ink on surface is AA`, () => {
         expect(contrastRatio(p.ink, p.surface)).toBeGreaterThanOrEqual(4.5)
       })
