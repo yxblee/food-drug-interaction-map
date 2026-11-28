@@ -25,6 +25,9 @@ citations:
     title: "RASAGILINE TABLET [TEVA PHARMACEUTICALS USA, INC.]"
     url: "https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=e802c83c-e581-4a11-b83d-1df47120078d"
     setid: "e802c83c-e581-4a11-b83d-1df47120078d"
+  - type: guideline
+    title: "Rasagiline: MedlinePlus Drug Information"
+    url: "https://medlineplus.gov/druginfo/meds/a606017.html"
 status: approved
 reviewed_at: 2026-10-15
 source: openfda

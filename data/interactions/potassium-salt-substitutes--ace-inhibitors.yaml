@@ -12,6 +12,9 @@ citations:
     title: "LISINOPRIL TABLET [ST. MARY'S MEDICAL PARK PHARMACY]"
     url: "https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=6062fd98-7663-f4b5-e053-2a91aa0acbc3"
     setid: "6062fd98-7663-f4b5-e053-2a91aa0acbc3"
+  - type: "guideline"
+    title: "Lisinopril: MedlinePlus Drug Information"
+    url: "https://medlineplus.gov/druginfo/meds/a692051.html"
 status: approved
 source: curated
 reviewed_at: 2026-10-09

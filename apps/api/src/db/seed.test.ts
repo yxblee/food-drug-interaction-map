@@ -163,6 +163,28 @@ describe('seed dataset', () => {
       ).toBe(true)
     }
   })
+  it('gives 11 more single-Citation Caution Interactions a second guideline Citation (#225)', () => {
+    const mp = (page: string) => `https://medlineplus.gov/druginfo/meds/${page}.html`
+    for (const [id, url] of [
+      ['aged-cheeses--linezolid', mp('a602004')],
+      ['aged-cheeses--rasagiline', mp('a606017')],
+      ['calcium-supplements--calcitriol', mp('a682335')],
+      ['coffee--ciprofloxacin', mp('a688016')],
+      ['dairy--calcitriol', mp('a682335')],
+      ['leafy-greens--warfarin', mp('a682277')],
+      ['potassium-salt-substitutes--ace-inhibitors', mp('a692051')],
+      ['potassium-salt-substitutes--arbs', mp('a695008')],
+      ['sauerkraut--linezolid', mp('a602004')],
+      ['soy-sauce--linezolid', mp('a602004')],
+      ['st-johns-wort--venlafaxine', 'https://www.nccih.nih.gov/health/st-johns-wort'],
+    ] as const) {
+      const i = get(id)
+      expect(i?.status, id).toBe('approved')
+      expect(i?.severity, id).toBe('caution')
+      expect(i?.citations.length, id).toBe(2)
+      expect(i?.citations[1], id).toMatchObject({ type: 'guideline', url })
+    }
+  })
   it('gives every Approved Avoid Interaction two Citations (#135, #160)', () => {
     expect(citationGaps(ds!.interactions)).toEqual([])
   })
