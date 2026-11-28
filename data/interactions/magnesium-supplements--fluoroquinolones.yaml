@@ -6,7 +6,7 @@ severity: caution
 effect: decreases
 summary: "Magnesium can form complexes with quinolone antibiotics that the body cannot absorb."
 advice: "Take the antibiotic at least 2 hours before or 6 hours after magnesium supplements, or antacids or multivitamins that contain magnesium, unless your pharmacist advises otherwise."
-details: "The NIH fact sheet says magnesium forms insoluble complexes with quinolone antibiotics such as ciprofloxacin and levofloxacin, and gives the timing as at least 2 hours before or 4 to 6 hours after the supplement. The MedlinePlus ciprofloxacin page gives 6 hours after, for antacids and multivitamins containing magnesium; the advice uses that longer gap."
+details: "The NIH fact sheet says magnesium forms insoluble complexes with quinolone antibiotics such as ciprofloxacin and levofloxacin, and gives the timing as at least 2 hours before or 4 to 6 hours after the supplement. The MedlinePlus ciprofloxacin page gives 6 hours after, for antacids and multivitamins containing magnesium hydroxide; the advice uses that longer gap."
 citations:
   - type: "guideline"
     title: "NIH Office of Dietary Supplements: Magnesium fact sheet for health professionals (Interactions with Medications)"

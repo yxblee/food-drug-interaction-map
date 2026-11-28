@@ -167,7 +167,7 @@ describe('seed dataset', () => {
       })
     }
   })
-  it('words the advice no looser than the second Citation (#216)', () => {
+  it('pins the tightened wording (#216)', () => {
     expect(get('alcohol--acetaminophen')?.advice).toBe(
       'If you have 3 or more alcoholic drinks every day, do not take acetaminophen unless your doctor says it is safe, and never take more than the labelled daily limit.',
     )
